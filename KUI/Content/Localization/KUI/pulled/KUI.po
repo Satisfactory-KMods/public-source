@@ -1,0 +1,448 @@
+msgid ""
+msgstr ""
+"Language: zh-TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 1; plural = 0\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "KUI_GeneralWords,/min"
+msgid "/ min"
+msgstr "/ 分钟"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.Node_Format_Text.Format"
+msgid "<White10Reg>Produced in: </><Orange10SemiB>{WHERE}</>"
+msgstr "<White10Reg>生产于： </><Orange10SemiB>{WHERE}</>"
+
+msgctxt "KUI_GeneralWords,Accept"
+msgid "Accept"
+msgstr "同意"
+
+msgctxt "KUI_GeneralWords,Add"
+msgid "Add"
+msgstr "添加"
+
+msgctxt "KUI_GeneralWords,Added"
+msgid "Added!"
+msgstr "已添加！"
+
+msgctxt "KUI_GeneralWords,Amount"
+msgid "Amount"
+msgstr "数量"
+
+msgctxt "KUI_GeneralWords,Time_Any"
+msgid "Any Time"
+msgstr "任何时间"
+
+msgctxt "KUI_GeneralWords,BuildGun"
+msgid "Build Gun"
+msgstr "制造一把枪"
+
+msgctxt "KUI_GeneralWords,Building"
+msgid "Building"
+msgstr "建造"
+
+msgctxt "KUI_GeneralWords,Found_Danger"
+msgid "Can be found in Dangerous Areas."
+msgstr "可在危险区域找到。"
+
+msgctxt "KUI_GeneralWords,Found_Everywhere"
+msgid "Can be found in every biome."
+msgstr "可在每个生态群系中找到。"
+
+msgctxt "KUI_GeneralWords,Cancle"
+msgid "Cancle"
+msgstr "取消"
+
+msgctxt "KUI_GeneralWords,Rare_Common"
+msgid "Common"
+msgstr "常见"
+
+msgctxt "KUI_GeneralWords,Consumed"
+msgid "Consumed"
+msgstr "消耗"
+
+msgctxt "KUI_GeneralWords,ConsumedIn"
+msgid "Consumed In"
+msgstr "消耗在"
+
+msgctxt "KUI_GeneralWords,Copy"
+msgid "Copy"
+msgstr "复制"
+
+msgctxt "KUI_GeneralWords,Workbench"
+msgid "Craft Bench"
+msgstr "制作台"
+
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "可从各种矿石簇中开采的碎金属。用于制造金属锭或液态金属。\\r\\n\\r\\n也可以用机器清洗以提取更多金属。"
+
+msgctxt "KUI_GeneralWords,CycleTime"
+msgid "Cycle Time"
+msgstr "周期时间"
+
+msgctxt "KUI_GeneralWords,Time_Day"
+msgid "Day"
+msgstr "白天"
+
+msgctxt "KUI_GeneralWords,Delete"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
+msgstr "您确定要打开此网站吗？您的浏览器将打开并访问该网站！\\r\\n\\r\\n{url}"
+
+msgctxt "KUI_GeneralWords,Edit"
+msgid "Edit"
+msgstr "编辑"
+
+msgctxt "KUI_GeneralWords,Effect"
+msgid "Effect"
+msgstr "效果"
+
+msgctxt "KUI_GeneralWords,DefaultSearchText"
+msgid "Enter text here..."
+msgstr "在此处输入文本..."
+
+msgctxt "KUI_GeneralWords,Workshop"
+msgid "Equipment Workshop"
+msgstr "装备工坊"
+
+msgctxt "KUI_GeneralWords,State_Error"
+msgid "Error"
+msgstr "错误"
+
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\\r\\n{Function}"
+msgstr "功能：\\r\\n{Function}"
+
+msgctxt "KUI_ItemFormat,Liquid"
+msgid "Fluid"
+msgstr "流体"
+
+msgctxt "KUI_ItemFormat,Gas"
+msgid "Gas"
+msgstr "气体"
+
+msgctxt "KUI_ItemFormat,Heat"
+msgid "Heat"
+msgstr "热量"
+
+msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
+msgid "INSERT FUEL"
+msgstr "输入燃料"
+
+msgctxt "KUI_GeneralWords,State_Idle"
+msgid "Idle"
+msgstr "闲置"
+
+msgctxt "KUI_GeneralWords,Image"
+msgid "Image"
+msgstr "图片"
+
+msgctxt "KUI_GeneralWords,Time_Invalid"
+msgid "Invalid"
+msgstr "无效"
+
+msgctxt "KUI_GeneralWords,InvFormat"
+msgid "Invalid Information"
+msgstr "无效信息"
+
+msgctxt "KUI_GeneralWords,Item"
+msgid "Item"
+msgstr "物品"
+
+msgctxt "KUI_GeneralWords,ItemName"
+msgid "Item Name"
+msgstr "物品名称"
+
+msgctxt "KUI_GeneralWords,Layout"
+msgid "Layout"
+msgstr "布局"
+
+msgctxt "KUI_GeneralWords,RSS_LayOutLoaded"
+msgid "Layout loaded"
+msgstr "布局已加载"
+
+msgctxt "KUI_GeneralWords,LessDetails"
+msgid "Less Details"
+msgstr "更少细节"
+
+msgctxt "KUI_GeneralWords,LivePreview"
+msgid "Live Preview"
+msgstr "实时预览"
+
+msgctxt "KUI_GeneralWords,Loading"
+msgid "Loading..."
+msgstr "加载中..."
+
+msgctxt "KUI_GeneralWords,State_MissingModule"
+msgid "Missing Module"
+msgstr "模型缺失"
+
+msgctxt "KUI_GeneralWords,MoreDetails"
+msgid "More Details"
+msgstr "更多细节"
+
+msgctxt "KUI_GeneralWords,NO"
+msgid "NO"
+msgstr "不"
+
+msgctxt "KUI_GeneralWords,Time_Night"
+msgid "Night"
+msgstr "夜晚"
+
+msgctxt "KUI_GeneralWords,No"
+msgid "No"
+msgstr "不"
+
+msgctxt "KUI_GeneralWords,Warning_NoFluid"
+msgid "No Fluid!"
+msgstr "缺少流体！"
+
+msgctxt "KUI_GeneralWords,NoInv"
+msgid "No Inventory set"
+msgstr "未设置库存"
+
+msgctxt "KUI_GeneralWords,State_NoPower"
+msgid "No Power"
+msgstr "缺少电力"
+
+msgctxt "KUI_GeneralWords,Warning_NoPower"
+msgid "No Power!"
+msgstr "缺少电力！"
+
+msgctxt "KUI_GeneralWords,NoCon"
+msgid "No connection"
+msgstr "未连接"
+
+msgctxt "KUI_GeneralWords,Rate_60"
+msgid "Normal extraction rate is: 60/min"
+msgstr "正常提取速率为：60/分钟"
+
+msgctxt "KUI_GeneralWords,Rate_60m³"
+msgid "Normal extraction rate is: 60m³/min"
+msgstr "正常提取速率为：60m³/分钟"
+
+msgctxt "KUI_GeneralWords,PP_OpenUrl_D"
+msgid "Open Url"
+msgstr "打开网址"
+
+msgctxt "KUI_GeneralWords,State_Overclocked"
+msgid "Overclocked"
+msgstr "超频"
+
+msgctxt "KUI_GeneralWords,Part"
+msgid "Parts"
+msgstr "部件"
+
+msgctxt "KUI_GeneralWords,Paste"
+msgid "Paste"
+msgstr "粘贴"
+
+msgctxt "KUI_GeneralWords,Paused"
+msgid "Paused"
+msgstr "暂停"
+
+msgctxt "KUI_GeneralWords,State_Produce"
+msgid "Produce"
+msgstr "生产"
+
+msgctxt "KUI_GeneralWords,Produced"
+msgid "Produced"
+msgstr "已生产"
+
+msgctxt "KUI_GeneralWords,ProducedIn"
+msgid "Produced In"
+msgstr "生产于"
+
+msgctxt "KUI_GeneralWords,Rare_Rare"
+msgid "Rare"
+msgstr "稀有"
+
+msgctxt "KUI_GeneralWords,RecipeFormat"
+msgid "Recipe: {Name}"
+msgstr "配方：{Name}"
+
+msgctxt "KUI_GeneralWords,Refresh"
+msgid "Refresh"
+msgstr "刷新"
+
+msgctxt "KUI_GeneralWords,RelevantItems"
+msgid "Relevant Items:"
+msgstr "相关物品："
+
+msgctxt "KUI_GeneralWords,Remove"
+msgid "Remove"
+msgstr "移除"
+
+msgctxt "KUI_GeneralWords,Reset"
+msgid "Reset"
+msgstr "重设"
+
+msgctxt "KUI_GeneralWords,RSS_DefaultTextElementText"
+msgid "Rss Sign Text"
+msgstr "Rss标志文本"
+
+msgctxt "KUI_GeneralWords,Running"
+msgid "Running"
+msgstr "运行中"
+
+msgctxt "KUI_GeneralWords,Save"
+msgid "Save"
+msgstr "保存"
+
+msgctxt "KUI_GeneralWords,SaveAndExit"
+msgid "Save & Exit"
+msgstr "保存并退出"
+
+msgctxt "KUI_GeneralWords,SaveAsPreset"
+msgid "Save as preset"
+msgstr "保存为预设："
+
+msgctxt "KUI_GeneralWords,Saved"
+msgid "Saved"
+msgstr "已保存"
+
+msgctxt "KUI_GeneralWords,Select"
+msgid "Select"
+msgstr "选择"
+
+msgctxt "KUI_GeneralWords,SelectItem"
+msgid "Select Item"
+msgstr "选择物品"
+
+msgctxt "KUI_GeneralWords,SlotNotUsed"
+msgid "Slot not in use"
+msgstr "槽位未使用"
+
+msgctxt "KUI_ItemFormat,Solid"
+msgid "Solid"
+msgstr "固体"
+
+msgctxt "KUI_GeneralWords,Stable"
+msgid "Stable"
+msgstr "稳定"
+
+msgctxt "KUI_GeneralWords,Stack"
+msgid "Stack"
+msgstr "堆叠"
+
+msgctxt "KUI_GeneralWords,State_Standby"
+msgid "Standby"
+msgstr "待机"
+
+msgctxt "KUI_GeneralWords,Template"
+msgid "Template"
+msgstr "模板"
+
+msgctxt "KUI_GeneralWords,Text"
+msgid "Text"
+msgstr "文本"
+
+msgctxt "KUI_GeneralWords,Type"
+msgid "Type"
+msgstr "类型"
+
+msgctxt "KUI_GeneralWords,Unknown"
+msgid "Unknown"
+msgstr "未知"
+
+msgctxt "KUI_GeneralWords,UnStable"
+msgid "Unstable"
+msgstr "不稳定"
+
+msgctxt "KUI_GeneralWords,Rare_VeryCommon"
+msgid "Very Common"
+msgstr "非常常见"
+
+msgctxt "KUI_GeneralWords,Rare_VeryRare"
+msgid "Very Rare"
+msgstr "非常稀有"
+
+msgctxt "KUI_GeneralWords,NotInit"
+msgid "Widget not Init!"
+msgstr "窗口部件未初始化！"
+
+msgctxt "KUI_GeneralWords,YES"
+msgid "YES"
+msgstr "是"
+
+msgctxt "KUI_GeneralWords,Yes"
+msgid "Yes"
+msgstr "是"
+
+msgctxt "KUI_GeneralWords,Deleted"
+msgid "deleted"
+msgstr "已删除"
+
+msgctxt "KUI_GeneralWords,loaded"
+msgid "loaded"
+msgstr "已加载"
+
+msgctxt "KUI_GeneralWords,m³"
+msgid "m³"
+msgstr "m³"
+
+msgctxt "KUI_GeneralWords,m3/min"
+msgid "m³ / min"
+msgstr "m³/分钟"
+
+msgctxt "KUI_GeneralWords,no"
+msgid "no"
+msgstr "不"
+
+msgctxt "KUI_GeneralWords,PartPMin"
+msgid "per minute"
+msgstr "每分钟"
+
+msgctxt "KUI_GeneralWords,yes"
+msgid "yes"
+msgstr "是"
+
+msgctxt "KUI_GeneralWords,FromTo"
+msgid "{From} to {To}"
+msgstr "{From} 到 {To}"
+
+msgctxt "KUI_GeneralWords,FromToCelc"
+msgid "{From} to {To}°C"
+msgstr "{From} 到 {To}°C"
+
+msgctxt "KUI_GeneralWords,ToPercent"
+msgid "{From}% to {To}%"
+msgstr "{From}%% 到 {To}%%"
+
+msgctxt "KUI_GeneralWords,TimeInSec"
+msgid "{Time} Sec"
+msgstr "{Time} 秒"
+
+msgctxt "KUI_GeneralWords,Percent"
+msgid "{Value} %"
+msgstr "{Value} %%"
+
+msgctxt "KUI_GeneralWords,PerMin"
+msgid "{Value} / Min"
+msgstr "{Value} / 分钟"
+
+msgctxt "KUI_GeneralWords,MW"
+msgid "{Value} MW"
+msgstr "{Value} MW"
+
+msgctxt "KUI_GeneralWords,Format_m³"
+msgid "{Value} m³"
+msgstr "{Value} m³"
+
+msgctxt "KUI_GeneralWords,m3PerMin"
+msgid "{Value} m³ / Min"
+msgstr "{Value} m³ / 分钟"
+
+msgctxt "KUI_GeneralWords,Celcius"
+msgid "{Value} °C"
+msgstr "{Value} °C"
+
+msgctxt "KUI_GeneralWords,CountMulti"
+msgid "{count}x"
+msgstr "{count}x"

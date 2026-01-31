@@ -1,0 +1,55 @@
+{
+	"FileVersion": 3,
+	"Version": 3,
+	"VersionName": "3.4.0",
+	"SemVersion": "3.4.0",
+	"FriendlyName": "KPrivateCodeLib",
+	"Description": "Lib for Kyris Mods",
+	"Category": "Modding",
+	"CreatedBy": "Kyri123/Kyrium",
+	"CreatedByURL": "https://github.com/Kyri123",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "KPrivateCodeLib",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.11.1",
+			"Enabled": true
+		},
+		{
+			"Name": "KUI",
+			"SemVersion": "^3.3.0",
+			"Enabled": true
+		},
+		{
+			"Name": "KBFL",
+			"SemVersion": "^4.0.0",
+			"Enabled": true
+		},
+		{
+			"Name": "KAPI",
+			"Enabled": true,
+			"SemVersion": "^2.1.0"
+		}
+	],
+	"LocalizationTargets": [
+		{
+			"Name": "KPrivateCodeLib",
+			"LoadingPolicy": "Always"
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=416835"
+}

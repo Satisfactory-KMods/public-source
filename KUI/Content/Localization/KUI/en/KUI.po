@@ -1,0 +1,1421 @@
+﻿# KUI English translation.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: KUI\n"
+"POT-Creation-Date: 2026-01-20 10:43\n"
+"PO-Revision-Date: 2026-01-20 10:43\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Key:	BFL_Widget.K2Node_FunctionEntry_0.MetaData.Category
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BFL_Widget.K2Node_FunctionEntry_0.MetaData.Category"
+msgid "Default"
+msgstr "Default"
+
+#. Key:	BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "Invalid"
+
+#. Key:	BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "Solid"
+
+#. Key:	BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[2]
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[2]"
+msgid "Liquid"
+msgstr "Liquid"
+
+#. Key:	BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Gas"
+
+#. Key:	BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "Heat"
+
+#. Key:	BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[0].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[0].PropertyTooltip"
+msgid "The item."
+msgstr "The item."
+
+#. Key:	BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[1].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[1].PropertyTooltip"
+msgid "The amount of this item."
+msgstr "The amount of this item."
+
+#. Key:	BPW_KUI_ItemDisplay.BPW_KUI_ItemDisplay_C.PaletteCategory
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,BPW_KUI_ItemDisplay.BPW_KUI_ItemDisplay_C.PaletteCategory"
+msgid "User Created"
+msgstr "User Created"
+
+#. Key:	KUI_CustomOverclockingUI.mPercentText.HintText
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.mPercentText.HintText"
+msgid "%"
+msgstr "%"
+
+#. Key:	KUI_CustomOverclockingUI.NewVariables[0].Category
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.NewVariables[0].Category"
+msgid "HeaderButton"
+msgstr "HeaderButton"
+
+#. Key:	KUI_CustomOverclockingUI.Node_Format_Text.Format
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Format_Text.Format"
+msgid "{value}%"
+msgstr "{value}%"
+
+#. Key:	KUI_CustomOverclockingUI.Node_Select.Option_0
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_0"
+msgid "Target production rate:"
+msgstr "Target production rate:"
+
+#. Key:	KUI_CustomOverclockingUI.Node_Select.Option_1
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_1"
+msgid "Target consumption rate:"
+msgstr "Target consumption rate:"
+
+#. Key:	KUI_CustomOverclockingUI.Node_Select.Option_1_01
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_1_01"
+msgid "part per minute"
+msgstr "part per minute"
+
+#. Key:	KUI_CustomOverclockingUI_Production.Node_Select.Option_0
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI_Production.Node_Select.Option_0"
+msgid "m³ per minute"
+msgstr "m³ per minute"
+
+#. Key:	KUI_CustomOverclockingUI_Production.Node_Select.Option_1
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_CustomOverclockingUI_Production.Node_Select.Option_1"
+msgid "parts per minute"
+msgstr "parts per minute"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[0].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[0].PropertyTooltip"
+msgid "The visual type of the checkbox"
+msgstr "The visual type of the checkbox"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[10].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[10].PropertyTooltip"
+msgid "Padding"
+msgstr "Padding"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[11].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[11].PropertyTooltip"
+msgid "Background appearance"
+msgstr "Background appearance"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[12].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[12].PropertyTooltip"
+msgid "Background appearance when hovered"
+msgstr "Background appearance when hovered"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[13].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[13].PropertyTooltip"
+msgid "Background appearance when pressed"
+msgstr "Background appearance when pressed"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[14].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[14].PropertyTooltip"
+msgid "The normal unchecked foreground color"
+msgstr "The normal unchecked foreground color"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[15].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[15].PropertyTooltip"
+msgid "Foreground Color when hovered"
+msgstr "Foreground Color when hovered"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[16].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[16].PropertyTooltip"
+msgid "Foreground Color when pressed"
+msgstr "Foreground Color when pressed"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[17].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[17].PropertyTooltip"
+msgid "Foreground Color when checked"
+msgstr "Foreground Color when checked"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[18].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[18].PropertyTooltip"
+msgid "Foreground Color when checked and pressed"
+msgstr "Foreground Color when checked and pressed"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[1].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[1].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is unchecked (normal)"
+msgstr "CheckBox appearance when the CheckBox is unchecked (normal)"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[20].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[20].PropertyTooltip"
+msgid "Foreground Color when the check state is indeterminate"
+msgstr "Foreground Color when the check state is indeterminate"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[21].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[21].PropertyTooltip"
+msgid "BorderBackgroundColor refers to the actual color and opacity of the supplied border image on toggle buttons"
+msgstr "BorderBackgroundColor refers to the actual color and opacity of the supplied border image on toggle buttons"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[22].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[22].PropertyTooltip"
+msgid "The sound the check box should play when checked"
+msgstr "The sound the check box should play when checked"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[23].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[23].PropertyTooltip"
+msgid "The sound the check box should play when unchecked"
+msgstr "The sound the check box should play when unchecked"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[24].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[24].PropertyTooltip"
+msgid "The sound the check box should play when initially hovered over"
+msgstr "The sound the check box should play when initially hovered over"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[2].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[2].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is unchecked and hovered"
+msgstr "CheckBox appearance when the CheckBox is unchecked and hovered"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[4].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[4].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is checked"
+msgstr "CheckBox appearance when the CheckBox is checked"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[5].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[5].PropertyTooltip"
+msgid "CheckBox appearance when checked and hovered"
+msgstr "CheckBox appearance when checked and hovered"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[6].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[6].PropertyTooltip"
+msgid "CheckBox appearance when checked and pressed"
+msgstr "CheckBox appearance when checked and pressed"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[7].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[7].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is undetermined"
+msgstr "CheckBox appearance when the CheckBox is undetermined"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[8].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[8].PropertyTooltip"
+msgid "CheckBox appearance when CheckBox is undetermined and hovered"
+msgstr "CheckBox appearance when CheckBox is undetermined and hovered"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[9].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[9].PropertyTooltip"
+msgid "CheckBox appearance when CheckBox is undetermined and pressed"
+msgstr "CheckBox appearance when CheckBox is undetermined and pressed"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[0].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[0].PropertyTooltip"
+msgid "How to draw the image"
+msgstr "How to draw the image"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[1].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[1].PropertyTooltip"
+msgid "How to tile the image in Image mode"
+msgstr "How to tile the image in Image mode"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[2].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[2].PropertyTooltip"
+msgid "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\n          comes from a hardware device such as a web camera."
+msgstr "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\n          comes from a hardware device such as a web camera."
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[3].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[3].PropertyTooltip"
+msgid "Size of the resource in Slate Units"
+msgstr "Size of the resource in Slate Units"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[4].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[4].PropertyTooltip"
+msgid "The margin to use in Box and Border modes"
+msgstr "The margin to use in Box and Border modes"
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[5].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[5].PropertyTooltip"
+msgid "Tinting applied to the image."
+msgstr "Tinting applied to the image."
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[6].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[6].PropertyTooltip"
+msgid "How to draw the outline.  Currently only used for RoundedBox type brushes."
+msgstr "How to draw the outline.  Currently only used for RoundedBox type brushes."
+
+#. Key:	KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[7].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[7].PropertyTooltip"
+msgid "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\nthe AtlasedTextureInterface."
+msgstr "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\nthe AtlasedTextureInterface."
+
+#. Key:	KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[0].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[0].PropertyTooltip"
+msgid "The current specified color; only meaningful when ColorToUse == UseColor_Specified."
+msgstr "The current specified color; only meaningful when ColorToUse == UseColor_Specified."
+
+#. Key:	KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[1].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[1].PropertyTooltip"
+msgid "The rule for which color to pick."
+msgstr "The rule for which color to pick."
+
+#. Key:	KUI_MainWindow.KUI_MainWindow_C.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_MainWindow.KUI_MainWindow_C.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Production"
+msgstr "Production"
+
+#. Key:	KUI_MainWindow.Node_Add.NewItem_Text_5_FD671CE446AF05CA543E228C049AB0F9
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_MainWindow.Node_Add.NewItem_Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Overclocking"
+msgstr "Overclocking"
+
+#. Key:	KUI_Plug.Node_Format_Text.Format
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "FUNCTION:\r\n{Function}"
+
+#. Key:	KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
+msgid "INSERT FUEL"
+msgstr "INSERT FUEL"
+
+#. Key:	MovieSceneColorTrack_0.DisplayName
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,MovieSceneColorTrack_0.DisplayName"
+msgid "Color and Opacity"
+msgstr "Color and Opacity"
+
+#. Key:	MovieSceneFloatTrack_0.DisplayName
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,MovieSceneFloatTrack_0.DisplayName"
+msgid "Render Opacity"
+msgstr "Render Opacity"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[0].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[0].PropertyTooltip"
+msgid "The human readable display name of this object."
+msgstr "The human readable display name of this object."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[10].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[10].PropertyTooltip"
+msgid "Allows us to only see this Actor in the Editor, and not in the actual game.\n@see SetActorHiddenInGame()"
+msgstr "Allows us to only see this Actor in the Editor, and not in the actual game.\n@see SetActorHiddenInGame()"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[11].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[11].PropertyTooltip"
+msgid "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
+msgstr "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[12].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[12].PropertyTooltip"
+msgid "If true then destroy self when \"finished\", meaning all relevant components report that they are done and no timelines or timers are in flight."
+msgstr "If true then destroy self when \"finished\", meaning all relevant components report that they are done and no timelines or timers are in flight."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[13].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[13].PropertyTooltip"
+msgid "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\n@see https://www.unrealengine.com/blog/damage-in-ue4\n@see TakeDamage(), ReceiveDamage()"
+msgstr "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\n@see https://www.unrealengine.com/blog/damage-in-ue4\n@see TakeDamage(), ReceiveDamage()"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[14].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[14].PropertyTooltip"
+msgid "If true, this actor should search for an owned camera component to view through when used as a view target."
+msgstr "If true, this actor should search for an owned camera component to view through when used as a view target."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[15].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[15].PropertyTooltip"
+msgid "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\n@see UpdateOverlapsMethodDuringLevelStreaming"
+msgstr "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\n@see UpdateOverlapsMethodDuringLevelStreaming"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[16].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[16].PropertyTooltip"
+msgid "Whether this actor should be considered or not during HLOD generation."
+msgstr "Whether this actor should be considered or not during HLOD generation."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[17].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[17].PropertyTooltip"
+msgid "If true, this actor will replicate to remote machines\n@see SetReplicates()"
+msgstr "If true, this actor will replicate to remote machines\n@see SetReplicates()"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[18].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[18].PropertyTooltip"
+msgid "When true the replication system will only replicate the registered subobjects and the replicated actor components list\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+msgstr "When true the replication system will only replicate the registered subobjects and the replicated actor components list\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[19].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[19].PropertyTooltip"
+msgid "How long this Actor lives before dying, 0=forever. Note this is the INITIAL value and should not be modified once play has begun."
+msgstr "How long this Actor lives before dying, 0=forever. Note this is the INITIAL value and should not be modified once play has begun."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[1].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[1].PropertyTooltip"
+msgid "The human readable description of this object."
+msgstr "The human readable description of this object."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[20].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[20].PropertyTooltip"
+msgid "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
+msgstr "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[21].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[21].PropertyTooltip"
+msgid "Dormancy setting for actor to take itself off of the replication list without being destroyed on clients."
+msgstr "Dormancy setting for actor to take itself off of the replication list without being destroyed on clients."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[22].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[22].PropertyTooltip"
+msgid "Controls how to handle spawning this actor in a situation where it's colliding with something else. \"Default\" means AlwaysSpawn here."
+msgstr "Controls how to handle spawning this actor in a situation where it's colliding with something else. \"Default\" means AlwaysSpawn here."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[23].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[23].PropertyTooltip"
+msgid "Square of the max distance from the client's viewpoint that this actor is relevant and will be replicated."
+msgstr "Square of the max distance from the client's viewpoint that this actor is relevant and will be replicated."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[24].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[24].PropertyTooltip"
+msgid "How often (per second) this actor will be considered for replication, used to determine NetUpdateTime"
+msgstr "How often (per second) this actor will be considered for replication, used to determine NetUpdateTime"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[25].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[25].PropertyTooltip"
+msgid "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
+msgstr "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[26].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[26].PropertyTooltip"
+msgid "Priority for this actor when checking for replication in a low bandwidth or saturated situation, higher priority means it is more likely to replicate"
+msgstr "Priority for this actor when checking for replication in a low bandwidth or saturated situation, higher priority means it is more likely to replicate"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[27].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[27].PropertyTooltip"
+msgid "Pawn responsible for damage and other gameplay events caused by this actor."
+msgstr "Pawn responsible for damage and other gameplay events caused by this actor."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[28].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[28].PropertyTooltip"
+msgid "Local space pivot offset for the actor, only used in the editor"
+msgstr "Local space pivot offset for the actor, only used in the editor"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[29].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[29].PropertyTooltip"
+msgid "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+msgstr "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[30].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[30].PropertyTooltip"
+msgid "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\n@see         ActorGuid\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+msgstr "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\n@see         ActorGuid\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[31].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[31].PropertyTooltip"
+msgid "The GUID for this actor's content bundle."
+msgstr "The GUID for this actor's content bundle."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[32].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[32].PropertyTooltip"
+msgid "The scale to apply to any billboard components in editor builds (happens in any WITH_EDITOR build, including non-cooked games)."
+msgstr "The scale to apply to any billboard components in editor builds (happens in any WITH_EDITOR build, including non-cooked games)."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[33].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[33].PropertyTooltip"
+msgid "Array of tags that can be used for grouping and categorizing."
+msgstr "Array of tags that can be used for grouping and categorizing."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[4].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[4].PropertyTooltip"
+msgid "Used to sync and start build effect on buildings when created, but not after creation.\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+msgstr "Used to sync and start build effect on buildings when created, but not after creation.\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[6].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[6].PropertyTooltip"
+msgid "Abstract instances configuration data for the buildable"
+msgstr "Abstract instances configuration data for the buildable"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[7].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[7].PropertyTooltip"
+msgid "Clearance data of this buildable"
+msgstr "Clearance data of this buildable"
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[8].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[8].PropertyTooltip"
+msgid "If true, this actor is only relevant to its owner. If this flag is changed during play, all non-owner channels would need to be explicitly closed."
+msgstr "If true, this actor is only relevant to its owner. If this flag is changed during play, all non-owner channels would need to be explicitly closed."
+
+#. Key:	Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[9].PropertyTooltip
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[9].PropertyTooltip"
+msgid "Always relevant for network (overrides bOnlyRelevantToOwner)."
+msgstr "Always relevant for network (overrides bOnlyRelevantToOwner)."
+
+#. Key:	Subsystem_WidgetModifier.Node_Format_Text.Format
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.Node_Format_Text.Format"
+msgid "<White10Reg>Produced in: </><Orange10SemiB>{WHERE}</>"
+msgstr "<White10Reg>Produced in: </><Orange10SemiB>{WHERE}</>"
+
+#. Key:	Subsystem_WidgetModifier.Sprite.SpriteInfo.DisplayName
+#. SourceLocation:	/KUI/ST_KUI.ST_KUI
+#: /KUI/ST_KUI.ST_KUI
+msgctxt "ST_KUI,Subsystem_WidgetModifier.Sprite.SpriteInfo.DisplayName"
+msgid "Info"
+msgstr "Info"
+
+#. Key:	Celcius
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,Celcius"
+msgid "{Value} °C"
+msgstr "{Value} °C"
+
+#. Key:	CountMulti
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,CountMulti"
+msgid "{count}x"
+msgstr "{count}x"
+
+#. Key:	CrushedOres
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+
+#. Key:	Format_m³
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,Format_m³"
+msgid "{Value} m³"
+msgstr "{Value} m³"
+
+#. Key:	FromTo
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,FromTo"
+msgid "{From} to {To}"
+msgstr "{From} to {To}"
+
+#. Key:	FromToCelc
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,FromToCelc"
+msgid "{From} to {To}°C"
+msgstr "{From} to {To}°C"
+
+#. Key:	m3PerMin
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,m3PerMin"
+msgid "{Value} m³ / Min"
+msgstr "{Value} m³ / Min"
+
+#. Key:	MW
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,MW"
+msgid "{Value} MW"
+msgstr "{Value} MW"
+
+#. Key:	Percent
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,Percent"
+msgid "{Value} %"
+msgstr "{Value} %"
+
+#. Key:	PerMin
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,PerMin"
+msgid "{Value} / Min"
+msgstr "{Value} / Min"
+
+#. Key:	RecipeFormat
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,RecipeFormat"
+msgid "Recipe: {Name}"
+msgstr "Recipe: {Name}"
+
+#. Key:	TimeInSec
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,TimeInSec"
+msgid "{Time} Sec"
+msgstr "{Time} Sec"
+
+#. Key:	ToPercent
+#. SourceLocation:	/KUI/StringTables/KUI_Formats.KUI_Formats
+#: /KUI/StringTables/KUI_Formats.KUI_Formats
+msgctxt "KUI_GeneralWords,ToPercent"
+msgid "{From}% to {To}%"
+msgstr "{From}% to {To}%"
+
+#. Key:	/min
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,/min"
+msgid "/ min"
+msgstr "/ min"
+
+#. Key:	Accept
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Accept"
+msgid "Accept"
+msgstr "Accept"
+
+#. Key:	Add
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Add"
+msgid "Add"
+msgstr "Add"
+
+#. Key:	Added
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Added"
+msgid "Added!"
+msgstr "Added!"
+
+#. Key:	Amount
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Amount"
+msgid "Amount"
+msgstr "Amount"
+
+#. Key:	BuildGun
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,BuildGun"
+msgid "Build Gun"
+msgstr "Build Gun"
+
+#. Key:	Building
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Building"
+msgid "Building"
+msgstr "Building"
+
+#. Key:	Cancle
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Cancle"
+msgid "Cancle"
+msgstr "Cancle"
+
+#. Key:	Consumed
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Consumed"
+msgid "Consumed"
+msgstr "Consumed"
+
+#. Key:	ConsumedIn
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,ConsumedIn"
+msgid "Consumed In"
+msgstr "Consumed In"
+
+#. Key:	Copy
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Copy"
+msgid "Copy"
+msgstr "Copy"
+
+#. Key:	CycleTime
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,CycleTime"
+msgid "Cycle Time"
+msgstr "Cycle Time"
+
+#. Key:	DefaultSearchText
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,DefaultSearchText"
+msgid "Enter text here..."
+msgstr "Enter text here..."
+
+#. Key:	Delete
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Delete"
+msgid "Delete"
+msgstr "Delete"
+
+#. Key:	Deleted
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Deleted"
+msgid "deleted"
+msgstr "deleted"
+
+#. Key:	Edit
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Edit"
+msgid "Edit"
+msgstr "Edit"
+
+#. Key:	Heat
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "Heat"
+
+#. Key:	Idle
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "Idle"
+
+#. Key:	Invalid
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "Invalid"
+
+#. Key:	InvFormat
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,InvFormat"
+msgid "Invalid Information"
+msgstr "Invalid Information"
+
+#. Key:	Item
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Item"
+msgid "Item"
+msgstr "Item"
+
+#. Key:	ItemName
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,ItemName"
+msgid "Item Name"
+msgstr "Item Name"
+
+#. Key:	LessDetails
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,LessDetails"
+msgid "Less Details"
+msgstr "Less Details"
+
+#. Key:	loaded
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,loaded"
+msgid "loaded"
+msgstr "loaded"
+
+#. Key:	Loading
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Loading"
+msgid "Loading..."
+msgstr "Loading..."
+
+#. Key:	m3/min
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,m3/min"
+msgid "m³ / min"
+msgstr "m³ / min"
+
+#. Key:	MoreDetails
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,MoreDetails"
+msgid "More Details"
+msgstr "More Details"
+
+#. Key:	m³
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,m³"
+msgid "m³"
+msgstr "m³"
+
+#. Key:	NoCon
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,NoCon"
+msgid "No connection"
+msgstr "No connection"
+
+#. Key:	NoInv
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,NoInv"
+msgid "No Inventory set"
+msgstr "No Inventory set"
+
+#. Key:	NoPower
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "No Power"
+
+#. Key:	NotInit
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,NotInit"
+msgid "Widget not Init!"
+msgstr "Widget not Init!"
+
+#. Key:	Part
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Part"
+msgid "Parts"
+msgstr "Parts"
+
+#. Key:	PartPMin
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,PartPMin"
+msgid "per minute"
+msgstr "per minute"
+
+#. Key:	Paste
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Paste"
+msgid "Paste"
+msgstr "Paste"
+
+#. Key:	Paused
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Paused"
+msgid "Paused"
+msgstr "Paused"
+
+#. Key:	Produced
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Produced"
+msgid "Produced"
+msgstr "Produced"
+
+#. Key:	ProducedIn
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,ProducedIn"
+msgid "Produced In"
+msgstr "Produced In"
+
+#. Key:	RelevantItems
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,RelevantItems"
+msgid "Relevant Items:"
+msgstr "Relevant Items:"
+
+#. Key:	Remove
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Remove"
+msgid "Remove"
+msgstr "Remove"
+
+#. Key:	Running
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Running"
+msgid "Running"
+msgstr "Running"
+
+#. Key:	Save
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Save"
+msgid "Save"
+msgstr "Save"
+
+#. Key:	SaveAndExit
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,SaveAndExit"
+msgid "Save & Exit"
+msgstr "Save & Exit"
+
+#. Key:	SaveAsPreset
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,SaveAsPreset"
+msgid "Save as preset"
+msgstr "Save as preset"
+
+#. Key:	Saved
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Saved"
+msgid "Saved"
+msgstr "Saved"
+
+#. Key:	SelectItem
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,SelectItem"
+msgid "Select Item"
+msgstr "Select Item"
+
+#. Key:	SlotNotUsed
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,SlotNotUsed"
+msgid "Slot not in use"
+msgstr "Slot not in use"
+
+#. Key:	Stable
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Stable"
+msgid "Stable"
+msgstr "Stable"
+
+#. Key:	Stack
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Stack"
+msgid "Stack"
+msgstr "Stack"
+
+#. Key:	Type
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Type"
+msgid "Type"
+msgstr "Type"
+
+#. Key:	Unknown
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Unknown"
+msgid "Unknown"
+msgstr "Unknown"
+
+#. Key:	UnStable
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,UnStable"
+msgid "Unstable"
+msgstr "Unstable"
+
+#. Key:	Workbench
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Workbench"
+msgid "Craft Bench"
+msgstr "Craft Bench"
+
+#. Key:	Workshop
+#. SourceLocation:	/KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+#: /KUI/StringTables/KUI_GeneralWords.KUI_GeneralWords
+msgctxt "KUI_GeneralWords,Workshop"
+msgid "Equipment Workshop"
+msgstr "Equipment Workshop"
+
+#. Key:	Gas
+#. SourceLocation:	/KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+#: /KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+msgctxt "KUI_ItemFormat,Gas"
+msgid "Gas"
+msgstr "Gas"
+
+#. Key:	Heat
+#. SourceLocation:	/KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+#: /KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+msgctxt "KUI_ItemFormat,Heat"
+msgid "Heat"
+msgstr "Heat"
+
+#. Key:	Liquid
+#. SourceLocation:	/KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+#: /KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+msgctxt "KUI_ItemFormat,Liquid"
+msgid "Fluid"
+msgstr "Fluid"
+
+#. Key:	Solid
+#. SourceLocation:	/KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+#: /KUI/StringTables/KUI_ItemFormat.KUI_ItemFormat
+msgctxt "KUI_ItemFormat,Solid"
+msgid "Solid"
+msgstr "Solid"
+
+#. Key:	PP_OpenUrl_D
+#. SourceLocation:	/KUI/StringTables/KUI_Popups.KUI_Popups
+#: /KUI/StringTables/KUI_Popups.KUI_Popups
+msgctxt "KUI_GeneralWords,PP_OpenUrl_D"
+msgid "Open Url"
+msgstr "Open Url"
+
+#. Key:	PP_OpenUrl_T
+#. SourceLocation:	/KUI/StringTables/KUI_Popups.KUI_Popups
+#: /KUI/StringTables/KUI_Popups.KUI_Popups
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+
+#. Key:	State_Error
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_Error"
+msgid "Error"
+msgstr "Error"
+
+#. Key:	State_Idle
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_Idle"
+msgid "Idle"
+msgstr "Idle"
+
+#. Key:	State_MissingModule
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_MissingModule"
+msgid "Missing Module"
+msgstr "Missing Module"
+
+#. Key:	State_NoPower
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_NoPower"
+msgid "No Power"
+msgstr "No Power"
+
+#. Key:	State_Overclocked
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_Overclocked"
+msgid "Overclocked"
+msgstr "Overclocked"
+
+#. Key:	State_Produce
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_Produce"
+msgid "Produce"
+msgstr "Produce"
+
+#. Key:	State_Standby
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,State_Standby"
+msgid "Standby"
+msgstr "Standby"
+
+#. Key:	Warning_NoFluid
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,Warning_NoFluid"
+msgid "No Fluid!"
+msgstr "No Fluid!"
+
+#. Key:	Warning_NoPower
+#. SourceLocation:	/KUI/StringTables/KUI_Production.KUI_Production
+#: /KUI/StringTables/KUI_Production.KUI_Production
+msgctxt "KUI_GeneralWords,Warning_NoPower"
+msgid "No Power!"
+msgstr "No Power!"
+
+#. Key:	Found_Danger
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Found_Danger"
+msgid "Can be found in Dangerous Areas."
+msgstr "Can be found in Dangerous Areas."
+
+#. Key:	Found_Everywhere
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Found_Everywhere"
+msgid "Can be found in every biome."
+msgstr "Can be found in every biome."
+
+#. Key:	Rare_Common
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rare_Common"
+msgid "Common"
+msgstr "Common"
+
+#. Key:	Rare_Rare
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rare_Rare"
+msgid "Rare"
+msgstr "Rare"
+
+#. Key:	Rare_VeryCommon
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rare_VeryCommon"
+msgid "Very Common"
+msgstr "Very Common"
+
+#. Key:	Rare_VeryRare
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rare_VeryRare"
+msgid "Very Rare"
+msgstr "Very Rare"
+
+#. Key:	Rate_60
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rate_60"
+msgid "Normal extraction rate is: 60/min"
+msgstr "Normal extraction rate is: 60/min"
+
+#. Key:	Rate_60m³
+#. SourceLocation:	/KUI/StringTables/KUI_Resource.KUI_Resource
+#: /KUI/StringTables/KUI_Resource.KUI_Resource
+msgctxt "KUI_GeneralWords,Rate_60m³"
+msgid "Normal extraction rate is: 60m³/min"
+msgstr "Normal extraction rate is: 60m³/min"
+
+#. Key:	Time_Any
+#. SourceLocation:	/KUI/StringTables/KUI_Time.KUI_Time
+#: /KUI/StringTables/KUI_Time.KUI_Time
+msgctxt "KUI_GeneralWords,Time_Any"
+msgid "Any Time"
+msgstr "Any Time"
+
+#. Key:	Time_Day
+#. SourceLocation:	/KUI/StringTables/KUI_Time.KUI_Time
+#: /KUI/StringTables/KUI_Time.KUI_Time
+msgctxt "KUI_GeneralWords,Time_Day"
+msgid "Day"
+msgstr "Day"
+
+#. Key:	Time_Invalid
+#. SourceLocation:	/KUI/StringTables/KUI_Time.KUI_Time
+#: /KUI/StringTables/KUI_Time.KUI_Time
+msgctxt "KUI_GeneralWords,Time_Invalid"
+msgid "Invalid"
+msgstr "Invalid"
+
+#. Key:	Time_Night
+#. SourceLocation:	/KUI/StringTables/KUI_Time.KUI_Time
+#: /KUI/StringTables/KUI_Time.KUI_Time
+msgctxt "KUI_GeneralWords,Time_Night"
+msgid "Night"
+msgstr "Night"
+
+#. Key:	Effect
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Effect"
+msgid "Effect"
+msgstr "Effect"
+
+#. Key:	Image
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Image"
+msgid "Image"
+msgstr "Image"
+
+#. Key:	Layout
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Layout"
+msgid "Layout"
+msgstr "Layout"
+
+#. Key:	LivePreview
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,LivePreview"
+msgid "Live Preview"
+msgstr "Live Preview"
+
+#. Key:	no
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,no"
+msgid "no"
+msgstr "no"
+
+#. Key:	NO
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,NO"
+msgid "NO"
+msgstr "NO"
+
+#. Key:	No
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,No"
+msgid "No"
+msgstr "No"
+
+#. Key:	Refresh
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Refresh"
+msgid "Refresh"
+msgstr "Refresh"
+
+#. Key:	Reset
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Reset"
+msgid "Reset"
+msgstr "Reset"
+
+#. Key:	RSS_DefaultTextElementText
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,RSS_DefaultTextElementText"
+msgid "Rss Sign Text"
+msgstr "Rss Sign Text"
+
+#. Key:	RSS_LayOutLoaded
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,RSS_LayOutLoaded"
+msgid "Layout loaded"
+msgstr "Layout loaded"
+
+#. Key:	Select
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Select"
+msgid "Select"
+msgstr "Select"
+
+#. Key:	Template
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Template"
+msgid "Template"
+msgstr "Template"
+
+#. Key:	Text
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Text"
+msgid "Text"
+msgstr "Text"
+
+#. Key:	yes
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,yes"
+msgid "yes"
+msgstr "yes"
+
+#. Key:	YES
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,YES"
+msgid "YES"
+msgstr "YES"
+
+#. Key:	Yes
+#. SourceLocation:	/KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+#: /KUI/StringTables/KUI_WidgetWords.KUI_WidgetWords
+msgctxt "KUI_GeneralWords,Yes"
+msgid "Yes"
+msgstr "Yes"
+
+#. Key:	Key
+#. SourceLocation:	Mods/KUI/Source/KUI/Public/KUIModule.h(66)
+#: Mods/KUI/Source/KUI/Public/KUIModule.h(66)
+msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
+msgid "SourceString"
+msgstr "SourceString"
+

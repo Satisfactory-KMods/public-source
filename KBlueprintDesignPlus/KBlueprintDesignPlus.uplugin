@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.3.0",
+	"SemVersion": "1.3.0",
+	"FriendlyName": "Blueprint Designer Plus",
+	"Description": "",
+	"Category": "Modding",
+	"CreatedBy": "Kyri123/Kyrium",
+	"CreatedByURL": "https://github.com/Kyri123",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.11.1",
+			"Enabled": true
+		}
+	],
+	"LocalizationTargets": [
+		{
+			"Name": "KBlueprintDesignPlus",
+			"LoadingPolicy": "Always"
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=416835"
+}

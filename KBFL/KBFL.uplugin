@@ -1,0 +1,40 @@
+{
+	"FileVersion": 3,
+	"Version": 3,
+	"VersionName": "4.0.0",
+	"SemVersion": "4.0.0",
+	"FriendlyName": "KBFL",
+	"Description": "Lib for Kyris Mods",
+	"Category": "Modding",
+	"CreatedBy": "Kyri123/Kyrium",
+	"CreatedByURL": "https://github.com/Kyri123",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "KBFL",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.11.1",
+			"Enabled": true
+		}
+	],
+	"LocalizationTargets": [
+		{
+			"Name": "KBFL",
+			"LoadingPolicy": "Always"
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=416835"
+}

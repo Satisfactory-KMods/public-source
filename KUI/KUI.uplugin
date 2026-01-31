@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 3,
+	"VersionName": "3.4.0",
+	"SemVersion": "3.4.0",
+	"FriendlyName": "KUI",
+	"Description": "",
+	"Category": "Modding",
+	"CreatedBy": "Kyrium/Kyri123",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.11.1",
+			"Enabled": true
+		}
+	],
+	"LocalizationTargets": [
+		{
+			"Name": "KUI",
+			"LoadingPolicy": "Always"
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=416835"
+}
