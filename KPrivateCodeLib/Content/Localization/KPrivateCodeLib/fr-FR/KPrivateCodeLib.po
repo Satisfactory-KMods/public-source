@@ -1,0 +1,99 @@
+msgid ""
+msgstr ""
+"Language: fr-FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n > 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
+msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
+msgstr "<LightGrey12Reg>Merci d'avoir utilisé</><Orange12Reg>KMods </>"
+
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>Nous voulons que vous, avez le choix de choisir quand vous voulez and </><Orange12Reg>quel publicité vous voulez voir! </> \\r\\n<LightGrey12Reg>Vous pouvez changer ceci à n'importe quel moment dans </><Orange12Reg>la Configuration du Mod KPrivateLib. </> \\r\\n\\r\\n<Orange12Reg>Ce message n'apparaîtra qu'une seule fois </>"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
+msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
+msgstr "Impossible de déplacer le module sur cette construction (Trop, Invalide, ou pas de place)"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
+msgid "Edit"
+msgstr "Modifier"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable Sink Option"
+msgstr "Activer l'option de Lavabo"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable pull rules"
+msgstr "Activer les règles d'activation"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable push rule"
+msgstr "Activer les règles de poussée"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable remote access"
+msgstr "Activer l'accès à Distance"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
+msgid "K.Mods Patreons"
+msgstr "Patreons de K.Mods"
+
+msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
+msgid "KMods"
+msgstr "KMods"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
+msgid "Missing master Building cannot attach module!"
+msgstr "Impossible de placer ce module sans construction principal!"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
+msgid "Module is not allowed here"
+msgstr "Ce module n'est pas autorisé ici"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
+msgid "Patreon Configuration"
+msgstr "Configuration Patreon"
+
+msgctxt "KPrivateCodeLib,ConstructDisqualifier_MaxCountReached"
+msgid "Reached global max count for this building (5)"
+msgstr "Limite de construction global atteinte (5)"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
+msgid "Remote Access"
+msgstr "Accès à distance"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
+msgid "Save And Close"
+msgstr "Sauvegarder et Fermer"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
+msgid "Save Color"
+msgstr "Sauvegarder la couleur"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Show Patreon Button"
+msgstr "Montrer le button Patreon"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Show Patreon List"
+msgstr "Monter la liste Patreon"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
+msgid "Sink Utility"
+msgstr "Fonctionnalité de Lavabo"
+
+msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
+msgid "Text Block"
+msgstr "Block de texte"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
+msgid "Thanks to all supporter!"
+msgstr "Merci à tous les supporters!"
+
+msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
+msgid "Unlock new network tier"
+msgstr "Débloquer un nouveau tier de réseau"

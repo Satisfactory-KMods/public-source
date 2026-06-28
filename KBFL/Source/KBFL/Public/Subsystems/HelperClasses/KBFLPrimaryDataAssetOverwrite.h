@@ -11,8 +11,8 @@
 
 #include "KBFLPrimaryDataAssetOverwrite.generated.h"
 /**
- * Specialized CDO Overwrite handler for UPrimaryDataAsset instances.
- * Since UPrimaryDataAsset are treated as object instances rather than CDOs,
+ * Specialized CDO Overwrite handler for UDataAsset instances.
+ * Since UDataAsset are treated as object instances rather than CDOs,
  * this class provides special handling for finding and modifying them.
  */
 UCLASS()
@@ -36,55 +36,69 @@ public:
 	void ValidateManualProperties();
 #endif
 
-	/** Target class for DataAsset (UPrimaryDataAsset or derived classes) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "PrimaryDataAsset")
-	TSubclassOf<UPrimaryDataAsset> mTargetDataAssetClass;
+	// ===== Target Settings =====
+	/** Target class for DataAsset (UDataAsset or derived classes) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Target Settings")
+	TSubclassOf<UDataAsset> mTargetDataAssetClass;
+
+	/** When mTargetDataAssetClass is abstract, provide a concrete subclass here to use as the property container
+	 * template. mTargetDataAssetClass still identifies which assets to target; this class is only used so the
+	 * property container can be created and edited. Must be a non-abstract subclass of mTargetDataAssetClass. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings",
+			  meta = (AllowAbstract = "false",
+					  EditCondition = "mTargetDataAssetClass != nullptr",
+					  EditConditionHides))
+	TSubclassOf<UDataAsset> mAbstractContainerClass;
 
 	/** Target object instance (alternative to class-based targeting) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
 	TObjectPtr<UObject> mTargetDataAssetInstance;
-
-	/** Additional target classes to apply overrides to */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "PrimaryDataAsset")
-	TArray<TSoftClassPtr<UPrimaryDataAsset>> mOtherTargetClasses;
 
 	/** If true, mTargetDataAssetClass is only used as a container for properties, not for asset targeting.
 	 * Use mRealTargetClass for actual class targeting. This is a workaround for abstract classes. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
 	bool bTargetOnlyAsContainer = false;
 
 	/** The real target class to apply overrides to when bTargetOnlyAsContainer is true.
 	 * This allows you to use an abstract class as property container while targeting concrete classes. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset",
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings",
 			  meta = (AllowAbstract = "false", EditCondition = "bTargetOnlyAsContainer", EditConditionHides))
-	TSoftClassPtr<UPrimaryDataAsset> mRealTargetClass;
+	TSoftClassPtr<UDataAsset> mRealTargetClass;
 
-	/** If true, only apply to Blueprint-based PrimaryDataAssets */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
-	bool bOnlyApplyOnBlueprints = true;
+	/** Additional target classes to apply overrides to */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Target Settings")
+	TArray<TSoftClassPtr<UDataAsset>> mOtherTargetClasses;
 
-	/** Paths to search for PrimaryDataAsset instances */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
+	/** Paths to search for DataAsset instances */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
 	TArray<FString> mFindAssetsInPaths;
 
+	// ===== Blueprint Handling =====
+	/** If true, only apply to Blueprint-based DataAssets */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Blueprint Handling")
+	bool bOnlyApplyOnBlueprints = true;
+
+	// ===== Include/Exclude =====
 	/** Specific DataAsset instances to apply overrides to */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
-	TArray<TSoftObjectPtr<UPrimaryDataAsset>> mSpecificAssets;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Include/Exclude")
+	TArray<TSoftObjectPtr<UDataAsset>> mSpecificAssets;
 
 	/** DataAsset instances to ignore/skip */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PrimaryDataAsset")
-	TArray<TSoftObjectPtr<UPrimaryDataAsset>> mIgnoreAssets;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Include/Exclude")
+	TArray<TSoftObjectPtr<UDataAsset>> mIgnoreAssets;
 
+	// ===== Property Container =====
 	/** Instanced object storing actual overridden property values */
-	UPROPERTY(EditAnywhere, Instanced, Category = "PrimaryDataAsset")
-	UObject* mPropertyContainer = nullptr;
+	UPROPERTY(EditAnywhere, Instanced, Category = "Property Container")
+	TObjectPtr<UObject> mPropertyContainer = nullptr;
 
+	// ===== Property Overrides =====
 	/** Properties that have been explicitly modified by the user */
-	UPROPERTY(EditAnywhere, Category = "PrimaryDataAsset", meta = (TitleProperty = "mPropertyName"))
+	UPROPERTY(EditAnywhere, Category = "Property Overrides", meta = (TitleProperty = "mPropertyName"))
 	TSet<FKBFLCDOOverwriteProperty> mModifiedProperties;
 
 	/** Manual property overrides - allows you to manually add/edit properties to override */
-	UPROPERTY(EditAnywhere, Category = "PrimaryDataAsset", meta = (TitleProperty = "mPropertyName"))
+	UPROPERTY(EditAnywhere, Category = "Property Overrides", meta = (TitleProperty = "mPropertyName"))
 	TSet<FKBFLCDOOverwriteProperty> mManuelPropertiesOverwrite;
 
 private:
@@ -118,11 +132,11 @@ public:
 	virtual void ApplyToInstances() override;
 
 	/** Refresh the property container when TargetClass changes */
-	UFUNCTION(CallInEditor, Category = "PrimaryDataAsset")
+	UFUNCTION(CallInEditor, Category = "Actions")
 	void RefreshPropertyContainer();
 
 	/** Validate and auto-detect types for manual property overrides */
-	UFUNCTION(CallInEditor, Category = "PrimaryDataAsset")
+	UFUNCTION(CallInEditor, Category = "Actions")
 	void ValidateAndDetectPropertyTypes();
 
 #if WITH_EDITOR

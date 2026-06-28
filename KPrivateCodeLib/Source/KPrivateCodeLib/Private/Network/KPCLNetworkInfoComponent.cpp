@@ -1,10 +1,10 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
-
+// Copyright Coffee Stain Studios. All Rights Reserved.
 
 #include "Network/KPCLNetworkInfoComponent.h"
 
 #include "Net/UnrealNetwork.h"
 
+#include "Network/Buildings/KPCLNetworkCore.h"
 #include "Network/KPCLNetwork.h"
 
 void UKPCLNetworkInfoComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -23,23 +23,29 @@ bool UKPCLNetworkInfoComponent::HasCore() const
 	return mNetworkCoresInNetwork.Num() >= 1;
 }
 
-int32 UKPCLNetworkInfoComponent::CoreCount() const
-{
-	return mNetworkCoresInNetwork.Num();
-}
+int32 UKPCLNetworkInfoComponent::CoreCount() const { return mNetworkCoresInNetwork.Num(); }
 
 void UKPCLNetworkInfoComponent::SetCors(TArray<AKPCLNetworkCore*> Cores)
 {
 	if (mNetworkCoresInNetwork.Num() != Cores.Num())
 	{
-		FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-			                                                     [&, Cores]()
-			                                                     {
-				                                                     if (CoreStateChanged.IsBound())
-				                                                     {
-					                                                     CoreStateChanged.Broadcast(Cores.Num() > 0);
-				                                                     }
-			                                                     }), TStatId(), nullptr, ENamedThreads::GameThread);
+		// Fixed: previous capture [&, Cores] captured `this` by reference into a deferred
+		// game-thread task — use-after-free if the component is destroyed before the task runs.
+		// Replaced with an explicit TWeakObjectPtr capture so the broadcast is safely skipped
+		// when the component is gone.
+		TWeakObjectPtr<UKPCLNetworkInfoComponent> WeakThis(this);
+		const bool bHasCores = Cores.Num() > 0;
+		FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+			FSimpleDelegateGraphTask::FDelegate::CreateLambda(
+				[WeakThis, bHasCores]()
+				{
+					UKPCLNetworkInfoComponent* StrongThis = WeakThis.Get();
+					if (StrongThis && StrongThis->CoreStateChanged.IsBound())
+					{
+						StrongThis->CoreStateChanged.Broadcast(bHasCores);
+					}
+				}),
+			TStatId(), nullptr, ENamedThreads::GameThread);
 	}
 	mNetworkCoresInNetwork = Cores;
 }
@@ -55,17 +61,14 @@ UKPCLNetwork* UKPCLNetworkInfoComponent::GetNetwork() const
 
 class AKPCLNetworkCore* UKPCLNetworkInfoComponent::GetFirstCores() const
 {
-	return mNetworkCoresInNetwork.Num() > 0 ? mNetworkCoresInNetwork[0] : nullptr;
+	return mNetworkCoresInNetwork.Num() > 0 ? mNetworkCoresInNetwork[0].Get() : nullptr;
 }
 
 class AKPCLNetworkCore* UKPCLNetworkInfoComponent::GetFirstCores(bool& Valid) const
 {
-	AKPCLNetworkCore* Core = mNetworkCoresInNetwork.Num() > 0 ? mNetworkCoresInNetwork[0] : nullptr;
+	AKPCLNetworkCore* Core = mNetworkCoresInNetwork.Num() > 0 ? mNetworkCoresInNetwork[0].Get() : nullptr;
 	Valid = IsValid(Core);
 	return Core;
 }
 
-TArray<class AKPCLNetworkCore*> UKPCLNetworkInfoComponent::GetCores() const
-{
-	return mNetworkCoresInNetwork;
-}
+TArray<class AKPCLNetworkCore*> UKPCLNetworkInfoComponent::GetCores() const { return mNetworkCoresInNetwork; }

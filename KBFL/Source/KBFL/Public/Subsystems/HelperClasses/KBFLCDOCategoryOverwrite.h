@@ -25,13 +25,22 @@ public:
 	UKBFLCDOCategoryOverwrite();
 	virtual void ApplyToInstances() override;
 
-	/** must be set for CDO */
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	// Lazy-load path: re-apply to a single class loaded after the initial CDO pass.
+	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+	virtual void ApplyToInstance(UObject* Instance) override;
+
+	// ===== Target Category =====
+	/** Target category to assign items and recipes to */
+	UPROPERTY(EditAnywhere, Category = "Target Category")
+	TSoftClassPtr<UFGItemCategory> mToCategory;
+
+	// ===== Items to Recategorize =====
+	/** Item descriptors to move to the target category */
+	UPROPERTY(EditAnywhere, Category = "Items to Recategorize")
 	TArray<TSoftClassPtr<UFGItemDescriptor>> mItems;
 
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	// ===== Recipes to Recategorize =====
+	/** Recipes to move to the target category */
+	UPROPERTY(EditAnywhere, Category = "Recipes to Recategorize")
 	TArray<TSoftClassPtr<UFGRecipe>> mRecipes;
-
-	UPROPERTY(EditAnywhere, Category = "CDO")
-	TSoftClassPtr<UFGItemCategory> mToCategory;
 };

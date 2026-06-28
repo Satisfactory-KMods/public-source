@@ -1,10 +1,11 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Buildables/FGBuildableWire.h"
-#include "GameFramework/Actor.h"
+
 #include "KPCLNetworkCable.generated.h"
 
 UCLASS(Abstract)

@@ -1,4 +1,3 @@
-﻿#pragma once
 #include "Subsystems/ResourceNodes/KBFLResourceNodeDescriptor_ResourceWell.h"
 
 #include "Buildables/FGBuildableFrackingActivator.h"

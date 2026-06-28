@@ -1,5 +1,7 @@
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
+#include "Engine/AssetManager.h"
+
 #include "FGGameState.h"
 #include "KBFLLogging.h"
 #include "SMLWorldModule.h"
@@ -49,8 +51,9 @@ void UKBFLAssetDataSubsystem::Deinitialize()
 	mAllFoundedDriveablePawns.Empty();
 	mAllFoundedHolograms.Empty();
 	mAllFoundedModModules.Empty();
-	mAllFoundedCDOHelpers.Empty();
 	mAllFoundedResourceDescriptors.Empty();
+	mAllFoundResearchTrees.Empty();
+	mAllFoundAGS.Empty();
 	mAllFoundedObjects.Empty();
 
 	for (TTuple<FName, FKBFLAssetData> directoryMapping : mDirectoryMappings)
@@ -60,6 +63,9 @@ void UKBFLAssetDataSubsystem::Deinitialize()
 
 	mDirectoryMappings.Empty();
 
+	mScannedAssets.Empty();
+	mResolvedTypes.Empty();
+	mPendingAsyncLoads.Empty();
 	bWasInit = false;
 
 	Super::Deinitialize();
@@ -67,18 +73,311 @@ void UKBFLAssetDataSubsystem::Deinitialize()
 
 void UKBFLAssetDataSubsystem::ScanOnInitialize()
 {
-	DoScan();
-	bWasInit = false;
+	// Init only scans registry metadata - no class is loaded here. Categories resolve lazily on first query.
+	EnsureRegistryScanned();
 }
 
 void UKBFLAssetDataSubsystem::DoScan(bool Force)
 {
-	if (!bWasInit || Force)
+	if (Force)
 	{
-		UE_LOG(AssetDataSubsystemLog, Log, TEXT("FORCE! Initialize Subsystem in WorldName: %s"),
-			   *GetWorld()->GetMapName());
-		InitAssetFinder();
-		PrintFound();
+		// Drop every cache and force a fresh registry scan. Categories will re-resolve lazily on next query.
+		mResolvedTypes.Empty();
+		mAllFoundedSchematics.Empty();
+		mAllFoundedRecipes.Empty();
+		mAllFoundedItems.Empty();
+		mAllFoundedBuildables.Empty();
+		mAllFoundedDriveablePawns.Empty();
+		mAllFoundedHolograms.Empty();
+		mAllFoundedModModules.Empty();
+		mAllFoundedResourceDescriptors.Empty();
+		mAllFoundResearchTrees.Empty();
+		mAllFoundAGS.Empty();
+		mAllFoundedObjects.Empty();
+
+		for (TTuple<FName, FKBFLAssetData> DirectoryMapping : mDirectoryMappings)
+		{
+			DirectoryMapping.Value.cleanup();
+		}
+		mDirectoryMappings.Empty();
+
+		mScannedAssets.Empty();
+		mPendingAsyncLoads.Empty();
+		bWasInit = false;
+	}
+
+	EnsureRegistryScanned();
+}
+
+void UKBFLAssetDataSubsystem::EnsureRegistryScanned()
+{
+	if (bWasInit)
+	{
+		return;
+	}
+
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	// Safety guard: do not scan while AssetRegistry is still loading assets,
+	// as this can cause a crash in FPluginModuleLoader::FindRootModulesOfType
+	if (AssetRegistry.IsLoadingAssets())
+	{
+		UE_LOG(AssetDataSubsystemLog, Warning,
+			   TEXT("EnsureRegistryScanned: AssetRegistry is still loading - deferring until OnFilesLoaded"));
+		AssetRegistry.OnFilesLoaded().AddUObject(this, &UKBFLAssetDataSubsystem::ScanOnInitialize);
+		return;
+	}
+
+	InitAssetFinder();
+}
+
+void UKBFLAssetDataSubsystem::InitAssetFinder()
+{
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	// Use game world module by default
+	TSubclassOf<UWorldModule> ModuleTypeClass = UGameWorldModule::StaticClass();
+
+	// Use MenuWorldModule if we are in the main menu
+	if (FPluginModuleLoader::IsMainMenuWorld(GetWorld()))
+	{
+		ModuleTypeClass = UMenuWorldModule::StaticClass();
+	}
+
+	// Discover modules of the relevant types
+	const TArray<FDiscoveredModule> DiscoveredModules = FPluginModuleLoader::FindRootModulesOfType(ModuleTypeClass);
+
+	TArray<FName> SearchPaths;
+	SearchPaths.Add(FName("/Game"));
+
+	for (const FDiscoveredModule& Module : DiscoveredModules)
+	{
+		UE_LOG(AssetDataSubsystemLog, Log, TEXT("Load Mod: %s"), *Module.OwnerPluginName);
+		SearchPaths.Add(FName("/" + Module.OwnerPluginName));
+	}
+
+	// Gather ONLY Blueprint + DataAsset registry metadata. This does NOT load any class object -
+	// FAssetData is registry metadata. Class objects are loaded lazily, per category, in
+	// EnsureCategoryResolved when a getter for that category is first called.
+	FARFilter Filter;
+	Filter.PackagePaths = SearchPaths;
+	Filter.bRecursivePaths = true;
+	Filter.bRecursiveClasses = true;
+	Filter.ClassPaths.Add(FTopLevelAssetPath(UBlueprint::StaticClass()));
+	Filter.ClassPaths.Add(FTopLevelAssetPath(UBlueprintGeneratedClass::StaticClass()));
+	Filter.ClassPaths.Add(FTopLevelAssetPath(UDataAsset::StaticClass()));
+
+	mScannedAssets.Reset();
+	if (AssetRegistry.GetAssets(Filter, mScannedAssets))
+	{
+		bWasInit = true;
+		UE_LOG(AssetDataSubsystemLog, Log,
+			   TEXT("Registry scan complete: %d candidate assets found (no classes loaded yet)"), mScannedAssets.Num());
+	}
+	else
+	{
+		UE_LOG(AssetDataSubsystemLog, Error, TEXT("FAIL TO FIND ASSET PATH"));
+	}
+}
+
+void UKBFLAssetDataSubsystem::EnsureCategoryResolved(int32 Type)
+{
+	if (mResolvedTypes.Contains(Type))
+	{
+		return;
+	}
+
+	EnsureRegistryScanned();
+	if (!bWasInit)
+	{
+		// Registry still streaming - resolution deferred until OnFilesLoaded re-runs the scan.
+		return;
+	}
+
+	// GetDerivedClasses finds all currently in-memory subclasses with no disk I/O.
+	// Using LoadObject here corrupts CSS's replication graph init (causes MP crash).
+	auto AddDerivedToSet = [](UClass* Parent, auto& OutSet)
+	{
+		TArray<UClass*> Derived;
+		GetDerivedClasses(Parent, Derived, true);
+		for (UClass* C : Derived)
+		{
+			using SC = typename TDecay<decltype(OutSet)>::Type::ElementType;
+			if (SC Sub = C)
+			{
+				OutSet.Add(Sub);
+			}
+		}
+	};
+
+	switch (Type)
+	{
+	case 0:
+		AddDerivedToSet(UFGSchematic::StaticClass(), mAllFoundedSchematics);
+		break;
+	case 1:
+		AddDerivedToSet(UFGRecipe::StaticClass(), mAllFoundedRecipes);
+		break;
+	case 2:
+		AddDerivedToSet(UFGItemDescriptor::StaticClass(), mAllFoundedItems);
+		break;
+	case 3:
+		AddDerivedToSet(AFGBuildable::StaticClass(), mAllFoundedBuildables);
+		break;
+	case 4:
+		AddDerivedToSet(AFGDriveablePawn::StaticClass(), mAllFoundedDriveablePawns);
+		break;
+	case 5:
+		AddDerivedToSet(AFGHologram::StaticClass(), mAllFoundedHolograms);
+		break;
+	case 6:
+		AddDerivedToSet(UModModule::StaticClass(), mAllFoundedModModules);
+		break;
+	case 8:
+		AddDerivedToSet(UFGResourceDescriptor::StaticClass(), mAllFoundedResourceDescriptors);
+		break;
+	case 10:
+		AddDerivedToSet(UFGResearchTree::StaticClass(), mAllFoundResearchTrees);
+		break;
+	case 11:
+		FindAllDataAssetsOfClass(mAllFoundAGS);
+		break;
+	default:
+		return;
+	}
+
+	mResolvedTypes.Add(Type);
+	IndexResolvedCategory(Type);
+	TriggerAsyncLoadsForCategory(Type);
+}
+
+void UKBFLAssetDataSubsystem::EnsureAllResolved()
+{
+	static const int32 AllTypes[] = {0, 1, 2, 3, 4, 5, 6, 8, 10, 11};
+	for (int32 Type : AllTypes)
+	{
+		EnsureCategoryResolved(Type);
+	}
+}
+
+void UKBFLAssetDataSubsystem::setMapClass(UClass* Class, int32 Type)
+{
+	TArray<FString> DirectoryArray;
+	Class->GetFullName().ParseIntoArray(DirectoryArray, TEXT("/"));
+	FString ModName = DirectoryArray[1];
+	// UE_LOG( LogTemp, Warning, TEXT("setMapClass: %s > %s > %d"), *ModName, *Class->GetFullName( ), Type );
+
+	if (FKBFLAssetData* AssetData = mDirectoryMappings.Find(FName(ModName.ToLower())))
+	{
+		AssetData->WriteClass(Class, Type);
+	}
+	else
+	{
+		FKBFLAssetData KBFLAssetData = FKBFLAssetData();
+		KBFLAssetData.WriteClass(Class, Type);
+		mDirectoryMappings.Add(FName(ModName.ToLower()), KBFLAssetData);
+	}
+}
+
+void UKBFLAssetDataSubsystem::setMapClass(UObject* Object, int32 Type)
+{
+	TArray<FString> DirectoryArray;
+	Object->GetFullName().ParseIntoArray(DirectoryArray, TEXT("/"));
+	FString ModName = DirectoryArray[1];
+	// UE_LOG(LogTemp, Warning, TEXT("setMapClass (OBJECT): %s > %s > %d"), *ModName, *Object->GetFullName( ),
+	// Type);
+
+	if (FKBFLAssetData* AssetData = mDirectoryMappings.Find(FName(ModName.ToLower())))
+	{
+		AssetData->WriteObject(Object, Type);
+	}
+	else
+	{
+		FKBFLAssetData KBFLAssetData = FKBFLAssetData();
+		KBFLAssetData.WriteObject(Object, Type);
+		mDirectoryMappings.Add(FName(ModName.ToLower()), KBFLAssetData);
+	}
+}
+
+void UKBFLAssetDataSubsystem::IndexResolvedCategory(int32 Type)
+{
+	switch (Type)
+	{
+	case 0:
+		for (UClass* Data : mAllFoundedSchematics)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 0);
+		}
+		break;
+	case 1:
+		for (UClass* Data : mAllFoundedRecipes)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 1);
+		}
+		break;
+	case 2:
+		for (UClass* Data : mAllFoundedItems)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 2);
+		}
+		break;
+	case 3:
+		for (UClass* Data : mAllFoundedBuildables)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 3);
+		}
+		break;
+	case 4:
+		for (UClass* Data : mAllFoundedDriveablePawns)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 4);
+		}
+		break;
+	case 5:
+		for (UClass* Data : mAllFoundedHolograms)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 5);
+		}
+		break;
+	case 6:
+		for (UClass* Data : mAllFoundedModModules)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 6);
+		}
+		break;
+	case 8:
+		for (UClass* Data : mAllFoundedResourceDescriptors)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 8);
+		}
+		break;
+	case 10:
+		for (UClass* Data : mAllFoundResearchTrees)
+		{
+			mAllFoundedObjects.Add(Data);
+			setMapClass(Data, 10);
+		}
+		break;
+	case 11:
+		for (UObject* Data : mAllFoundAGS)
+		{
+			setMapClass(Data, 11);
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -116,8 +415,6 @@ void UKBFLAssetDataSubsystem::PrintFound()
 	PrintArray(mAllFoundedHolograms);
 	UE_LOG(AssetDataSubsystemLog, Log, TEXT("mAllFoundedModModules: %d"), mAllFoundedModModules.Num());
 	PrintArray(mAllFoundedModModules);
-	UE_LOG(AssetDataSubsystemLog, Log, TEXT("mAllFoundedCDOHelpers: %d"), mAllFoundedCDOHelpers.Num());
-	PrintArray(mAllFoundedCDOHelpers);
 	UE_LOG(AssetDataSubsystemLog, Log, TEXT("mAllFoundedResourceDescriptors: %d"),
 		   mAllFoundedResourceDescriptors.Num());
 	PrintArray(mAllFoundedResourceDescriptors);
@@ -126,142 +423,11 @@ void UKBFLAssetDataSubsystem::PrintFound()
 	UE_LOG(AssetDataSubsystemLog, Log, TEXT("--------------------------------------------"));
 }
 
-void UKBFLAssetDataSubsystem::InitAssetFinder()
-{
-	FAssetRegistryModule& AssetRegistryModule =
-		FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
-	bWasInit = true;
-
-	// Use game world module by default
-	TSubclassOf<UWorldModule> ModuleTypeClass = UGameWorldModule::StaticClass();
-
-	// Use MenuWorldModule if we are in the main menu
-	if (FPluginModuleLoader::IsMainMenuWorld(GetWorld()))
-	{
-		ModuleTypeClass = UMenuWorldModule::StaticClass();
-	}
-
-	// Discover modules of the relevant types
-	const TArray<FDiscoveredModule> DiscoveredModules = FPluginModuleLoader::FindRootModulesOfType(ModuleTypeClass);
-
-	TArray<FName> SearchPaths;
-	SearchPaths.Add(FName("/Game"));
-
-	for (const FDiscoveredModule& Module : DiscoveredModules)
-	{
-		UE_LOG(AssetDataSubsystemLog, Log, TEXT("Load Mod: %s"), *Module.OwnerPluginName);
-		SearchPaths.Add(FName("/" + Module.OwnerPluginName));
-	}
-
-	// OPTIMIZATION: Create filter for only Blueprint assets to reduce initial scan
-	// This significantly reduces the number of assets we need to process
-	// Instead of loading ALL assets (textures, meshes, sounds, etc.), we only look at Blueprints
-	FARFilter Filter;
-	Filter.PackagePaths = SearchPaths;
-	Filter.bRecursivePaths = true;
-	Filter.bRecursiveClasses = true;
-
-	// Only load Blueprint assets
-	Filter.ClassPaths.Add(FTopLevelAssetPath(UBlueprint::StaticClass()));
-	Filter.ClassPaths.Add(FTopLevelAssetPath(UBlueprintGeneratedClass::StaticClass()));
-
-	// Also include DataAsset for session settings
-	Filter.ClassPaths.Add(FTopLevelAssetPath(UDataAsset::StaticClass()));
-
-	TArray<FAssetData> AssetData;
-	if (AssetRegistry.GetAssets(Filter, AssetData))
-	{
-		UE_LOG(AssetDataSubsystemLog, Log, TEXT("Found %d assets to scan (filtered from all assets)"), AssetData.Num());
-
-		// Scan specific types with filtered asset data
-		// GetAllClassesOfSubclass is now optimized to use NativeParentClass filtering
-		GetAllClassesOfSubclass(AssetData, mAllFoundedSchematics);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedRecipes);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedItems);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedBuildables);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedDriveablePawns);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedHolograms);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedModModules);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedCDOHelpers);
-		GetAllClassesOfSubclass(AssetData, mAllFoundedResourceDescriptors);
-		GetAllClassesOfSubclass(AssetData, mAllFoundResearchTrees);
-
-		// Find DataAssets separately (different asset type)
-		FindAllDataAssetsOfClass(mAllFoundAGS);
-
-		UE_LOG(AssetDataSubsystemLog, Log,
-			   TEXT("Scan complete - Found: Schematics=%d, Recipes=%d, Items=%d, Buildables=%d, ResearchTrees=%d"),
-			   mAllFoundedSchematics.Num(), mAllFoundedRecipes.Num(), mAllFoundedItems.Num(),
-			   mAllFoundedBuildables.Num(), mAllFoundResearchTrees.Num());
-
-		// Build the mAllFoundedObjects set
-		for (UClass* data : mAllFoundedSchematics)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 0);
-		}
-		for (UClass* data : mAllFoundedRecipes)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 1);
-		}
-		for (UClass* data : mAllFoundedItems)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 2);
-		}
-		for (UClass* data : mAllFoundedBuildables)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 3);
-		}
-		for (UClass* data : mAllFoundedDriveablePawns)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 4);
-		}
-		for (UClass* data : mAllFoundedHolograms)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 5);
-		}
-		for (UClass* data : mAllFoundedModModules)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 6);
-		}
-		for (UClass* data : mAllFoundedCDOHelpers)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 7);
-		}
-		for (UClass* data : mAllFoundedResourceDescriptors)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 8);
-		}
-		for (UClass* data : mAllFoundResearchTrees)
-		{
-			mAllFoundedObjects.Add(data);
-			setMapClass(data, 10);
-		}
-		for (UObject* data : mAllFoundAGS)
-		{
-			setMapClass(data, 11);
-		}
-	}
-	else
-	{
-		UE_LOG(AssetDataSubsystemLog, Error, TEXT("FAIL TO FIND ASSET PATH"));
-	}
-}
-
 bool UKBFLAssetDataSubsystem::FilterAsset(const FAssetData& AssetData) { return true; }
 
 bool UKBFLAssetDataSubsystem::Local_FilterAsset(const FAssetData& AssetData) const
 {
-	for (const auto TagValue : AssetData.TagsAndValues)
+	for (const auto& TagValue : AssetData.TagsAndValues)
 	{
 		if (TagValue.Value.AsString().Contains("LevelScriptActor"))
 		{
@@ -287,12 +453,7 @@ bool UKBFLAssetDataSubsystem::Local_FilterAsset(const FAssetData& AssetData) con
 void UKBFLAssetDataSubsystem::GetItemsOfForms(TArray<EResourceForm> Forms,
 											  TArray<TSubclassOf<UFGItemDescriptor>>& Out_Items)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(2);
 
 	for (UClass* Class : mAllFoundedItems)
 	{
@@ -309,12 +470,7 @@ void UKBFLAssetDataSubsystem::GetItemsOfForms(TArray<EResourceForm> Forms,
 void UKBFLAssetDataSubsystem::GetItemsOfChilds(TArray<UClass*> Childs,
 											   TArray<TSubclassOf<UFGItemDescriptor>>& Out_Items, bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(2);
 
 	for (UClass* Class : mAllFoundedItems)
 	{
@@ -330,12 +486,7 @@ void UKBFLAssetDataSubsystem::GetItemsOfChilds(TArray<UClass*> Childs,
 
 void UKBFLAssetDataSubsystem::GetItemsFiltered(TArray<TSubclassOf<UFGItemDescriptor>>& Out_Items)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(2);
 
 	for (UClass* Class : mAllFoundedItems)
 	{
@@ -358,12 +509,7 @@ void UKBFLAssetDataSubsystem::GetItemsFiltered(TArray<TSubclassOf<UFGItemDescrip
 void UKBFLAssetDataSubsystem::GetItemsFilteredWithForm(TArray<EResourceForm> Forms,
 													   TArray<TSubclassOf<UFGItemDescriptor>>& Out_Items)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(2);
 
 	for (UClass* Class : mAllFoundedItems)
 	{
@@ -385,18 +531,14 @@ void UKBFLAssetDataSubsystem::GetItemsFilteredWithForm(TArray<EResourceForm> For
 
 TArray<TSubclassOf<UFGItemDescriptor>> UKBFLAssetDataSubsystem::GetAllItems()
 {
+	EnsureCategoryResolved(2);
 	return TArray<TSubclassOf<UFGItemDescriptor>>(mAllFoundedItems.Array());
 }
 
 void UKBFLAssetDataSubsystem::GetSchematicsOfTypes(TArray<ESchematicType> Types,
 												   TArray<TSubclassOf<UFGSchematic>>& Out_Schematics)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(0);
 
 	for (UClass* Class : mAllFoundedSchematics)
 	{
@@ -413,12 +555,7 @@ void UKBFLAssetDataSubsystem::GetSchematicsOfTypes(TArray<ESchematicType> Types,
 void UKBFLAssetDataSubsystem::GetSchematicsOfChilds(TArray<UClass*> Childs,
 													TArray<TSubclassOf<UFGSchematic>>& Out_Items, bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(0);
 
 	for (UClass* FoundedClass : mAllFoundedSchematics)
 	{
@@ -432,17 +569,16 @@ void UKBFLAssetDataSubsystem::GetSchematicsOfChilds(TArray<UClass*> Childs,
 	}
 }
 
-TArray<TSubclassOf<UFGSchematic>> UKBFLAssetDataSubsystem::GetAllSchematics() { return mAllFoundedSchematics.Array(); }
+TArray<TSubclassOf<UFGSchematic>> UKBFLAssetDataSubsystem::GetAllSchematics()
+{
+	EnsureCategoryResolved(0);
+	return mAllFoundedSchematics.Array();
+}
 
 void UKBFLAssetDataSubsystem::GetRecipesOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<UFGRecipe>>& Out_Items,
 												 bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(1);
 
 	for (UClass* FoundedClass : mAllFoundedRecipes)
 	{
@@ -459,12 +595,7 @@ void UKBFLAssetDataSubsystem::GetRecipesOfChilds(TArray<UClass*> Childs, TArray<
 void UKBFLAssetDataSubsystem::GetRecipesOfProducer(TArray<TSubclassOf<UObject>> Producers,
 												   TArray<TSubclassOf<UFGRecipe>>& Out_Items)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(1);
 
 	for (UClass* FoundedClass : mAllFoundedRecipes)
 	{
@@ -480,22 +611,19 @@ void UKBFLAssetDataSubsystem::GetRecipesOfProducer(TArray<TSubclassOf<UObject>> 
 
 TArray<TSubclassOf<UFGRecipe>> UKBFLAssetDataSubsystem::GetAllRecipes()
 {
+	EnsureCategoryResolved(1);
 	return TArray<TSubclassOf<UFGRecipe>>(mAllFoundedRecipes.Array());
 }
 TArray<TSubclassOf<UFGResearchTree>> UKBFLAssetDataSubsystem::GetAllResearchTrees()
 {
+	EnsureCategoryResolved(10);
 	return TArray<TSubclassOf<UFGResearchTree>>(mAllFoundResearchTrees.Array());
 }
 
 void UKBFLAssetDataSubsystem::GetBuildableOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<AFGBuildable>>& Out_Items,
 												   bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(3);
 
 	for (UClass* FoundedClass : mAllFoundedBuildables)
 	{
@@ -511,6 +639,7 @@ void UKBFLAssetDataSubsystem::GetBuildableOfChilds(TArray<UClass*> Childs, TArra
 
 TArray<TSubclassOf<AFGBuildable>> UKBFLAssetDataSubsystem::GetAllBuildable()
 {
+	EnsureCategoryResolved(3);
 	return TArray<TSubclassOf<AFGBuildable>>(mAllFoundedBuildables.Array());
 }
 
@@ -561,6 +690,7 @@ bool UKBFLAssetDataSubsystem::CheckHasRecipeProducer(TSubclassOf<UFGRecipe> Test
 TSubclassOf<UFGBuildingDescriptor>
 UKBFLAssetDataSubsystem::GetDescForBuildable(TSubclassOf<AFGBuildable> BuildableClass)
 {
+	EnsureCategoryResolved(2);
 	for (UClass* ItemClass : mAllFoundedItems)
 	{
 		if (ItemClass && ItemClass->IsChildOf(UFGBuildingDescriptor::StaticClass()))
@@ -577,6 +707,7 @@ UKBFLAssetDataSubsystem::GetDescForBuildable(TSubclassOf<AFGBuildable> Buildable
 
 TSubclassOf<UFGVehicleDescriptor> UKBFLAssetDataSubsystem::GetDescForVehicle(TSubclassOf<AFGVehicle> Class)
 {
+	EnsureCategoryResolved(2);
 	for (UClass* ItemClass : mAllFoundedItems)
 	{
 		if (ItemClass && ItemClass->IsChildOf(UFGVehicleDescriptor::StaticClass()))
@@ -591,25 +722,42 @@ TSubclassOf<UFGVehicleDescriptor> UKBFLAssetDataSubsystem::GetDescForVehicle(TSu
 	return nullptr;
 }
 
-void UKBFLAssetDataSubsystem::GetAllBuildableDesc(TArray<TSubclassOf<UFGBuildingDescriptor>>& Out) {}
-
 void UKBFLAssetDataSubsystem::GetObjectsOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<UObject>>& Out_Items,
 												 bool UseNativeCheck)
 {
-	if (!bWasInit)
+	// Dedupe via a TSet (O(1)) instead of TArray::AddUnique (O(n)) — Derived can be thousands of classes,
+	// and this is called multiple times per CDO overwrite, so AddUnique made it O(n^2).
+	TSet<UClass*> Seen;
+	Seen.Reserve(Out_Items.Num());
+	for (const TSubclassOf<UObject>& Existing : Out_Items)
 	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
+		if (UClass* ExistingClass = Existing.Get())
+		{
+			Seen.Add(ExistingClass);
+		}
 	}
 
-	for (UClass* FoundedClass : mAllFoundedObjects)
+	for (UClass* Parent : Childs)
 	{
-		if (TSubclassOf<UObject> Class = FoundedClass)
+		if (!IsValid(Parent))
 		{
-			if (CheckChild(Class, Childs, UseNativeCheck))
+			continue;
+		}
+
+		TArray<UClass*> Derived;
+		GetDerivedClasses(Parent, Derived, true);
+
+		for (UClass* DerivedClass : Derived)
+		{
+			if (!DerivedClass || Seen.Contains(DerivedClass))
 			{
-				Out_Items.Add(Class);
+				continue;
+			}
+
+			if (CheckChild(DerivedClass, Childs, UseNativeCheck))
+			{
+				Seen.Add(DerivedClass);
+				Out_Items.Add(DerivedClass);
 			}
 		}
 	}
@@ -619,12 +767,7 @@ void UKBFLAssetDataSubsystem::GetDriveablePawnsOfChilds(TArray<UClass*> Childs,
 														TArray<TSubclassOf<AFGDriveablePawn>>& Out_Items,
 														bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(4);
 
 	for (UClass* FoundedClass : mAllFoundedDriveablePawns)
 	{
@@ -641,12 +784,7 @@ void UKBFLAssetDataSubsystem::GetDriveablePawnsOfChilds(TArray<UClass*> Childs,
 void UKBFLAssetDataSubsystem::GetHologramsOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<AFGHologram>>& Out_Items,
 												   bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(5);
 
 	for (UClass* FoundedClass : mAllFoundedHolograms)
 	{
@@ -663,12 +801,7 @@ void UKBFLAssetDataSubsystem::GetHologramsOfChilds(TArray<UClass*> Childs, TArra
 void UKBFLAssetDataSubsystem::GetModModulesOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<UModModule>>& Out_Items,
 													bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(6);
 
 	for (UClass* FoundedClass : mAllFoundedModModules)
 	{
@@ -682,37 +815,10 @@ void UKBFLAssetDataSubsystem::GetModModulesOfChilds(TArray<UClass*> Childs, TArr
 	}
 }
 
-void UKBFLAssetDataSubsystem::GetCDOHelpersOfChilds(TArray<UClass*> Childs,
-													TArray<TSubclassOf<UKBFL_CDOHelperClass_Base>>& Out_Items,
-													bool UseNativeCheck)
-{
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
-
-	for (UClass* FoundedClass : mAllFoundedCDOHelpers)
-	{
-		if (TSubclassOf<UKBFL_CDOHelperClass_Base> Class = FoundedClass)
-		{
-			if (CheckChild(Class, Childs, UseNativeCheck))
-			{
-				Out_Items.Add(Class);
-			}
-		}
-	}
-}
 
 FKBFLAssetData UKBFLAssetDataSubsystem::GetModRelatedData(UModModule* ModModule)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureAllResolved();
 
 	UE_LOG(AssetDataSubsystemLog, Warning, TEXT("GetModRelatedData: %s"),
 		   *ModModule->GetOwnerModReference().ToString().ToLower());
@@ -727,12 +833,7 @@ FKBFLAssetData UKBFLAssetDataSubsystem::GetModRelatedData(UModModule* ModModule)
 void UKBFLAssetDataSubsystem::GetResourceDescriptorsOfChilds(
 	TArray<UClass*> Childs, TArray<TSubclassOf<UKBFLActorSpawnDescriptorBase>>& Out_Items, bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(AssetDataSubsystemLog, Error,
-			   TEXT("Try to get classes without Init before the subsytem! Do ForceScan!"));
-		DoScan();
-	}
+	EnsureCategoryResolved(8);
 
 	for (UClass* FoundedClass : mAllFoundedResourceDescriptors)
 	{
@@ -743,5 +844,423 @@ void UKBFLAssetDataSubsystem::GetResourceDescriptorsOfChilds(
 				Out_Items.Add(Class);
 			}
 		}
+	}
+}
+
+static UClass* GetParentClassForType(int32 Type)
+{
+	switch (Type)
+	{
+	case 0:
+		return UFGSchematic::StaticClass();
+	case 1:
+		return UFGRecipe::StaticClass();
+	case 2:
+		return UFGItemDescriptor::StaticClass();
+	case 3:
+		return AFGBuildable::StaticClass();
+	case 4:
+		return AFGDriveablePawn::StaticClass();
+	case 5:
+		return AFGHologram::StaticClass();
+	case 6:
+		return UModModule::StaticClass();
+	case 8:
+		return UFGResourceDescriptor::StaticClass();
+	case 10:
+		return UFGResearchTree::StaticClass();
+	default:
+		return nullptr;
+	}
+}
+
+void UKBFLAssetDataSubsystem::TriggerAsyncLoadsForCategory(int32 Type)
+{
+	UClass* ParentClass = GetParentClassForType(Type);
+	if (!IsValid(ParentClass) || mScannedAssets.IsEmpty())
+	{
+		return;
+	}
+
+	if (!UAssetManager::IsInitialized())
+	{
+		return;
+	}
+
+	TArray<FSoftObjectPath> ToLoad;
+
+	for (const FAssetData& AssetData : mScannedAssets)
+	{
+		if (!Local_FilterAsset(AssetData))
+		{
+			continue;
+		}
+
+		// Skip assets where the native parent is definitely not related to ParentClass.
+		FString NativeParentClassPath;
+		if (AssetData.GetTagValue(FBlueprintTags::NativeParentClassPath, NativeParentClassPath))
+		{
+			FString NativeClassName, NativeClassObjectPath;
+			if (FPackageName::ParseExportTextPath(NativeParentClassPath, &NativeClassName, &NativeClassObjectPath))
+			{
+				if (UClass* NativeClass = FindObject<UClass>(nullptr, *NativeClassObjectPath))
+				{
+					if (!NativeClass->IsChildOf(ParentClass))
+					{
+						continue;
+					}
+				}
+			}
+		}
+
+		FString GeneratedClassExportedPath;
+		if (!AssetData.GetTagValue(FBlueprintTags::GeneratedClassPath, GeneratedClassExportedPath))
+		{
+			continue;
+		}
+
+		FString GeneratedClassPath;
+		if (!FPackageName::ParseExportTextPath(GeneratedClassExportedPath, nullptr, &GeneratedClassPath))
+		{
+			continue;
+		}
+
+		// Already in memory — the sync GetDerivedClasses pass already handled it.
+		if (FindObject<UClass>(nullptr, *GeneratedClassPath))
+		{
+			continue;
+		}
+
+		ToLoad.Emplace(GeneratedClassPath);
+	}
+
+	if (ToLoad.IsEmpty())
+	{
+		return;
+	}
+
+	mPendingAsyncLoads.FindOrAdd(Type).Append(ToLoad);
+
+	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+		ToLoad, FStreamableDelegate::CreateUObject(this, &UKBFLAssetDataSubsystem::OnCategoryAsyncLoaded, Type));
+}
+
+void UKBFLAssetDataSubsystem::OnCategoryAsyncLoaded(int32 Type)
+{
+	TArray<FSoftObjectPath>* Paths = mPendingAsyncLoads.Find(Type);
+	if (!Paths)
+	{
+		return;
+	}
+
+	for (const FSoftObjectPath& Path : *Paths)
+	{
+		UClass* Class = FindObject<UClass>(nullptr, *Path.ToString());
+		if (!IsValid(Class))
+		{
+			continue;
+		}
+		AddAsyncLoadedClassToCategory(Class, Type);
+	}
+
+	mPendingAsyncLoads.Remove(Type);
+}
+
+void UKBFLAssetDataSubsystem::NotifyClassLoaded(UClass* Class)
+{
+	if (!IsValid(Class))
+	{
+		return;
+	}
+
+	// Classify into a single category and route. AddAsyncLoadedClassToCategory only adds + broadcasts
+	// when the class is genuinely new. Order matters: more-derived bases first (UFGResourceDescriptor
+	// derives from UFGItemDescriptor), so check it before the item category.
+	int32 Type = -1;
+	if (Class->IsChildOf(UFGSchematic::StaticClass()))
+	{
+		Type = 0;
+	}
+	else if (Class->IsChildOf(UFGRecipe::StaticClass()))
+	{
+		Type = 1;
+	}
+	else if (Class->IsChildOf(UFGResourceDescriptor::StaticClass()))
+	{
+		Type = 8;
+	}
+	else if (Class->IsChildOf(UFGItemDescriptor::StaticClass()))
+	{
+		Type = 2;
+	}
+	else if (Class->IsChildOf(AFGDriveablePawn::StaticClass()))
+	{
+		Type = 4;
+	}
+	else if (Class->IsChildOf(AFGHologram::StaticClass()))
+	{
+		Type = 5;
+	}
+	else if (Class->IsChildOf(AFGBuildable::StaticClass()))
+	{
+		Type = 3;
+	}
+	else if (Class->IsChildOf(UModModule::StaticClass()))
+	{
+		Type = 6;
+	}
+	else if (Class->IsChildOf(UFGResearchTree::StaticClass()))
+	{
+		Type = 10;
+	}
+
+	if (Type != -1)
+	{
+		AddAsyncLoadedClassToCategory(Class, Type);
+	}
+}
+
+void UKBFLAssetDataSubsystem::AddAsyncLoadedClassToCategory(UClass* Class, int32 Type)
+{
+	if (!IsValid(Class))
+	{
+		return;
+	}
+
+	// Default true — only set false by TSet::Add when element is genuinely new.
+	bool bWasAlreadyPresent = true;
+
+	switch (Type)
+	{
+	case 0:
+		if (TSubclassOf<UFGSchematic> Sub = Class)
+		{
+			mAllFoundedSchematics.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 1:
+		if (TSubclassOf<UFGRecipe> Sub = Class)
+		{
+			mAllFoundedRecipes.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 2:
+		if (TSubclassOf<UFGItemDescriptor> Sub = Class)
+		{
+			mAllFoundedItems.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 3:
+		if (TSubclassOf<AFGBuildable> Sub = Class)
+		{
+			mAllFoundedBuildables.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 4:
+		if (TSubclassOf<AFGDriveablePawn> Sub = Class)
+		{
+			mAllFoundedDriveablePawns.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 5:
+		if (TSubclassOf<AFGHologram> Sub = Class)
+		{
+			mAllFoundedHolograms.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 6:
+		if (TSubclassOf<UModModule> Sub = Class)
+		{
+			mAllFoundedModModules.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 8:
+		if (TSubclassOf<UFGResourceDescriptor> Sub = Class)
+		{
+			mAllFoundedResourceDescriptors.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	case 10:
+		if (TSubclassOf<UFGResearchTree> Sub = Class)
+		{
+			mAllFoundResearchTrees.Add(Sub, &bWasAlreadyPresent);
+		}
+		break;
+	default:
+		return;
+	}
+
+	if (!bWasAlreadyPresent)
+	{
+		mAllFoundedObjects.Add(Class);
+		setMapClass(Class, Type);
+		BroadcastCategoryEvent(Class, Type);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BroadcastCategoryEvent(UClass* Class, int32 Type)
+{
+	switch (Type)
+	{
+	case 0:
+		OnSchematicAdded.Broadcast(Class);
+		break;
+	case 1:
+		OnRecipeAdded.Broadcast(Class);
+		break;
+	case 2:
+		OnItemAdded.Broadcast(Class);
+		break;
+	case 3:
+		OnBuildableAdded.Broadcast(Class);
+		break;
+	case 4:
+		OnDriveablePawnAdded.Broadcast(Class);
+		break;
+	case 5:
+		OnHologramAdded.Broadcast(Class);
+		break;
+	case 6:
+		OnModModuleAdded.Broadcast(Class);
+		break;
+	case 8:
+		OnResourceDescriptorAdded.Broadcast(Class);
+		break;
+	case 10:
+		OnResearchTreeAdded.Broadcast(Class);
+		break;
+	default:
+		break;
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnSchematicAdded(FKBFLOnSchematicAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnSchematicAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(0);
+	}
+	for (TSubclassOf<UFGSchematic> Item : mAllFoundedSchematics)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnRecipeAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(1);
+	}
+	for (TSubclassOf<UFGRecipe> Item : mAllFoundedRecipes)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnItemAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(2);
+	}
+	for (TSubclassOf<UFGItemDescriptor> Item : mAllFoundedItems)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnBuildableAdded(FKBFLOnBuildableAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnBuildableAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(3);
+	}
+	for (TSubclassOf<AFGBuildable> Item : mAllFoundedBuildables)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnDriveablePawnAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(4);
+	}
+	for (TSubclassOf<AFGDriveablePawn> Item : mAllFoundedDriveablePawns)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnHologramAdded(FKBFLOnHologramAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnHologramAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(5);
+	}
+	for (TSubclassOf<AFGHologram> Item : mAllFoundedHolograms)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnModModuleAdded(FKBFLOnModModuleAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnModModuleAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(6);
+	}
+	for (TSubclassOf<UModModule> Item : mAllFoundedModModules)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnResourceDescriptorAdded(FKBFLOnResourceDescriptorAddedEvent Delegate,
+															bool bEnsureLoaded)
+{
+	OnResourceDescriptorAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(8);
+	}
+	for (TSubclassOf<UFGResourceDescriptor> Item : mAllFoundedResourceDescriptors)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnResearchTreeAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(10);
+	}
+	for (TSubclassOf<UFGResearchTree> Item : mAllFoundResearchTrees)
+	{
+		Delegate.ExecuteIfBound(Item);
+	}
+}
+
+void UKBFLAssetDataSubsystem::BindOnSessionSettingAdded(FKBFLOnSessionSettingAddedEvent Delegate, bool bEnsureLoaded)
+{
+	OnSessionSettingAdded.Add(Delegate);
+	if (bEnsureLoaded)
+	{
+		EnsureCategoryResolved(11);
+	}
+	for (USMLSessionSetting* Item : mAllFoundAGS)
+	{
+		Delegate.ExecuteIfBound(Item);
 	}
 }

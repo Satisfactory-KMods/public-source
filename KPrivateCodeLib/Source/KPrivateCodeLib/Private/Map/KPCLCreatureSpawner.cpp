@@ -1,14 +1,10 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Map/KPCLCreatureSpawner.h"
 
 #include "FGHealthComponent.h"
 
-AKPCLCreatureSpawner::AKPCLCreatureSpawner()
-{
-	PrimaryActorTick.bCanEverTick = true;
-}
+AKPCLCreatureSpawner::AKPCLCreatureSpawner() { PrimaryActorTick.bCanEverTick = true; }
 
 void AKPCLCreatureSpawner::BeginPlay()
 {
@@ -46,7 +42,7 @@ void AKPCLCreatureSpawner::CheckNodesInRange()
 
 	mIsActive = NewActive;
 	mRespawnTimeIndays = 1;
-	//mRespawnTimeIndays = mIsActive ? 1 : -1;
+	// mRespawnTimeIndays = mIsActive ? 1 : -1;
 }
 
 void AKPCLCreatureSpawner::ReApplyChangesOnCreatures()
@@ -79,9 +75,11 @@ void AKPCLCreatureSpawner::ReApplyChangesOnCreature_Implementation(AFGCreature* 
 		}
 	}
 
-	for (const TTuple<int32, UMaterialInterface*> MaterialOverwrite : mMaterialOverwrite)
+	if (USkeletalMeshComponent* SkeletalMesh = Creature->FindComponentByClass<USkeletalMeshComponent>())
 	{
-		Creature->FindComponentByClass<USkeletalMeshComponent>()->SetMaterial(
-			MaterialOverwrite.Key, MaterialOverwrite.Value);
+		for (const TTuple<int32, UMaterialInterface*> MaterialOverwrite : mMaterialOverwrite)
+		{
+			SkeletalMesh->SetMaterial(MaterialOverwrite.Key, MaterialOverwrite.Value);
+		}
 	}
 }

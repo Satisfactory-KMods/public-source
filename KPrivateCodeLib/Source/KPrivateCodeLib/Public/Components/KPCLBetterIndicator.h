@@ -1,6 +1,8 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
+
+#include "CoreMinimal.h"
 
 #include "KPCLColoredStaticMesh.h"
 
@@ -26,10 +28,10 @@ enum class ENewProductionState : uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBIndicatorStateChanged, ENewProductionState, NewState);
 
 /**
-* Proxy placed in buildings to be replaced with an instance on creation, supports coloring.
-* Todo: This is a DEPARTED Component and need to remove SOON
-*/
-UCLASS(Blueprintable, meta = ( BlueprintSpawnableComponent ))
+ * Proxy placed in buildings to be replaced with an instance on creation, supports coloring.
+ * Todo: This is a DEPARTED Component and needs to be removed SOON.
+ */
+UCLASS(Blueprintable, meta = (BlueprintSpawnableComponent))
 class KPRIVATECODELIB_API UKPCLBetterIndicator : public UKPCLColoredStaticMesh
 {
 	GENERATED_BODY()
@@ -37,40 +39,38 @@ class KPRIVATECODELIB_API UKPCLBetterIndicator : public UKPCLColoredStaticMesh
 public:
 	UKPCLBetterIndicator();
 
-	// GetCurrent Emissive for the Light
-	UFUNCTION(BlueprintPure, Category="KMods Indicator")
+	UFUNCTION(BlueprintPure, Category = "KMods Indicator")
 	float GetEmissive() const;
 
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
 	void SetState(ENewProductionState NewState, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
 	void SetEmissiveOverwrite(float NewIntensity, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
 	FLinearColor GetColorByState(ENewProductionState State) const;
 
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
 	FLinearColor GetCurrentColor() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods Indicator")
+	UFUNCTION(BlueprintPure, Category = "KMods Indicator")
 	ENewProductionState GetState() const;
 
 private:
-	TEnumAsByte<ENewProductionState> mCurrentState;
+	ENewProductionState mCurrentState;
+	float mEmissiveIntensityOverwrite = -1.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods", meta=(ArraySizeEnum="ENewProductionState"))
+	UPROPERTY(EditDefaultsOnly, Category = "KMods", meta = (ArraySizeEnum = "ENewProductionState"))
 	FLinearColor mStateColors[11];
 
-	UPROPERTY(BlueprintAssignable, Category="KMods|Events")
+	UPROPERTY(BlueprintAssignable, Category = "KMods|Events")
 	FOnBIndicatorStateChanged OnIndicatorStateChanged;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
-	TArray<TEnumAsByte<ENewProductionState>> mPulsStates = {
-		ENewProductionState::Error, ENewProductionState::Idle, ENewProductionState::Paused
-	};
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
+	TArray<ENewProductionState> mPulsStates = {ENewProductionState::Error, ENewProductionState::Idle,
+											   ENewProductionState::Paused};
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
 	float mEmissiveIntensity = 2.0f;
-	float mEmissiveIntensityOverwrite = -1.0f;
 };

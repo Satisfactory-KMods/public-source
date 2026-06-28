@@ -1,6 +1,9 @@
-﻿// ILikeBanas
+// ILikeBanas
 
 #pragma once
+
+#include "CoreMinimal.h"
+
 #include "Configuration/ModConfiguration.h"
 #include "Interfaces/IHttpRequest.h"
 
@@ -39,17 +42,11 @@ public:
 	void OnSettingChanged();
 
 	static void QueryApi(FHttpRequestRef& Request, FString QueryName, TArray<FString> Parameter = {},
-	                     bool Execute = true, bool IsPost = false);
+						 bool Execute = true, bool IsPost = false);
 	static bool ParseApiQuery(FHttpResponsePtr Response, TSharedPtr<FJsonObject>& Json);
 
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContext"))
 	static void StartReQueryPatreon(UObject* WorldContext);
-
-	UPROPERTY(BlueprintAssignable)
-	FOnPatreonBenefitHasChanged OnPatreonBenefitHasChanged;
-
-	UPROPERTY(BlueprintAssignable)
-	FKPCLOnSettingUpdated OnSettingsUpdated;
 
 	UFUNCTION(BlueprintPure)
 	bool ActivePatreonList() const { return bActivePatreonList; };
@@ -59,6 +56,12 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool ActiveNewsFeed() const { return bActiveNewsFeed; };
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPatreonBenefitHasChanged OnPatreonBenefitHasChanged;
+
+	UPROPERTY(BlueprintAssignable)
+	FKPCLOnSettingUpdated OnSettingsUpdated;
 
 private:
 	bool bPatreonIsActive = false;

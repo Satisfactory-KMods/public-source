@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"Language: zh-TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 1; plural = 0\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
+msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
+msgstr "<LightGrey12Reg>感谢您使用 </><Orange12Reg>KMods</>"
+
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>我们希望您能够决定是否以及 </><Orange12Reg>您想看到哪些广告！</>rn<LightGrey12Reg>您可以在任何时候在 </><Orange12Reg>KPrivateLib 模组配置中更改此设置。</>rnrn<Orange12Reg>此弹窗只会出现一次</>"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
+msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
+msgstr "无法将此模块吸附到建筑上。（太多、无效或无位置）"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
+msgid "Edit"
+msgstr "编辑"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable Sink Option"
+msgstr "启用下沉选项"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable pull rules"
+msgstr "启用拉取规则"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable push rule"
+msgstr "启用推送规则"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable remote access"
+msgstr "启用远程访问"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName"
+msgid "Inventory Pull"
+msgstr "库存调用"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName"
+msgid "Inventory Push Module"
+msgstr "库存推送模块"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
+msgid "K.Mods Patreons"
+msgstr "K.Mods Patreons"
+
+msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
+msgid "KMods"
+msgstr "K.Mods"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
+msgid "Missing master Building cannot attach module!"
+msgstr "缺少主建筑，无法附加模块！"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
+msgid "Module is not allowed here"
+msgstr "此处不允许设置模块"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
+msgid "Patreon Configuration"
+msgstr "Patreon 配置"
+
+msgctxt "KPrivateCodeLib,ConstructDisqualifier_MaxCountReached"
+msgid "Reached global max count for this building (5)"
+msgstr "达到此建筑的全局最大数量（5）"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
+msgid "Remote Access"
+msgstr "远程访问"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
+msgid "Save And Close"
+msgstr "保存并关闭"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
+msgid "Save Color"
+msgstr "保存颜色"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.TextBlock_2.Text"
+msgid "Show KMods Neewsfeed (SoonTM)"
+msgstr "显示 KMods 新闻订阅（即将推出）"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Show Patreon Button"
+msgstr "显示 Patreon 按钮"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Show Patreon List"
+msgstr "显示 Patreon 列表"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
+msgid "Sink Utility"
+msgstr "下沉工具"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.TextBlock.Text"
+msgid "Swatch Name"
+msgstr "色板名称"
+
+msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
+msgid "Text Block"
+msgstr "文本块"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
+msgid "Thanks to all supporter!"
+msgstr "感谢所有支持者！"
+
+msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
+msgid "Unlock new network tier"
+msgstr "解锁新的网络层级"

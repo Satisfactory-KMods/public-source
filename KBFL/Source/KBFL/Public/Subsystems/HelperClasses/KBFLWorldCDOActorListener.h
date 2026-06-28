@@ -5,6 +5,8 @@
 
 #include "KBFLWorldCDOActorListener.generated.h"
 
+class ULevel;
+
 UENUM(BlueprintType)
 enum class EKBFLWorldCDOActorListenerEvent : uint8
 {
@@ -26,20 +28,34 @@ public:
 	virtual void ApplyToActorsInWorld() override;
 	virtual void Clear() override;
 
-	// Called when a relevant actor is spawned
+	// Called when a relevant actor is spawned or destroyed
 	UFUNCTION()
 	void OnActorEvent(AActor* Actor);
 
-	// Specify which actor classes to listen for
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Actor Listener")
+	/** Override point: a matching actor passed the class + requirement checks. Subclasses do their work here. */
+	virtual void OnActorMatched(AActor* Actor) {}
+
+	// ===== Listener Settings =====
+	/** Event type to listen for (spawned or destroyed actors) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Listener Settings")
+	EKBFLWorldCDOActorListenerEvent mEventToListenFor = EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent;
+
+	/** If true, also listen for subclasses of the specified actor classes */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Listener Settings")
+	bool bUseSubclassCheck = true;
+
+	/** If true (and mEventToListenFor is SpawnedActorEvent), also process actors loaded via streaming levels */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Listener Settings")
+	bool bListenStreamingLevel = true;
+
+	// ===== Target Actors =====
+	/** Specify which actor classes to listen for */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Target Actors")
 	TArray<TSubclassOf<AActor>> mActorClassesToListenFor;
 
 protected:
+	void OnLevelAddedToWorld(ULevel* Level, UWorld* World);
+
 	FDelegateHandle mActorHandle;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Actor Listener")
-	EKBFLWorldCDOActorListenerEvent mEventToListenFor = EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor Listener")
-	bool bUseSubclassCheck = true;
+	FDelegateHandle mLevelAddedHandle;
 };

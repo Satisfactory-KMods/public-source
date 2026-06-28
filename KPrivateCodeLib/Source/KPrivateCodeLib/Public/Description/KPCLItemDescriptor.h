@@ -1,14 +1,13 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Resources/FGItemDescriptor.h"
+
 #include "KPCLItemDescriptor.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class KPRIVATECODELIB_API UKPCLItemDescriptor : public UFGItemDescriptor
 {

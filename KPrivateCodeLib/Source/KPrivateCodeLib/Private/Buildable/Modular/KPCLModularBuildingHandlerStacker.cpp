@@ -1,18 +1,16 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Buildable/Modular/KPCLModularBuildingHandlerStacker.h"
 
-#include "FGPowerConnectionComponent.h"
 #include "Buildable/Modular/KPCLModularBuildingInterface.h"
+#include "FGPowerConnectionComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 #include "Net/UnrealNetwork.h"
 
 // Start FAttachmentData
 
-
-uint32 FAttachmentDataStacker::GetIndexFromActor(AFGBuildable* Actor) const
+int32 FAttachmentDataStacker::GetIndexFromActor(AFGBuildable* Actor) const
 {
 	for (int i = 0; i < mSnappedActors.Num(); ++i)
 	{
@@ -21,12 +19,13 @@ uint32 FAttachmentDataStacker::GetIndexFromActor(AFGBuildable* Actor) const
 			return i;
 		}
 	}
-	return +1;
+	return INDEX_NONE;
 }
 
 bool FAttachmentDataStacker::CanSnapTo(int32 MaxModuleCount) const
 {
-	//UE_LOG(LogTemp, Warning, TEXT("%s, %d/%d"), mSnappedActors.Num() < MaxModuleCount ? *FString("Y") : *FString("N"), mSnappedActors.Num(), MaxModuleCount);
+	// UE_LOG(LogTemp, Warning, TEXT("%s, %d/%d"), mSnappedActors.Num() < MaxModuleCount ? *FString("Y") :
+	// *FString("N"), mSnappedActors.Num(), MaxModuleCount);
 	return mSnappedActors.Num() < MaxModuleCount;
 }
 
@@ -67,9 +66,17 @@ AFGBuildable* FAttachmentDataStacker::GetActorFromIndex(int32 Index) const
 
 void FAttachmentDataStacker::RemoveActorFromData(AFGBuildable* Actor)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("RemoveActorFromData"));
 	mSnappedActors.Remove(Actor);
 	mSnappedActors.Remove(nullptr);
+
+	// Re-apply modular indices so saved mModularIndex values stay in sync after the array shifts.
+	for (int32 i = 0; i < mSnappedActors.Num(); ++i)
+	{
+		if (IsValid(mSnappedActors[i]))
+		{
+			IKPCLModularBuildingInterface::Execute_ApplyModularIndex(mSnappedActors[i], i);
+		}
+	}
 }
 
 bool FAttachmentDataStacker::AddActorToData(AFGBuildable* Actor)
@@ -92,7 +99,7 @@ TArray<AFGBuildable*> FAttachmentDataStacker::GetActorsUpperIndex(int32 Index)
 	return Outer;
 }
 
-// End FAttachmentData
+//~ End FAttachmentData
 
 // Start UKPCLModularBuildingHandlerStacker
 UKPCLModularBuildingHandlerStacker::UKPCLModularBuildingHandlerStacker()
@@ -107,12 +114,6 @@ void UKPCLModularBuildingHandlerStacker::GetLifetimeReplicatedProps(TArray<FLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UKPCLModularBuildingHandlerStacker, mAttachmentDatas);
-}
-
-void UKPCLModularBuildingHandlerStacker::BeginPlay()
-{
-	Super::BeginPlay();
-	InitArrays();
 }
 
 void UKPCLModularBuildingHandlerStacker::InitArrays()
@@ -151,6 +152,11 @@ void UKPCLModularBuildingHandlerStacker::InitArrays()
 		}
 	}
 
+	if (mAttachmentDatas.Num() != mAttachmentInformations.Num())
+	{
+		mAttachmentDatas.SetNum(mAttachmentInformations.Num());
+	}
+
 	for (int i = 0; i < mAttachmentInformations.Num(); ++i)
 	{
 		mAttachmentDatas[i].mMainSnapLocations = mAttachmentInformations[i].mWorldMainSnapPoint;
@@ -182,10 +188,14 @@ void UKPCLModularBuildingHandlerStacker::OnRep_AttachmentDatas()
 	BroadcastTrigger();
 }
 
-bool UKPCLModularBuildingHandlerStacker::AddNewActorToAttachment(AFGBuildable* Actor,
-                                                                 TSubclassOf<UKAPIModularAttachmentDescriptor>
-                                                                 Attachment, FTransform Location, float Distance)
+bool UKPCLModularBuildingHandlerStacker::AddNewActorToAttachment(
+	AFGBuildable* Actor, TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment, FTransform Location, float Distance)
 {
+	if (AActor* Owner = GetOwner(); Owner && !Owner->HasAuthority())
+	{
+		return false;
+	}
+
 	const int AttachmentIndex = FindAttachmentIndex(Attachment);
 
 	if (AttachmentIndex >= 0)
@@ -205,6 +215,11 @@ bool UKPCLModularBuildingHandlerStacker::AddNewActorToAttachment(AFGBuildable* A
 
 void UKPCLModularBuildingHandlerStacker::AttachedActorRemoved(AFGBuildable* Actor)
 {
+	if (AActor* Owner = GetOwner(); Owner && !Owner->HasAuthority())
+	{
+		return;
+	}
+
 	for (FAttachmentDataStacker& AttachmentData : mAttachmentDatas)
 	{
 		AttachmentData.RemoveActorFromData(Actor);
@@ -214,8 +229,8 @@ void UKPCLModularBuildingHandlerStacker::AttachedActorRemoved(AFGBuildable* Acto
 }
 
 bool UKPCLModularBuildingHandlerStacker::CanAttachToLocation(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-                                                             FTransform TestLocation, FTransform& OutLocation,
-                                                             float Distance) const
+															 FTransform TestLocation, FTransform& OutLocation,
+															 float Distance) const
 {
 	if (CanAttach(Attachment))
 	{
@@ -223,7 +238,7 @@ bool UKPCLModularBuildingHandlerStacker::CanAttachToLocation(TSubclassOf<UKAPIMo
 		if (AttachmentIndex >= 0)
 		{
 			if (mAttachmentDatas[AttachmentIndex].CanSnapTo(
-				mAttachmentInformations[AttachmentIndex].mMaxStackingModuleCount))
+					mAttachmentInformations[AttachmentIndex].mMaxStackingModuleCount))
 			{
 				OutLocation = mAttachmentDatas[AttachmentIndex].GetSnapLocation();
 				return true;
@@ -234,8 +249,8 @@ bool UKPCLModularBuildingHandlerStacker::CanAttachToLocation(TSubclassOf<UKAPIMo
 }
 
 bool UKPCLModularBuildingHandlerStacker::GetSnapPointInRange(FTransform TestLocation, FTransform& SnapLocation,
-                                                             float AllowedDistance,
-                                                             TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+															 float AllowedDistance,
+															 TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
 {
 	if (CanAttach(Attachment))
 	{
@@ -243,7 +258,7 @@ bool UKPCLModularBuildingHandlerStacker::GetSnapPointInRange(FTransform TestLoca
 		if (AttachmentIndex >= 0)
 		{
 			if (mAttachmentDatas[AttachmentIndex].CanSnapTo(
-				mAttachmentInformations[AttachmentIndex].mMaxStackingModuleCount))
+					mAttachmentInformations[AttachmentIndex].mMaxStackingModuleCount))
 			{
 				SnapLocation = mAttachmentDatas[AttachmentIndex].GetSnapLocation();
 				return true;
@@ -253,8 +268,8 @@ bool UKPCLModularBuildingHandlerStacker::GetSnapPointInRange(FTransform TestLoca
 	return false;
 }
 
-AFGBuildable* UKPCLModularBuildingHandlerStacker::GetAttachedActorByClass(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+AFGBuildable*
+UKPCLModularBuildingHandlerStacker::GetAttachedActorByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
 {
 	const int AttachmentIndex = FindAttachmentIndex(Attachment);
 	if (AttachmentIndex >= 0)
@@ -267,8 +282,8 @@ AFGBuildable* UKPCLModularBuildingHandlerStacker::GetAttachedActorByClass(
 	return nullptr;
 }
 
-TArray<AFGBuildable*> UKPCLModularBuildingHandlerStacker::GetAttachedActorsByClass(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+TArray<AFGBuildable*>
+UKPCLModularBuildingHandlerStacker::GetAttachedActorsByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
 {
 	const int AttachmentIndex = FindAttachmentIndex(Attachment);
 	if (AttachmentIndex >= 0)
@@ -280,13 +295,16 @@ TArray<AFGBuildable*> UKPCLModularBuildingHandlerStacker::GetAttachedActorsByCla
 
 void UKPCLModularBuildingHandlerStacker::GetAttachedActors(TArray<AFGBuildable*>& Out)
 {
-	for (FAttachmentDataStacker Data : mAttachmentDatas)
+	for (const FAttachmentDataStacker& Data : mAttachmentDatas)
 	{
-		if (Data.mSnappedActors.Num() > 0)
+		for (const TObjectPtr<AFGBuildable>& Actor : Data.mSnappedActors)
 		{
-			Out.Append(Data.mSnappedActors);
+			if (IsValid(Actor))
+			{
+				Out.Add(Actor);
+			}
 		}
 	}
 }
 
-// End UKPCLModularBuildingHandlerStacker
+//~ End UKPCLModularBuildingHandlerStacker

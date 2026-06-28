@@ -1,0 +1,117 @@
+msgid ""
+msgstr ""
+"Language: ko-KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 1; plural = 0\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
+msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
+msgstr "<Orange12Reg>KMods</><LightGrey12Reg>를 사용해 주셔서 감사합니다</>"
+
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgstr ""
+"<Orange12Reg>우리는 사용자가</><LightGrey12Reg>어떤 광고를 볼 지 직접 결정할 수 있도록 하고 있습니다.</>\\r\\n<Orange12Reg>KPrivateLib 모드 설정에서</><LightGrey12Reg>언제든지 변경할 수 있습니다.</>\\r\\n\\r\\n<Orange12Reg>이 팝업창은 한 번만 표시됩니다.</>\n"
+""
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
+msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
+msgstr "이 모듈을 건물에 스냅할 수 없습니다. (공간이 부족하거나 잘못됨)"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
+msgid "Edit"
+msgstr "편집"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable Sink Option"
+msgstr "싱크 옵션 활성화"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable pull rules"
+msgstr "꺼내기 규칙 활성화"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable push rule"
+msgstr "주입 규칙 활성화"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable remote access"
+msgstr "원격 조작 활성화"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName"
+msgid "Inventory Pull"
+msgstr "인벤토리 꺼내기"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName"
+msgid "Inventory Push Module"
+msgstr "인벤토리 주입 모듈"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
+msgid "K.Mods Patreons"
+msgstr "K.Mods Patreons"
+
+msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
+msgid "KMods"
+msgstr "KMods"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
+msgid "Missing master Building cannot attach module!"
+msgstr "기초가 되는 건물이 없어 모듈을 연결할 수 없습니다!"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
+msgid "Module is not allowed here"
+msgstr "모듈은 이곳에 허용되지 않습니다"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
+msgid "Patreon Configuration"
+msgstr "Patreon 구성"
+
+msgctxt "KPrivateCodeLib,ConstructDisqualifier_MaxCountReached"
+msgid "Reached global max count for this building (5)"
+msgstr "이 건물의 전역 최대 한도에 도달했습니다 (5)"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
+msgid "Remote Access"
+msgstr "원격 조작"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
+msgid "Save And Close"
+msgstr "저장하고 닫기"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
+msgid "Save Color"
+msgstr "색상 저장"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.TextBlock_2.Text"
+msgid "Show KMods Neewsfeed (SoonTM)"
+msgstr "KMods 뉴스피드 표시 (SoonTM)"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Show Patreon Button"
+msgstr "Patreon 버튼 표시"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Show Patreon List"
+msgstr "Patreon 목록 표시"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
+msgid "Sink Utility"
+msgstr "싱크 도구"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.TextBlock.Text"
+msgid "Swatch Name"
+msgstr "견본 이름"
+
+msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
+msgid "Text Block"
+msgstr "문구 블록"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
+msgid "Thanks to all supporter!"
+msgstr "모든 서포터들에게 감사드립니다!"
+
+msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
+msgid "Unlock new network tier"
+msgstr "새로운 네트워크 티어 해제"

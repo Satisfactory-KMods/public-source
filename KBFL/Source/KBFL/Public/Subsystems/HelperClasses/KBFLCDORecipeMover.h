@@ -18,15 +18,26 @@ class KBFL_API UKBFLCDORecipeMover : public UKBFLCDOOverwriteBase
 public:
 	virtual void ApplyToInstances() override;
 
-	UPROPERTY(EditAnywhere, Category = "CDO")
-	bool bReplace = true;
+	// Lazy-load path: re-apply to a single recipe class loaded after the initial CDO pass.
+	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+	virtual void ApplyToInstance(UObject* Instance) override;
 
-	UPROPERTY(EditAnywhere, Meta = (MustImplement = "FGRecipeProducerInterface"), Category = "CDO")
+	// ===== Source Settings =====
+	/** Source producer to move recipes from (must implement FGRecipeProducerInterface) */
+	UPROPERTY(EditAnywhere, Meta = (MustImplement = "FGRecipeProducerInterface"), Category = "Source Settings")
 	TSoftClassPtr<UObject> mSourceTarget;
 
-	UPROPERTY(EditAnywhere, Category = "CDO")
-	TArray<TSoftClassPtr<UFGRecipe>> mRecipesToIgnore;
-
-	UPROPERTY(EditAnywhere, Meta = (MustImplement = "FGRecipeProducerInterface"), Category = "CDO")
+	// ===== Target Settings =====
+	/** Target producers to move recipes to (must implement FGRecipeProducerInterface) */
+	UPROPERTY(EditAnywhere, Meta = (MustImplement = "FGRecipeProducerInterface"), Category = "Target Settings")
 	TArray<TSoftClassPtr<UObject>> mProducedIn;
+
+	/** If true, replace existing recipes in target producers. If false, merge with existing recipes */
+	UPROPERTY(EditAnywhere, Category = "Target Settings")
+	bool bReplace = true;
+
+	// ===== Exclusions =====
+	/** Recipes to ignore when moving (won't be moved) */
+	UPROPERTY(EditAnywhere, Category = "Exclusions")
+	TArray<TSoftClassPtr<UFGRecipe>> mRecipesToIgnore;
 };

@@ -11,28 +11,26 @@
 
 #include "Net/UnrealNetwork.h"
 
-AKPCLModularExtractorBase::AKPCLModularExtractorBase(): mModularHandler(nullptr)
-{
-}
+AKPCLModularExtractorBase::AKPCLModularExtractorBase() : mModularHandler(nullptr) {}
 
 FText AKPCLModularExtractorBase::GetLookAtDecription_Implementation(AFGCharacterPlayer* byCharacter,
-                                                                    const FUseState& state) const
+																	const FUseState& state) const
 {
-	return mShouldUseUiFromMaster && GetMasterBuildable() != this
-		       ? Execute_GetLookAtDecription(GetMasterBuildable(), byCharacter, state)
-		       : Super::GetLookAtDecription_Implementation(byCharacter, state);
+	return mShouldUseUiFromMaster && GetMasterBuildable() != this && IsValid(GetMasterBuildable())
+		? Execute_GetLookAtDecription(GetMasterBuildable(), byCharacter, state)
+		: Super::GetLookAtDecription_Implementation(byCharacter, state);
 }
 
 bool AKPCLModularExtractorBase::IsUseable_Implementation() const
 {
-	return mShouldUseUiFromMaster && GetMasterBuildable() != this
-		       ? Execute_IsUseable(GetMasterBuildable())
-		       : Super::IsUseable_Implementation();
+	return mShouldUseUiFromMaster && GetMasterBuildable() != this && IsValid(GetMasterBuildable())
+		? Execute_IsUseable(GetMasterBuildable())
+		: Super::IsUseable_Implementation();
 }
 
 void AKPCLModularExtractorBase::OnUseStop_Implementation(AFGCharacterPlayer* byCharacter, const FUseState& State)
 {
-	if (GetMasterBuildable() != this && mShouldUseUiFromMaster)
+	if (GetMasterBuildable() != this && mShouldUseUiFromMaster && mMasterBuilding.IsValid())
 	{
 		Execute_OnUseStop(mMasterBuilding.Get(), byCharacter, State);
 		return;
@@ -42,7 +40,7 @@ void AKPCLModularExtractorBase::OnUseStop_Implementation(AFGCharacterPlayer* byC
 
 void AKPCLModularExtractorBase::OnUse_Implementation(AFGCharacterPlayer* byCharacter, const FUseState& State)
 {
-	if (GetMasterBuildable() != this && mShouldUseUiFromMaster)
+	if (GetMasterBuildable() != this && mShouldUseUiFromMaster && mMasterBuilding.IsValid())
 	{
 		Execute_OnUse(mMasterBuilding.Get(), byCharacter, State);
 		return;
@@ -76,10 +74,7 @@ AFGBuildable* AKPCLModularExtractorBase::GetMasterBuilding_Implementation()
 	return nullptr;
 }
 
-FPowerOptions AKPCLModularExtractorBase::GetPowerOptions_Implementation()
-{
-	return mPowerOptions;
-}
+FPowerOptions AKPCLModularExtractorBase::GetPowerOptions_Implementation() { return mPowerOptions; }
 
 UKPCLModularBuildingHandlerBase* AKPCLModularExtractorBase::GetModularHandler_Implementation()
 {
@@ -92,15 +87,9 @@ void AKPCLModularExtractorBase::SetMasterBuilding_Implementation(AFGBuildable* A
 	OnMasterBuildingReceived(Actor);
 }
 
-int32 AKPCLModularExtractorBase::GetModularIndex_Implementation()
-{
-	return mModularIndex;
-}
+int32 AKPCLModularExtractorBase::GetModularIndex_Implementation() { return mModularIndex; }
 
-void AKPCLModularExtractorBase::ApplyModularIndex_Implementation(int32 Index)
-{
-	mModularIndex = Index;
-}
+void AKPCLModularExtractorBase::ApplyModularIndex_Implementation(int32 Index) { mModularIndex = Index; }
 
 void AKPCLModularExtractorBase::SetAttachedActor_Implementation(AFGBuildable* Actor)
 {
@@ -132,8 +121,8 @@ void AKPCLModularExtractorBase::RemoveAttachedActor_Implementation(AFGBuildable*
 }
 
 bool AKPCLModularExtractorBase::AttachedActor_Implementation(AFGBuildable* Actor,
-                                                             TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-                                                             FTransform Location, float Distance)
+															 TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
+															 FTransform Location, float Distance)
 {
 	if (mModularHandler)
 	{
@@ -213,19 +202,11 @@ void AKPCLModularExtractorBase::EndPlay(const EEndPlayReason::Type EndPlayReason
 	Super::EndPlay(EndPlayReason);
 }
 
-void AKPCLModularExtractorBase::OnMasterBuildingReceived_Implementation(AActor* Actor)
-{
-}
+void AKPCLModularExtractorBase::OnMasterBuildingReceived_Implementation(AActor* Actor) {}
 
-void AKPCLModularExtractorBase::OnMeshUpdate()
-{
-	Event_OnMeshUpdate();
-}
+void AKPCLModularExtractorBase::OnMeshUpdate() { Event_OnMeshUpdate(); }
 
-UKPCLModularBuildingHandlerBase* AKPCLModularExtractorBase::GetHandler() const
-{
-	return mModularHandler;
-}
+UKPCLModularBuildingHandlerBase* AKPCLModularExtractorBase::GetHandler() const { return mModularHandler; }
 
 AFGBuildable* AKPCLModularExtractorBase::GetMasterBuildable() const
 {
@@ -236,19 +217,26 @@ AFGBuildable* AKPCLModularExtractorBase::GetMasterBuildable() const
 	return nullptr;
 }
 
-void AKPCLModularExtractorBase::OnModulesWasUpdated_Implementation()
-{
-}
+void AKPCLModularExtractorBase::OnModulesWasUpdated_Implementation() {}
 
 void AKPCLModularExtractorBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//UI
-	DOREPLIFETIME(AKPCLModularExtractorBase, mMasterBuilding);
 	DOREPLIFETIME(AKPCLModularExtractorBase, mModularHandler);
+	DOREPLIFETIME(AKPCLModularExtractorBase, mMasterBuilding);
 	DOREPLIFETIME(AKPCLModularExtractorBase, mModularIndex);
 }
+
+void AKPCLModularExtractorBase::OnRep_MasterBuilding()
+{
+	if (mMasterBuilding.IsValid())
+	{
+		OnMasterBuildingReceived(mMasterBuilding.Get());
+	}
+}
+
+void AKPCLModularExtractorBase::OnRep_ModularIndex() { ReadyForVisuelUpdate(); }
 
 void AKPCLModularExtractorBase::PostInitializeComponents()
 {

@@ -1,9 +1,6 @@
 ﻿#include "Components/KPCLBetterIndicator.h"
 
-UKPCLBetterIndicator::UKPCLBetterIndicator()
-{
-	mCustomExtraData = {3.0f, .0f, 0.473958f, 0.026989f};
-}
+UKPCLBetterIndicator::UKPCLBetterIndicator() { mCustomExtraData = {3.0f, .0f, 0.473958f, 0.026989f}; }
 
 float UKPCLBetterIndicator::GetEmissive() const
 {
@@ -25,10 +22,7 @@ void UKPCLBetterIndicator::SetState(ENewProductionState NewState, bool MarkState
 		}
 		else
 		{
-			AsyncTask(ENamedThreads::GameThread, [&]()
-			{
-				OnIndicatorStateChanged.Broadcast(mCurrentState);
-			});
+			AsyncTask(ENamedThreads::GameThread, [&]() { OnIndicatorStateChanged.Broadcast(mCurrentState); });
 		}
 	}
 	ApplyNewColorData(FKPCLColorData(0, GetEmissive()), MarkStateDirty);
@@ -53,12 +47,6 @@ FLinearColor UKPCLBetterIndicator::GetColorByState(ENewProductionState State) co
 	return mStateColors[static_cast<uint8>(State)];
 }
 
-FLinearColor UKPCLBetterIndicator::GetCurrentColor() const
-{
-	return GetColorByState(mCurrentState);
-}
+FLinearColor UKPCLBetterIndicator::GetCurrentColor() const { return GetColorByState(mCurrentState); }
 
-ENewProductionState UKPCLBetterIndicator::GetState() const
-{
-	return mCurrentState;
-}
+ENewProductionState UKPCLBetterIndicator::GetState() const { return mCurrentState; }

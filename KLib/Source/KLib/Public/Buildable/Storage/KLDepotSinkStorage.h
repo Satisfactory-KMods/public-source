@@ -1,12 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FGPowerConnectionComponent.h"
-#include "FGResourceSinkSubsystem.h"
+
 #include "Buildables/FGCentralStorageContainer.h"
-#include "Structures/KPCLFunctionalStructure.h"
+#include "FGResourceSinkSubsystem.h"
 
 #include "KLDepotSinkStorage.generated.h"
 
@@ -18,20 +17,31 @@ class KLIB_API AKLDepotSinkStorage : public AFGCentralStorageContainer
 public:
 	AKLDepotSinkStorage();
 
-	virtual void BeginPlay() override;
-	virtual void Factory_Tick(float dt) override;
+	//~ Begin AFGBuildableFactory Interface
 	virtual bool CanProduce_Implementation() const override;
+	//~ End AFGBuildableFactory Interface
 
-	void HandleStack();
+	//~ Begin AActor Interface
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
 	void CacheSubsystem();
 
-	/** Cached resource sink subsystem */
-	UPROPERTY()
-	AFGResourceSinkSubsystem* mResourceSinkSubsystem;
+	/** Sinks the overflow of the last inventory slot above mKeepStackFraction of its stack size. */
+	void TrySinkOverflow();
+
+	void OnInventoryItemAdded(TSubclassOf<UFGItemDescriptor> ItemClass, int32 NumAdded,
+							  UFGInventoryComponent* SourceInventory);
+
+	/** Fraction of a full stack to keep in the sink slot; only the amount above this is sunk. [0,1] */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|SinkStorage",
+			  meta = (ClampMin = "0.0", ClampMax = "1.0"))
+	float mKeepStackFraction = 0.9f;
+
+	/** Max items to sink per item-added event. 0 = drain the entire overflow at once. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|SinkStorage")
+	int32 mMaxItemsToSinkPerCycle = 0;
 
 	UPROPERTY()
-	UFGPowerConnectionComponent* mPowerConnection;
-
-	UPROPERTY(SaveGame)
-	FSmartTimer mTimer;
+	TObjectPtr<AFGResourceSinkSubsystem> mResourceSinkSubsystem;
 };

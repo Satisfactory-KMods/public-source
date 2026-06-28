@@ -1,13 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Subsystem/KLSlugSubsystem.h"
 
-#include "Net/UnrealNetwork.h"
+#include <Net/UnrealNetwork.h>
+
 #include "Subsystems/KAPIDataAssetSubsystem.h"
-
 #include "Subsystems/KBFLAssetDataSubsystem.h"
-
 
 // Sets default values
 AKLSlugSubsystem::AKLSlugSubsystem()
@@ -21,21 +19,14 @@ void AKLSlugSubsystem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	mSkipUnlock.Init(GetWorld(), this);
+	KPCL_ASG_INIT(mSkipUnlock);
 }
 
 void AKLSlugSubsystem::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	mSkipUnlock.StopListenOnUpdated(GetWorld());
-}
-
-void AKLSlugSubsystem::OnOptionsUpdated(FString UpdatedCVar)
-{
-	Super::OnOptionsUpdated(UpdatedCVar);
-
-	mSkipUnlock.OnUpdate(GetWorld(), UpdatedCVar);
+	KPCL_ASG_DEINIT(mSkipUnlock);
 }
 
 void AKLSlugSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -55,7 +46,7 @@ AKLSlugSubsystem* AKLSlugSubsystem::Get(UObject* worldContext)
 
 void AKLSlugSubsystem::AddBreededEgg(TSubclassOf<UFGItemDescriptor> Egg)
 {
-	if (IsValid(Egg))
+	if (HasAuthority() && IsValid(Egg))
 	{
 		mBreededEggs.AddUnique(Egg);
 	}
@@ -115,7 +106,7 @@ TArray<TSubclassOf<UFGItemDescriptor>> AKLSlugSubsystem::GetAllBreededSlugs() co
 
 void AKLSlugSubsystem::AddBreededSlugs(TSubclassOf<UFGItemDescriptor> Slug)
 {
-	if (IsValid(Slug))
+	if (HasAuthority() && IsValid(Slug))
 	{
 		mBreededSlugs.AddUnique(Slug);
 	}

@@ -1,14 +1,15 @@
 ﻿#include "Buildable/KlBuildableCleaner.h"
 
+#include <Net/UnrealNetwork.h>
+
+#include "Async/TaskGraphInterfaces.h"
 #include "BFL/KBFL_Player.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Cpp/KBFLCppInventoryHelper.h"
 #include "FGFactoryConnectionComponent.h"
 #include "FGPlayerController.h"
 #include "Logging.h"
-
-#include "Net/UnrealNetwork.h"
-
+#include "Replication/KLDefaultRCO.h"
 #include "Resources/FGNoneDescriptor.h"
 #include "Subsystem/KPCLUnlockSubsystem.h"
 
@@ -65,7 +66,7 @@ void AKLBuildableCleaner::UI_ApplyRelevantItems_Implementation(TArray<TSubclassO
 		{
 			OutSlots.AddUnique(GetCurrentCleanerRecipe()->mCleanerItemInfo.mProduceItem);
 		}
-		for (FKAPICleanerInfo Product : GetCurrentCleanerRecipe()->mBypassProducts)
+		for (const FKAPICleanerInfo& Product : GetCurrentCleanerRecipe()->mBypassProducts)
 		{
 			if (!IsValid(Product.mProduceItem))
 			{
@@ -129,7 +130,7 @@ void AKLBuildableCleaner::Overclocking_GetProductionResults_Implementation(
 																  CurrentRecipe->mCleanerItemInfo.mProductionTime));
 		}
 
-		for (FKAPICleanerInfo CleanerInfo : CurrentRecipe->mBypassProducts)
+		for (const FKAPICleanerInfo& CleanerInfo : CurrentRecipe->mBypassProducts)
 		{
 			OutProducts.Add(FKPCLOverclockingProductionResults(CleanerInfo.mProduceItem, CleanerInfo.mProduceAmount,
 															   CleanerInfo.mProductionTime));
@@ -139,21 +140,59 @@ void AKLBuildableCleaner::Overclocking_GetProductionResults_Implementation(
 
 TArray<UKAPICleanerItemDescription*> AKLBuildableCleaner::GetAllCleanerRecipes() const
 {
-	AKLUnlockSubsystem* UnlockSubsystem = AKLUnlockSubsystem::Get(GetWorld());
-	if (!IsValid(UnlockSubsystem))
+	// Use the already-cached subsystem pointer (set in BeginPlay / lazily in CheckFluid) to avoid a per-call
+	// world-subsystem scan via GetSubsystemFromChild.
+	AKLUnlockSubsystem* Subsystem =
+		IsValid(mUnlockSubsystem) ? mUnlockSubsystem.Get() : AKLUnlockSubsystem::Get(GetWorld());
+	if (!IsValid(Subsystem))
 	{
 		return TArray<UKAPICleanerItemDescription*>();
 	}
-	return UnlockSubsystem->GetAllUnlockedCleanerDesc();
+	return Subsystem->GetAllUnlockedCleanerDesc();
 }
 
 UKAPICleanerItemDescription* AKLBuildableCleaner::GetCurrentCleanerRecipe() const { return mCurrentCleanerRecipe; }
 
+void AKLBuildableCleaner::CommitProductionHandlers()
+{
+	mPropertyReplicator.MarkPropertyDirty(FName("mCleanerItemHandler"));
+	mPropertyReplicator.MarkPropertyDirty(FName("mSlotProductionHandler"));
+}
+
 void AKLBuildableCleaner::SetCleanerRecipe(UKAPICleanerItemDescription* NewCleanerInfo)
 {
+	// Factory_TickAuthOnly runs on a worker thread. Any mutation of replicated state (MarkPropertyDirty,
+	// inventory Empty/Resize, mSlotProductionHandler writes) must happen on the game thread. Marshal there
+	// before doing anything else so that BeginPlay / RCO / UI callers (game thread) run synchronously.
+	if (!IsInGameThread())
+	{
+		TWeakObjectPtr<AKLBuildableCleaner> WeakThis(this);
+		TWeakObjectPtr<UKAPICleanerItemDescription> WeakRecipe(NewCleanerInfo);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[WeakThis, WeakRecipe]()
+			{
+				if (AKLBuildableCleaner* Self = WeakThis.Get())
+				{
+					Self->SetCleanerRecipe(WeakRecipe.Get());
+				}
+			},
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		return;
+	}
+
+	if (!HasAuthority())
+	{
+		if (UKLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKLDefaultRCO>(this))
+		{
+			RCO->Server_SetCleanerRecipe(this, NewCleanerInfo);
+		}
+		return;
+	}
+
 	if (mCurrentCleanerRecipe != NewCleanerInfo && CanSetCleanerRecipe(NewCleanerInfo))
 	{
 		mCurrentCleanerRecipe = NewCleanerInfo;
+		mPropertyReplicator.MarkPropertyDirty(FName("mCurrentCleanerRecipe"));
 		ApplyRecipeSettings();
 	}
 }
@@ -165,7 +204,15 @@ bool AKLBuildableCleaner::CanSetCleanerRecipe(UKAPICleanerItemDescription* NewCl
 		return false;
 	}
 
-	return GetAllCleanerRecipes().Contains(NewCleanerInfo);
+	// Use the cached subsystem pointer to avoid a world-subsystem scan on every call, and check membership
+	// directly against the cached unlock list (avoids a second subsystem lookup inside GetAllCleanerRecipes).
+	AKLUnlockSubsystem* Subsystem =
+		IsValid(mUnlockSubsystem) ? mUnlockSubsystem.Get() : AKLUnlockSubsystem::Get(GetWorld());
+	if (!IsValid(Subsystem))
+	{
+		return false;
+	}
+	return Subsystem->GetAllUnlockedCleanerDesc().Contains(NewCleanerInfo);
 }
 
 void AKLBuildableCleaner::SetPendingPotential(float newPendingPotential)
@@ -178,6 +225,7 @@ void AKLBuildableCleaner::SetPendingPotential(float newPendingPotential)
 	{
 		Handle.mPendingPotential = newPendingPotential;
 	}
+	CommitProductionHandlers();
 }
 
 bool AKLBuildableCleaner::ValidateRecipeSettings()
@@ -195,7 +243,7 @@ bool AKLBuildableCleaner::ValidateRecipeSettings()
 		return false;
 	}
 
-	TArray<FKAPICleanerInfo> CleanerInfos = CurrentInfo->mBypassProducts;
+	const TArray<FKAPICleanerInfo>& CleanerInfos = CurrentInfo->mBypassProducts;
 	if (GetOutputInventory()->GetSizeLinear() != MAX_BYPASS_SLOTS)
 	{
 		return false;
@@ -203,15 +251,18 @@ bool AKLBuildableCleaner::ValidateRecipeSettings()
 
 	for (int i = 0; i < MAX_BYPASS_SLOTS; ++i)
 	{
-		TSubclassOf<UFGItemDescriptor> AllowedItem = GetInventory()->GetAllowedItemOnIndex(i);
+		TSubclassOf<UFGItemDescriptor> AllowedItem = GetOutputInventory()->GetAllowedItemOnIndex(i);
 		if (CleanerInfos.IsValidIndex(i))
 		{
+			// Any allowed-item mismatch means the slots are stale — invalidate immediately.
 			if (AllowedItem != CleanerInfos[i].mProduceItem)
 			{
-				if (!mSlotProductionHandler.IsValidIndex(i))
-				{
-					return false;
-				}
+				return false;
+			}
+			// Handler must exist and carry the correct cycle time.
+			if (!mSlotProductionHandler.IsValidIndex(i))
+			{
+				return false;
 			}
 			if (mSlotProductionHandler[i].mProductionTime != CleanerInfos[i].mProductionTime)
 			{
@@ -220,6 +271,7 @@ bool AKLBuildableCleaner::ValidateRecipeSettings()
 		}
 		else if (!IsValid(AllowedItem) || !AllowedItem->IsChildOf(UFGNoneDescriptor::StaticClass()))
 		{
+			// Unused bypass slots must be explicitly locked to UFGNoneDescriptor.
 			return false;
 		}
 	}
@@ -239,6 +291,83 @@ bool AKLBuildableCleaner::ValidateRecipeSettings()
 }
 
 
+void AKLBuildableCleaner::ConfigureRecipeSlots()
+{
+	// Guard: this function mutates inventory size, replicated arrays, and calls MarkPropertyDirty — all of
+	// which must happen on the game thread. Factory_TickAuthOnly (worker thread) reaches this via
+	// CheckFluid Phase 2; marshal back to the game thread so the operations are safe.
+	if (!IsInGameThread())
+	{
+		TWeakObjectPtr<AKLBuildableCleaner> WeakThis(this);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[WeakThis]()
+			{
+				if (AKLBuildableCleaner* Self = WeakThis.Get())
+				{
+					Self->ConfigureRecipeSlots();
+				}
+			},
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		return;
+	}
+
+	UKAPICleanerItemDescription* CurrentInfo = GetCurrentCleanerRecipe();
+	if (!IsValid(CurrentInfo))
+	{
+		return;
+	}
+
+	// Cleaner-item slot: lock to the required item, or block with UFGNoneDescriptor.
+	if (CurrentInfo->CleanerItemNeeded())
+	{
+		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), CLEANER_ITEM_INDEX,
+															  CurrentInfo->mCleanerItemInfo.mProduceItem);
+	}
+	else
+	{
+		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), CLEANER_ITEM_INDEX,
+															  UFGNoneDescriptor::StaticClass());
+	}
+
+	// Bypass output slots: rebuild handlers and allowed items.
+	mSlotProductionHandler.Empty();
+	const TArray<FKAPICleanerInfo>& CleanerInfos = CurrentInfo->mBypassProducts;
+
+	GetOutputInventory()->Resize(MAX_BYPASS_SLOTS);
+	for (int i = 0; i < MAX_BYPASS_SLOTS; ++i)
+	{
+		if (CleanerInfos.IsValidIndex(i))
+		{
+			UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), i,
+																  CleanerInfos[i].mProduceItem);
+
+			FFullProductionHandle Handler;
+			Handler.mPendingPotential = GetPendingPotential();
+			Handler.mCurrentPotential = GetCurrentPotential();
+			Handler.SetNewTime(CleanerInfos[i].mProductionTime, true);
+			mSlotProductionHandler.Add(Handler);
+		}
+		else
+		{
+			UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), i,
+																  UFGNoneDescriptor::StaticClass());
+		}
+	}
+
+	// Cleaner-item handle: run when needed, reset otherwise.
+	if (CurrentInfo->CleanerItemNeeded())
+	{
+		mCleanerItemHandler.SetNewTime(CurrentInfo->mCleanerItemInfo.mProductionTime, true);
+	}
+	else
+	{
+		mCleanerItemHandler.Reset();
+	}
+
+	SetProductionTime(CurrentInfo->mProductionTime, true);
+	CommitProductionHandlers();
+}
+
 void AKLBuildableCleaner::ApplyRecipeSettings()
 {
 	if (!HasAuthority())
@@ -246,51 +375,13 @@ void AKLBuildableCleaner::ApplyRecipeSettings()
 		return;
 	}
 
-	UKAPICleanerItemDescription* CurrentInfo = GetCurrentCleanerRecipe();
-	if (IsValid(CurrentInfo))
+	if (IsValid(GetCurrentCleanerRecipe()))
 	{
-		// Flush Inventorys to make sure that we can start producing the new way
+		// Flush inventories on an explicit recipe change so we start fresh.
 		GetInventory()->Empty();
-
-		if (CurrentInfo->CleanerItemNeeded())
-		{
-			UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(
-				GetInventory(), CLEANER_ITEM_INDEX, GetCurrentCleanerRecipe()->mCleanerItemInfo.mProduceItem);
-		}
-		else
-		{
-			UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), CLEANER_ITEM_INDEX,
-																  UFGNoneDescriptor::StaticClass());
-		}
-
-		mSlotProductionHandler.Empty();
-		TArray<FKAPICleanerInfo> CleanerInfos = GetCurrentCleanerRecipe()->mBypassProducts;
-
 		GetOutputInventory()->Empty();
-		GetOutputInventory()->Resize(MAX_BYPASS_SLOTS);
-		for (int i = 0; i < MAX_BYPASS_SLOTS; ++i)
-		{
-			if (CleanerInfos.IsValidIndex(i))
-			{
-				UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), i,
-																	  CleanerInfos[i].mProduceItem);
 
-				FFullProductionHandle Handler;
-
-				Handler.mPendingPotential = GetPendingPotential();
-				Handler.mCurrentPotential = GetCurrentPotential();
-				Handler.SetNewTime(CleanerInfos[i].mProductionTime, true);
-				mSlotProductionHandler.Add(Handler);
-			}
-			else
-			{
-				UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), i,
-																	  UFGNoneDescriptor::StaticClass());
-			}
-		}
-
-		mCleanerItemHandler.SetNewTime(GetCurrentCleanerRecipe()->mCleanerItemInfo.mProductionTime, true);
-		SetProductionTime(GetCurrentCleanerRecipe()->mProductionTime, true);
+		ConfigureRecipeSlots();
 	}
 }
 
@@ -324,21 +415,19 @@ void AKLBuildableCleaner::BeginPlay()
 	}
 }
 
-void AKLBuildableCleaner::Factory_Tick(float dt)
+void AKLBuildableCleaner::Factory_TickAuthOnly(float dt)
 {
-	Super::Factory_Tick(dt);
+	Super::Factory_TickAuthOnly(dt);
 
-	if (HasAuthority())
+	if (HasPower())
 	{
-		if (HasPower())
-		{
-			CheckFluid(dt);
-		}
+		CheckFluid(dt);
+	}
 
-		if (IsProducing())
-		{
-			ByPassProduceHandle(dt);
-		}
+	if (IsProducing())
+	{
+		ByPassProduceHandle(dt);
+		CommitProductionHandlers();
 	}
 }
 
@@ -348,7 +437,8 @@ void AKLBuildableCleaner::CollectBelts()
 	{
 		UKBFLCppInventoryHelper::PullBelt(GetInventory(), CLEANER_ITEM_INDEX, 0.f,
 										  GetCurrentCleanerRecipe()->mCleanerItemInfo.mProduceItem, mBeltInput);
-		mBeltOutput->SetInventoryAccessIndex(GetFullestStackIndex());
+		const int32 FullestIdx = GetFullestStackIndex();
+		mBeltOutput->SetInventoryAccessIndex(FullestIdx >= 0 ? FullestIdx : 0);
 	}
 }
 
@@ -378,12 +468,25 @@ void AKLBuildableCleaner::GetConditionalReplicatedProps(TArray<FFGCondReplicated
 
 bool AKLBuildableCleaner::FilterInputInventory(TSubclassOf<UObject> object, int32 idx) const
 {
-	if (!IsValid(GetCurrentCleanerRecipe()) || !IsValid(object))
+	UKAPICleanerItemDescription* CurrentRecipe = GetCurrentCleanerRecipe();
+	if (!IsValid(CurrentRecipe) || !IsValid(object))
 	{
 		return false;
 	}
 
-	return true;
+	if (idx == FLUID_INPUT_INDEX)
+	{
+		return object == CurrentRecipe->mInFluid.ItemClass;
+	}
+	if (idx == CLEANER_ITEM_INDEX)
+	{
+		return CurrentRecipe->CleanerItemNeeded() && object == CurrentRecipe->mCleanerItemInfo.mProduceItem;
+	}
+	if (idx == FLUID_OUTPUT_INDEX)
+	{
+		return IsValid(CurrentRecipe->mOutFluid.ItemClass) && object == CurrentRecipe->mOutFluid.ItemClass;
+	}
+	return false;
 }
 
 UFGInventoryComponent* AKLBuildableCleaner::GetInventory() const { return mInputInventory; }
@@ -418,7 +521,8 @@ void AKLBuildableCleaner::onProducingFinal_Implementation()
 
 void AKLBuildableCleaner::CheckFluid(float dt)
 {
-	if (!bShouldAutoSetRecipeIfNotSet || IsValid(GetCurrentCleanerRecipe()) || !mSearchForRecipeTimer.Tick(dt))
+	// Throttle both phases by the smart timer.
+	if (!mSearchForRecipeTimer.Tick(dt))
 	{
 		return;
 	}
@@ -433,33 +537,29 @@ void AKLBuildableCleaner::CheckFluid(float dt)
 		return;
 	}
 
-	TSubclassOf<UFGItemDescriptor> lFluid;
-	if (GetInventory())
+	// Phase 1: auto-detect a recipe from the input fluid when none is set.
+	if (bShouldAutoSetRecipeIfNotSet && !IsValid(GetCurrentCleanerRecipe()))
 	{
-		FInventoryStack Stack;
-		GetInventory()->GetStackFromIndex(FLUID_INPUT_INDEX, Stack);
-		lFluid = Stack.HasItems() ? Stack.Item.GetItemClass() : nullptr;
-		if (!lFluid)
+		TSubclassOf<UFGItemDescriptor> lFluid;
+		if (GetInventory())
 		{
-			if (mPipeInput)
+			FInventoryStack Stack;
+			GetInventory()->GetStackFromIndex(FLUID_INPUT_INDEX, Stack);
+			lFluid = Stack.HasItems() ? Stack.Item.GetItemClass() : nullptr;
+		}
+		if (!lFluid && mPipeInput && mPipeInput->IsConnected() && mPipeInput->HasFluidIntegrant())
+		{
+			lFluid = mPipeInput->GetFluidDescriptor();
+			if (!lFluid)
 			{
-				if (mPipeInput->IsConnected() && mPipeInput->HasFluidIntegrant())
+				if (const UFGPipeConnectionFactory* OtherConnection =
+						Cast<UFGPipeConnectionFactory>(mPipeInput->GetConnection()))
 				{
-					if (mPipeInput->GetFluidDescriptor())
-					{
-						lFluid = mPipeInput->GetFluidDescriptor();
-					}
-					else if (const UFGPipeConnectionFactory* OtherConnection =
-								 Cast<UFGPipeConnectionFactory>(mPipeInput->GetConnection()))
-					{
-						lFluid = OtherConnection->GetFluidDescriptor();
-					}
+					lFluid = OtherConnection->GetFluidDescriptor();
 				}
 			}
 		}
-
-		if ((!GetCurrentCleanerRecipe() && lFluid) ||
-			(lFluid && GetCurrentCleanerRecipe() && GetCurrentCleanerRecipe()->mInFluid.ItemClass != lFluid))
+		if (lFluid)
 		{
 			UKAPICleanerItemDescription* NewDesc = mUnlockSubsystem->GetUnlockedCleanerDesc(lFluid);
 			if (IsValid(NewDesc))
@@ -469,9 +569,10 @@ void AKLBuildableCleaner::CheckFluid(float dt)
 		}
 	}
 
-	if (!ValidateRecipeSettings())
+	// Phase 2: if a recipe is set but slots/handlers have drifted, re-sync without flushing production.
+	if (IsValid(GetCurrentCleanerRecipe()) && !ValidateRecipeSettings())
 	{
-		ApplyRecipeSettings();
+		ConfigureRecipeSlots();
 	}
 }
 
@@ -550,7 +651,8 @@ bool AKLBuildableCleaner::CheckOutputAndWasteInventory() const
 			}
 		}
 
-		if (!Default->mOutFluid.ItemClass->IsChildOf(UFGNoneDescriptor::StaticClass()) &&
+		if (IsValid(Default->mOutFluid.ItemClass) &&
+			!Default->mOutFluid.ItemClass->IsChildOf(UFGNoneDescriptor::StaticClass()) &&
 			!UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), FLUID_OUTPUT_INDEX, Default->mOutFluid.ItemClass,
 												   Default->mOutFluid.Amount))
 		{

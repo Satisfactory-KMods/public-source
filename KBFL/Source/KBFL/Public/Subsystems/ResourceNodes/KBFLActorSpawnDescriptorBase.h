@@ -27,10 +27,10 @@ public:
 	bool IsRequirementMetActor(class UKBFLActorSpawnDescriptorBase* Target, AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void ConfigureActor(class UKBFLActorSpawnDescriptorBase* Target, AActor* Actor);
+	void OnActorSpawned(class UKBFLActorSpawnDescriptorBase* Target, AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent)
-	void OnActorSpawned(class UKBFLActorSpawnDescriptorBase* Target, AActor* Actor);
+	void ConfigureActor(class UKBFLActorSpawnDescriptorBase* Target, AActor* Actor);
 
 	virtual UWorld* GetWorld() const override { return mWorld; };
 
@@ -73,7 +73,7 @@ public:
 	virtual TArray<TEnumAsByte<EObjectTypeQuery>> GetSphereCheckChannels();
 	virtual void SetSphereCheckChannels(TArray<TEnumAsByte<EObjectTypeQuery>> Channels);
 
-	virtual void ApplyMaterialData(AActor* Actor, TMap<uint8, UMaterialInterface*> MaterialInfo);
+	virtual void ApplyMaterialData(AActor* Actor, TMap<uint8, TObjectPtr<UMaterialInterface>> MaterialInfo);
 
 	virtual TArray<TSubclassOf<AActor>> GetSearchingActorClasses();
 
@@ -85,46 +85,62 @@ public:
 	virtual TSubclassOf<AActor> GetActorClass();
 	virtual TSubclassOf<AActor> GetActorFreeClass();
 
-	// Bool
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	// ===== Basic Settings =====
+	/** If true, this descriptor is disabled and won't spawn actors */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Basic Settings")
 	bool mDisabled = false;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	/** If true, existing actors can be moved to new locations */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Basic Settings")
 	bool mAllowToMove = true;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+	/** If true, remove old/wrong actors before spawning new ones */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Basic Settings")
 	bool mRemoveOld = true;
 
-	UPROPERTY(meta = (NoAutoJson = true))
-	bool mPreventSpawningByOverlapFreeActorClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config",
-			  meta = (editcondition = "mPreventSpawningByOverlapFreeActorClass"))
-	TSubclassOf<AActor> mActorFreeClass = AActor::StaticClass();
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
-	TArray<TSubclassOf<UKBFLSpawnRequirement>> mSpawnRequirements;
-
-	// Floats
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
-	float mCheckRange = 500.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
-	FString mMapName = "Persistent_Level";
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config")
+	/** If true, requires authority (server-side only spawning) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Basic Settings")
 	bool mNeedAuth = false;
 
-	UPROPERTY(Transient, BlueprintReadWrite)
-	class UKBFLResourceNodeSubsystem* mSubsystem = nullptr;
+	// ===== Spawn Requirements =====
+	/** Custom requirements that must be met for spawning */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Spawn Requirements")
+	TArray<TSubclassOf<UKBFLSpawnRequirement>> mSpawnRequirements;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Config|SphereCheckChannels")
+	// ===== Collision & Overlap =====
+	/** Check range for detecting existing actors */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision & Overlap")
+	float mCheckRange = 500.0f;
+
+	/** Object types to check for overlap detection */
+	UPROPERTY(EditDefaultsOnly, Category = "Collision & Overlap")
 	TArray<TEnumAsByte<EObjectTypeQuery>> mObjectTypeQuery =
 		TArray<TEnumAsByte<EObjectTypeQuery>>{ObjectTypeQuery1, ObjectTypeQuery2, ObjectTypeQuery5};
 
+	/** Prevent spawning if this actor class overlaps the spawn location */
+	UPROPERTY(meta = (NoAutoJson = true))
+	bool mPreventSpawningByOverlapFreeActorClass;
+
+	/** Actor class to check for overlap prevention */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Collision & Overlap",
+			  meta = (editcondition = "mPreventSpawningByOverlapFreeActorClass"))
+	TSubclassOf<AActor> mActorFreeClass = AActor::StaticClass();
+
+	// ===== World Settings =====
+	/** Map name to spawn actors in (e.g., "Persistent_Level") */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "World Settings")
+	FString mMapName = "Persistent_Level";
+
+	// ===== Internal State =====
+	UPROPERTY(Transient, BlueprintReadWrite)
+	TObjectPtr<class UKBFLResourceNodeSubsystem> mSubsystem = nullptr;
+
+
 	UPROPERTY(Transient)
-	TArray<AActor*> mAllActors;
+	TArray<TObjectPtr<AActor>> mAllActors;
 
 	UPROPERTY(Transient)
 	TArray<TObjectPtr<UKBFLSpawnRequirement>> mRequirements;
+
+	virtual UWorld* GetWorld() const override;
 };

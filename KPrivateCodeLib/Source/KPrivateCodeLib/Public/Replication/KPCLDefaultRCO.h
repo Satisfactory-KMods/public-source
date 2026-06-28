@@ -1,19 +1,21 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGPlayerController.h"
 #include "FGRemoteCallObject.h"
-#include "Components/KPCLNetworkPlayerComponent.h"
+
 #include "OutlineSystem/KPCLOutlineSubsystem.h"
 #include "Structures/KPCLNetworkStructures.h"
 #include "Subsystem/KPCLSwatchSystem.h"
+
 #include "KPCLDefaultRCO.generated.h"
 
-/**
- * 
- */
+class AKPCLBuildableBalanceSplitter;
+class AKPCLFaxitSubsystem;
+
 UCLASS()
 class KPRIVATECODELIB_API UKPCLDefaultRCO : public UFGRemoteCallObject
 {
@@ -27,8 +29,8 @@ public:
 	{
 		if (WorldContext)
 		{
-			if (AFGPlayerController* Controller = Cast<AFGPlayerController>(
-				WorldContext->GetWorld()->GetFirstPlayerController()))
+			if (AFGPlayerController* Controller =
+					Cast<AFGPlayerController>(WorldContext->GetWorld()->GetFirstPlayerController()))
 			{
 				if (UKPCLDefaultRCO* RCO = Controller->GetRemoteCallObjectOfClass<UKPCLDefaultRCO>())
 				{
@@ -44,8 +46,8 @@ public:
 	{
 		if (WorldContext)
 		{
-			if (AFGPlayerController* Controller = Cast<AFGPlayerController>(
-				WorldContext->GetWorld()->GetFirstPlayerController()))
+			if (AFGPlayerController* Controller =
+					Cast<AFGPlayerController>(WorldContext->GetWorld()->GetFirstPlayerController()))
 			{
 				if (T* RCO = Controller->GetRemoteCallObjectOfClass<T>())
 				{
@@ -56,7 +58,7 @@ public:
 		return nullptr;
 	};
 
-	// Start Outline
+	//~ Begin Outline
 
 	UFUNCTION(Server, BlueprintCallable, WithValidation, Reliable)
 	void Server_CreateOutlineForActor(AKPCLOutlineSubsystem* Subsystem, FOutlineData Data);
@@ -72,7 +74,10 @@ public:
 	UFUNCTION(Server, BlueprintCallable, WithValidation, Reliable)
 	void Server_SetOutlineColor(AKPCLOutlineSubsystem* Subsystem, FLinearColor Color, EOutlineColorSlot ColorSlot);
 	FORCEINLINE bool Server_SetOutlineColor_Validate(AKPCLOutlineSubsystem* Subsystem, FLinearColor Color,
-	                                                 EOutlineColorSlot ColorSlot) { return true; }
+													 EOutlineColorSlot ColorSlot)
+	{
+		return true;
+	}
 
 	UFUNCTION(Server, BlueprintCallable, WithValidation, Reliable)
 	void Server_ClearOutlineForActor(AKPCLOutlineSubsystem* Subsystem, AActor* Actor);
@@ -81,7 +86,7 @@ public:
 		return true;
 	}
 
-	// End Outline
+	//~ End Outline
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -112,27 +117,29 @@ public:
 
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void Server_MoveItemAmount(class UFGInventoryComponent* Source, int32 SourceIndex, UFGInventoryComponent* Target,
-	                           FItemAmount Amount, bool ResizeToFit);
+							   FItemAmount Amount, bool ResizeToFit);
 
 	bool Server_MoveItemAmount_Validate(class UFGInventoryComponent* Source, int32 SourceIndex,
-	                                    UFGInventoryComponent* Target, FItemAmount Amount, bool ResizeToFit)
+										UFGInventoryComponent* Target, FItemAmount Amount, bool ResizeToFit)
 	{
 		return true;
 	}
 
 	UFUNCTION(BlueprintCallable)
 	static int32 MoveItemAmount(class UFGInventoryComponent* Source, int32 SourceIndex, UFGInventoryComponent* Target,
-	                            FItemAmount Amount, bool ResizeToFit);
+								FItemAmount Amount, bool ResizeToFit);
 
-
-	// START: Faxit
+	//~ Begin Faxit
 
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void Server_Faxit_SetFilterItem(class AKPCLNetworkConnectionBuilding* Target,
-	                                TSubclassOf<UFGItemDescriptor> NewItem);
+									TSubclassOf<UFGItemDescriptor> NewItem);
 
 	bool Server_Faxit_SetFilterItem_Validate(class AKPCLNetworkConnectionBuilding* Target,
-	                                         TSubclassOf<UFGItemDescriptor> NewItem) { return true; }
+											 TSubclassOf<UFGItemDescriptor> NewItem)
+	{
+		return true;
+	}
 
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void Server_Faxit_ClearSpeedOverride(class AKPCLNetworkConnectionBuilding* Target);
@@ -150,9 +157,102 @@ public:
 	void Server_Faxit_GrabFromNetwork(class AKPCLNetworkCore* Target, AFGCharacterPlayer* Player, FItemAmount Amount);
 
 	bool Server_Faxit_GrabFromNetwork_Validate(class AKPCLNetworkCore* Target, AFGCharacterPlayer* Player,
-	                                           FItemAmount Amount) { return true; }
+											   FItemAmount Amount)
+	{
+		return true;
+	}
 
-	// END: Faxit
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Faxit_StorageFromPlayerToNetwork(class AKPCLNetworkCore* Target, AFGCharacterPlayer* Player,
+												 FItemAmount Amount);
+
+	bool Server_Faxit_StorageFromPlayerToNetwork_Validate(class AKPCLNetworkCore* Target, AFGCharacterPlayer* Player,
+														  FItemAmount Amount)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Faxit_UpdateNetworkName(class AKPCLFaxitSubsystem* Target, class AKPCLNetworkCore* Core,
+										const FString& NewName);
+
+	bool Server_Faxit_UpdateNetworkName_Validate(class AKPCLFaxitSubsystem* Target, class AKPCLNetworkCore* Core,
+												 const FString& NewName)
+	{
+		return true;
+	}
+
+	//~ End Faxit
+
+	//~ Begin PressureRegulatorValve
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Valve_SetOnThreshold(class AKPCLPressureRegulatorValve* Target, float NewThreshold);
+
+	bool Server_Valve_SetOnThreshold_Validate(class AKPCLPressureRegulatorValve* Target, float NewThreshold)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Valve_SetOffThreshold(class AKPCLPressureRegulatorValve* Target, float NewThreshold);
+
+	bool Server_Valve_SetOffThreshold_Validate(class AKPCLPressureRegulatorValve* Target, float NewThreshold)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Valve_SetInvertThresholdBehavior(class AKPCLPressureRegulatorValve* Target, bool bInvert);
+
+	bool Server_Valve_SetInvertThresholdBehavior_Validate(class AKPCLPressureRegulatorValve* Target, bool bInvert)
+	{
+		return true;
+	}
+
+	//~ End PressureRegulatorValve
+
+	//~ Begin BalanceSplitter
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Splitter_SetFilteredItems(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+										  const TArray<TSubclassOf<UFGItemDescriptor>>& Items);
+
+	bool Server_Splitter_SetFilteredItems_Validate(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+												   const TArray<TSubclassOf<UFGItemDescriptor>>& Items)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Splitter_SetItemsPerMin(AKPCLBuildableBalanceSplitter* Target, int32 Idx, float ItemsPerMin);
+
+	bool Server_Splitter_SetItemsPerMin_Validate(AKPCLBuildableBalanceSplitter* Target, int32 Idx, float ItemsPerMin)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Splitter_RemoveFromFilter(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+										  TSubclassOf<UFGItemDescriptor> Item);
+
+	bool Server_Splitter_RemoveFromFilter_Validate(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+												   TSubclassOf<UFGItemDescriptor> Item)
+	{
+		return true;
+	}
+
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void Server_Splitter_AddOrSetFilter(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+										TSubclassOf<UFGItemDescriptor> Item);
+
+	bool Server_Splitter_AddOrSetFilter_Validate(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+												 TSubclassOf<UFGItemDescriptor> Item)
+	{
+		return true;
+	}
+
+	//~ End BalanceSplitter
 
 	UPROPERTY(Replicated)
 	bool mDummy = true;

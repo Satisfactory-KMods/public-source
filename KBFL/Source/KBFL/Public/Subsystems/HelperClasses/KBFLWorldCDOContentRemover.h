@@ -38,54 +38,65 @@ public:
 	UFUNCTION()
 	void OnSchematicUnlocked(TSubclassOf<UFGSchematic> UnlockedSchematic);
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover")
+	// ===== General Settings =====
+	/** Listen for schematic unlocks and remove schematics dynamically */
+	UPROPERTY(EditAnywhere, Category = "General Settings")
 	bool bListenOnSchematicManager;
 
-	// =============================================================================
-
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Schematics")
+	// ===== Schematics Removal =====
+	/** Specific schematics to remove */
+	UPROPERTY(EditAnywhere, Category = "Schematics|Remove")
 	TArray<TSoftClassPtr<UFGSchematic>> mSchematicsToRemove;
 	TArray<TSubclassOf<UFGSchematic>> mCachedSchematicsToRemove;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Schematics")
+	/** Remove all schematics in these paths */
+	UPROPERTY(EditAnywhere, Category = "Schematics|Remove")
 	TArray<FString> mSchematicsInPath;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Schematics")
+	/** Keep schematics in these paths (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Schematics|Keep")
 	TArray<FString> mSchematicsInPathKeep;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Schematics")
+	/** Specific schematics to keep (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Schematics|Keep")
 	TArray<TSoftClassPtr<UFGSchematic>> mSchematicsToKeep;
 	TArray<TSubclassOf<UFGSchematic>> mCachedSchematicsToKeep;
 
-	// =============================================================================
-
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Recipes")
+	// ===== Recipes Removal =====
+	/** Specific recipes to remove */
+	UPROPERTY(EditAnywhere, Category = "Recipes|Remove")
 	TArray<TSoftClassPtr<UFGRecipe>> mRecipesToRemove;
 	TArray<TSubclassOf<UFGRecipe>> mCachedRecipesToRemove;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Recipes")
+	/** Remove all recipes in these paths */
+	UPROPERTY(EditAnywhere, Category = "Recipes|Remove")
 	TArray<FString> mRecipesInPath;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Recipes")
+	/** Keep recipes in these paths (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Recipes|Keep")
 	TArray<FString> mRecipesInPathKeep;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|Recipes")
+	/** Specific recipes to keep (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Recipes|Keep")
 	TArray<TSoftClassPtr<UFGRecipe>> mRecipesToKeep;
 	TArray<TSubclassOf<UFGRecipe>> mCachedRecipesToKeep;
 
-	// =============================================================================
-
-	UPROPERTY(EditAnywhere, Category = "Content Remover|ResearchTrees")
+	// ===== Research Trees Removal =====
+	/** Specific research trees to remove */
+	UPROPERTY(EditAnywhere, Category = "Research Trees|Remove")
 	TArray<TSoftClassPtr<UFGResearchTree>> mResearchTreesToRemove;
 	TArray<TSubclassOf<UFGResearchTree>> mCachedResearchTreesToRemove;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|ResearchTrees")
+	/** Remove all research trees in these paths */
+	UPROPERTY(EditAnywhere, Category = "Research Trees|Remove")
 	TArray<FString> mResearchTreesInPath;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|ResearchTrees")
+	/** Keep research trees in these paths (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Research Trees|Keep")
 	TArray<FString> mResearchTreesInPathKeep;
 
-	UPROPERTY(EditAnywhere, Category = "Content Remover|ResearchTrees")
+	/** Specific research trees to keep (overrides removal) */
+	UPROPERTY(EditAnywhere, Category = "Research Trees|Keep")
 	TArray<TSoftClassPtr<UFGResearchTree>> mResearchTreesToKeep;
 	TArray<TSubclassOf<UFGResearchTree>> mCachedResearchTreesToKeep;
 };

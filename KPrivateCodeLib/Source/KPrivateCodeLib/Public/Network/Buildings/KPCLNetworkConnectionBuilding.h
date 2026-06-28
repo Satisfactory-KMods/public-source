@@ -1,11 +1,16 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGCentralStorageSubsystem.h"
 #include "FGResourceSinkSubsystem.h"
-#include "KPCLNetworkCore.h"
-#include "Network/KPCLNetworkBuildingBase.h"
 #include "Resources/FGNoneDescriptor.h"
+
+#include "Network/Buildings/KPCLNetworkCore.h"
+#include "Network/KPCLNetworkBuildingBase.h"
+
 #include "KPCLNetworkConnectionBuilding.generated.h"
 
 UCLASS()
@@ -32,42 +37,23 @@ class KPRIVATECODELIB_API AKPCLNetworkConnectionBuilding : public AKPCLNetworkBu
 public:
 	friend class AKPCLNetworkSink;
 
-	virtual void UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) override;
 	AKPCLNetworkConnectionBuilding();
 
-	// START: AActor
-	virtual void BeginPlay() override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	// END: AActor
+	virtual void UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) override;
 
-	// START: FGBuildable
+	//~ Begin AActor
+	virtual void BeginPlay() override;
+	//~ End AActor
+
+	//~ Begin FGBuildable
 	virtual bool CanProduce_Implementation() const override;
 	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
-	// END: FGBuildable
+	//~ End FGBuildable
 
 	virtual UFGFactoryClipboardSettings* CopySettings_Implementation() override;
 	virtual bool PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-	                                          class AFGPlayerController* player) override;
+											  class AFGPlayerController* player) override;
 
-protected:
-	virtual void onProducingFinal_Implementation() override;
-
-	virtual void SetBelts() override;
-	virtual void CollectBelts() override;
-	virtual void CollectAndPushPipes(float dt, bool IsPush) override;
-	virtual void Server_DoFlush() override;
-
-	bool CanStoreInDepot() const;
-	bool CanSinkItem(TSubclassOf<UFGItemDescriptor> Item) const;
-
-	void UpdateInventoryState();
-	int32 UploadToDepot(int32 Amount) const;
-	int32 Sink(int32 Amount);
-	void UpdateProductionSpeed(bool ShouldReset = false);
-
-	void UpdateInventoryFilter() const;
-
-public:
 	virtual float GetPowerConsume() const override;
 	virtual float GetRealPowerConsume() const override;
 
@@ -120,23 +106,6 @@ public:
 	UFUNCTION(BlueprintPure, Category = "KMods|Faxit")
 	bool HasItemStored(int32 Slot = 0) const;
 
-private:
-	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
-	UFGInventoryComponent* mInventory;
-
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	TSubclassOf<UFGItemDescriptor> mFilterItem = TSubclassOf<UFGItemDescriptor>{UFGNoneDescriptor::StaticClass()};
-
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	float mSpeedOverride = -1.f;
-
-	UPROPERTY()
-	TMap<TSubclassOf<UFGItemDescriptor>, FItemAmount> mCurrentStateCache;
-
-	int32 ITEM_AMOUNT = 5;
-	int32 FLUID_AMOUNT = 5000;
-
-public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Faxit")
 	FKPCLNetworkDistanceModifier mDistanceTransferModifier;
 
@@ -165,6 +134,36 @@ public:
 	float mCableBoostAmount = 2.f;
 
 protected:
+	virtual void onProducingFinal_Implementation() override;
+
+	virtual void SetBelts() override;
+	virtual void CollectBelts() override;
+	virtual void CollectAndPushPipes(float dt, bool IsPush) override;
+	virtual void Server_DoFlush() override;
+
+	bool CanStoreInDepot() const;
+	bool CanSinkItem(TSubclassOf<UFGItemDescriptor> Item) const;
+
+	void UpdateInventoryState();
+	int32 UploadToDepot(int32 Amount) const;
+	int32 Sink(int32 Amount);
+	void UpdateProductionSpeed(bool ShouldReset = false);
+
+	void UpdateInventoryFilter() const;
+
 	UPROPERTY(Transient)
-	AFGCentralStorageSubsystem* mCentralStorageSubsystem;
+	TObjectPtr<AFGCentralStorageSubsystem> mCentralStorageSubsystem;
+
+private:
+	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
+	TObjectPtr<UFGInventoryComponent> mInventory;
+
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	TSubclassOf<UFGItemDescriptor> mFilterItem = TSubclassOf<UFGItemDescriptor>{UFGNoneDescriptor::StaticClass()};
+
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	float mSpeedOverride = -1.f;
+
+	int32 ITEM_AMOUNT = 5;
+	int32 FLUID_AMOUNT = 5000;
 };

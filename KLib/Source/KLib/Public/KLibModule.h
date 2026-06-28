@@ -1,8 +1,10 @@
-﻿#pragma once
+// ILikeBanas
 
-#include "Modules/ModuleManager.h"
+#pragma once
 
-#define LOCTEXT_NAMESPACE "KLib"
+#include <Modules/ModuleManager.h>
+
+#undef LOCTEXT_CPP_STRING_TABLE
 #define LOCTEXT_CPP_STRING_TABLE "KLib/ST_KLib_CPP"
 
 /**

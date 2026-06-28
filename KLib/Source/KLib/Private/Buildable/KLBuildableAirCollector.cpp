@@ -1,7 +1,8 @@
 // ILikeBanas
 
-
 #include "Buildable/KLBuildableAirCollector.h"
+
+#include <Net/UnrealNetwork.h>
 
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildables/FGBuildableFoundation.h"
@@ -9,10 +10,26 @@
 #include "FGFactoryConnectionComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-#include "Net/UnrealNetwork.h"
-#include "Resources/FGResourceNode.h"
+void AKLBuildableAirCollector::SetHittedElements(int32 NewValue)
+{
+	mHittedElements = NewValue;
+	mPropertyReplicator.MarkPropertyDirty(FName("mHittedElements"));
+	RecalculateProduction();
+}
 
-TArray<UActorComponent*> GTempComps;
+void AKLBuildableAirCollector::SetScannerInformation(UKAPIAirCollectorData* NewInfo)
+{
+	mScannerInformation = NewInfo;
+	mPropertyReplicator.MarkPropertyDirty(FName("mScannerInformation"));
+	RecalculateProduction();
+}
+
+void AKLBuildableAirCollector::SetCollectorHeight(float NewHeight)
+{
+	mCollectorHeight = NewHeight;
+	mPropertyReplicator.MarkPropertyDirty(FName("mCollectorHeight"));
+	RecalculateProduction();
+}
 
 AKLBuildableAirCollector::AKLBuildableAirCollector() : mCollectorHeight(0)
 {
@@ -44,23 +61,20 @@ void AKLBuildableAirCollector::Overclocking_GetProductionResults_Implementation(
 	}
 }
 
-void AKLBuildableAirCollector::Factory_Tick(float dt)
+void AKLBuildableAirCollector::Factory_TickAuthOnly(float dt)
 {
-	Super::Factory_Tick(dt);
+	Super::Factory_TickAuthOnly(dt);
 
-	if (HasAuthority())
+	if (IsValid(GetInventory()) && IsValid(GetScannerInformation()))
 	{
-		if (IsValid(GetInventory()) && IsValid(GetScannerInformation()))
+		FInventoryStack OutStack;
+		GetInventory()->GetStackFromIndex(PRODUCT_INV_IDX, OutStack);
+		if (OutStack.HasItems())
 		{
-			FInventoryStack OutStack;
-			GetInventory()->GetStackFromIndex(PRODUCT_INV_IDX, OutStack);
-			if (OutStack.HasItems())
+			TSubclassOf<UFGItemDescriptor> ProduceItem = GetScannerInformation()->mItemClass;
+			if (OutStack.Item.GetItemClass() != ProduceItem)
 			{
-				TSubclassOf<UFGItemDescriptor> ProduceItem = GetScannerInformation()->mItemClass;
-				if (OutStack.Item.GetItemClass() != ProduceItem)
-				{
-					GetInventory()->Empty();
-				}
+				GetInventory()->Empty();
 			}
 		}
 	}
@@ -74,6 +88,8 @@ void AKLBuildableAirCollector::GetConditionalReplicatedProps(TArray<FFGCondRepli
 	FG_DOREPCONDITIONAL(ThisClass, mScannerInformation);
 	FG_DOREPCONDITIONAL(ThisClass, mCollectorHeight);
 	FG_DOREPCONDITIONAL(ThisClass, mCachedNearCollectors);
+	FG_DOREPCONDITIONAL(ThisClass, mCachedProduceAmount);
+	FG_DOREPCONDITIONAL(ThisClass, mCachedProduceWithoutMalus);
 }
 
 void AKLBuildableAirCollector::CollectAndPushPipes(float dt, bool IsPush)
@@ -108,9 +124,12 @@ void AKLBuildableAirCollector::BeginPlay()
 	{
 		CheckGasType();
 
-		TSubclassOf<UFGItemDescriptor> ProduceItem = GetScannerInformation()->mItemClass;
-		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), PRODUCT_INV_IDX, ProduceItem);
-		SetProductionTime(GetScannerInformation()->mProductionTime);
+		if (IsValid(GetScannerInformation()))
+		{
+			TSubclassOf<UFGItemDescriptor> ProduceItem = GetScannerInformation()->mItemClass;
+			UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), PRODUCT_INV_IDX, ProduceItem);
+			SetProductionTime(GetScannerInformation()->mProductionTime);
+		}
 
 		GetInventory()->AddArbitrarySlotSize(PRODUCT_INV_IDX, 500000);
 
@@ -118,8 +137,9 @@ void AKLBuildableAirCollector::BeginPlay()
 		FindNearbyCollectos();
 	}
 
-	// Change Collector Height
-	mCollectorHeight = GetCollectorHeight();
+	// Change Collector Height — triggers RecalculateProduction() via the setter.
+	// Also covers the server path above since SetCollectorHeight calls RecalculateProduction().
+	SetCollectorHeight(GetCollectorHeight());
 }
 
 bool AKLBuildableAirCollector::CanProduce_Implementation() const
@@ -137,13 +157,18 @@ bool AKLBuildableAirCollector::CanProduce_Implementation() const
 
 void AKLBuildableAirCollector::FindNearbyCollectos()
 {
+	// Self-scan: one SphereOverlapActors for this collector; also calls RecalculateProduction().
 	CacheNearbyCollectors();
 
-	for (TWeakObjectPtr<AKLBuildableAirCollector> Collector : mCachedNearCollectors)
+	// Incremental push: instead of asking each neighbour to re-scan the world (O(N) overlaps),
+	// simply insert this collector into their cached list and trigger a cheap recalculate.
+	for (TWeakObjectPtr<AKLBuildableAirCollector>& Collector : mCachedNearCollectors)
 	{
 		if (Collector.IsValid())
 		{
-			Collector->CacheNearbyCollectors();
+			Collector->mCachedNearCollectors.AddUnique(this);
+			Collector->mPropertyReplicator.MarkPropertyDirty(FName("mCachedNearCollectors"));
+			Collector->RecalculateProduction();
 		}
 	}
 }
@@ -152,11 +177,16 @@ void AKLBuildableAirCollector::EndPlay(const EEndPlayReason::Type endPlayReason)
 {
 	if (endPlayReason == EEndPlayReason::Destroyed)
 	{
-		for (TWeakObjectPtr<AKLBuildableAirCollector> Collector : mCachedNearCollectors)
+		// Incremental remove: pull this collector out of each neighbour's cached list without
+		// triggering a world query on their side. Then recompute their production cheaply.
+		for (TWeakObjectPtr<AKLBuildableAirCollector>& Collector : mCachedNearCollectors)
 		{
 			if (Collector.IsValid())
 			{
-				Collector->CacheNearbyCollectors();
+				Collector->mCachedNearCollectors.RemoveAll([this](const TWeakObjectPtr<AKLBuildableAirCollector>& Ptr)
+														   { return Ptr.Get() == this; });
+				Collector->mPropertyReplicator.MarkPropertyDirty(FName("mCachedNearCollectors"));
+				Collector->RecalculateProduction();
 			}
 		}
 	}
@@ -171,71 +201,81 @@ void AKLBuildableAirCollector::GetLifetimeReplicatedProps(TArray<class FLifetime
 
 int32 AKLBuildableAirCollector::CalculateProduceMalus() const
 {
-	int32 Produce = FMath::CeilToInt32(FMath::CeilToFloat(CalculateProduceWithoutMalus() / 500.0f) * 500.0f);
-	int32 WithMalus = FMath::CeilToInt32(FMath::CeilToFloat(CalculateProduce() / 500.0f) * 500.0f);
-	return WithMalus - Produce;
+	// Both cached values are already rounded/clamped by RecalculateProduction().
+	return mCachedProduceWithoutMalus - mCachedProduceAmount;
 }
 
 void AKLBuildableAirCollector::GetCollectorHeightBonus(float& InPercentValue, float& InFloatValue) const
 {
-	float HighMulti = 1 + (mCollectorHeight - mCollectorMinHeight) / (mCollectorMaxHeight - mCollectorMinHeight) * 4;
-
-	if (HighMulti < 1)
-	{
-		HighMulti = 1;
-	}
-	if (HighMulti > 5)
-	{
-		HighMulti = 5;
-	}
-
-	InPercentValue = HighMulti * 100;
+	const float HighMulti = GetHeightMultiplier();
+	InPercentValue = HighMulti * 100.0f;
 	InFloatValue = HighMulti;
 }
 
 int32 AKLBuildableAirCollector::CalculateProduce() const
 {
-	float CollectorMalus = 1 + (mCachedNearCollectors.Num() * 1.1);
-
-	float WithoutMalus = CalculateProduceWithoutMalus();
-	float EndProduce = WithoutMalus / CollectorMalus;
-
-
-	// Round to nearest 0.5k
-	EndProduce = FMath::CeilToFloat(FMath::CeilToInt32(EndProduce) / 500.0f) * 500.0f;
-
-	if (CollectorMalus <= 1.f)
-	{
-		return FMath::CeilToInt32(EndProduce);
-	}
-
-	int32 Min = GetScannerInformation()->mProduceItemCountMin;
-	int32 Max = GetScannerInformation()->mProduceItemCountMax;
-	int32 Produce = FMath::CeilToInt32(EndProduce);
-
-	// Clamp to min/max from the definition
-	return FMath::Clamp(Produce, Min, Max);
+	// Hot-path (may be called from worker thread via CanProduce_Implementation):
+	// return the cached value computed on the game thread. Atomic int32 read, lock-free.
+	return mCachedProduceAmount;
 }
 
 int32 AKLBuildableAirCollector::CalculateProduceWithoutMalus() const
 {
-	if (!IsValid(GetScannerInformation()))
+	// Returns the cached value computed on the game thread.
+	return mCachedProduceWithoutMalus;
+}
+
+void AKLBuildableAirCollector::RecalculateProduction()
+{
+	if (!HasAuthority())
 	{
-		return 1000;
+		return;
 	}
 
-	int32 Produce;
-	if (GetScannerInformation()->bUseHightBasesdProduction)
+	UKAPIAirCollectorData* ScannerInfo = GetScannerInformation();
+
+	// --- Without-malus value ---
+	int32 WithoutMalus;
+	if (!IsValid(ScannerInfo))
 	{
-		Produce = CalculateProductionBasedOnHeight();
+		WithoutMalus = 1000;
+	}
+	else if (ScannerInfo->bUseHightBasesdProduction)
+	{
+		WithoutMalus = CalculateProductionBasedOnHeight();
 	}
 	else
 	{
-		Produce = CalculateProductionBasedOnHits();
+		WithoutMalus = CalculateProductionBasedOnHits();
 	}
 
-	return FMath::Clamp(Produce, static_cast<float>(GetScannerInformation()->mProduceItemCountMin),
-						static_cast<float>(GetScannerInformation()->mProduceItemCountMax));
+	if (IsValid(ScannerInfo))
+	{
+		WithoutMalus = FMath::Clamp(WithoutMalus, ScannerInfo->mProduceItemCountMin, ScannerInfo->mProduceItemCountMax);
+	}
+
+	mCachedProduceWithoutMalus = WithoutMalus;
+	mPropertyReplicator.MarkPropertyDirty(FName("mCachedProduceWithoutMalus"));
+
+	// --- With-malus value (neighbour penalty) ---
+	if (!IsValid(ScannerInfo))
+	{
+		mCachedProduceAmount = 1000;
+	}
+	else
+	{
+		const float ValidCollectorCount = static_cast<float>(GetValidNearCollectorCount());
+		const float CollectorMalus = 1.0f + (ValidCollectorCount * 1.1f);
+		const float EndProduceRaw = static_cast<float>(WithoutMalus) / CollectorMalus;
+
+		// Round to nearest 0.5k and clamp.
+		const float EndProduce = FMath::FloorToFloat(FMath::FloorToInt32(EndProduceRaw) / 500.0f) * 500.0f;
+		const int32 Produce = FMath::FloorToInt32(EndProduce);
+		mCachedProduceAmount =
+			FMath::Clamp(Produce, ScannerInfo->mProduceItemCountMin, ScannerInfo->mProduceItemCountMax);
+	}
+
+	mPropertyReplicator.MarkPropertyDirty(FName("mCachedProduceAmount"));
 }
 
 int32 AKLBuildableAirCollector::CalculateProductionBasedOnHits() const
@@ -245,8 +285,8 @@ int32 AKLBuildableAirCollector::CalculateProductionBasedOnHits() const
 		return 1000;
 	}
 
-	int32 Hitted = mHittedElements;
-	int32 PerHit = GetScannerInformation()->mProductionPerHit;
+	const int32 Hitted = mHittedElements;
+	const int32 PerHit = GetScannerInformation()->mProductionPerHit;
 
 	return Hitted * PerHit;
 }
@@ -258,17 +298,18 @@ int32 AKLBuildableAirCollector::CalculateProductionBasedOnHeight() const
 		return 1000;
 	}
 
-	float HighMulti = FMath::Clamp(
-		1 + (mCollectorHeight - mCollectorMinHeight) / (mCollectorMaxHeight - mCollectorMinHeight) * 4, 1.f, 5.f);
-
-	int32 Produce = GetScannerInformation()->mProduceItemCountBase;
-
-	return Produce * HighMulti;
+	const int32 Produce = GetScannerInformation()->mProduceItemCountBase;
+	return static_cast<int32>(Produce * GetHeightMultiplier());
 }
 
 void AKLBuildableAirCollector::CacheNearbyCollectors()
 {
-	FVector ActorLocation = GetActorLocation();
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	const FVector ActorLocation = GetActorLocation();
 	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes =
 		TArray<TEnumAsByte<EObjectTypeQuery>>{ObjectTypeQuery1, ObjectTypeQuery2};
 
@@ -282,18 +323,27 @@ void AKLBuildableAirCollector::CacheNearbyCollectors()
 
 	for (AActor* Actor : OutActors)
 	{
-		if (Actor != this)
+		if (Actor == this)
 		{
-			AKLBuildableAirCollector* Collector = Cast<AKLBuildableAirCollector>(Actor);
-
-			mCachedNearCollectors.Add(Collector);
+			continue;
 		}
+		AKLBuildableAirCollector* Collector = Cast<AKLBuildableAirCollector>(Actor);
+		if (!IsValid(Collector))
+		{
+			continue;
+		}
+		mCachedNearCollectors.AddUnique(Collector);
 	}
+
+	mPropertyReplicator.MarkPropertyDirty(FName("mCachedNearCollectors"));
+
+	// Production depends on how many valid neighbours are cached, so recompute.
+	RecalculateProduction();
 }
 
 void AKLBuildableAirCollector::GetCachedNearCollectors(TArray<AKLBuildableAirCollector*>& Collectors) const
 {
-	for (const TWeakObjectPtr<AKLBuildableAirCollector> Collector : mCachedNearCollectors)
+	for (const TWeakObjectPtr<AKLBuildableAirCollector>& Collector : mCachedNearCollectors)
 	{
 		if (Collector.IsValid())
 		{
@@ -302,7 +352,7 @@ void AKLBuildableAirCollector::GetCachedNearCollectors(TArray<AKLBuildableAirCol
 	}
 }
 
-int32 AKLBuildableAirCollector::GetNumOfCollectorsInRange() const { return mCachedNearCollectors.Num(); }
+int32 AKLBuildableAirCollector::GetNumOfCollectorsInRange() const { return GetValidNearCollectorCount(); }
 
 UKAPIAirCollectorData* AKLBuildableAirCollector::GetScannerInformation() const
 {
@@ -317,6 +367,10 @@ UKAPIAirCollectorData* AKLBuildableAirCollector::GetScannerInformation() const
 TArray<UKAPIAirCollectorData*> AKLBuildableAirCollector::GetAllScans() const
 {
 	UKAPIDataAssetSubsystem* Subsystem = UKAPIDataAssetSubsystem::Get(GetWorld());
+	if (!IsValid(Subsystem))
+	{
+		return {};
+	}
 	return Subsystem->AirCollector_GetAll();
 }
 
@@ -326,13 +380,12 @@ void AKLBuildableAirCollector::CheckGasType()
 	{
 		if (mHittedElements >= mScannerInformation->mMaxHit)
 		{
-			mHittedElements = mScannerInformation->mMaxHit;
+			SetHittedElements(mScannerInformation->mMaxHit);
 		}
-
 		return;
 	}
 
-	mHittedElements = 1;
+	SetHittedElements(1);
 	UKAPIAirCollectorData* ScannerResult = mScannerFallback;
 
 	for (UKAPIAirCollectorData* Data : GetAllScans())
@@ -340,16 +393,18 @@ void AKLBuildableAirCollector::CheckGasType()
 		int32 Hitted = 0;
 		if (Data->TestHit(this, Hitted))
 		{
-			if (Data->mRecipePrio >= ScannerResult->mRecipePrio)
+			// Guard against a null fallback — treat any match as higher priority if no winner yet.
+			if (!IsValid(ScannerResult) || Data->mRecipePrio >= ScannerResult->mRecipePrio)
 			{
 				ScannerResult = Data;
-				mHittedElements = Hitted;
+				SetHittedElements(Hitted);
 			}
 		}
 	}
 
-	mScannerInformation = ScannerResult;
-	fgcheck(mScannerInformation);
+	// ScannerResult may still be null if fallback is unset and nothing matched.
+	// GetScannerInformation() handles null mScannerInformation gracefully via mScannerFallback.
+	SetScannerInformation(ScannerResult);
 }
 
 void AKLBuildableAirCollector::SetInstancedMesh()
@@ -387,8 +442,26 @@ void AKLBuildableAirCollector::SetInstancedMesh()
 	}
 }
 
-float AKLBuildableAirCollector::GetCollectorHeight() const
+float AKLBuildableAirCollector::GetCollectorHeight() const { return GetActorLocation().Z; }
+
+int32 AKLBuildableAirCollector::GetValidNearCollectorCount() const
 {
-	const FVector ActorLocation = GetActorLocation();
-	return ActorLocation.Z;
+	int32 Count = 0;
+	for (const TWeakObjectPtr<AKLBuildableAirCollector>& Collector : mCachedNearCollectors)
+	{
+		if (Collector.IsValid())
+		{
+			++Count;
+		}
+	}
+	return Count;
+}
+
+float AKLBuildableAirCollector::GetHeightMultiplier() const
+{
+	return FMath::Clamp(1.0f +
+							(mCollectorHeight - static_cast<float>(mCollectorMinHeight)) /
+								(static_cast<float>(mCollectorMaxHeight) - static_cast<float>(mCollectorMinHeight)) *
+								4.0f,
+						1.0f, 5.0f);
 }

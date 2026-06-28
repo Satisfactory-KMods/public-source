@@ -488,7 +488,7 @@ void UKBFLCDOOverwrite::RefreshPropertyContainer()
 	DupParams.FlagMask = RF_AllFlags & ~(RF_ClassDefaultObject | RF_ArchetypeObject | RF_DefaultSubObject);
 	DupParams.ApplyFlags = RF_NoFlags; // Don't apply any additional flags - let
 									   // it serialize normally
-	DupParams.InternalFlagMask = EInternalObjectFlags::AllFlags;
+	DupParams.InternalFlagMask = EInternalObjectFlags_AllFlags;
 
 	mPropertyContainer = StaticDuplicateObjectEx(DupParams);
 
@@ -683,6 +683,30 @@ void UKBFLCDOOverwrite::ApplyNumericProperty(FProperty* Property, void* Containe
 				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
 				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
 	}
+	else if (FUInt32Property* UInt32Prop = CastField<FUInt32Property>(Property))
+	{
+		uint32 CurrentValue = UInt32Prop->GetPropertyValue(DestValuePtr);
+		uint32 ModifierValue = UInt32Prop->GetPropertyValue(ContainerValuePtr);
+		uint32 ResultValue = ApplyOperation(CurrentValue, ModifierValue);
+		UInt32Prop->SetPropertyValue(DestValuePtr, ResultValue);
+
+		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+				  "ApplyToInstance: Numeric operation on '{PropertyName}' on "
+				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
+	}
+	else if (FUInt64Property* UInt64Prop = CastField<FUInt64Property>(Property))
+	{
+		uint64 CurrentValue = UInt64Prop->GetPropertyValue(DestValuePtr);
+		uint64 ModifierValue = UInt64Prop->GetPropertyValue(ContainerValuePtr);
+		uint64 ResultValue = ApplyOperation(CurrentValue, ModifierValue);
+		UInt64Prop->SetPropertyValue(DestValuePtr, ResultValue);
+
+		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+				  "ApplyToInstance: Numeric operation on '{PropertyName}' on "
+				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
+	}
 }
 
 void UKBFLCDOOverwrite::ApplyBoolProperty(FProperty* Property, void* ContainerValuePtr, void* DestValuePtr,
@@ -755,8 +779,8 @@ void UKBFLCDOOverwrite::ApplyStringProperty(FProperty* Property, void* Container
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToInstance: String operation on '{PropertyName}' on "
-				  "'{TargetName}' | Asset: {AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue);
+				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
 	}
 	else if (FNameProperty* NameProp = CastField<FNameProperty>(Property))
 	{
@@ -784,8 +808,9 @@ void UKBFLCDOOverwrite::ApplyStringProperty(FProperty* Property, void* Container
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToInstance: Name operation on '{PropertyName}' on "
-				  "'{TargetName}' | Asset: {AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue.ToString());
+				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue.ToString(),
+				  ResultValue.ToString());
 	}
 	else if (FTextProperty* TextProp = CastField<FTextProperty>(Property))
 	{
@@ -813,8 +838,9 @@ void UKBFLCDOOverwrite::ApplyStringProperty(FProperty* Property, void* Container
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToInstance: Text operation on '{PropertyName}' on "
-				  "'{TargetName}' | Asset: {AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue.ToString());
+				  "'{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue.ToString(),
+				  ResultValue.ToString());
 	}
 }
 
@@ -851,11 +877,18 @@ void UKBFLCDOOverwrite::ApplyPropertyWithBehavior(FProperty* Property, void* Con
 		}
 		else
 		{
+			FString OldValueStr;
+			Property->ExportTextItem_Direct(OldValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			Property->CopyCompleteValue(DestValuePtr, ContainerValuePtr);
+
+			FString NewValueStr;
+			Property->ExportTextItem_Direct(NewValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 					  "ApplyToInstance: Replacing numeric property '{PropertyName}' "
-					  "on '{TargetName}' | Asset: {AssetPath}",
-					  Property->GetName(), TargetInstance->GetName(), AssetPath);
+					  "on '{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+					  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValueStr, NewValueStr);
 		}
 		break;
 
@@ -874,11 +907,18 @@ void UKBFLCDOOverwrite::ApplyPropertyWithBehavior(FProperty* Property, void* Con
 		}
 		else
 		{
+			FString OldValueStr;
+			Property->ExportTextItem_Direct(OldValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			Property->CopyCompleteValue(DestValuePtr, ContainerValuePtr);
+
+			FString NewValueStr;
+			Property->ExportTextItem_Direct(NewValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 					  "ApplyToInstance: Replacing string property '{PropertyName}' "
-					  "on '{TargetName}' | Asset: {AssetPath}",
-					  Property->GetName(), TargetInstance->GetName(), AssetPath);
+					  "on '{TargetName}' | Asset: {AssetPath} | {OldValue} -> {NewValue}",
+					  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValueStr, NewValueStr);
 		}
 		break;
 
@@ -1099,6 +1139,79 @@ void UKBFLCDOOverwrite::ApplyToInstances()
 	const FString AssetPath = GetPathName();
 
 	TSet<TSubclassOf<UObject>> ClassesToProcess;
+	if (!CollectClassesToProcess(ClassesToProcess))
+	{
+		return;
+	}
+
+	int32 TotalProcessedClasses = 0;
+	// Resolve the ignore list once instead of LoadSynchronous per processed class.
+	const TArray<TSubclassOf<UObject>> ClassesToIgnore = LoadSoftClassesArray(mIgnoreClasses);
+
+	// Also apply to all subclass CDOs in mAlsoApplyOn
+	for (const TSubclassOf<UObject>& SubClass : ClassesToProcess)
+	{
+		// Skip the target class itself if OnlyApplyOnSubclasses() is enabled
+		if (OnlyApplyOnSubclasses() && SubClass == mTargetClass)
+		{
+			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+					  "ApplyToInstances: Skipping target class '{0}' "
+					  "(OnlyApplyOnSubclasses()=true) | Asset: {AssetPath}",
+					  *SubClass->GetName(), AssetPath);
+			continue;
+		}
+
+		// Skip native C++ classes if bOnlyApplyOnBlueprints is enabled
+		if (bOnlyApplyOnBlueprints && SubClass && !SubClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
+		{
+			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+					  "ApplyToInstances: Skipping native class '{0}' "
+					  "(bOnlyApplyOnBlueprints=true) | Asset: {AssetPath}",
+					  *SubClass->GetName(), AssetPath);
+			continue;
+		}
+
+		// Skip if this class is in the ignore list
+		if (ClassesToIgnore.Contains(SubClass))
+		{
+			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+					  "ApplyToInstances: Skipping ignored class '{0}' | Asset: {AssetPath}",
+					  SubClass ? *SubClass->GetName() : TEXT("Invalid"), AssetPath);
+			continue;
+		}
+
+		TSubclassOf<UObject> LoadedNativeClass = mNativeClass;
+		if (SubClass && LoadedNativeClass && SubClass->IsChildOf(LoadedNativeClass))
+		{
+			if (UObject* SubClassCDO = mSubsystem->GetAndStoreDefaultObject_Native<UObject>(SubClass))
+			{
+				Requirements_NotifyOnModify(SubClassCDO);
+				ApplyToInstance(SubClassCDO);
+				Requirements_NotifyOnModified(SubClassCDO);
+				TotalProcessedClasses++;
+			}
+		}
+	}
+
+	if (TotalProcessedClasses == 0)
+	{
+		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+				  "ApplyToInstances: No classes were processed. Please check your "
+				  "filters and target class. | Asset: {AssetPath}",
+				  AssetPath);
+	}
+	else
+	{
+		UE_LOGFMT(LogKBFLCDOOverwrite, Log,
+				  "ApplyToInstances: Successfully applied to {0} class CDOs | "
+				  "Asset: {AssetPath}",
+				  TotalProcessedClasses, AssetPath);
+	}
+}
+
+bool UKBFLCDOOverwrite::CollectClassesToProcess(TSet<TSubclassOf<UObject>>& ClassesToProcess)
+{
+	const FString AssetPath = GetPathName();
 
 	// Determine which class to use for targeting
 	TSubclassOf<UObject> EffectiveTargetClass = bTargetOnlyAsContainer ? mRealTargetClass : mTargetClass;
@@ -1107,27 +1220,15 @@ void UKBFLCDOOverwrite::ApplyToInstances()
 	if (!bTargetOnlyAsContainer && !EffectiveTargetClass)
 	{
 		UE_LOGFMT(LogKBFLCDOOverwrite, Error,
-				  "ApplyToInstances: No valid target class (mTargetClass is null) "
+				  "CollectClassesToProcess: No valid target class (mTargetClass is null) "
 				  "| Asset: {AssetPath}",
 				  AssetPath);
-		return;
-	}
-
-	// Log if using container mode
-	if (bTargetOnlyAsContainer)
-	{
-		UE_LOGFMT(LogKBFLCDOOverwrite, Log,
-				  "ApplyToInstances: Using TargetOnlyAsContainer mode - "
-				  "PropertyContainer: {0}, RealTarget: {1} | Asset: {AssetPath}",
-				  mTargetClass ? *mTargetClass->GetName() : TEXT("None"),
-				  mRealTargetClass ? *mRealTargetClass->GetName()
-								   : TEXT("None (will use mFindAssetsInPaths or mAlsoApplyOn)"),
-				  AssetPath);
+		return false;
 	}
 
 	// Only add the target class if we're not in "only subclasses" mode and not
 	// using container-only mode
-	if (!bOnlyApplyOnSubclasses && EffectiveTargetClass)
+	if (!OnlyApplyOnSubclasses() && EffectiveTargetClass)
 	{
 		ClassesToProcess.Add(EffectiveTargetClass);
 	}
@@ -1138,21 +1239,21 @@ void UKBFLCDOOverwrite::ApplyToInstances()
 		ClassesToProcess.Add(mRealTargetClass);
 	}
 
-	TArray<UClass*> AddionalSubClasses;
-	AddionalSubClasses.Append(LoadSoftClassesArray(mAddionalSubClasses));
 	ClassesToProcess.Append(LoadSoftClassesArray(mAlsoApplyOn));
 
 	if (bApplyOnSubclasses && EffectiveTargetClass)
 	{
+		TArray<UClass*> AddionalSubClasses;
+		AddionalSubClasses.Append(LoadSoftClassesArray(mAddionalSubClasses));
 		UKBFLAssetDataSubsystem* AssetSubsystem =
 			mSubsystem->GetGameInstance()->GetSubsystem<UKBFLAssetDataSubsystem>();
 
-		if (IsValid(EffectiveTargetClass) && bUseTargetAsSubclassFilter)
+		if (IsValid(EffectiveTargetClass) && UseTargetAsSubclassFilter())
 		{
 			AddionalSubClasses.Add(EffectiveTargetClass);
 		}
 
-		if (bUseNativeForSubclasses && IsValid(mNativeClass))
+		if (UseNativeForSubclasses() && IsValid(mNativeClass))
 		{
 			AddionalSubClasses.Add(mNativeClass);
 		}
@@ -1174,11 +1275,6 @@ void UKBFLCDOOverwrite::ApplyToInstances()
 			TSubclassOf<UObject> LoadedNativeClass = mNativeClass;
 			if (LoadedNativeClass)
 			{
-				UE_LOGFMT(LogKBFLCDOOverwrite, Log,
-						  "ApplyToInstances: Finding classes in {0} path(s) derived from "
-						  "{1} | Asset: {AssetPath}",
-						  mFindAssetsInPaths.Num(), *LoadedNativeClass->GetName(), AssetPath);
-
 				TArray<TSubclassOf<UObject>> FoundClasses;
 				TArray<UClass*> NativeClassArray = {LoadedNativeClass};
 				AssetSubsystem->GetObjectsOfChilds(NativeClassArray, FoundClasses, true);
@@ -1193,79 +1289,123 @@ void UKBFLCDOOverwrite::ApplyToInstances()
 					}
 
 					FString ClassPath = FoundClass->GetPathName();
-					bool bMatchesPath = false;
-
 					for (const FString& SearchPath : mFindAssetsInPaths)
 					{
 						if (ClassPath.StartsWith(SearchPath))
 						{
-							bMatchesPath = true;
-							UE_LOGFMT(LogKBFLCDOOverwrite, Verbose,
-									  "ApplyToInstances: Found matching class '{0}' in path "
-									  "'{1}' | Asset: {AssetPath}",
-									  *FoundClass->GetName(), SearchPath, AssetPath);
+							ClassesToProcess.Add(FoundClass);
 							break;
 						}
 					}
-
-					if (bMatchesPath && !ClassesToProcess.Contains(FoundClass))
-					{
-						ClassesToProcess.Add(FoundClass);
-					}
 				}
-
-				UE_LOGFMT(LogKBFLCDOOverwrite, Log,
-						  "ApplyToInstances: Found {0} classes in specified paths | "
-						  "Asset: {AssetPath}",
-						  ClassesToProcess.Num() - (ClassesToProcess.Num() - FoundClasses.Num()), AssetPath);
 			}
 		}
 	}
 
 	ClassesToProcess.Append(LoadSoftClassesArray(mOtherTargetClasses));
 
-	// Also apply to all subclass CDOs in mAlsoApplyOn
-	for (const TSubclassOf<UObject>& SubClass : ClassesToProcess)
+	return true;
+}
+
+bool UKBFLCDOOverwrite::ShouldCallForInstance(UClass* NewClass)
+{
+	if (!NewClass)
 	{
-		// Skip the target class itself if bOnlyApplyOnSubclasses is enabled
-		if (bOnlyApplyOnSubclasses && SubClass == mTargetClass)
-		{
-			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
-					  "ApplyToInstances: Skipping target class '{0}' "
-					  "(bOnlyApplyOnSubclasses=true) | Asset: {AssetPath}",
-					  *SubClass->GetName(), AssetPath);
-			continue;
-		}
+		return false;
+	}
 
-		// Skip native C++ classes if bOnlyApplyOnBlueprints is enabled
-		if (bOnlyApplyOnBlueprints && SubClass && !SubClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
-		{
-			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
-					  "ApplyToInstances: Skipping native class '{0}' "
-					  "(bOnlyApplyOnBlueprints=true) | Asset: {AssetPath}",
-					  *SubClass->GetName(), AssetPath);
-			continue;
-		}
+	// CHEAP O(1) predicate for the lazy-load path. This fires once per newly-loaded class per overwrite,
+	// so it must NOT enumerate derived classes (no GetDerivedClasses / CollectClassesToProcess). It checks
+	// NewClass directly against the targeting criteria. Soft classes use .Get() (no LoadSynchronous):
+	// NewClass is already in memory, and any soft entry pointing at it resolves.
 
-		TArray<TSubclassOf<UObject>> ClassesToIgnore = LoadSoftClassesArray(mIgnoreClasses);
-		// Skip if this class is in the ignore list
-		if (ClassesToIgnore.Contains(SubClass))
-		{
-			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
-					  "ApplyToInstances: Skipping ignored class '{0}' | Asset: {AssetPath}",
-					  SubClass ? *SubClass->GetName() : TEXT("Invalid"), AssetPath);
-			continue;
-		}
+	if (bOnlyApplyOnBlueprints && !NewClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
+	{
+		return false;
+	}
 
-		TSubclassOf<UObject> LoadedNativeClass = mNativeClass;
-		if (SubClass && LoadedNativeClass && SubClass->IsChildOf(LoadedNativeClass))
+	// Must be a child of the native parent (same gate the apply loop enforces).
+	TSubclassOf<UObject> LoadedNativeClass = mNativeClass;
+	if (!LoadedNativeClass || !NewClass->IsChildOf(LoadedNativeClass))
+	{
+		return false;
+	}
+
+	// Ignore list
+	for (const TSoftClassPtr<UObject>& Ignore : mIgnoreClasses)
+	{
+		if (Ignore.Get() == NewClass)
 		{
-			if (UObject* SubClassCDO = SubClass->GetDefaultObject())
+			return false;
+		}
+	}
+
+	const TSubclassOf<UObject> EffectiveTargetClass = bTargetOnlyAsContainer ? mRealTargetClass : mTargetClass;
+
+	if (OnlyApplyOnSubclasses() && NewClass == mTargetClass)
+	{
+		return false;
+	}
+
+	// Direct target / explicit lists
+	if (!OnlyApplyOnSubclasses() && EffectiveTargetClass && NewClass == EffectiveTargetClass)
+	{
+		return true;
+	}
+	if (bTargetOnlyAsContainer && mRealTargetClass && NewClass == mRealTargetClass)
+	{
+		return true;
+	}
+	for (const TSoftClassPtr<UObject>& Also : mAlsoApplyOn)
+	{
+		if (Also.Get() == NewClass)
+		{
+			return true;
+		}
+	}
+	for (const TSoftClassPtr<UObject>& Other : mOtherTargetClasses)
+	{
+		if (Other.Get() == NewClass)
+		{
+			return true;
+		}
+	}
+
+	// Subclass matching (no enumeration — direct IsChildOf on NewClass only)
+	if (bApplyOnSubclasses && EffectiveTargetClass)
+	{
+		if (UseTargetAsSubclassFilter() && NewClass->IsChildOf(EffectiveTargetClass))
+		{
+			return true;
+		}
+		if (UseNativeForSubclasses() && NewClass->IsChildOf(LoadedNativeClass))
+		{
+			return true;
+		}
+		for (const TSoftClassPtr<UObject>& AddSub : mAddionalSubClasses)
+		{
+			if (UClass* AddSubClass = AddSub.Get())
 			{
-				Requirements_NotifyOnModify(SubClassCDO);
-				ApplyToInstance(SubClassCDO);
-				Requirements_NotifyOnModified(SubClassCDO);
+				if (NewClass->IsChildOf(AddSubClass))
+				{
+					return true;
+				}
 			}
 		}
 	}
+
+	// Path-based targeting
+	if (mFindAssetsInPaths.Num() > 0)
+	{
+		const FString ClassPath = NewClass->GetPathName();
+		for (const FString& SearchPath : mFindAssetsInPaths)
+		{
+			if (ClassPath.StartsWith(SearchPath))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

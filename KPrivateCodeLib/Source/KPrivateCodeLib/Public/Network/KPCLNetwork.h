@@ -1,23 +1,23 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGPowerCircuit.h"
+
 #include "KPCLNetworkBuildingBase.h"
+
 #include "KPCLNetwork.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class KPRIVATECODELIB_API UKPCLNetwork : public UFGPowerCircuit
 {
 	GENERATED_BODY()
 
-	// START: UObject
+	//~ Begin UObject
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	// END: UObject
+	//~ End UObject
 
 	virtual void TickCircuit(float dt) override;
 	virtual void OnCircuitChanged() override;
@@ -43,8 +43,8 @@ public:
 
 private:
 	UPROPERTY(Replicated, SaveGame)
-	TArray<class AKPCLNetworkCore*> mCoreBuildings;
+	TArray<TObjectPtr<class AKPCLNetworkCore>> mCoreBuildings;
 
 	UPROPERTY(Replicated, SaveGame)
-	TArray<class AKPCLNetworkConnectionBuilding*> mConnectionBuildings;
+	TArray<TObjectPtr<class AKPCLNetworkConnectionBuilding>> mConnectionBuildings;
 };

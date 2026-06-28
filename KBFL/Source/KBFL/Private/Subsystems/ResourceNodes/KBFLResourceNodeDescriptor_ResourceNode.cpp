@@ -1,4 +1,3 @@
-﻿#pragma once
 #include "Subsystems/ResourceNodes/KBFLResourceNodeDescriptor_ResourceNode.h"
 
 #include "Buildables/FGBuildableResourceExtractor.h"

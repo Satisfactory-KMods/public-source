@@ -1,16 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Subsystem/KLUnlockSubsystem.h"
+
+#include <Net/UnrealNetwork.h>
 
 #include "FGSchematicManager.h"
 #include "FGUnlockSubsystem.h"
 #include "Logging.h"
-
-#include "Net/UnrealNetwork.h"
-
 #include "Subsystems/KBFLAssetDataSubsystem.h"
-
 
 // Sets default values
 AKLUnlockSubsystem::AKLUnlockSubsystem() : mAssetSubsystem(nullptr)
@@ -41,8 +38,6 @@ void AKLUnlockSubsystem::Init()
 	CleanerDescUnlocked();
 }
 
-void AKLUnlockSubsystem::Tick(float DeltaSeconds) { Super::Tick(DeltaSeconds); }
-
 void AKLUnlockSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -63,11 +58,22 @@ void AKLUnlockSubsystem::PostLoadGame_Implementation(int32 saveVersion, int32 ga
 
 void AKLUnlockSubsystem::UnlockCleanerDesc(TSubclassOf<UFGItemDescriptor> CleanerDesc)
 {
+	if (!HasAuthority())
+	{
+		return;
+	}
 	if (mUnlockedCleanerDescriptor.AddUnique(CleanerDesc) >= 0)
 	{
 		onCleanerDescUnlocked.Broadcast(CleanerDesc);
 		CleanerDescUnlocked();
 	}
+}
+
+void AKLUnlockSubsystem::OnRep_UnlockedCleanerDescriptor()
+{
+	// The replicated unlock list just changed on this client; rebuild the transient cache so cleaner UIs
+	// reflect the new unlock state without waiting for another trigger (join, reopen, etc.).
+	CleanerDescUnlocked();
 }
 
 UKAPIModularMinerDescription* AKLUnlockSubsystem::GetInformationAboutOre(const TSubclassOf<UFGResourceDescriptor> Desc,
@@ -95,6 +101,10 @@ bool AKLUnlockSubsystem::HasInformationAboutOre(const TSubclassOf<UFGResourceDes
 		return false;
 	}
 	AFGUnlockSubsystem* Subsystem = AFGUnlockSubsystem::Get(GetWorld());
+	if (!IsValid(Subsystem))
+	{
+		return false;
+	}
 	return Subsystem->GetScannableResources().Contains(Desc);
 }
 

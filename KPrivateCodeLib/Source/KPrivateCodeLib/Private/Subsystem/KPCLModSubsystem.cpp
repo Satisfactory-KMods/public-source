@@ -1,10 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Subsystem/KPCLModSubsystem.h"
 
 void FSubsystemTick::ExecuteTick(float DeltaTime, ELevelTick TickType, ENamedThreads::Type CurrentThread,
-                                 const FGraphEventRef& MyCompletionGraphEvent)
+								 const FGraphEventRef& MyCompletionGraphEvent)
 {
 	if (mTarget)
 	{
@@ -20,6 +19,7 @@ AKPCLModSubsystem::AKPCLModSubsystem()
 	mSubsystemTick.bStartWithTickEnabled = 0;
 	mSubsystemTick.TickGroup = TG_PrePhysics;
 	mSubsystemTick.EndTickGroup = TG_EndPhysics;
+	ReplicationPolicy = ESubsystemReplicationPolicy::SpawnOnServer_Replicate;
 }
 
 void AKPCLModSubsystem::Init()

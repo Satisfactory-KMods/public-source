@@ -6,7 +6,6 @@
 #include "FGResearchTree.h"
 #include "FGSchematic.h"
 #include "FGVehicle.h"
-#include "Interfaces/KBFLContentCDOHelperInterface.h"
 #include "KBFLLogging.h"
 #include "Module/WorldModule.h"
 #include "ResourceNodes/KBFLActorSpawnDescriptorBase.h"
@@ -27,7 +26,6 @@ struct FKBFLAssetData
 	void cleanup()
 	{
 		mAllFoundedBuildables.Empty();
-		mAllFoundedCDOHelpers.Empty();
 		mAllFoundedDriveablePawns.Empty();
 		mAllFoundedHolograms.Empty();
 		mAllFoundedItems.Empty();
@@ -64,9 +62,6 @@ struct FKBFLAssetData
 		case 6:
 			mAllFoundedModModules.Add(Class);
 			break;
-		case 7:
-			mAllFoundedCDOHelpers.Add(Class);
-			break;
 		case 8:
 			mAllFoundedResourceDescriptors.Add(Class);
 			break;
@@ -94,38 +89,60 @@ struct FKBFLAssetData
 	}
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<USMLSessionSetting*> mAllFoundAGS = {};
+	TSet<TObjectPtr<USMLSessionSetting>> mAllFoundAGS = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundResearchTrees = {};
+	TSet<TObjectPtr<UClass>> mAllFoundResearchTrees = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedSchematics = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedSchematics = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedRecipes = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedRecipes = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedItems = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedItems = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedBuildables = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedBuildables = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedDriveablePawns = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedDriveablePawns = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedHolograms = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedHolograms = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedModModules = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedModModules = {};
 
 	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedCDOHelpers = {};
-
-	UPROPERTY(BlueprintReadOnly)
-	TSet<UClass*> mAllFoundedResourceDescriptors = {};
+	TSet<TObjectPtr<UClass>> mAllFoundedResourceDescriptors = {};
 };
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnSchematicAdded, TSubclassOf<UFGSchematic>, Schematic);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnRecipeAdded, TSubclassOf<UFGRecipe>, Recipe);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnItemAdded, TSubclassOf<UFGItemDescriptor>, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnBuildableAdded, TSubclassOf<AFGBuildable>, Buildable);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnDriveablePawnAdded, TSubclassOf<AFGDriveablePawn>, DriveablePawn);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnHologramAdded, TSubclassOf<AFGHologram>, Hologram);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnModModuleAdded, TSubclassOf<UModModule>, ModModule);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnResourceDescriptorAdded, TSubclassOf<UFGResourceDescriptor>,
+											ResourceDescriptor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnResearchTreeAdded, TSubclassOf<UFGResearchTree>, ResearchTree);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FKBFLOnSessionSettingAdded, USMLSessionSetting*, SessionSetting);
+
+// Single-cast variants used by BindOn* helpers — Blueprint wires these via "Create Event" nodes.
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnSchematicAddedEvent, TSubclassOf<UFGSchematic>, Schematic);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnRecipeAddedEvent, TSubclassOf<UFGRecipe>, Recipe);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnItemAddedEvent, TSubclassOf<UFGItemDescriptor>, Item);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnBuildableAddedEvent, TSubclassOf<AFGBuildable>, Buildable);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnDriveablePawnAddedEvent, TSubclassOf<AFGDriveablePawn>, DriveablePawn);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnHologramAddedEvent, TSubclassOf<AFGHologram>, Hologram);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnModModuleAddedEvent, TSubclassOf<UModModule>, ModModule);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnResourceDescriptorAddedEvent, TSubclassOf<UFGResourceDescriptor>,
+								  ResourceDescriptor);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnResearchTreeAddedEvent, TSubclassOf<UFGResearchTree>, ResearchTree);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FKBFLOnSessionSettingAddedEvent, USMLSessionSetting*, SessionSetting);
 
 
 /**
@@ -148,44 +165,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem")
 	void DoScan(bool Force = false);
 
-	void setMapClass(UClass* Class, int32 Type)
-	{
-		TArray<FString> DirectoryArray;
-		Class->GetFullName().ParseIntoArray(DirectoryArray, TEXT("/"));
-		FString ModName = DirectoryArray[1];
-		// UE_LOG( LogTemp, Warning, TEXT("setMapClass: %s > %s > %d"), *ModName, *Class->GetFullName( ), Type );
+	/**
+	 * Scan the asset registry for candidate Blueprint/DataAsset metadata WITHOUT loading any class.
+	 * Cheap (registry metadata only). Class objects are loaded lazily, per category, on first query.
+	 */
+	void EnsureRegistryScanned();
 
-		if (FKBFLAssetData* AssetData = mDirectoryMappings.Find(FName(ModName.ToLower())))
-		{
-			AssetData->WriteClass(Class, Type);
-		}
-		else
-		{
-			FKBFLAssetData KBFLAssetData = FKBFLAssetData();
-			KBFLAssetData.WriteClass(Class, Type);
-			mDirectoryMappings.Add(FName(ModName.ToLower()), KBFLAssetData);
-		}
-	}
+	/**
+	 * Resolve (load) a single asset category on demand and cache it. Type codes match WriteClass:
+	 * 0=Schematics 1=Recipes 2=Items 3=Buildables 4=DriveablePawns 5=Holograms 6=ModModules
+	 * 8=ResourceDescriptors 10=ResearchTrees 11=SessionSettings.
+	 */
+	void EnsureCategoryResolved(int32 Type);
 
-	void setMapClass(UObject* Object, int32 Type)
-	{
-		TArray<FString> DirectoryArray;
-		Object->GetFullName().ParseIntoArray(DirectoryArray, TEXT("/"));
-		FString ModName = DirectoryArray[1];
-		// UE_LOG(LogTemp, Warning, TEXT("setMapClass (OBJECT): %s > %s > %d"), *ModName, *Object->GetFullName( ),
-		// Type);
+	/** Resolve every category. Required by union (GetObjectsOfChilds) and per-mod (GetModRelatedData) queries. */
+	void EnsureAllResolved();
 
-		if (FKBFLAssetData* AssetData = mDirectoryMappings.Find(FName(ModName.ToLower())))
-		{
-			AssetData->WriteObject(Object, Type);
-		}
-		else
-		{
-			FKBFLAssetData KBFLAssetData = FKBFLAssetData();
-			KBFLAssetData.WriteObject(Object, Type);
-			mDirectoryMappings.Add(FName(ModName.ToLower()), KBFLAssetData);
-		}
-	}
+	void setMapClass(UClass* Class, int32 Type);
+
+	void setMapClass(UObject* Object, int32 Type);
 
 	// NATIVE GETTER
 	static UKBFLAssetDataSubsystem* Get(const UObject* WorldContext);
@@ -292,8 +290,6 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Asset Data Subsystem")
 	TSubclassOf<UFGVehicleDescriptor> GetDescForVehicle(TSubclassOf<AFGVehicle> Class);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Asset Data Subsystem")
-	void GetAllBuildableDesc(TArray<TSubclassOf<UFGBuildingDescriptor>>& Out);
 	// END General Functions
 
 
@@ -325,11 +321,6 @@ public:
 							   bool UseNativeCheck = false);
 
 
-	/** Get All CDOHelpers that hit the Child Classes  */
-	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem")
-	void GetCDOHelpersOfChilds(TArray<UClass*> Childs, TArray<TSubclassOf<UKBFL_CDOHelperClass_Base>>& Out_Items,
-							   bool UseNativeCheck = false);
-
 	/** get data from a mod */
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem")
 	FKBFLAssetData GetModRelatedData(UModModule* ModModule);
@@ -340,11 +331,12 @@ public:
 										TArray<TSubclassOf<UKBFLActorSpawnDescriptorBase>>& Out_Items,
 										bool UseNativeCheck = false);
 
+	/** True once the registry metadata scan has run. Does NOT imply any class is loaded. */
 	inline static bool bWasInit = false;
 
 	/** Return the Index where the ItemClass allowed on Slot in Inventory */
 	template <class T>
-	static bool GetAllClassesOfSubclass(TArray<FAssetData> AllAssets, TSet<TSubclassOf<T>>& OutClasses);
+	static bool GetAllClassesOfSubclass(const TArray<FAssetData>& AllAssets, TSet<TSubclassOf<T>>& OutClasses);
 
 
 	/**
@@ -361,7 +353,98 @@ public:
 	template <class T>
 	static bool FindFirstDataAssetsOfClass(T*& OutDataAssets);
 
+	// Fired per-class as async-loaded BP classes arrive after initial sync resolution.
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnSchematicAdded OnSchematicAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnRecipeAdded OnRecipeAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnItemAdded OnItemAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnBuildableAdded OnBuildableAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnDriveablePawnAdded OnDriveablePawnAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnHologramAdded OnHologramAdded;
+
+	// ===== Bind + replay helpers =====
+	// Bind a typed callback and immediately invoke it for every already-loaded asset of that type.
+	// Use these instead of binding the multicast delegates directly so late subscribers do not miss
+	// assets that arrived before they bound.
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnSchematicAdded(FKBFLOnSchematicAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnBuildableAdded(FKBFLOnBuildableAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnHologramAdded(FKBFLOnHologramAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnModModuleAdded(FKBFLOnModModuleAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnResourceDescriptorAdded(FKBFLOnResourceDescriptorAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
+	void BindOnSessionSettingAdded(FKBFLOnSessionSettingAddedEvent Delegate, bool bEnsureLoaded = false);
+
+	/**
+	 * Notify the subsystem that a class was (lazily) loaded. Classifies it into its category and routes to
+	 * AddAsyncLoadedClassToCategory, which only adds + broadcasts the matching OnXAdded event if it is new.
+	 * Called by UKBFLContentCDOHelperSubsystem when a class is first seen at runtime.
+	 */
+	void NotifyClassLoaded(UClass* Class);
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnModModuleAdded OnModModuleAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnResourceDescriptorAdded OnResourceDescriptorAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnResearchTreeAdded OnResearchTreeAdded;
+
+	UPROPERTY(BlueprintAssignable, Category = "Asset Data Subsystem|Events")
+	FKBFLOnSessionSettingAdded OnSessionSettingAdded;
+
 private:
+	/** Add an already-resolved category's classes to the union set + per-mod directory map. */
+	void IndexResolvedCategory(int32 Type);
+
+	/** Registry metadata for candidate assets - filled by EnsureRegistryScanned, holds NO loaded classes. */
+	TArray<FAssetData> mScannedAssets;
+
+	/** Set of category Type codes already resolved (loaded + indexed), to avoid re-loading. */
+	TSet<int32> mResolvedTypes;
+
+	/** Scan mScannedAssets for unloaded BP classes of the given category and kick off async loads. */
+	void TriggerAsyncLoadsForCategory(int32 Type);
+	void OnCategoryAsyncLoaded(int32 Type);
+	void AddAsyncLoadedClassToCategory(UClass* Class, int32 Type);
+	void BroadcastCategoryEvent(UClass* Class, int32 Type);
+
+	/** Paths queued for async loading per category type — cleared when each batch completes. */
+	TMap<int32, TArray<FSoftObjectPath>> mPendingAsyncLoads;
+
 	UPROPERTY()
 	TSet<TSubclassOf<UFGSchematic>> mAllFoundedSchematics;
 
@@ -384,19 +467,16 @@ private:
 	TSet<TSubclassOf<UModModule>> mAllFoundedModModules;
 
 	UPROPERTY()
-	TSet<TSubclassOf<UKBFL_CDOHelperClass_Base>> mAllFoundedCDOHelpers;
-
-	UPROPERTY()
 	TSet<TSubclassOf<UFGResourceDescriptor>> mAllFoundedResourceDescriptors;
 
 	UPROPERTY()
-	TSet<UClass*> mAllFoundedObjects;
+	TSet<TObjectPtr<UClass>> mAllFoundedObjects;
 
 	UPROPERTY()
 	TSet<TSubclassOf<UFGResearchTree>> mAllFoundResearchTrees;
 
 	UPROPERTY()
-	TSet<USMLSessionSetting*> mAllFoundAGS;
+	TSet<TObjectPtr<USMLSessionSetting>> mAllFoundAGS;
 
 	UPROPERTY()
 	TMap<FName, FKBFLAssetData> mDirectoryMappings;
@@ -408,6 +488,8 @@ public:
 	TArray<FString> mPreventStrings = {"/PassiveMode/"};
 };
 
+#pragma warning(push)
+#pragma warning(disable : 4702)
 template <class T>
 void UKBFLAssetDataSubsystem::PrintArray(TSet<T> List)
 {
@@ -417,16 +499,14 @@ void UKBFLAssetDataSubsystem::PrintArray(TSet<T> List)
 		UE_LOG(AssetDataSubsystemLog, Log, TEXT("Class: %s"), *Class->GetClassPathName().ToString());
 	}
 }
+#pragma warning(pop)
 
 template <class T>
 void UKBFLAssetDataSubsystem::GetObjectsOfChilds_Internal(const TArray<UClass*> Childs,
 														  TArray<TSubclassOf<T>>& Out_Items, bool UseNativeCheck)
 {
-	if (!bWasInit)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Try to get classes without Init before the subsytem! CANCEL!"));
-		return;
-	}
+	// Union query needs every category loaded - resolve lazily on first use.
+	EnsureAllResolved();
 
 	for (UClass* FoundedClass : mAllFoundedObjects)
 	{
@@ -444,7 +524,8 @@ void UKBFLAssetDataSubsystem::GetObjectsOfChilds_Internal(const TArray<UClass*> 
 }
 
 template <class T>
-bool UKBFLAssetDataSubsystem::GetAllClassesOfSubclass(TArray<FAssetData> AllAssets, TSet<TSubclassOf<T>>& OutClasses)
+bool UKBFLAssetDataSubsystem::GetAllClassesOfSubclass(const TArray<FAssetData>& AllAssets,
+													  TSet<TSubclassOf<T>>& OutClasses)
 {
 	const UClass* TargetClass = T::StaticClass();
 
@@ -460,8 +541,8 @@ bool UKBFLAssetDataSubsystem::GetAllClassesOfSubclass(TArray<FAssetData> AllAsse
 			FString NativeClassObjectPath;
 			if (FPackageName::ParseExportTextPath(NativeParentClassPath, &NativeClassName, &NativeClassObjectPath))
 			{
-				// Load the native class and verify inheritance
-				if (UClass* NativeClass = LoadObject<UClass>(nullptr, *NativeClassObjectPath))
+				// FindObject only: native C++ classes are always in memory
+				if (UClass* NativeClass = FindObject<UClass>(nullptr, *NativeClassObjectPath))
 				{
 					if (!NativeClass->IsChildOf(TargetClass))
 					{
@@ -475,9 +556,9 @@ bool UKBFLAssetDataSubsystem::GetAllClassesOfSubclass(TArray<FAssetData> AllAsse
 		if (AssetData.AssetClassPath == FTopLevelAssetPath(UBlueprintGeneratedClass::StaticClass()))
 		{
 			TSoftClassPtr<UObject> SoftClass = TSoftClassPtr(FSoftObjectPath(AssetData.GetObjectPathString()));
-			if (SoftClass.IsPending() || SoftClass.IsValid())
+			if (SoftClass.IsValid())
 			{
-				UClass* LoadedClass = SoftClass.LoadSynchronous();
+				UClass* LoadedClass = SoftClass.Get();
 				if (LoadedClass && LoadedClass->IsChildOf(TargetClass))
 				{
 					OutClasses.Add(LoadedClass);
@@ -506,8 +587,8 @@ bool UKBFLAssetDataSubsystem::GetAllClassesOfSubclass(TArray<FAssetData> AllAsse
 			continue; // Skip if parsing fails
 		}
 
-		// Load the generated class
-		UClass* ClassObject = LoadObject<UClass>(nullptr, *GeneratedClassPath);
+		// FindObject only: force-loading BP classes here corrupts CSS's replication graph init
+		UClass* ClassObject = FindObject<UClass>(nullptr, *GeneratedClassPath);
 		if (ClassObject && ClassObject->IsChildOf(TargetClass))
 		{
 			OutClasses.Add(ClassObject);

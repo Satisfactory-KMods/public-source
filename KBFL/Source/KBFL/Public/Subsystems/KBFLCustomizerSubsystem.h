@@ -5,45 +5,11 @@
 #include "FGFactoryColoringTypes.h"
 #include "FGGameMode.h"
 #include "FGSwatchGroup.h"
-#include "KBFLLogging.h"
 #include "Module/WorldModule.h"
 #include "Subsystems/WorldSubsystem.h"
 
 #include "KBFLCustomizerSubsystem.generated.h"
 
-USTRUCT()
-struct FKBFPSwatchSaveInformation
-{
-	GENERATED_BODY()
-
-	UPROPERTY()
-	int32 mSwatchID;
-
-	UPROPERTY()
-	FString mPath;
-
-	UPROPERTY()
-	FString mModName;
-
-	UPROPERTY()
-	bool bIsBaseGame = false;
-
-	TSoftClassPtr<UFGFactoryCustomizationDescriptor_Swatch> GetSoftClass() const
-	{
-		return TSoftClassPtr<UFGFactoryCustomizationDescriptor_Swatch>(FSoftObjectPath(mPath));
-	}
-
-	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> LoadClass() const
-	{
-		TSoftClassPtr<UFGFactoryCustomizationDescriptor_Swatch> SoftClass = GetSoftClass();
-		if (!SoftClass.IsValid())
-		{
-			UE_LOG(CustomizerSubsystem, Warning, TEXT("Failed to load Swatch Class from path: %s"), *mPath);
-			return nullptr;
-		}
-		return GetSoftClass().LoadSynchronous();
-	}
-};
 
 UCLASS(Blueprintable, BlueprintType)
 class KBFL_API UKBFLactoryCustomizationDescriptor_Swatch : public UFGFactoryCustomizationDescriptor_Swatch
@@ -95,28 +61,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "KMods|Customizer Subsystem")
 	TMap<int32, TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> GetSwatchMap() const;
 
-	void SaveDirty();
-	void LoadSaved();
-	void TryToPatchSwatches();
-
-	UFUNCTION(BlueprintCallable, Category = "KMods|Customizer Subsystem")
-	void PatchSwatch(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch);
-
-	UFUNCTION(BlueprintPure, Category = "KMods|Customizer Subsystem")
-	FString GetModNameFromPath(FString modPath);
-
-	UFUNCTION(BlueprintPure, Category = "KMods|Customizer Subsystem")
-	static bool IsBaseGameSwatch(const TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>& SwatchInfo);
-
 private:
-	// Save/Load helpers specific to FKBFPSwatchSaveInformation
-	bool SaveSwatchArrayToFile(const TArray<FKBFPSwatchSaveInformation>& Swatches, const FString& FilePath);
-	bool LoadSwatchArrayFromFile(TArray<FKBFPSwatchSaveInformation>& OutSwatches, const FString& FilePath);
-	FString GetSwatchSavePath() const;
-
-	UPROPERTY()
-	TArray<FKBFPSwatchSaveInformation> mSavedSwatches;
-
 	UPROPERTY()
 	TMap<int32, TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> mSwatchIDMap;
 
@@ -140,5 +85,4 @@ private:
 
 	bool bDefaultGathered = false;
 	bool bInitialized = false;
-	bool bSwatchesPatched = false;
 };

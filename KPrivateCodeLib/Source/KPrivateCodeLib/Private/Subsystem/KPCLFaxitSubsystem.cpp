@@ -8,11 +8,114 @@
 #include "Net/UnrealNetwork.h"
 #include "Network/Buildings/KPCLNetworkCore.h"
 #include "Network/Buildings/KPCLNetworkTower.h"
+#include "Replication/KPCLDefaultRCO.h"
 #include "Resources/FGNoneDescriptor.h"
 #include "Schematic/KPCLSchematic.h"
 
+// ─── Copy / Move (FRWLock is non-copyable, so we handle it manually) ──────────
+
+FKPCLMappedItemAmount::FKPCLMappedItemAmount(const FKPCLMappedItemAmount& Other)
+{
+	FRWScopeLock ReadLock(Other.mItemAmountsLock, SLT_ReadOnly);
+	mItemAmounts = Other.mItemAmounts;
+	mReplicatedItemAmounts = Other.mReplicatedItemAmounts;
+	mMaxUniqueItems = Other.mMaxUniqueItems;
+	mStackMultiplier = Other.mStackMultiplier;
+}
+
+FKPCLMappedItemAmount& FKPCLMappedItemAmount::operator=(const FKPCLMappedItemAmount& Other)
+{
+	if (this != &Other)
+	{
+		FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
+		FRWScopeLock ReadLock(Other.mItemAmountsLock, SLT_ReadOnly);
+		mItemAmounts = Other.mItemAmounts;
+		mReplicatedItemAmounts = Other.mReplicatedItemAmounts;
+		mMaxUniqueItems = Other.mMaxUniqueItems;
+		mStackMultiplier = Other.mStackMultiplier;
+	}
+	return *this;
+}
+
+FKPCLMappedItemAmount::FKPCLMappedItemAmount(FKPCLMappedItemAmount&& Other) noexcept
+{
+	FRWScopeLock WriteLock(Other.mItemAmountsLock, SLT_Write);
+	mItemAmounts = MoveTemp(Other.mItemAmounts);
+	mReplicatedItemAmounts = MoveTemp(Other.mReplicatedItemAmounts);
+	mMaxUniqueItems = Other.mMaxUniqueItems;
+	mStackMultiplier = Other.mStackMultiplier;
+}
+
+FKPCLMappedItemAmount& FKPCLMappedItemAmount::operator=(FKPCLMappedItemAmount&& Other) noexcept
+{
+	if (this != &Other)
+	{
+		FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
+		FRWScopeLock OtherWriteLock(Other.mItemAmountsLock, SLT_Write);
+		mItemAmounts = MoveTemp(Other.mItemAmounts);
+		mReplicatedItemAmounts = MoveTemp(Other.mReplicatedItemAmounts);
+		mMaxUniqueItems = Other.mMaxUniqueItems;
+		mStackMultiplier = Other.mStackMultiplier;
+	}
+	return *this;
+}
+
+// ─── Private no-lock helpers (caller must hold the appropriate lock) ───────────
+
+bool FKPCLMappedItemAmount::HasItem_NoLock(TSubclassOf<UFGItemDescriptor> InItem) const
+{
+	if (!IsValid(InItem))
+	{
+		return false;
+	}
+	return mItemAmounts.Contains(InItem);
+}
+
+int32 FKPCLMappedItemAmount::GetSpaceFor_NoLock(TSubclassOf<UFGItemDescriptor> InItem, int32 Amount) const
+{
+	if (!IsValid(InItem) || Amount <= 0)
+	{
+		return 0;
+	}
+
+	int32 ItemStackSize = UFGItemDescriptor::GetStackSize(InItem);
+	int32 TotalStackSize = ItemStackSize * mStackMultiplier;
+	if (HasItem_NoLock(InItem))
+	{
+		int32 CurrentAmount = mItemAmounts[InItem];
+		int32 AvailableSpace = TotalStackSize - CurrentAmount;
+		return FMath::Min(Amount, AvailableSpace);
+	}
+	if (CanAddNewItemSlot_NoLock(InItem))
+	{
+		return FMath::Min(Amount, TotalStackSize);
+	}
+	return 0;
+}
+
+bool FKPCLMappedItemAmount::CanAddNewItemSlot_NoLock(TSubclassOf<UFGItemDescriptor> InItem) const
+{
+	if (!IsValid(InItem))
+	{
+		return false;
+	}
+	if (HasItem_NoLock(InItem))
+	{
+		return true;
+	}
+	return mItemAmounts.Num() < mMaxUniqueItems || mMaxUniqueItems < 0;
+}
+
+void FKPCLMappedItemAmount::RemoveItemFromStorage_NoLock(TSubclassOf<UFGItemDescriptor> InItem)
+{
+	mItemAmounts.Remove(InItem);
+}
+
+// ─── Public API (all guarded by mItemAmountsLock) ────────────────────────────
+
 void FKPCLMappedItemAmount::GetDismantleAmounts(TArray<FInventoryStack>& out_returns) const
 {
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
 	for (auto ItemAmount : mItemAmounts)
 	{
 		FInventoryStack TempStack(ItemAmount.Value, ItemAmount.Key);
@@ -37,7 +140,8 @@ int32 FKPCLMappedItemAmount::AddItemAmount(TSubclassOf<UFGItemDescriptor> InItem
 		return 0;
 	}
 
-	int32 Amount = GetSpaceFor(InItem, InAmount);
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
+	int32 Amount = GetSpaceFor_NoLock(InItem, InAmount);
 	if (mItemAmounts.Contains(InItem))
 	{
 		mItemAmounts[InItem] += Amount;
@@ -60,6 +164,8 @@ int32 FKPCLMappedItemAmount::RemoveItemAmount(TSubclassOf<UFGItemDescriptor> InI
 	{
 		return 0;
 	}
+
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
 	if (mItemAmounts.Contains(InItem))
 	{
 		int32 AvailableAmount = mItemAmounts[InItem];
@@ -67,7 +173,7 @@ int32 FKPCLMappedItemAmount::RemoveItemAmount(TSubclassOf<UFGItemDescriptor> InI
 		mItemAmounts[InItem] -= RemovedAmount;
 		if (mItemAmounts[InItem] <= 0)
 		{
-			RemoveItemFromStorage(InItem);
+			RemoveItemFromStorage_NoLock(InItem);
 		}
 		return RemovedAmount;
 	}
@@ -80,6 +186,8 @@ int32 FKPCLMappedItemAmount::RemoveItemAmount(const FItemAmount& ItemAmount)
 	{
 		return 0;
 	}
+
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
 	if (mItemAmounts.Contains(ItemAmount.ItemClass))
 	{
 		int32 AvailableAmount = mItemAmounts[ItemAmount.ItemClass];
@@ -87,7 +195,7 @@ int32 FKPCLMappedItemAmount::RemoveItemAmount(const FItemAmount& ItemAmount)
 		mItemAmounts[ItemAmount.ItemClass] -= RemovedAmount;
 		if (mItemAmounts[ItemAmount.ItemClass] <= 0)
 		{
-			RemoveItemFromStorage(ItemAmount.ItemClass);
+			RemoveItemFromStorage_NoLock(ItemAmount.ItemClass);
 		}
 		return RemovedAmount;
 	}
@@ -96,6 +204,7 @@ int32 FKPCLMappedItemAmount::RemoveItemAmount(const FItemAmount& ItemAmount)
 
 FItemAmount FKPCLMappedItemAmount::GetAmountOrCreateAmount(TSubclassOf<UFGItemDescriptor> InItem)
 {
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
 	if (!mItemAmounts.Contains(InItem))
 	{
 		mItemAmounts.Add(InItem, 0);
@@ -106,6 +215,7 @@ FItemAmount FKPCLMappedItemAmount::GetAmountOrCreateAmount(TSubclassOf<UFGItemDe
 
 FItemAmount FKPCLMappedItemAmount::GetAmountConst(TSubclassOf<UFGItemDescriptor> InItem, bool& HasItem) const
 {
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
 	HasItem = mItemAmounts.Contains(InItem);
 	if (HasItem)
 	{
@@ -122,6 +232,7 @@ FItemAmount FKPCLMappedItemAmount::GetAmountConst(TSubclassOf<UFGItemDescriptor>
 
 TArray<FItemAmount> FKPCLMappedItemAmount::ToItemAmountArray() const
 {
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
 	TArray<FItemAmount> result;
 	for (const auto& pair : mItemAmounts)
 	{
@@ -130,7 +241,11 @@ TArray<FItemAmount> FKPCLMappedItemAmount::ToItemAmountArray() const
 	return result;
 }
 
-int32 FKPCLMappedItemAmount::GetSlotSize() const { return mItemAmounts.Num(); }
+int32 FKPCLMappedItemAmount::GetSlotSize() const
+{
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
+	return mItemAmounts.Num();
+}
 
 bool FKPCLMappedItemAmount::HasItem(TSubclassOf<UFGItemDescriptor> InItem) const
 {
@@ -138,11 +253,13 @@ bool FKPCLMappedItemAmount::HasItem(TSubclassOf<UFGItemDescriptor> InItem) const
 	{
 		return false;
 	}
-	return mItemAmounts.Contains(InItem);
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
+	return HasItem_NoLock(InItem);
 }
 
 void FKPCLMappedItemAmount::CleanUpEmptySlots(TSet<TSubclassOf<UFGItemDescriptor>> BlacklistedItems)
 {
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
 	TArray<TSubclassOf<UFGItemDescriptor>> KeysToRemove;
 	for (const auto& pair : mItemAmounts)
 	{
@@ -166,7 +283,7 @@ void FKPCLMappedItemAmount::CleanUpEmptySlots(TSet<TSubclassOf<UFGItemDescriptor
 
 	for (const TSubclassOf<UFGItemDescriptor>& Key : KeysToRemove)
 	{
-		RemoveItemFromStorage(Key);
+		RemoveItemFromStorage_NoLock(Key);
 	}
 
 	if (mMaxUniqueItems > -1)
@@ -178,18 +295,20 @@ void FKPCLMappedItemAmount::CleanUpEmptySlots(TSet<TSubclassOf<UFGItemDescriptor
 			{
 				LastKey = pair.Key;
 			}
-			RemoveItemFromStorage(LastKey);
+			RemoveItemFromStorage_NoLock(LastKey);
 		}
 	}
 }
 
 void FKPCLMappedItemAmount::RemoveItemFromStorage(TSubclassOf<UFGItemDescriptor> InItem)
 {
-	mItemAmounts.Remove(InItem);
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
+	RemoveItemFromStorage_NoLock(InItem);
 }
 
 void FKPCLMappedItemAmount::TickReplication()
 {
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
 	TArray<FItemAmount> ReplicatedArray;
 	for (TPair<TSubclassOf<UFGItemDescriptor>, int> Amount : mItemAmounts)
 	{
@@ -200,6 +319,7 @@ void FKPCLMappedItemAmount::TickReplication()
 
 void FKPCLMappedItemAmount::Client_BuildMap()
 {
+	FRWScopeLock WriteLock(mItemAmountsLock, SLT_Write);
 	mItemAmounts.Empty();
 	for (FItemAmount ItemAmount : mReplicatedItemAmounts)
 	{
@@ -219,19 +339,8 @@ int32 FKPCLMappedItemAmount::GetSpaceFor(TSubclassOf<UFGItemDescriptor> InItem, 
 		return 0;
 	}
 
-	int32 ItemStackSize = UFGItemDescriptor::GetStackSize(InItem);
-	int32 TotalStackSize = ItemStackSize * mStackMultiplier;
-	if (HasItem(InItem))
-	{
-		int32 CurrentAmount = mItemAmounts[InItem];
-		int32 AvailableSpace = TotalStackSize - CurrentAmount;
-		return FMath::Min(Amount, AvailableSpace);
-	}
-	if (CanAddNewItemSlot(InItem))
-	{
-		return FMath::Min(Amount, TotalStackSize);
-	}
-	return 0;
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
+	return GetSpaceFor_NoLock(InItem, Amount);
 }
 
 bool FKPCLMappedItemAmount::CanAddNewItemSlot(TSubclassOf<UFGItemDescriptor> InItem) const
@@ -240,11 +349,8 @@ bool FKPCLMappedItemAmount::CanAddNewItemSlot(TSubclassOf<UFGItemDescriptor> InI
 	{
 		return false;
 	}
-	if (HasItem(InItem))
-	{
-		return true;
-	}
-	return mItemAmounts.Num() < mMaxUniqueItems || mMaxUniqueItems < 0;
+	FRWScopeLock ReadLock(mItemAmountsLock, SLT_ReadOnly);
+	return CanAddNewItemSlot_NoLock(InItem);
 }
 
 bool FKPCLMappedItemAmount::IsItemAllowed(TSubclassOf<UFGItemDescriptor> InItem) const
@@ -267,10 +373,13 @@ void AKPCLFaxitSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworks);
-	DOREPLIFETIME(AKPCLFaxitSubsystem, mDepotUnlocked);
-	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworkFluidSpeedLevel);
-	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworkSolidSpeedLevel);
 	DOREPLIFETIME(AKPCLFaxitSubsystem, mSinkUnlocked);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mDepotUnlocked);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mRemoteAccessUnlocked);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworkSolidSpeedLevel);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworkFluidSpeedLevel);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mNetworkLevel);
+	DOREPLIFETIME(AKPCLFaxitSubsystem, mDriveLevel);
 }
 
 void AKPCLFaxitSubsystem::BeginPlay()
@@ -284,25 +393,6 @@ void AKPCLFaxitSubsystem::BeginPlay()
 	}
 
 	RebuildMap();
-}
-
-void AKPCLFaxitSubsystem::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	/*const int32 NumPerGroup = FMath::Max(FMath::DivideAndRoundUp(mNetworks.Num(), 8), 1);
-	ParallelFor(8, [&](int32 Index)
-	{
-		for (int32 Member = Index * NumPerGroup; Member < FMath::Min(
-				 (Index + 1) * NumPerGroup, mNetworks.Num()); Member++)
-		{
-			FKPCLFaxitNetwork* Network = &mNetworks[Member];
-			if (ensure(Network) && ensure(Network->mCore))
-			{
-				Network->mCore->TickNetwork(DeltaSeconds, Network);
-			}
-		}
-	});*/
 }
 
 void AKPCLFaxitSubsystem::PostLoadGame_Implementation(int32 saveVersion, int32 gameVersion)
@@ -325,10 +415,13 @@ void AKPCLFaxitSubsystem::CleanupNetworks()
 			PendingToRemove.Add(Network.mNetworkId);
 			FKPCLFaxitNetwork* NetworkRef = GetNetworkRef(*Found);
 
-			Network.mNetworkBuildings.Append(Network.mNetworkTowers);
-			for (class AKPCLNetworkBuildingBase* NetworkBuilding : Network.mNetworkBuildings)
+			if (NetworkRef)
 			{
-				NetworkRef->AddActorToNetwork(NetworkBuilding);
+				Network.mNetworkBuildings.Append(Network.mNetworkTowers);
+				for (class AKPCLNetworkBuildingBase* NetworkBuilding : Network.mNetworkBuildings)
+				{
+					NetworkRef->AddActorToNetwork(NetworkBuilding);
+				}
 			}
 
 			continue;
@@ -438,6 +531,22 @@ void AKPCLFaxitSubsystem::UnRegisterNetworkTower(class AKPCLNetworkTower* Networ
 	}
 }
 
+bool AKPCLFaxitSubsystem::HasToManyNetworks() const
+{
+	const int32 Limit = GetNetworkLimit();
+	const int32 Current = GetNetworkCount();
+
+	return Current > Limit;
+}
+
+int32 AKPCLFaxitSubsystem::NetworksLeft() const
+{
+	const int32 Limit = GetNetworkLimit();
+	const int32 Current = GetNetworkCount();
+
+	return FMath::Max(Limit - Current, 0);
+}
+
 bool AKPCLFaxitSubsystem::IsTowerRegistered(class AFGBuildableRadarTower* Tower) const
 {
 	if (!IsValid(Tower))
@@ -454,7 +563,7 @@ AKPCLNetworkTower* AKPCLFaxitSubsystem::GetTowerByRadarTower(const AFGBuildableR
 		return nullptr;
 	}
 
-	AKPCLNetworkTower** Found = mRegisteredTowers.Find(Tower);
+	const TObjectPtr<AKPCLNetworkTower>* Found = mRegisteredTowers.Find(Tower);
 	if (!Found)
 	{
 		return nullptr;
@@ -474,13 +583,13 @@ FKPCLFaxitNetwork AKPCLFaxitSubsystem::CreateOrAddNetworkCoreNative(AKPCLNetwork
 	{
 		if (Network.mCore == Core)
 		{
-			Core->mNetworkId = Network.mNetworkId;
+			Core->SetNetworkIdDirect(Network.mNetworkId);
 			return Network;
 		}
 	}
 
 	FKPCLFaxitNetwork NewNetworkData = FKPCLFaxitNetwork(FGuid::NewGuid().ToString(), Core);
-	Core->mNetworkId = NewNetworkData.mNetworkId;
+	Core->SetNetworkIdDirect(NewNetworkData.mNetworkId);
 	mNetworks.Add(NewNetworkData);
 
 	// Rebuild map BEFORE calling AddBuildingToCore to ensure the map is up to date
@@ -679,6 +788,15 @@ bool AKPCLFaxitSubsystem::GetNetworkByCore(const AKPCLNetworkCore* Core, FKPCLFa
 
 void AKPCLFaxitSubsystem::UpdateNetworkName(AKPCLNetworkCore* Core, FString NewName)
 {
+	if (!HasAuthority())
+	{
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKPCLDefaultRCO>(GetWorld()))
+		{
+			RCO->Server_Faxit_UpdateNetworkName(this, Core, NewName);
+		}
+		return;
+	}
+
 	FKPCLFaxitNetwork* network = GetNetworkRef(Core);
 	if (network)
 	{
@@ -694,20 +812,39 @@ void AKPCLFaxitSubsystem::UpdateNetworkName(AKPCLNetworkCore* Core, FString NewN
 
 int32 AKPCLFaxitSubsystem::GetItemsPerMinute() const
 {
+	if (!IsValid(mBeltSpeedPerTier))
+	{
+		return 0;
+	}
 	return FMath::Max(mBeltSpeedPerTier->GetFloatValue(mNetworkSolidSpeedLevel), 15);
 }
 
 int32 AKPCLFaxitSubsystem::GetFluidPerMinute() const
 {
+	if (!IsValid(mPipeSpeedPerTier))
+	{
+		return 0;
+	}
 	return FMath::Max(mPipeSpeedPerTier->GetFloatValue(mNetworkFluidSpeedLevel), 30000);
 }
 
-int32 AKPCLFaxitSubsystem::GetNetworkLimit() const { return mNetworkCountsPerTier->GetFloatValue(mNetworkLevel); }
+int32 AKPCLFaxitSubsystem::GetNetworkLimit() const
+{
+	if (!IsValid(mNetworkCountsPerTier))
+	{
+		return 0;
+	}
+	return mNetworkCountsPerTier->GetFloatValue(mNetworkLevel);
+}
 
 int32 AKPCLFaxitSubsystem::GetNetworkCount() const { return mNetworks.Num(); }
 
 int32 AKPCLFaxitSubsystem::GetNetworkDriveLimit() const
 {
+	if (!IsValid(mDriveLimitPerTier))
+	{
+		return 0;
+	}
 	return FMath::Max(mDriveLimitPerTier->GetFloatValue(FMath::Max(mDriveLevel, 1)), 1);
 }
 
@@ -715,17 +852,20 @@ TArray<FKPCLFaxitNetwork> AKPCLFaxitSubsystem::GetNetworks() const { return mNet
 
 void AKPCLFaxitSubsystem::UnlockNetworkFeature()
 {
-	UKPCLSchematic::Faxit_GetLevel(GetWorld(), Drive, mDriveLevel);
-	UKPCLSchematic::Faxit_GetLevel(GetWorld(), Network, mNetworkLevel);
-	UKPCLSchematic::Faxit_GetLevel(GetWorld(), SolidSpeed, mNetworkSolidSpeedLevel);
-	UKPCLSchematic::Faxit_GetLevel(GetWorld(), FluidSpeed, mNetworkFluidSpeedLevel);
+	UKPCLSchematic::Faxit_GetLevel(GetWorld(), EKPCLNetworkLevelType::Drive, mDriveLevel);
+	UKPCLSchematic::Faxit_GetLevel(GetWorld(), EKPCLNetworkLevelType::Network, mNetworkLevel);
+	UKPCLSchematic::Faxit_GetLevel(GetWorld(), EKPCLNetworkLevelType::SolidSpeed, mNetworkSolidSpeedLevel);
+	UKPCLSchematic::Faxit_GetLevel(GetWorld(), EKPCLNetworkLevelType::FluidSpeed, mNetworkFluidSpeedLevel);
 
-	UKPCLSchematic::Faxit_IsUnlocked(GetWorld(), Sink, mSinkUnlocked);
-	UKPCLSchematic::Faxit_IsUnlocked(GetWorld(), Depot, mDepotUnlocked);
+	UKPCLSchematic::Faxit_IsUnlocked(GetWorld(), EKPCLNetworkLevelType::Sink, mSinkUnlocked);
+	UKPCLSchematic::Faxit_IsUnlocked(GetWorld(), EKPCLNetworkLevelType::Depot, mDepotUnlocked);
 
 	for (FKPCLFaxitNetwork& Network : mNetworks)
 	{
-		Network.mCore->OnTiersUpdated();
+		if (IsValid(Network.mCore))
+		{
+			Network.mCore->OnTiersUpdated();
+		}
 	}
 }
 

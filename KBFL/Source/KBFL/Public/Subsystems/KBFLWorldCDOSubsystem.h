@@ -48,10 +48,10 @@ protected:
 	bool bWorldPostInitCalled = false;
 
 	UPROPERTY()
-	TSet<class UKBFLCDOOverwriteWorldBasedBase*> mRegisteredWorldOverwrites;
+	TSet<TObjectPtr<class UKBFLCDOOverwriteWorldBasedBase>> mRegisteredWorldOverwrites;
 
 	UPROPERTY()
-	TSet<class UKBFLCDOOverwriteWorldBasedBase*> mTickableWorldOverwrites;
+	TSet<TObjectPtr<class UKBFLCDOOverwriteWorldBasedBase>> mTickableWorldOverwrites;
 
 	FDelegateHandle mOnWorldPostInitHandle;
 };

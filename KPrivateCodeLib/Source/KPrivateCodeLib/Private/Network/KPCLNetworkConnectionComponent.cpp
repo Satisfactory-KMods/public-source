@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/KPCLNetworkConnectionComponent.h"
 
 #include "FGCircuitSubsystem.h"
@@ -49,7 +48,4 @@ bool UKPCLNetworkConnectionComponent::IsNetworkOk() const
 	return true;
 }
 
-UKPCLNetworkConnectionComponent::UKPCLNetworkConnectionComponent()
-{
-	mCircuitType = UKPCLNetwork::StaticClass();
-}
+UKPCLNetworkConnectionComponent::UKPCLNetworkConnectionComponent() { mCircuitType = UKPCLNetwork::StaticClass(); }

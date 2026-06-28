@@ -1,14 +1,16 @@
 ﻿//
+
 #include "World/KLToxicResourceNode.h"
 
 #include "EngineUtils.h"
+
 
 AKLToxicResourceNode::AKLToxicResourceNode() {}
 
 FText AKLToxicResourceNode::GetLookAtDecription_Implementation(class AFGCharacterPlayer* byCharacter,
 															   const FUseState& state) const
 {
-	FText ItemName = UFGItemDescriptor::GetItemName(mResourceClass);
+	FText ItemName = UFGItemDescriptor::GetItemName(GetResourceClass());
 	return FText::Format(NSLOCTEXT("KLib", "ToxicResourceNode_LookAtDescription",
 								   "Containing {0}. Place a Air Collector nearby to harvest the toxic gas."),
 						 ItemName);

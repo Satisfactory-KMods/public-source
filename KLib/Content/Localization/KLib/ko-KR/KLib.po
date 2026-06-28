@@ -1,0 +1,2107 @@
+msgid ""
+msgstr ""
+"Language: ko-KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 1; plural = 0\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mAbbreviatedDisplayName"
+msgid "(H₂O)"
+msgstr "(H₂O)"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDescription"
+msgid "93.6% pure Titanium Dioxide. Processing it into TiCl might require a few attempts."
+msgstr "93.6% 순수 이산화티타늄. 염화 티타늄으로 (TiCl) 가공하려면 몇 번의 시도가 필요할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDescription"
+msgid "A Container for easy transport"
+msgstr "간편한 운반을 위한 용기"
+
+msgid "A Kerr Crystal with an electrically poled frame, allowing for manipulation of the crystal's optical properties.\\r\\nFundamental for optical computing."
+msgstr "전기적 극성을 띤 프레임을 갖춘 케르 크리스탈로, 수정의 광학적 특성을 조작할 수 있습니다.\\r\\n광학 컴퓨팅의 기본입니다."
+
+msgctxt "ST_Klib,Desc_TimeC_Adapter.Desc_TimeC_Adapter_C.mDescription"
+msgid "A adapter for different connections in a network system"
+msgstr "네트워크 시스템의 다양한 연결을 위한 어댑터"
+
+msgid "A bar stock cast from Magnitar™.\\r\\n\\r\\nHighly energetic magnetic fields can turn it into permanent magnets.\\r\\nCrafted into basic Magnitar™ parts."
+msgstr "마그네타™로 주조한 주괴.\\r\\n\\r\\n고에너지 자기장만 있으면 영구 자석으로 변신.\\r\\n기본 마그네타™ 부품으로 제작되었습니다."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mDescription"
+msgid "A basic conveyor drum drive, used to power Mk.2 Conveyor Belts."
+msgstr "Mk.2 컨베이어 벨트에 동력을 공급하는 데 사용되는 기본적인 컨베이어 드럼 드라이브입니다."
+
+msgctxt "KLib_Item,PuriItems"
+msgid "A box full of metal that has no dirt. perfect for melting and further processing."
+msgstr "먼지가 없어 녹여서 추가 가공하기에 완벽한 금속 상자입니다."
+
+msgid "A gas with a high proportion of sulfur. It is used in various processes such as the production of Sulfuric Acid.\\r\\n\\r\\nProduced by combusting Sulfur Powder in a Solid Fuel Heater or extracted from Flue Gas via filtration."
+msgstr "다량의 황이 포함된 가스. 황산 생산 등 다양한 공정에 사용됩니다.\\r\\n\\r\\n고체 연료 가열기에서 황 분말을 연소시키거나, 배기 가스를 여과하여 추출하는 것으로 생산할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mDescription"
+msgid "A high-tech conveyor drum drive, used to power Mk.5 Conveyor Belts."
+msgstr "Mk.5 컨베이어 벨트에 동력을 공급하는 데 사용되는 첨단 컨베이어 드럼 드라이브입니다."
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDescription"
+msgid "A magnesium-rich aluminum alloy, one of the most basic parts from Aluminum."
+msgstr "마그네슘이 풍부한 알루미늄 합금으로, 알루미늄의 가장 기본적인 구성요소 중 하나입니다."
+
+msgid "A metal mixture for advaned smelting. This Mixtures are used in the Foundary or in the Blast Furnace!\\r\\n\\r\\nNote: can weigh a lot. "
+msgstr "고급 제련에 필요한 금속 혼합물. 제철 용광로나 용광로에서 사용됩니다!\\r\\n\\r\\n참고: 생각보다 매우 무거울 수 있음."
+
+msgid "A mix of Titanium Chlorides, also known 'Tickle'.\\r\\nThe purple hue stems from TiCl3.\\r\\nMainly used to produce purified Titanium."
+msgstr "'TiCl'이라고도 알려진 염화티타늄 혼합물입니다.\\r\\n보라색 색조는 삼염화티타늄(TiCl3)에서 비롯됩니다.\\r\\n주로 정제된 티타늄 생산에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_CryoliteResidue.Desc_CryoliteResidue_C.mDescription"
+msgid "A mixture of byproducts left over after refining Bauxite."
+msgstr "보크사이트를 정제하고 남은 부산물을 혼합한 혼합물입니다."
+
+msgid "A network pole for transmitting and dividing information over longer distances.\\r\\n\\r\\nCan connect up to 6 cables. and attached walls."
+msgstr "장거리 정보 전송 및 공유에 사용되는 네트워크 전신주입니다.\\r\\n\\r\\n최대 6개의 송전선을 연결할 수 있습니다."
+
+msgid "A non-flammable, pungent-smelling gas used to refine Uranium and Titanium.\\r\\n\\r\\nOn MASSAGE-2 (AB)b, it is rarely found in underground gas wells. It can also be synthesized from Muriatic Acid."
+msgstr "불연성이며, 매운 냄새가 나는 가스로. 우라늄과 티타늄 정제에 사용됩니다.\\r\\n\\r\\nMASSAGE-2 (AB)b의 지하 가스정에서 매우 드물게 발견하거나, 염화수소산을 이용해 합성할 수 있습니다."
+
+msgid "A plate coated with titanium metal, produced through sintering of titanium hydride made from TiCl Gas.\\r\\n\\r\\nCommonly used to coat surfaces with titanium in a process known as 'sputtering'."
+msgstr "티타늄 금속으로 코팅된 판으로, 염화티타늄 가스로 만든 수소화 티타늄의 소결 공정을 통해 제작됩니다.\\r\\n\\r\\n일반적으로 '스퍼터링'으로 알려진 공정에서 티타늄을 이용한 표면 코팅 작업에 사용됩니다."
+
+msgid "A pre-soldered Wire, ready to be used in electronics.\\r\\nOne of the most basic parts made with Solder."
+msgstr "전자제품에 사용할 수 있도록 납땜 처리된 전선입니다.\\r\\n땜납으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDescription"
+msgid "A sack full of finely crushed powdered coal. Perfect for making gunpowder."
+msgstr "잘게 부순 분말 석탄이 가득 담긴 자루입니다. 화약 제작에 적합합니다."
+
+msgid "A semiconductor photodiode array. Converts light into electricity.\\r\\nOften used to construct Solar Panels or in advanced electronics."
+msgstr "반도체 광다이오드 배열. 빛을 전기로 변환합니다.\\r\\n태양 전지판이나 첨단 전자제품에 주로 사용됩니다."
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDescription"
+msgid "A small heatsink with high conductivity. Great for high power electronics."
+msgstr "높은 전도율을 지닌 소형 방열판. 고전력 전자 제품에 적합합니다."
+
+msgctxt "ST_Klib,Desc_LiquidRawSludge.Desc_LiquidRawSludge_C.mDescription"
+msgid "A waste product that contains trace amounts of iron, magnesium and tin."
+msgstr "약간의 철, 마그네슘, 주석을 함유한 폐기물입니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk1_N"
+msgid "AWESOME Storage Mk.1"
+msgstr "AWESOME 저장소 Mk.1"
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk2_N"
+msgid "AWESOME Storage Mk.2"
+msgstr "AWESOME 저장소 Mk.2"
+
+msgid "Able to re-form parts into other products through heating, refrigeration and pressurization processes.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports.\\r\\n\\r\\nSolid Output: The first solid output port is on the right (viewed from the output side.)"
+msgstr "가열, 냉각 및 가압 공정을 통해 부품을 다른 제품으로 재형성할 수 있습니다.\\r\\n\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n컨베이어 벨트와 파이프라인의 입력부 및 출력부가 있습니다.\\r\\n\\r\\n고체 출력: 첫 번째 고체 출력 포트는 오른쪽에 위치합니다. (출력부에서 봤을 때)"
+
+msgctxt "StringTable_Categorys,Acid"
+msgid "Acid"
+msgstr "산"
+
+msgctxt "StringTable_Categorys,AdvancedSorting"
+msgid "Advanced Sorting"
+msgstr "고급 분류"
+
+msgctxt "StringTable_Categorys,AdvancedStandardParts"
+msgid "Advanced Standard Parts"
+msgstr "고급 표준 부품"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDisplayName"
+msgid "Air"
+msgstr "공기"
+
+msgctxt "StringTable_KLib_Buildings,Build_AirCollector_Name"
+msgid "Air Collector"
+msgstr "공기 수집기"
+
+msgctxt "ST_Klib,Desc_PackagedAir.Desc_PackagedAir_C.mDescription"
+msgid "Air, packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 공기."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mDisplayName"
+msgid "AlClad Belt Drive"
+msgstr "알클래드 벨트 드라이브"
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mAbbreviatedDisplayName"
+msgid "Algae"
+msgstr "조류"
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mDisplayName"
+msgid "Algal Mass"
+msgstr "조류 덩어리"
+
+msgctxt "StringTable_KLib_Buildings,Build_BioWaterExtractor_SF+_Name"
+msgid "Algal Mass Extractor"
+msgstr "조류 덩어리 추출기"
+
+msgid "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "최대 6개의 데이터 케이블 연결 가능.\\r\\nFaxit 스캐너, 복사기나 연결체를 데이터 케이블로 연결하는 것으로 데이터 처리량을 100% 증가시킬 수 있습니다.\\r\\n\\r\\n참고: 저장 연결체는 다른 저장 연결체가 속한 Faxit 네트워크에 연결할 수 없습니다."
+
+msgctxt "StringTable_Categorys,Alloys"
+msgid "Alloys"
+msgstr "합금"
+
+msgid "Also known as Methane Gas. It is the lightest crude oil distillate and is often used as fuel for oil refineries.\\r\\nMay also be reformed to produce 'Syngas', a mixture of Hydrogen and Carbon Monoxide.\\r\\nCan be burned in Solution Heaters."
+msgstr "가장 가벼운 원유 증류액인 이 기체는, 메탄 가스라고도 불리며 정유 공장의 연료로 많이 사용됩니다.\\r\\n수소와 일산화탄소의 혼합물인 '합성 가스'를 생산하기 위해 개질할 수도 있습니다.\\r\\n용액 가열기에서 연소할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDisplayName"
+msgid "Aluminum Coil"
+msgstr "알루미늄 코일"
+
+msgid "An accumulation of phytoplankton (planktonic algae), commonly found in underground reservoirs.\\r\\nThey are in a state of hibernation and no longer perform photosynthesis.\\r\\n\\r\\nProcessing into biomass fuels is possible, but perhaps there is a way to reactivate them."
+msgstr "지하 저수지에서 흔히 발견되는, 동면 중인 식물성 플랑크톤(플랑크톤성 조류)이 축적된 형태.\\r\\n\\r\\n바이오매스 연료로 가공하는 것도 가능하지만 이를 다시 활성화할 수 있는 방법이 있을지도 모릅니다."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDescription"
+msgid "An advanced conveyor drum drive, used to power Mk.3 Conveyor Belts."
+msgstr "Mk.3 컨베이어 벨트에 동력을 공급하는 데 사용되는 발전형 드럼 드라이브입니다."
+
+msgid "An advanced part made from Magnitar™.\\r\\n\\r\\nIt is easily magnetized and has low thermal expansion, allowing it to channel electromagnetic fields or to be used in precision instruments.\\r\\nUsed for crafting."
+msgstr "마그네타™로 만든 고급 부품입니다.\\r\\n\\r\\n자화가 용이하고 열팽창이 적어 전자기장을 전달하거나 정밀 기기에 사용할 수 있습니다.\\r\\n제작에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_TimeC_Case.Desc_TimeC_Case_C.mDescription"
+msgid "An electrically poled frame, used to control the optical properties of crystals."
+msgstr "크리스탈의 광학적 특성을 제어하는 데 사용되는 전기적으로 폴딩된 프레임입니다."
+
+msgctxt "ST_Klib,Desc_LeadFrame.Desc_LeadFrame_C.mDescription"
+msgid "An extremely heavy lead-plated modular frame, resistant to most acids."
+msgstr "대부분의 산에 저항성을 가진 고중량 납 도금 모듈형 골조입니다."
+
+msgid "An extremely wear resistant modular frame, coated with TITAN ( ti-al-n: titanium-aluminum-nitride).\\r\\nPower Usage: 0-4000 MW (2000 MW average).\\r\\n\\r\\nProduced in the Particle Accelerator by bombarding Fused Modular Frames with Titanium ions torn from a target material."
+msgstr "내마모성이 매우 뛰어난 모듈식 골조로, TITAN(ti-al-n: 티타늄 알루미늄 질화물)으로 코팅되었습니다.\\r\\n전력 사용량: 0-4000 MW(평균 2000 MW).\\r\\n\\r\\n입자 가속기에서 목표 물질에서 찢어진 티타늄 이온으로 융합된 모듈식 골조에 충격을 가하여 생산됩니다."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mDescription"
+msgid "An industrial conveyor drum drive, used to power Mk.4 Conveyor Belts."
+msgstr "Mk.4 컨베이어 벨트에 동력을 공급하는 데 사용되는 산업용 컨베이어 드럼 드라이브입니다."
+
+msgctxt "ST_Klib,Desc_Asphalt.Desc_Asphalt_C.mDisplayName"
+msgid "Asphalt"
+msgstr "아스팔트"
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모듈형 채굴기의 전력 요구량을 증가시킵니다.\\r\\n일부 광석은 더 높은 등급의 드릴날이 필요합니다.\\r\\n기본 추출 속도: 출력 당 30/분\\r\\n\\r\\n모든 채굴 보너스는('채굴 효율') 채굴기의 추출 속도에 직접 적용됩니다.\\r\\n예: 50% x 30/분 = 15/분 (출력 당).\\r\\n\\r\\n참고: 자원 순도는 기본 추출 속도가 아닌 채굴 보너스에 반영됩니다."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모듈형 채굴기의 전력 요구량을 증가시킵니다.\\r\\n일부 광석은 더 높은 등급의 드릴날이 필요합니다.\\r\\n기본 추출 속도: 출력 당 60/분\\r\\n\\r\\n모든 채굴 보너스는('채굴 효율') 채굴기의 추출 속도에 직접 적용됩니다.\\r\\n예: 50% x 60/분 = 30/분 (출력 당).\\r\\n\\r\\n참고: 자원 순도는 기본 추출 속도가 아닌 채굴 보너스에 반영됩니다."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모든 광석을 채굴할 수 있을 만큼 강력합니다.\\r\\n기본 추출 속도: 출력 당 120/분\\r\\n\\r\\n모든 채굴 보너스는('채굴 효율') 채굴기의 추출 속도에 직접 적용됩니다.\\r\\n예: 50% x 120/분 = 60/분 (출력 당).\\r\\n\\r\\n참고: 자원 순도는 기본 추출 속도가 아닌 채굴 보너스에 반영됩니다."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모듈형 채굴기의 전력 요구량을 증가시킵니다.\\r\\n\\r\\n공급된 유체에 따라 채굴기의 채굴 효율을 증가시킵니다. 유체가 공급되지 않으면 채굴기가 활성화되지 않습니다.\\r\\n\\r\\n채굴 효율 보너스는 채굴기 메뉴의 ‘유체 정보’ 패널에서 확인할 수 있습니다."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly crushes extracted ores and dirts.\\r\\n\\r\\nReduces the Mining Efficiency Bonus from Booster Modules to half their original value.\\r\\n\\r\\nNOTE: Module is not compatible with Smelter Module."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모듈형 채굴기의 전력 요구량을 증가시킵니다.\\r\\n\\r\\n채굴한 광석과 흙을 바로 분쇄합니다.\\r\\n\\r\\n부스터 모듈의 채굴 효율 보너스를 원래 수치의 절반으로 감소시킵니다.\\r\\n\\r\\n참고: 이 모듈은 제련 모듈과 호환되지 않습니다."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly smelts the extracted ores down to their primary metal ingots and ejects Tailings Slurry via the fluid output.\\r\\nDirt combusts and becomes Crushed Gangue.\\r\\nHead Lift: 10 m.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nNOTE: Module is not compatible with Crusher Module."
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n모듈형 채굴기의 전력 요구량을 증가시킵니다.\\r\\n\\r\\n추출된 광석을 즉시 1차 금속 주괴로 제련하고 유체 배출구를 통해 자갈 혼합물을 출력합니다.\\r\\n흙은 연소하여 분쇄된 맥석이 됩니다.\\r\\n헤드리프트: 10미터\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n참고: 이 모듈은 파쇄 모듈과 호환되지 않습니다."
+
+msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
+msgstr "모듈형 채굴기에 부착할 수 있습니다.\\r\\n\\r\\n에너지 소비량이 다음과 같이 변동됩니다:\\r\\n(모듈 당 {PowerMin}-{PowerMax} MW)\\r\\n채굴기의 전력 회로를 오버클럭합니다.\\r\\n\\r\\n채굴 효율 보너스: {BonusOnProduction}%"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
+msgid "BD1"
+msgstr "BD1"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mAbbreviatedDisplayName"
+msgid "BD2"
+msgstr "BD2"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mAbbreviatedDisplayName"
+msgid "BD3"
+msgstr "BD3"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mAbbreviatedDisplayName"
+msgid "BD4"
+msgstr "BD4"
+
+msgctxt "ST_Klib,Desc_InvarPlates.Desc_InvarPlates_C.mAbbreviatedDisplayName"
+msgid "Bar"
+msgstr "Bar"
+
+msgctxt "ST_Klib,Desc_InvarPlates.Desc_InvarPlates_C.mDisplayName"
+msgid "Bar Magnet"
+msgstr "주괴 자석"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_1.Desc_SnailFood_Tier_1_C.mDisplayName"
+msgid "Basic Grain Meal"
+msgstr "기본 곡물 식사"
+
+msgctxt "ST_Klib,Desc_Naphtha.Desc_Naphtha_C.mDescription"
+msgid "Benzine is a very light distillate of crude oil. Its main use is in the production of Ethylene Gas."
+msgstr "매우 가벼운 원유 증류액인 벤젠은, 주로 에틸렌 가스 생산에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_PackagedLiquidBioWater.Desc_PackagedLiquidBioWater_C.mDescription"
+msgid "Biological Water, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 생물학적 물."
+
+msgid "Bitumen, also known as Asphalt, is one of the heaviest distillates of Crude Oil.\\r\\nIt is a by-product and mostly used in Asphalt roads and roofs.\\r\\nCan also be used to seal joints in plumbing."
+msgstr "아스팔트라고도 알려진 역청은 원유의 가장 무거운 증류물 중 하나입니다.\\r\\n아스팔트 도로와 지붕에 주로 사용되는 부산물이며 배관의 이음새를 밀봉하는 데도 사용할 수 있습니다."
+
+msgctxt "ST_Klib,SlugDesc_BlueSlug.SlugDesc_BlueSlug_C.mDisplayName"
+msgid "Blue Slug"
+msgstr "파란색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_EggBlue.EggDesc_EggBlue_C.mDisplayName"
+msgid "Blue Slug Egg"
+msgstr "파란색 슬러그 알"
+
+msgctxt "ST_Klib,Desc_SteelBolt.Desc_SteelBolt_C.mAbbreviatedDisplayName"
+msgid "Bolt"
+msgstr "볼트"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDisplayName"
+msgid "Brass Belt Drive"
+msgstr "황동 벨트 드라이브"
+
+msgctxt "ST_Klib,Desc_BrassIngot.Desc_BrassIngot_C.mDisplayName"
+msgid "Brass Ingot"
+msgstr "황동 주괴"
+
+msgctxt "ST_Klib,Desc_BrassPipe.Desc_BrassPipe_C.mDisplayName"
+msgid "Brass Pipes"
+msgstr "황동 파이프"
+
+msgctxt "ST_Klib,Desc_BrassPlates.Desc_BrassPlates_C.mDisplayName"
+msgid "Brass Plates"
+msgstr "황동 판"
+
+msgctxt "ST_Klib,Desc_BronzeBeam.Desc_BronzeBeam_C.mDisplayName"
+msgid "Bronze Beam"
+msgstr "청동 빔"
+
+msgctxt "ST_Klib,Desc_BronzeFrame.Desc_BronzeFrame_C.mDisplayName"
+msgid "Bronze Frame"
+msgstr "청동 프레임"
+
+msgctxt "ST_Klib,Desc_BronzeIngot.Desc_BronzeIngot_C.mDisplayName"
+msgid "Bronze Ingot"
+msgstr "청동 주괴"
+
+msgctxt "ST_Klib,Desc_BronzePipe.Desc_BronzePipe_C.mDisplayName"
+msgid "Bronze Pipes"
+msgstr "청동 파이프"
+
+msgctxt "ST_Klib,Desc_BronzePlates.Desc_BronzePlates_C.mDisplayName"
+msgid "Bronze Plates"
+msgstr "청동 판"
+
+msgctxt "StringTable_Categorys,BuildingPats"
+msgid "Building Parts"
+msgstr "건축 부품"
+
+msgctxt "ST_Klib,Desc_Neutronium.Desc_Neutronium_C.mAbbreviatedDisplayName"
+msgid "CNG"
+msgstr "CNG"
+
+msgctxt "StringTable_KLib_Buildings,Build_PipeHole2_D"
+msgid "Can be attached to walls, allowing Pipelines to pass through them."
+msgstr "벽에 부착하여 파이프라인이 벽을 통과할 수 있도록 합니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_Conv_WallHole_D"
+msgid "Can be used as a connection for conveyor belts. "
+msgstr "컨베이어 벨트의 연결에 사용할 수 있습니다."
+
+msgid "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%,\\r\\nNormal: 100%,\\r\\nPure: 200%"
+msgstr "다양한 모듈을 장착할 수 있습니다.\\r\\n광석을 추출하려면 드릴날이 필요하며, 일부 광석에는 추가 모듈 역시 필요합니다. 모듈이 누락되었다면 파란색 불빛이 표시됩니다.\\r\\n\\r\\n참고: 노드 순도와 모듈은 채굴기의 '채굴 효율'에 영향을 주며, 이 값은 연결된 채굴날의 효율에 곱해집니다.\\r\\n\\r\\n순도에 따른 기본 효율 :\\r\\n순도 낮음: 50%,\\r\\n순도 보통: 100%,\\r\\n순도 높음: 200%"
+
+msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipe inputs and outputs.\\r\\n\\r\\nFluid Output: The first fluid output is at the bottom\\r\\nSolid Output: The first solid output is on the right."
+msgstr "복잡한 증류 및 정제 공정이 가능합니다.\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n컨베이어 벨트와 파이프라인의 입력부 및 출력부가 있습니다.\\r\\n\\r\\n유체 출력: 첫 번째 유체 출력 포트는 하단에 위치합니다.\\r\\n고체 출력: 첫 번째 고체 출력 포트는 오른쪽에 위치합니다."
+
+msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline inputs and output ports.\\r\\n\\r\\nFluid Output: The first fluid output port is at the top.\\r\\nSolid Output: The first solid output port is on the right."
+msgstr "복잡한 증류 및 정제 공정이 가능합니다.\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n컨베이어 벨트와 파이프라인의 입력부 및 출력부가 있습니다.\\r\\n\\r\\n유체 출력: 첫 번째 유체 출력 포트는 하단에 위치합니다.\\r\\n고체 출력: 첫 번째 고체 출력 포트는 오른쪽에 위치합니다."
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing the outputs):\\r\\nThe right Pipe is the first output."
+msgstr "합금을 생산하거나 고체 성분을 녹여 액체 상태의 금속을 주조할 수 있습니다.\\r\\n최고 온도: 1500°C\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n컨베이어 벨트 1개와 파이프 입력 2개를 포함합니다.\\r\\n출력 순서(출력 방향 기준):\\r\\n우측 파이프가 첫 번째 출력입니다."
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing thhe outputs):\\r\\nThe right Pipe is the first output."
+msgstr "합금을 생산하거나 고체 성분을 녹여 액체 상태의 금속을 주조할 수 있습니다.\\r\\n최고 온도: 1500°C\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n컨베이어 벨트 1개와 파이프 입력 2개를 포함합니다.\\r\\n출력 순서(출력 방향 기준):\\r\\n우측 파이프가 첫 번째 출력입니다."
+
+msgctxt "ST_Klib,Desc_CarbonMesh.Desc_CarbonMesh_C.mDisplayName"
+msgid "Carbon Mesh"
+msgstr "탄소 그물망"
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDisplayName"
+msgid "Carbon Powder"
+msgstr "탄소 분말"
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mAbbreviatedDisplayName"
+msgid "Cat"
+msgstr "Cat"
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDisplayName"
+msgid "Caterium Heatsink"
+msgstr "카테리움 방열판"
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mDisplayName"
+msgid "Caterium Plate"
+msgstr "카테리움 판"
+
+msgctxt "ST_Klib,Desc_CateriumRod.Desc_CateriumRod_C.mDisplayName"
+msgid "Caterium Rod"
+msgstr "카테리움 봉"
+
+msgctxt "ST_Klib,Desc_CausticSoda.Desc_CausticSoda_C.mDisplayName"
+msgid "Caustic Soda"
+msgstr "가성 소다"
+
+msgctxt "ST_Klib,Desc_PackagedCausticSoda.Desc_PackagedCausticSoda_C.mDescription"
+msgid "Caustic Soda , packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 가성 소다."
+
+msgid "Caustic Soda, more commonly known as Sodium Hydroxide or Lye, is the basic counterpart of Muriatic Acid.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in Quartz and Nickel refinement processes."
+msgstr "가성소다는 수산화나트륨이나 양잿물이라고도 알려져 있으며, 염산의 염기성 대응 물질이기도 합니다.\\r\\n둘 다 소금으로 제작할 수 있으며, 일반적으로 석영 및 니켈 정제 공정에 사용됩니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackableConvPole_N"
+msgid "Ceiling Stackable Conveyor Pole"
+msgstr "중첩 가능 컨베이어 천장 기둥"
+
+msgctxt "StringTable_Categorys,Centrifugation"
+msgid "Centrifugation"
+msgstr "원심분리"
+
+msgctxt "StringTable_Categorys,Chemical"
+msgid "Chemical"
+msgstr "화학"
+
+msgctxt "StringTable_KLib_Buildings,Build_ChemReactor_n"
+msgid "Chemical Reactor"
+msgstr "화학 반응로"
+
+msgctxt "ST_Klib,Widget_LootChests.KUI_MainWindow.mTitle"
+msgid "Chest"
+msgstr "상자"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mAbbreviatedDisplayName"
+msgid "Chlor"
+msgstr "염소"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mDisplayName"
+msgid "Chlorine Gas"
+msgstr "염소 가스"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Chlor.Desc_PackagedGas_Chlor_C.mDescription"
+msgid "Chlorine, packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 염소."
+
+msgctxt "ST_Klib,Desc_ChromPlates.Desc_ChromPlates_C.mDisplayName"
+msgid "Chrom Plates"
+msgstr "크롬 판"
+
+msgctxt "StringTable_Categorys,Cleaning"
+msgid "Cleaning"
+msgstr "청소"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.TextBlock.Text"
+msgid "Close"
+msgstr "닫기"
+
+msgctxt "ST_Klib,Desc_CobaltIngot.Desc_CobaltIngot_C.mDisplayName"
+msgid "Cobalt Ingot"
+msgstr "코발트 주괴"
+
+msgctxt "ST_Klib,Desc_CobaltPlates.Desc_CobaltPlates_C.mDisplayName"
+msgid "Cobalt Plates"
+msgstr "코발트 판"
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mAbbreviatedDisplayName"
+msgid "Coil"
+msgstr "코일"
+
+msgctxt "ST_Klib,Desc_ColdSlag.Desc_ColdSlag_C.mDisplayName"
+msgid "Cold Slag"
+msgstr "차가운 슬래그"
+
+msgctxt "ST_Klib,Desc_EggDNA_Yellow.Desc_EggDNA_Yellow_C.mDescription"
+msgid "Collected genes from a slug, maybe an egg can be created from them? I guess we need an analysis of the genes."
+msgstr "슬러그에서 유전자를 채취하면 알을 만들 수 있을까요? 유전자 분석이 필요할 것 같아요."
+
+msgid "Collects air from the environment. The higher it is, the more air the Air Collector can collect.\\r\\n\\r\\nThe higher the elevation, the faster it can collect air.\\r\\n\\r\\nCollection speed will be reduced if other Air Collectors are nearby.  This range can be viewed with R (default) in build mode.\\r\\n\\r\\nIf placed nearly a Gas Pillar it will collect Toxic Air."
+msgstr "주변 환경에서 공기를 수집합니다. 더 높은 고도에 설치할수록 더 많은 공기를 더 빠르게 수집할 수 있습니다.\\r\\n\\r\\n다른 공기 수집기가 근처에 있으면 수집 속도가 감소합니다. 이 범위는 건설 모드에서 R 키로(기본값) 확인할 수 있습니다.\\r\\n\\r\\n가스 기둥 근처에 배치하면 유독한 공기를 수집합니다."
+
+msgctxt "ST_Klib,Desc_CompactBiomass.Desc_CompactBiomass_C.mDisplayName"
+msgid "Compact Biomass"
+msgstr "압축 바이오매스"
+
+msgid "Compact Biomass to Burn in the Biomass Heater.\\r\\n\\r\\nCan not use in the Biomass Burner!"
+msgstr "바이오매스 가열기에서 연소할 수 있는 압축된 바이오매스.\\r\\n\\r\\n바이오매스 연소기에서는 사용할 수 없습니다!"
+
+msgctxt "ST_Klib,Desc_Neutronium.Desc_Neutronium_C.mDisplayName"
+msgid "Condensed Neutrium Gas"
+msgstr "농축된 뉴트로늄 가스"
+
+msgid "Contains 24 slots for storing large amounts of items.\\r\\nHas one input and output for conveyor belts.\\r\\n\\r\\nIf powered it will store items and automatically convert items in the bottom right slot to AWESOME sink points."
+msgstr "대량의 아이템을 보관할 수 있는 슬롯 24개가 포함되어 있습니다.\\r\\n각각 1개의 컨베이어 벨트 입력 및 출력부가 있습니다.\\r\\n전원이 켜지면 물품을 보관하고 오른쪽 하단 슬롯에 있는 물품을 자동으로 AWESOME 싱크 포인트로 변환합니다."
+
+msgid "Contains 48 slots for storing large amounts of items.\\r\\nHas one input and output for conveyor belts.\\r\\n\\r\\nIf powered it will store items and automatically convert items in the bottom right slot to AWESOME sink points."
+msgstr "대량의 아이템을 보관할 수 있는 슬롯 48개가 포함되어 있습니다.\\r\\n각각 1개의 컨베이어 벨트 입력 및 출력부가 있습니다.\\r\\n전원이 켜지면 물품을 보관하고 오른쪽 하단 슬롯에 있는 물품을 자동으로 AWESOME 싱크 포인트로 변환합니다."
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mDescription"
+msgid "Converts laser light into correlated photon pair beams. Used in quantum optics and quantum computing."
+msgstr "레이저로 된 빛을 상호 연관된 광자 쌍으로 구성된 광선 형태로 변환합니다. 양자 광학이나 양자 컴퓨팅에 사용됩니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_Conv_WallHole_N"
+msgid "Conveyor Wall Hole"
+msgstr "컨베이어 벽 구멍"
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mAbbreviatedDisplayName"
+msgid "Cool"
+msgstr "시원함"
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mDisplayName"
+msgid "Coolant"
+msgstr "냉각수"
+
+msgctxt "StringTable_Categorys,Cooling"
+msgid "Cooling"
+msgstr "냉각"
+
+msgctxt "ST_Klib,Desc_PackagedCoolingWater.Desc_PackagedCoolingWater_C.mDescription"
+msgid "Cooling Water, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 냉각수."
+
+msgctxt "ST_Klib,Desc_CopperBusbar.Desc_CopperBusbar_C.mDisplayName"
+msgid "Copper Busbars"
+msgstr "구리 부스바"
+
+msgctxt "ST_Klib,Desc_CopperRod.Desc_CopperRod_C.mDisplayName"
+msgid "Copper Rod"
+msgstr "구리 봉"
+
+msgctxt "ST_Klib,Desc_TinSheet.Desc_TinSheet_C.mDescription"
+msgid "Copper Sheets that have been covered in a tin layer, increasing corrosion resistance."
+msgstr "구리 박판을 주석 도금으로 덮어 내식성을 높였습니다."
+
+msgctxt "ST_Klib,SlugDesc_Copper.SlugDesc_Copper_C.mDisplayName"
+msgid "Copper Slug"
+msgstr "구리 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Copper.EggDesc_Copper_C.mDisplayName"
+msgid "Copper Slug Egg"
+msgstr "구리 슬러그 알"
+
+msgctxt "ST_Klib,Widget_NetworkStats.K2Node_Select_2.EnumEntryFriendlyNames[3]"
+msgid "Core"
+msgstr "코어"
+
+msgctxt "ST_Klib,Desc_CrushedAurovite.Desc_CrushedAurovite_C.mDisplayName"
+msgid "Crushed Aurovite"
+msgstr "분쇄된 오로바이트"
+
+msgctxt "ST_Klib,Desc_CrushedBauxite.Desc_CrushedBauxite_C.mDisplayName"
+msgid "Crushed Bauxite"
+msgstr "분쇄된 보크사이트"
+
+msgctxt "ST_Klib,Desc_CrushedCallanite.Desc_CrushedCallanite_C.mDisplayName"
+msgid "Crushed Callanite"
+msgstr "분쇄된 칼라나이트"
+
+msgctxt "ST_Klib,Desc_CrushedCaterium.Desc_CrushedCaterium_C.mDisplayName"
+msgid "Crushed Caterium"
+msgstr "분쇄된 카테리움"
+
+msgctxt "ST_Klib,Desc_CrushedChrom.Desc_CrushedChrom_C.mDisplayName"
+msgid "Crushed Chrom"
+msgstr "분쇄된 크롬"
+
+msgctxt "ST_Klib,Desc_CrushedCobalt.Desc_CrushedCobalt_C.mDisplayName"
+msgid "Crushed Cobalt"
+msgstr "분쇄된 코발트"
+
+msgctxt "ST_Klib,Desc_CrushedCopper.Desc_CrushedCopper_C.mDisplayName"
+msgid "Crushed Copper"
+msgstr "분쇄된 구리"
+
+msgctxt "ST_Klib,Desc_Gangue.Desc_Gangue_C.mDisplayName"
+msgid "Crushed Gangue"
+msgstr "분쇄된 맥석"
+
+msgctxt "ST_Klib,Desc_CrushedIridium.Desc_CrushedIridium_C.mDisplayName"
+msgid "Crushed Iridium"
+msgstr "분쇄된 이리듐"
+
+msgctxt "ST_Klib,Desc_CrushedIron.Desc_CrushedIron_C.mDisplayName"
+msgid "Crushed Iron"
+msgstr "분쇄된 철"
+
+msgctxt "ST_Klib,Desc_CrushedLarrussite.Desc_CrushedLarrussite_C.mDisplayName"
+msgid "Crushed Larrussite"
+msgstr "분쇄된 라루사이트"
+
+msgctxt "ST_Klib,Desc_CrushedLead.Desc_CrushedLead_C.mDisplayName"
+msgid "Crushed Lead"
+msgstr "분쇄된 납"
+
+msgctxt "ST_Klib,Desc_CrushedMagnesium.Desc_CrushedMagnesium_C.mDisplayName"
+msgid "Crushed Magnesium"
+msgstr "분쇄된 마그네슘"
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDisplayName"
+msgid "Crushed Montanion"
+msgstr "분쇄된 몬타니온"
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDescription"
+msgid "Crushed Montanion, used in further processing and purification steps to extract different metals"
+msgstr "분쇄된 몬타니온, 다양한 금속을 추출하기 위한 추가 처리나 정제 공정에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_CrushedNickle.Desc_CrushedNickle_C.mDisplayName"
+msgid "Crushed Nickel"
+msgstr "분쇄된 니켈"
+
+msgctxt "ST_Klib,Desc_CrushedPlatinum.Desc_CrushedPlatinum_C.mDisplayName"
+msgid "Crushed Platinum"
+msgstr "분쇄된 백금"
+
+msgctxt "ST_Klib,Desc_CrushedTitan.Desc_CrushedTitan_C.mDisplayName"
+msgid "Crushed Rutile"
+msgstr "분쇄된 금홍석"
+
+msgctxt "ST_Klib,Desc_CrushedSilver.Desc_CrushedSilver_C.mDisplayName"
+msgid "Crushed Silver"
+msgstr "분쇄된 은"
+
+msgctxt "ST_Klib,Desc_CrushedSiterite.Desc_CrushedSiterite_C.mDisplayName"
+msgid "Crushed Siterite"
+msgstr "분쇄된 시터라이트"
+
+msgctxt "ST_Klib,Desc_CrushedTin.Desc_CrushedTin_C.mDisplayName"
+msgid "Crushed Tin"
+msgstr "분쇄된 주석"
+
+msgctxt "ST_Klib,Desc_CrushedTungsten.Desc_CrushedTungsten_C.mDisplayName"
+msgid "Crushed Tungsten"
+msgstr "분쇄된 텅스텐"
+
+msgctxt "ST_Klib,Desc_CrushedZinc.Desc_CrushedZinc_C.mDisplayName"
+msgid "Crushed Zinc"
+msgstr "분쇄된 아연"
+
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "다양한 광석 군집에서 채굴할 수 있는 분쇄된 형태의 금속입니다. 주괴나 액체 금속 주조에 사용됩니다.\\r\\n\\r\\n기계로 세척하여 더 많은 금속을 추출할 수도 있습니다."
+
+msgid "Crushed raw ores and seperates the wanted from the unwanted materials.\\r\\nThe first step of processing for many ores.\\r\\n\\r\\nSolid Output: The first solid output port is on the right."
+msgstr "원광석을 분쇄하고 원하는 물질과 부산물을 분리합니다.\\r\\n많은 광석이 첫 번째 처리 단계로 거쳐갑니다.\\r\\n\\r\\n아이템 출력: 첫 번째 아이템 출력 포트는 오른쪽에 위치합니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_Crusher_N"
+msgid "Crusher"
+msgstr "분쇄기"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Crusher_N"
+msgid "Crusher Module"
+msgstr "분쇄 모듈"
+
+msgctxt "StringTable_Categorys,CrushingOres"
+msgid "Crushing Ores"
+msgstr "광석 분쇄"
+
+msgctxt "StringTable_Categorys,CrushingPowders"
+msgid "Crushing Powders"
+msgstr "분말 분쇄"
+
+msgctxt "StringTable_Categorys,Cat_BSC_Cultivation"
+msgid "Cultivation"
+msgstr "재배"
+
+msgctxt "ST_Klib,Desc_Faxit_DimensionalDrive_Mk1.Desc_Faxit_DimensionalDrive_Mk1_C.mAbbreviatedDisplayName"
+msgid "DMk1"
+msgstr "DMk1"
+
+msgctxt "ST_Klib,Desc_TimeC_Cable.Desc_TimeC_Cable_C.mAbbreviatedDisplayName"
+msgid "Data"
+msgstr "데이터"
+
+msgctxt "ST_Klib,Desc_TimeC_Cable.Desc_TimeC_Cable_C.mDisplayName"
+msgid "Data Cable"
+msgstr "데이터 케이블"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.ItemName_6.Text"
+msgid "Daytime:"
+msgstr "하루 시간:"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk3_N"
+msgid "Diamond Mining Head"
+msgstr "다이아몬드 드릴날"
+
+msgctxt "ST_Klib,Desc_DieselOil.Desc_DieselOil_C.mDisplayName"
+msgid "Diesel Fuel"
+msgstr "디젤 연료"
+
+msgctxt "ST_Klib,Desc_PackagedDieselOil.Desc_PackagedDieselOil_C.mDescription"
+msgid "Diesel Fuel, packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 디젤 연료."
+
+msgctxt "ST_Klib,Desc_DieselOil.Desc_DieselOil_C.mDescription"
+msgid "Diesel fuel is mostly used to generate heat."
+msgstr "디젤 연료는 주로 열을 발생시키는 데 사용됩니다."
+
+msgctxt "ST_Klib,Build_SinkCentralStorage.Build_SinkCentralStorage_C.mDisplayName"
+msgid "Dimensional Depot Uploader (Sink)"
+msgstr "차원 창고 업로더 (싱크)"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidDirtyWater.Desc_PackagedLiquidDirtyWater_C.mDescription"
+msgid "Dirty Water, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 오수."
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mDrillModule.mFunction"
+msgid "Drill"
+msgstr "드릴"
+
+msgctxt "ST_Klib,Node_Add.NewItem"
+msgid "Drill Tier is to low"
+msgstr "드릴 티어가 너무 낮습니다"
+
+msgctxt "ST_Klib,BP_NetworkDriveItem.BP_NetworkDriveItem_C.mDisplayName"
+msgid "Drive Mk.{Tier}"
+msgstr "드라이브 Mk.{Tier}"
+
+msgctxt "ST_Klib,Desc_SlugSlime_High.Desc_SlugSlime_High_C.mAbbreviatedDisplayName"
+msgid "ESlime"
+msgstr "ESlime"
+
+msgctxt "ST_Klib,Desc_NC_Barrel.Desc_NC_Barrel_C.mDisplayName"
+msgid "Empty Barrel"
+msgstr "빈 배럴"
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDisplayName"
+msgid "Empty Cryo Tank"
+msgstr "빈 저온 탱크"
+
+msgctxt "ST_Klib,Cat_SlugEnergy.Cat_SlugEnergy_C.mDisplayName"
+msgid "Energized Slug Slime"
+msgstr "활성화된 슬러그 점액"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule1.mFunction"
+msgid "Energy 1"
+msgstr "에너지 1"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule2.mFunction"
+msgid "Energy 2"
+msgstr "에너지 2"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule3.mFunction"
+msgid "Energy 3"
+msgstr "에너지 3"
+
+msgctxt "ST_Klib,Desc_EnrichedUranium.Desc_EnrichedUranium_C.mDisplayName"
+msgid "Enriched Uranium"
+msgstr "농축된 우라늄"
+
+msgctxt "ST_Klib,Desc_Ethylene.Desc_Ethylene_C.mAbbreviatedDisplayName"
+msgid "Eth"
+msgstr "Eth"
+
+msgctxt "ST_Klib,Desc_Ethylene.Desc_Ethylene_C.mDisplayName"
+msgid "Ethylene Gas"
+msgstr "에틸렌 가스"
+
+msgid "Ethylene is made by cracking Naptha. It is a monomer used to make polymers like Polyethylene, a plastic.\\r\\nCan be burned in Solution Heaters."
+msgstr "에틸렌은 나프타를 분해하여 제작할 수 있습니다. 플라스틱과 같은 폴리에틸렌과 같은 폴리머를 만드는 데 사용할 수 있는 단량체로 사용됩니다.\\r\\n용액 가열기에서 연소할 수 있습니다."
+
+msgid "Extracts Algal Mass from underground reservoirs.\\r\\nDefault extraction rate: 60 m^3 Alglas Mass per minute.\\r\\n\\r\\nNote: Must be placed on an Algal Mass node.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "지하 저수지에서 조류 덩어리를 추출합니다.\\r\\n기본 추출 속도: 분당 조류 덩어리 60m³\\r\\n\\r\\n참고: 조류 덩어리 노드에 배치해야 합니다.\\r\\n\\r\\n헤드리프트: 10미터\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)"
+
+msgid "FICSIT's answer to Theseus's Paradox.\\r\\nProduced by infusing the slime from mineral slugs with Dark Matter.\\r\\n\\r\\n'Everything is just one paint coat away from becoming something new.'"
+msgstr "테세우스의 역설에 대한 FICSIT의 해답은 다음과 같습니다.\\r\\n광물 슬러그 점액에 암흑 물질을 주입하여 생산하세요.\\r\\n\\r'모든 것은 페인트칠 한 번이면 새로운 것이 될 수 있습니다.'"
+
+msgctxt "ST_Klib,Desc_FanBlade.Desc_FanBlade_C.mDisplayName"
+msgid "Fan Blades"
+msgstr "선풍기 날개"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPoleWallDouple"
+msgid "FaxIT Double Wall Pole"
+msgstr "FaxIT 이중 벽 기둥"
+
+msgctxt "StringTable_KLib_Buildings,Ram_In_N"
+msgid "FaxIT Input Processor"
+msgstr "FaxIT 입력 처리기"
+
+msgctxt "StringTable_KLib_Buildings,Ram_Out_N"
+msgid "FaxIT Output Processor"
+msgstr "FaxIT 출력 처리기"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPole_N"
+msgid "FaxIT Pole"
+msgstr "FaxIT 기둥"
+
+msgctxt "StringTable_KLib_Buildings,NetworkTerminal_N"
+msgid "FaxIT Terminal"
+msgstr "FaxIT 터미널"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPoleWall"
+msgid "FaxIT Wall Pole"
+msgstr "FaxIT 벽 기둥"
+
+msgctxt "ST_Klib,Build_CS_PoleWallDouble.Build_CS_PoleWallDouble_C.mDisplayName"
+msgid "FaxIt Double Wall Socket"
+msgstr "FaxIT 이중 벽 소켓"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_I_Solid"
+msgid "FaxIt Fluid Copier"
+msgstr "FaxIT 유체 복사기"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_I_Fluid"
+msgid "FaxIt Fluid Scanner"
+msgstr "FaxIT 유체 스캐너"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_O_Solid"
+msgid "FaxIt Solid Copier"
+msgstr "FaxIT 아이템 복사기"
+
+msgctxt "ST_Klib,Build_CS_InputSolid.Build_CS_InputSolid_C.mDisplayName"
+msgid "FaxIt Solid Scanner"
+msgstr "FaxIT 아이템 스캐너"
+
+msgctxt "ST_Klib,Build_CS_Core.Build_CS_Core_C.mDisplayName"
+msgid "FaxIt Storage Nexus"
+msgstr "FaxIT 저장소 연결체"
+
+msgctxt "ST_Klib,Build_CS_PoleStand.Build_CS_PoleStand_C.mDisplayName"
+msgid "FaxIt Telecom Pole"
+msgstr "FaxIT 통신 기둥"
+
+msgctxt "ST_Klib,Build_CS_PoleWall.Build_CS_PoleWall_C.mDisplayName"
+msgid "FaxIt Wall Socket"
+msgstr "FaxIT 벽 소켓"
+
+msgctxt "ST_Klib,SSC_Faxit.SSC_Faxit_C.mDisplayName"
+msgid "Faxit"
+msgstr "FaxIT"
+
+msgctxt "ST_Klib,Build_CS_Cable_4.Build_CS_Cable_4_C.mDisplayName"
+msgid "Faxit Cable"
+msgstr "FaxIT 전선"
+
+msgctxt "ST_Klib,Build_CS_Cable.Build_CS_Cable_C.mDisplayName"
+msgid "Faxit Cable - Blue"
+msgstr "FaxIT 전선 - 파란색"
+
+msgctxt "ST_Klib,Build_CS_Cable_3.Build_CS_Cable_3_C.mDisplayName"
+msgid "Faxit Cable - Red"
+msgstr "FaxIT 전선 - 빨간색"
+
+msgctxt "ST_Klib,Build_CS_Cable_5.Build_CS_Cable_5_C.mDisplayName"
+msgid "Faxit Cable - Yellow"
+msgstr "FaxIT 전선 - 노란색"
+
+msgctxt "ST_Klib,Build_CS_Cable_2.Build_CS_Cable_2_C.mDisplayName"
+msgid "Faxit Cable- Green"
+msgstr "FaxIt 전선 - 초록색"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_O_Fluid"
+msgid "Faxit Fluid Sender"
+msgstr "FaxIt 유체 전달기"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock_134.Text"
+msgid "Filtration medium not required for current operation"
+msgstr "현재 작동에 여과 매체가 필요하지 않습니다."
+
+msgctxt "StringTable_KLib_Buildings,FluidConditioner_N"
+msgid "Filtrator"
+msgstr "여과기"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock_59.Text"
+msgid "Filtrator waste by-products"
+msgstr "여과기 폐기 부산물"
+
+msgctxt "StringTable_KLib_Buildings,Build_FlexibleBlastFurnaceSmelter_N"
+msgid "Flexible Blast Furnace"
+msgstr "유연한 제철 용광로"
+
+msgctxt "ST_Klib,Desc_FlueGas.Desc_FlueGas_C.mAbbreviatedDisplayName"
+msgid "Flue"
+msgstr "Flue"
+
+msgctxt "ST_Klib,Desc_FlueGas.Desc_FlueGas_C.mDisplayName"
+msgid "Flue Gas"
+msgstr "배기 가스"
+
+msgctxt "ST_Klib,Desc_PackagedGas_CarbonDioxide.Desc_PackagedGas_CarbonDioxide_C.mDescription"
+msgid "Flue Gas, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 배기 가스."
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mFluidModule.mFunction"
+msgid "Fluid"
+msgstr "유체"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock.Text"
+msgid "Fluid Conditioner filtration medium monitoring"
+msgstr "유체 컨디셔너 여과 매체 모니터링"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.SF+_WidgetComp_SubWindow.Title"
+msgid "Fluid Info"
+msgstr "유체 정보"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Fluid_N"
+msgid "Fluid Module"
+msgstr "유체 모듈"
+
+msgctxt "ST_Klib,Node_Select.Tank"
+msgid "Fluid Tank"
+msgstr "유체 탱크"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Tank_Module_Name"
+msgid "Fluid Tank Module"
+msgstr "유체 탱크 모듈"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock.Text"
+msgid "Flush Fluid Tank"
+msgstr "유체 탱크 비우기"
+
+msgctxt "StringTable_Categorys,Food"
+msgid "Food"
+msgstr "음식"
+
+msgid "Food for Slugs.\\r\\n\\r\\nFood Tier: {Tier}"
+msgstr "슬러그를 위한 음식입니다.\\r\\n\\r\\n음식 티어: {Tier}"
+
+msgctxt "ST_Klib,Desc_NC_Barrel.Desc_NC_Barrel_C.mDescription"
+msgid "For packing Oils"
+msgstr "원유 포장용"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDescription"
+msgid "Fresh Air. Low Nitrogen content but rich in CO2 and Oxygen."
+msgstr "신선한 공기. 질소 함량은 낮지만 이산화탄소와 산소가 풍부합니다."
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_4.Desc_SnailFood_Tier_4_C.mDisplayName"
+msgid "Fruity Meal"
+msgstr "과일로 가득 찬 식사"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_7.Desc_SnailFood_Tier_7_C.mDisplayName"
+msgid "Fruity Snail Food"
+msgstr "과일로 가득 찬 달팽이 먹이"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier2_N"
+msgid "Full Booster Module"
+msgstr "풀 부스터 모듈"
+
+msgid "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "통신 전봇대처럼 작동하지만 벽에 부착하여 사용하며 전신주와 같은 기능을 합니다. 벽의 양쪽 면마다 하나의 연결부가 있습니다.\\r\\n\\r\\n한 면에 데이터 전선을 최대 6개 연결할 수 있습니다.r\\n\\r\\nFaxit 스캐너, 복사기, 연결체를 데이터 케이블로 연결하여 데이터 전송 속도를 100% 높일 수 있습니다.\\r\\n\\r\\n참고: 저장소 연결체는 다른 저장소 연결체가 속한 Faxit 네트워크와 연결할 수 없습니다."
+
+msgid "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "통신 전봇대처럼 작동하지만 벽에 부착하여 사용하며 전신주와 같은 기능을 합니다.\\r\\n\\r\\n한 면에 데이터 전선을 최대 6개 연결할 수 있습니다.r\\n\\r\\nFaxit 스캐너, 복사기, 연결체를 데이터 케이블로 연결하여 데이터 전송 속도를 100% 높일 수 있습니다.\\r\\n\\r\\n참고: 저장소 연결체는 다른 저장소 연결체가 속한 Faxit 네트워크와 연결할 수 없습니다."
+
+msgctxt "ST_Klib,Build_ChemReactor.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "가스"
+
+msgid "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "광자로 분해되기 전 유체의 정확한 홀로그램 사본을 생성합니다.\\r\\n홀로그램 데이터와 광자 스트림은 저장 연결체로부터 가져옵니다.\\r\\n\\r\\n데이터 처리량은 무선 모드에서 제한되며, 데이터 케이블을 이용하여 저장망에 연결하면 처리량을 100% 증가시킬 수 있습니다."
+
+msgid "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "광자로 분해되기 전 개체의 정확한 홀로그램 사본을 생성합니다.\\r\\n홀로그램 데이터와 광자 스트림은 저장 연결체로부터 가져옵니다.\\r\\n\\r\\n데이터 처리량은 무선 모드에서 제한되며, 데이터 케이블을 이용하여 저장망에 연결하면 처리량을 100% 증가시킬 수 있습니다."
+
+msgctxt "ST_Klib,Desc_Glass.Desc_Glass_C.mDisplayName"
+msgid "Glass"
+msgstr "유리"
+
+msgctxt "ST_Klib,SlugDesc_Golden.SlugDesc_Golden_C.mDisplayName"
+msgid "Golden Slug"
+msgstr "금 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Golden.EggDesc_Golden_C.mDisplayName"
+msgid "Golden Slug Egg"
+msgstr "금 슬러그 알"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier1_N"
+msgid "Half Booster Module"
+msgstr "하프 부스터 모듈"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk2_N"
+msgid "Hardened Mining Head"
+msgstr "강화된 드릴날"
+
+msgctxt "StringTable_Categorys,Heating"
+msgid "Heating"
+msgstr "가열"
+
+msgid "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "데이터 케이블을 더 먼 거리까지 확장할 수 있도록 합니다.\\r\\n통신탑 하단에 추가 연결부가 있어 통신 전신주과 같은 다른 건물에 연결할 수 있습니다.\\r\\n\\r데이터 케이블로 Faxit 스캐너, 복사기 및 연결체를 서로 연결하여 데이터 전송 속도를 100% 증가시킬 수 있습니다.\\r\\n\\r\\n참고: 저장 연결체는 다른 저장 연결체가 있는 Faxit 네트워크와 연결할 수 없습니다."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam_Hot.Desc_PackagedGas_Steam_Hot_C.mDescription"
+msgid "Hot Steam, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 뜨거운 증기."
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Humidity"
+msgstr "습도"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Humidity_Module_Name"
+msgid "Humidity Module"
+msgstr "습도 모듈"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName_1.Text"
+msgid "Humidity:"
+msgstr "습도: "
+
+msgctxt "ST_Klib,Node_Format_Text.Format_34"
+msgid "Humidity: {TEMP}%"
+msgstr "습도: {TEMP}%"
+
+msgid "Humidity\\r\\n{value}%"
+msgstr "습도\\r\\n{value}%"
+
+msgctxt "ST_Klib,Node_Select.Option_0_04"
+msgid "Humidty"
+msgstr "습도"
+
+msgctxt "ST_Klib,Desc_Gas_Hydrogen.Desc_Gas_Hydrogen_C.mAbbreviatedDisplayName"
+msgid "Hydro"
+msgstr "수력"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidHydrocarbons.Desc_PackagedLiquidHydrocarbons_C.mDescription"
+msgid "Hydrocarbons, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 탄화수소."
+
+msgctxt "ST_Klib,Desc_PackagedLiquidHydrochloricAcid.Desc_PackagedLiquidHydrochloricAcid_C.mDescription"
+msgid "Hydrochloric Acid, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 염산."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Hydrogen.Desc_PackagedGas_Hydrogen_C.mDescription"
+msgid "Hydrogen , packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 수소."
+
+msgctxt "ST_Klib,Widget_Cleaner.KUI_ProductionInfoWidget.mFuelText"
+msgid "INSERT FILTER"
+msgstr "필터 입력"
+
+msgctxt "KLib_Item,BeltItemDesc"
+msgid "Important part for conveyor belts."
+msgstr "컨베이어 벨트에 필수적인 부품입니다."
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Incubator"
+msgstr "인큐베이터"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Small_Module_Name"
+msgid "Incubator Module"
+msgstr "인큐베이터 모듈"
+
+msgctxt "StringTable_Categorys,IndustrialWashing"
+msgid "Industrial Washing"
+msgstr "인큐베이터 청소"
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackableHyperPole_N"
+msgid "Invert Stackable Hypertube Support"
+msgstr "역방향 중첩 가능 하이퍼큐브 지지대"
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackablePipePole_N"
+msgid "Invert Stackable Pipeline Support"
+msgstr "역방향 중첩 가능 파이프라인 지지대"
+
+msgid "Iron Plates, covered with a protective tin layer.\\r\\nThe basis for more advanced, robust parts."
+msgstr "보호를 위해 주석으로 도금한 철 판.\\r\\n더욱 고급스러우며, 견고한 부품의 기초로 사용됩니다."
+
+msgctxt "ST_Klib,Desc_IronSheet.Desc_IronSheet_C.mDisplayName"
+msgid "Iron Sheet"
+msgstr "철 박판"
+
+msgctxt "ST_Klib,SlugDesc_Iron.SlugDesc_Iron_C.mDisplayName"
+msgid "Iron Slug"
+msgstr "철 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Iron.EggDesc_Iron_C.mDisplayName"
+msgid "Iron Slug Egg"
+msgstr "철 슬러그 알"
+
+msgctxt "ST_Klib,Desc_IronWire.Desc_IronWire_C.mDisplayName"
+msgid "Iron Wire"
+msgstr "철 전선"
+
+msgctxt "ST_Klib,Desc_CarbonMesh.Desc_CarbonMesh_C.mDescription"
+msgid "Is needed to build solar panels or used as a filter for liquids."
+msgstr "태양 전지판 제작이나 액체 여과에 사용합니다."
+
+msgctxt "ST_Klib,Desc_ToxicAir.Desc_ToxicAir_C.mDescription"
+msgid "It stinks, it's irritating, it's full of Natural Gas and Hydrogen. Bad for you, good for the factory!"
+msgstr "냄새가 나고, 자극적이며, 천연 가스와 수소로 가득합니다. 여러분에게는 유해할 지 모르지만, 공장에는 필요합니다!"
+
+msgctxt "ST_Klib,ResourceNode_QuantumCrystal.NewVariables[0].Category"
+msgid "KMods"
+msgstr "KMods"
+
+msgctxt "ST_Klib,Desc_TimeC_StabilizedTimeCrystal.Desc_TimeC_StabilizedTimeCrystal_C.mAbbreviatedDisplayName"
+msgid "Kerr"
+msgstr "Kerr"
+
+msgctxt "ST_Klib,Res_KerrCrystal.Res_KerrCrystal_C.mDisplayName"
+msgid "Kerr Crystal"
+msgstr "케르 수정"
+
+msgctxt "ST_Klib,Desc_CryoliteResidue.Desc_CryoliteResidue_C.mAbbreviatedDisplayName"
+msgid "KyRes"
+msgstr "KyRes"
+
+msgctxt "ST_Klib,Desc_CryoliteResidue.Desc_CryoliteResidue_C.mDisplayName"
+msgid "Kyalite Residue"
+msgstr "칼라이트 잔류물"
+
+msgctxt "ST_Klib,Desc_LeadFrame.Desc_LeadFrame_C.mDisplayName"
+msgid "Lead Frame"
+msgstr "납 프레임"
+
+msgctxt "ST_Klib,Desc_LeadIngot.Desc_LeadIngot_C.mDisplayName"
+msgid "Lead Ingot"
+msgstr "납 주괴"
+
+msgctxt "ST_Klib,Desc_LeadPlates.Desc_LeadPlates_C.mDisplayName"
+msgid "Lead Plates"
+msgstr "납 판"
+
+msgctxt "ST_Klib,Desc_LeadSheet.Desc_LeadSheet_C.mDisplayName"
+msgid "Lead Sheet"
+msgstr "납 박판"
+
+msgctxt "ST_Klib,SlugDesc_Lime.SlugDesc_Lime_C.mDisplayName"
+msgid "Lime Slug"
+msgstr "석회 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Lime.EggDesc_Lime_C.mDisplayName"
+msgid "Lime Slug Egg"
+msgstr "석회 슬러그 알"
+
+msgctxt "ST_Klib,Desc_CausticSoda.Desc_CausticSoda_C.mAbbreviatedDisplayName"
+msgid "Lyigi"
+msgstr "Lyigi"
+
+msgctxt "ST_Klib,Desc_MagnesiumGranules.Desc_MagnesiumGranules_C.mDisplayName"
+msgid "Magnesium Granules"
+msgstr "마그네슘 과립"
+
+msgctxt "ST_Klib,Desc_InvarPipe.Desc_InvarPipe_C.mDisplayName"
+msgid "Magnetic Core"
+msgstr "자성 코어"
+
+msgctxt "ST_Klib,Desc_InvarIngot.Desc_InvarIngot_C.mAbbreviatedDisplayName"
+msgid "Magni"
+msgstr "Magni"
+
+msgctxt "ST_Klib,Desc_InvarIngot.Desc_InvarIngot_C.mDisplayName"
+msgid "Magnitar™ Billet"
+msgstr "마그네타™ 빌렛"
+
+msgid "Mainly composed of carbon oxides and some sulfur compounds. A common product of burning carbon based fuels.\\r\\n\\r\\nCan be processed in the Filtrator to extract componds"
+msgstr "주로 탄소 산화물과 일부 유황 화합물로 구성된 이 가스는, 탄소 기반 연료를 연소할 때 발생하는 일반적인 물질입니다.\\r\\n\\r\\n여과기에서 처리하여 각종 화합물을 추출할 수 있습니다."
+
+msgid "Mainly used in the Gas Generator to make Power\\r\\n\\r\\nCan burn in the Gas Generator"
+msgstr "주로 가스 발생기에서 전력 생산에 사용됩니다\\r\\n\\r\\n가스 발생기에서 연소할 수 있습니다."
+
+msgctxt "StringTable_Categorys,MasterSorting"
+msgid "Master Sorting"
+msgstr "마스터 분류"
+
+msgid "Melting Point: 1000°C\\r\\n\\r\\nCaterium in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 1000°C\\r\\r\\n액체 형태의 카테리움으로, 대량 주괴 주조나 기타 부품 제작에 활용됩니다."
+
+msgid "Melting Point: 1084°C\\r\\n\\r\\nCopper in liquid form, useful for bulk casting ingots or other parts, as well as making Brass."
+msgstr "녹는점: 1084°C\\r\\n\\r액체 형태의 구리로, 대량 주괴 주조나 기타 부품 제작, 또는 황동 제작에 활용됩니다."
+
+msgid "Melting Point: 1160°C, Carbon Content: 3.80 %\\r\\n\\r\\nGrey Cast Iron in liquid form, useful for bulk casting ingots or other parts, as well as making steel."
+msgstr "녹는점: 1160°C, 탄소 함량: 3.80%\\r\\n\\r\\n액체 형태의 철로, 대량 주괴 주조나 기타 부품 제작, 또는 강철 제작에 활용됩니다."
+
+msgid "Melting Point: 1380°C, Carbon Content: 0.85 %\\r\\n\\r\\nLiquid Steel. When cooled slowly, tough and ductile Pearlite is formed.\\r\\nWhen cooled quickly, hard and brittle Martensite is formed."
+msgstr "녹는점: 1380°C, 탄소 함량: 0.85%\\r\\n\\r\\n천천히 냉각하면 단단하고 연성인 펄라이트가, 빠르게 냉각하면 단단하고 부서지기 쉬운 마르텐사이트가 형성됩니다."
+
+msgid "Melting Point: 1390°C\\r\\n\\r\\nMagnitar™ is FICSIT's internally developed iron-nickel-cobalt (Fernico) alloy.\\r\\nIt is ferromagnetic and can be processed into permanent magnets or magnetic cores."
+msgstr "녹는점: 1390°C\\r\\n\\r\\n마그네타™는 FICSIT가 자체 개발한 철-니켈-코발트(페르니코) 합금으로 강한 자성을 가져 영구 자석이나 자기 코어로 가공할 수 있습니다."
+
+msgid "Melting Point: 1453°C\\r\\n\\r\\nNickel in liquid form, mainly used to produce magnetic alloys. Requires additional fuels to be molten down in a Flexible Blast Furnace."
+msgstr "녹는점: 1453°C\\r\\n\\r\\n액체 형태의 니켈로, 주로 강자성 합금 생산에 사용됩니다. 제철 용광로에서 녹이려면 추가 연료가 필요합니다."
+
+msgid "Melting Point: 1495°C\\r\\n\\r\\nCobalt in liquid form, useful for bulk casting ingots or other parts. Requires additional fuels to be molten down in a Flexible Blast Furnace."
+msgstr "녹는점: 1495°C\\r\\n\\r액체 형태의 코발트로, 대량 주괴 주조나 기타 부품 제작에 유용합니다. 제철 용광로에서 녹이려면 추가 연료가 필요합니다."
+
+msgid "Melting Point: 220°C\\r\\n\\r\\nSolder in liquid form, either to be used directly or cast into Solder Wire and Solder Rods."
+msgstr "녹는점: 220°C\\r\\n\\n액체 형태의 땜납으로, 직접 사용하거나 전선 또는 봉 형태로 주조할 수 있습니다."
+
+msgid "Melting Point: 232°C\\r\\n\\r\\nTin in liquid form, useful for bulk casting ingots or other parts.\\r\\nMelting it in a Flexible Blast Furance is energy inefficient."
+msgstr "녹는점: 232°C\\r\\n\\r액체 형태의 주석으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다.\\r\\n유연한 제철 용광로로 녹일 수 있지만, 에너지 효율은 떨어집니다."
+
+msgid "Melting Point: 328°C\\r\\n\\r\\nLead in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 328°C\\r\\n\\r액체 형태의 납으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다."
+
+msgid "Melting Point: 419°C\\r\\n\\r\\nZinc in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 419°C\\r\\n\\r액체 형태의 아연으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다."
+
+msgid "Melting Point: 650°C\\r\\n\\r\\nMagnesium in liquid form, useful for bulk casting ingots or other parts.\\r\\nWARNING: Highly combustible!"
+msgstr "녹는점: 650°C\\r\\n\\r액체 형태의 마그네슘으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다.\\r\\n경고: 높은 가연성!"
+
+msgid "Melting Point: 660°C\\r\\n\\r\\nPure Aluminum in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 660°C\\r\\n\\r액체 형태의 알루미늄으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다."
+
+msgid "Melting Point: 930°C\\r\\n\\r\\nBrass in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 930°C\\r\\n\\r액체 형태의 황동으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다."
+
+msgid "Melting Point: 950°C\\r\\n\\r\\nBronze in liquid form, useful for bulk casting ingots or other parts."
+msgstr "녹는점: 950°C\\r\\n\\r액체 형태의 청동으로, 대량 주괴 주조나 기타 부품 제작에 유용합니다."
+
+msgctxt "ST_Klib,Cat_ModularMiner.Cat_ModularMiner_C.mDisplayName"
+msgid "Miner"
+msgstr "채굴기"
+
+msgctxt "ST_Klib,Node_Add.NewItem_09"
+msgid "Missing Egg!"
+msgstr "알 없음!"
+
+msgctxt "StringTable_KLib_Buildings,ModularMiner_N"
+msgid "Modular Miner"
+msgstr "모듈형 채굴기"
+
+msgid "Molecular Hydrogen in Gas Form. Hydrogen is an excellent fuel as well as an important reactant in chemistry. Usually made through steam reforming of Natural Gas.\\r\\nCan be burned in Solution Heaters and rapidly increases heat."
+msgstr "가스 형태의 수소 분자. 수소는 훌륭한 연료이자 화학적으로 중요한 반응원입니다. 보통 천연 가스를 증기 개질하여 제작할 수 있으며, 각종 가열기에서 연소하여 빠르게 열을 생산할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_LiquidAluminum.Desc_LiquidAluminum_C.mDisplayName"
+msgid "Molten Aluminum"
+msgstr "녹은 알루미늄"
+
+msgctxt "ST_Klib,Desc_LiquidBrass.Desc_LiquidBrass_C.mDisplayName"
+msgid "Molten Brass"
+msgstr "녹은 황동"
+
+msgctxt "ST_Klib,Desc_LiquidBronze.Desc_LiquidBronze_C.mDisplayName"
+msgid "Molten Bronze"
+msgstr "녹은 청동"
+
+msgctxt "ST_Klib,Desc_LiquidGold.Desc_LiquidGold_C.mDisplayName"
+msgid "Molten Caterium"
+msgstr "녹은 카테리움"
+
+msgctxt "ST_Klib,Desc_LiquidCobalt.Desc_LiquidCobalt_C.mDisplayName"
+msgid "Molten Cobalt"
+msgstr "녹은 코발트"
+
+msgctxt "ST_Klib,Desc_LiquidCopper.Desc_LiquidCopper_C.mDisplayName"
+msgid "Molten Copper"
+msgstr "녹은 구리"
+
+msgctxt "ST_Klib,Desc_LiquidIron.Desc_LiquidIron_C.mDisplayName"
+msgid "Molten Iron"
+msgstr "녹은 철"
+
+msgctxt "ST_Klib,Desc_LiquidLead.Desc_LiquidLead_C.mDisplayName"
+msgid "Molten Lead"
+msgstr "녹은 납"
+
+msgctxt "ST_Klib,Desc_LiquidMagnesium.Desc_LiquidMagnesium_C.mDisplayName"
+msgid "Molten Magnesium"
+msgstr "녹은 마그네슘"
+
+msgctxt "ST_Klib,Desc_LiquidInvar.Desc_LiquidInvar_C.mDisplayName"
+msgid "Molten Magnitar™"
+msgstr "녹은 마그네타™"
+
+msgctxt "StringTable_Categorys,SimpleMoltenMetals"
+msgid "Molten Metals"
+msgstr "녹은 금속"
+
+msgctxt "ST_Klib,Desc_LiquidSolder.Desc_LiquidSolder_C.mDisplayName"
+msgid "Molten Solder"
+msgstr "녹은 땜납"
+
+msgctxt "ST_Klib,Desc_LiquidSteel.Desc_LiquidSteel_C.mDisplayName"
+msgid "Molten Steel"
+msgstr "녹은 강철"
+
+msgctxt "ST_Klib,Desc_LiquidTin.Desc_LiquidTin_C.mDisplayName"
+msgid "Molten Tin"
+msgstr "녹은 주석"
+
+msgctxt "ST_Klib,Desc_LiquidZinc.Desc_LiquidZinc_C.mDisplayName"
+msgid "Molten Zinc"
+msgstr "녹은 아연"
+
+msgctxt "KLib_Item,MoltenMetals"
+msgid "Molten metal waiting for further processing"
+msgstr "추가 처리를 기다리는 녹은 금속"
+
+msgctxt "ST_Klib,Desc_LiquidHydrochloricAcid.Desc_LiquidHydrochloricAcid_C.mDisplayName"
+msgid "Muriatic Acid"
+msgstr "염산"
+
+msgid "Muriatic Acid, more commonly known as Hydrochloric Acid, is the acidic counterpart of Caustic Soda.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in ore washing processes and in Chlorine production."
+msgstr "염화 수소산으로도 알려진 이 물질은 가성 소다의 산성 대응 물질입니다.\\r\\n두 물질 모두 소금을 이용해 제작할 수 있습니다,\\r\\n\\r\\n주로 광석 세척이나 염소 생산에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_LiquidHydrochloricAcid.Desc_LiquidHydrochloricAcid_C.mAbbreviatedDisplayName"
+msgid "Murio"
+msgstr "Murio"
+
+msgctxt "ST_Klib,Node_Select.None"
+msgid "NOPE"
+msgstr "아니오"
+
+msgctxt "ST_Klib,Desc_KLIB_NaturalGas.Desc_KLIB_NaturalGas_C.mAbbreviatedDisplayName"
+msgid "Nat"
+msgstr "Nat"
+
+msgctxt "ST_Klib,Desc_KLIB_NaturalGas.Desc_KLIB_NaturalGas_C.mDisplayName"
+msgid "Natural Gas"
+msgstr "천연 가스"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkBuildings.SubBuildCat_NetworkBuildings_C.mDisplayName"
+msgid "Network Buildings"
+msgstr "네트워크 건물"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkCore.SubBuildCat_NetworkCore_C.mDisplayName"
+msgid "Network Core"
+msgstr "네트워크 코어"
+
+msgctxt "ST_Klib,Widget_NetworkTerminal.KUI_MainWindow.mTitle"
+msgid "Network Terminal"
+msgstr "네트워크 터미널"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkWire.SubBuildCat_NetworkWire_C.mDisplayName"
+msgid "Network Wireing"
+msgstr "네트워크 와이어링"
+
+msgid "Neutrium is composed entirely of neutrons and decays back down to protons and electrons in a short time. Since it is electrically neutral, it cannot be directly affected by magnetic fields.\\r\\n\\r\\nUsed in the production of other exotic forms of matter."
+msgstr "뉴트로늄은 순수한 중성자로만 구성되어 있으며 짧은 시간만에 양성자와 전자로 붕괴됩니다. 전기적으로 중성이므로 자기장의 직접적인 영향을 받지 않습니다.\\r\\n\\r\\n다른 이국적인 형태의 물질을 만드는 데 사용됩니다."
+
+msgctxt "ST_Klib,Disq_ModularMiner.Disq_ModularMiner_C.mDisqfualifyingText"
+msgid "No knowledge about these ore... need more research first!"
+msgstr "이 광석에 대한 정보가 부족합니다... 더 많은 연구가 필요합니다!"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock_255.Text"
+msgid "Node quallity survey"
+msgstr "노드 품질 조사"
+
+msgctxt "ST_Klib,Node_Add.NewItem_08"
+msgid "Not enough fluid!"
+msgstr "유체가 충분하지 않습니다!"
+
+msgctxt "KLib_Item,SlugDesc_Show"
+msgid "Note: they use the same temperature and humidity as the eggs."
+msgstr "참고: 알과 동일한 온도와 습도를 사용합니다."
+
+msgctxt "ST_Klib,Desc_BrassPipe.Desc_BrassPipe_C.mDescription"
+msgid "One of the most basic parts from Brass."
+msgstr "황동으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_BronzePipe.Desc_BronzePipe_C.mDescription"
+msgid "One of the most basic parts from Bronze."
+msgstr "청동으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mDescription"
+msgid "One of the most basic parts from Caterium."
+msgstr "카테리움으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_ChromPlates.Desc_ChromPlates_C.mDescription"
+msgid "One of the most basic parts from Chrom."
+msgstr "크롬으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_CobaltPlates.Desc_CobaltPlates_C.mDescription"
+msgid "One of the most basic parts from Cobalt."
+msgstr "코발트로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_CopperRod.Desc_CopperRod_C.mDescription"
+msgid "One of the most basic parts from Copper."
+msgstr "구리로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_IronSheet.Desc_IronSheet_C.mDescription"
+msgid "One of the most basic parts from Iron."
+msgstr "철로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_LeadPlates.Desc_LeadPlates_C.mDescription"
+msgid "One of the most basic parts from Lead."
+msgstr "납으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_SolderRod.Desc_SolderRod_C.mDescription"
+msgid "One of the most basic parts from Solder."
+msgstr "땜납으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_SteelRod.Desc_SteelRod_C.mDescription"
+msgid "One of the most basic parts from Steel."
+msgstr "강철로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_TinRod.Desc_TinRod_C.mDescription"
+msgid "One of the most basic parts from Tin."
+msgstr "주석으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,Desc_ZincPlates.Desc_ZincPlates_C.mDescription"
+msgid "One of the most basic parts from Zinc."
+msgstr "아연으로 만든 가장 기본적인 부품 중 하나입니다."
+
+msgctxt "ST_Klib,SlugDesc_Orange.SlugDesc_Orange_C.mDisplayName"
+msgid "Orange Slug"
+msgstr "주황색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Orange.EggDesc_Orange_C.mDisplayName"
+msgid "Orange Slug Egg"
+msgstr "주황색 슬러그 알"
+
+msgctxt "StringTable_Categorys,OreProcessing"
+msgid "Ore Processing"
+msgstr "광석 처리"
+
+msgctxt "ST_Klib,Res_GasOxygen.Res_GasOxygen_C.mDisplayName"
+msgid "Oxygen"
+msgstr "산소"
+
+msgctxt "ST_Klib,Desc_PackagedGasOxygen.Desc_PackagedGasOxygen_C.mDescription"
+msgid "Oxygen, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 산소."
+
+msgctxt "ST_Klib,Desc_Gas_Oxyhydrogen.Desc_Gas_Oxyhydrogen_C.mDisplayName"
+msgid "Oxyhydrogen"
+msgstr "산수소"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Oxyhydrogen.Desc_PackagedGas_Oxyhydrogen_C.mDescription"
+msgid "Oxyhydrogen, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 산산소."
+
+msgctxt "ST_Klib,Desc_PowerRelay.Desc_PowerRelay_C.mAbbreviatedDisplayName"
+msgid "PMR"
+msgstr "PMR"
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mAbbreviatedDisplayName"
+msgid "PPC"
+msgstr "PPC"
+
+msgctxt "ST_Klib,Desc_PowerShardCrystal.Desc_PowerShardCrystal_C.mAbbreviatedDisplayName"
+msgid "PSF"
+msgstr "PSF"
+
+msgctxt "ST_Klib,Desc_PackagedAir.Desc_PackagedAir_C.mDisplayName"
+msgid "Packaged Air"
+msgstr "포장된 공기"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidBioWater.Desc_PackagedLiquidBioWater_C.mDisplayName"
+msgid "Packaged Algal Mass"
+msgstr "포장된 조류 덩어리"
+
+msgctxt "ST_Klib,Desc_PackagedDieselOil.Desc_PackagedDieselOil_C.mDisplayName"
+msgid "Packaged Diesel Fuel"
+msgstr "포장된 디젤 연료"
+
+msgctxt "ST_Klib,Desc_PackagedSlugSlime_High.Desc_PackagedSlugSlime_High_C.mDisplayName"
+msgid "Packaged Energized Slug Slime"
+msgstr "포장된 활성 슬러그 점액"
+
+msgctxt "ST_Klib,Desc_PackagedGas_CarbonDioxide.Desc_PackagedGas_CarbonDioxide_C.mDisplayName"
+msgid "Packaged Flue Gas"
+msgstr "포장된 배기 가스"
+
+msgctxt "ST_Klib,Desc_PackagedNaturalGas.Desc_PackagedNaturalGas_C.mDisplayName"
+msgid "Packaged Natural Gas"
+msgstr "포장된 천연 가스"
+
+msgctxt "ST_Klib,Desc_PackagedGasOxygen.Desc_PackagedGasOxygen_C.mDisplayName"
+msgid "Packaged Oxygen"
+msgstr "포장된 산소"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Oxyhydrogen.Desc_PackagedGas_Oxyhydrogen_C.mDisplayName"
+msgid "Packaged Oxyhydrogen"
+msgstr "포장된 산수소"
+
+msgctxt "ST_Klib,Desc_Packaged_Paraffin.Desc_Packaged_Paraffin_C.mDisplayName"
+msgid "Packaged Paraffin"
+msgstr "포장된 파라핀"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidRawSludge.Desc_PackagedLiquidRawSludge_C.mDisplayName"
+msgid "Packaged Raw Sludge"
+msgstr "포장된 미가공 침전물"
+
+msgctxt "ST_Klib,Desc_PackagedSlugSlime_Low.Desc_PackagedSlugSlime_Low_C.mDisplayName"
+msgid "Packaged Slug Slime"
+msgstr "포장된 슬러그 점액"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam_Hot.Desc_PackagedGas_Steam_Hot_C.mDisplayName"
+msgid "Packaged Steam"
+msgstr "포장된 증기"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Titantetrachlorid.Desc_PackagedGas_Titantetrachlorid_C.mDisplayName"
+msgid "Packaged TiCl Gas"
+msgstr "포장된 염화티타늄 가스"
+
+msgctxt "ST_Klib,Desc_PackagedToxicAir.Desc_PackagedToxicAir_C.mDisplayName"
+msgid "Packaged Toxic Air"
+msgstr "포장된 유독한 공기"
+
+msgctxt "KLib_Item,PackagedItemsDesc"
+msgid "Packaged fluid or gas for alternative transport."
+msgstr "대체 수송을 위해 포장된 유체 또는 가스."
+
+msgctxt "ST_Klib,Cat_Packaging_Acid.Cat_Packaging_Acid_C.mDisplayName"
+msgid "Packaging - Acid"
+msgstr "포장 - 산"
+
+msgctxt "ST_Klib,Cat_Packaging_Oil.Cat_Packaging_Oil_C.mDisplayName"
+msgid "Packaging - Barrel"
+msgstr "포장 - 배럴"
+
+msgctxt "ST_Klib,Cat_Packaging_Bottle.Cat_Packaging_Bottle_C.mDisplayName"
+msgid "Packaging - Bottle"
+msgstr "포장 - 병"
+
+msgctxt "ST_Klib,Cat_Packaging_Canister.Cat_Packaging_Canister_C.mDisplayName"
+msgid "Packaging - Canister"
+msgstr "포장 - 용기"
+
+msgctxt "ST_Klib,Cat_Packaging_Cold.Cat_Packaging_Cold_C.mDisplayName"
+msgid "Packaging - Cold / Energetic"
+msgstr "포장 - 저온 / 에너지"
+
+msgctxt "ST_Klib,Cat_Packaging_Gas.Cat_Packaging_Gas_C.mDisplayName"
+msgid "Packaging - Gas"
+msgstr "포장 - 가스"
+
+msgctxt "ST_Klib,Cat_Packaging_Hot.Cat_Packaging_Hot_C.mDisplayName"
+msgid "Packaging - Hot"
+msgstr "포장 - 고온"
+
+msgctxt "ST_Klib,Desc_PackedSoda.Desc_PackedSoda_C.mDisplayName"
+msgid "Packed Soda"
+msgstr "포장된 소다"
+
+msgctxt "ST_Klib,Desc_Paint.Desc_Paint_C.mDisplayName"
+msgid "Paint"
+msgstr "페인트"
+
+msgctxt "ST_Klib,Desc_Paint.Desc_Paint_C.mDescription"
+msgid "Paint for the Color Gun."
+msgstr "색상 총을 위한 페인트입니다."
+
+msgctxt "ST_Klib,Desc_Paraffin.Desc_Paraffin_C.mDisplayName"
+msgid "Paraffin"
+msgstr "파라핀"
+
+msgctxt "ST_Klib,Desc_Naphtha.Desc_Naphtha_C.mDisplayName"
+msgid "Petroleum Benzine"
+msgstr "석유 벤젠"
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mDisplayName"
+msgid "Photon Pair Converter"
+msgstr "광자 쌍 변환기"
+
+msgctxt "ST_Klib,Desc_TimeC_QuantumProcessor.Desc_TimeC_QuantumProcessor_C.mDisplayName"
+msgid "Photonic Processor"
+msgstr "광자 처리기"
+
+msgctxt "ST_Klib,Desc_TimeC_QuantumProcessor.Desc_TimeC_QuantumProcessor_C.mDescription"
+msgid "Photonic Processors use light instead of electronic signals to do calculations. Used for high-bandwidth data processing, such as hologram transformations."
+msgstr "광자 프로세서는 전자 신호 대신 빛을 이용하여 계산을 수행합니다. 홀로그램 변환과 같은 고주파수 데이터 처리에 유용하게 사용됩니다."
+
+msgctxt "ST_Klib,SlugDesc_Pink.SlugDesc_Pink_C.mDisplayName"
+msgid "Pink Slug"
+msgstr "분홍색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Pink.EggDesc_Pink_C.mDisplayName"
+msgid "Pink Slug Egg"
+msgstr "분홍색 슬러그 알"
+
+msgctxt "StringTable_KLib_Buildings,Build_PipeHole2_N"
+msgid "Pipeline Wall Hole"
+msgstr "파이프라인 벽 구멍"
+
+msgctxt "ST_Klib,Desc_PlutoniumFuel.Desc_PlutoniumFuel_C.mDisplayName"
+msgid "Plutonium Fuel"
+msgstr "플루토늄 연료"
+
+msgctxt "ST_Klib,Desc_TimeC_Case.Desc_TimeC_Case_C.mAbbreviatedDisplayName"
+msgid "Pol."
+msgstr "Pol."
+
+msgctxt "ST_Klib,Desc_TimeC_Case.Desc_TimeC_Case_C.mDisplayName"
+msgid "Polarization Frame"
+msgstr "편광 프레임"
+
+msgctxt "ST_Klib,Desc_TimeC_StabilizedTimeCrystal.Desc_TimeC_StabilizedTimeCrystal_C.mDisplayName"
+msgid "Poled Kerr Crystal"
+msgstr "극성 케르 수정"
+
+msgctxt "StringTable_Categorys,PouringMetal"
+msgid "Pouring Metal"
+msgstr "금속 붓기"
+
+msgctxt "ST_Klib,Desc_PowerRelay.Desc_PowerRelay_C.mDisplayName"
+msgid "Power Management Relay"
+msgstr "전원 관리 계전기"
+
+msgctxt "ST_Klib,Desc_PowerShardCrystal.Desc_PowerShardCrystal_C.mDisplayName"
+msgid "Power Shard Fragment"
+msgstr "동력 조각 파편"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_27"
+msgid "Power: {cur}/{max} MW"
+msgstr "전력: {cur}/{max} MW"
+
+msgid "Processes fluids by reducing them to solid components or treating them with a selected filter.\\r\\nEvery slot has its own production time.\\r\\n\\r\\nHead Lift: 10 meters. (Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nHas a single belt output which outputs the solid products in a set order.\\r\\n\\r\\nThis fixed output order can be sorted with splitter trees or a smart sorting system."
+msgstr "유체를 고체 부품으로 환원하거나 선택한 필터를 이용해 처리 및 가공합니다.\\r\\n슬롯마다 고유한 생산 시간이 있습니다..\\r\\n\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n고체 생산품을 정해진 순서로 출력하는 단일 벨트 출력이 있습니다.\\r\\n\\r\\n이 고정된 출력 순서는 여러 대의 분배기나 또는 스마트 분류 시스템을 이용하여 보정, 분류할 수 있습니다."
+
+msgid "Processor unit to increase the speed for store items form the FaxIT Receiver.\\r\\n\\r\\nPLACEHOLDER DESIGN WILL REPLACE SOON:TM!"
+msgstr "FaxIT 수신기의 아이템 보관 속도를 높여주는 처리 유닛.\\r\\n\\r\\n플레이스홀더 디자인이 곧 교체될 예정입니다:TM!"
+
+msgid "Processor unit to increase the speed for store items form the FaxIT Sender.\\r\\n\\r\\nPLACEHOLDER DESIGN WILL REPLACE SOON:TM!"
+msgstr "FaxIT 전송기의 아이템 보관 속도를 높여주는 처리 유닛.\\r\\n\\r\\n플레이스홀더 디자인이 곧 교체될 예정입니다:TM!"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_26"
+msgid "Prod. Time: {time} sec"
+msgstr "생산 시간: {time} 초"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_28"
+msgid "Productivity: {perc}%"
+msgstr "생산성: {perc}%"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_5.Desc_SnailFood_Tier_5_C.mDisplayName"
+msgid "Protein Meal"
+msgstr "단백질 식단"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDisplayName"
+msgid "Pure Rutile"
+msgstr "순수한 금홍석"
+
+msgid "Purifies loose materials through industrial washing with a fluid. Outputs unwanted byproducts (like gangue) as a liquid slurry.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports."
+msgstr "유체를 이용한 산업용 유체 세척 공정을 통해 이물질을 정화합니다. 원치 않는 부산물(맥석 등)은 액체 혼합물 형태로 배출됩니다.\\r\\n\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)\\r\\n\\r\\n컨베이어 벨트와 파이프라인의 입력부 및 출력부가 있습니다."
+
+msgctxt "ST_Klib,SlugDesc_Purple.SlugDesc_Purple_C.mDisplayName"
+msgid "Purple Slug"
+msgstr "자주색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_EggPurple.EggDesc_EggPurple_C.mDisplayName"
+msgid "Purple Slug Egg"
+msgstr "자주색 슬러그 알"
+
+msgctxt "ST_Klib,Desc_TimeC_Adapter.Desc_TimeC_Adapter_C.mDisplayName"
+msgid "Quantum Cable Adapter"
+msgstr "양자 케이블 어댑터"
+
+msgctxt "ST_Klib,Desc_EnrichedUranium.Desc_EnrichedUranium_C.mDescription"
+msgid "Radioactive!"
+msgstr "방사성!"
+
+msgctxt "ST_Klib,Desc_LiquidRawSludge.Desc_LiquidRawSludge_C.mDisplayName"
+msgid "Raw Sludge"
+msgstr "미가공 침전물"
+
+msgid "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "홀로그램 템플릿을 사용하여 광자로부터 유체의 정확한 사본을 재구성합니다.\\r\\n홀로그램 데이터와 광자 스트림은 저장 연결체로부터 가져옵니다.\\r\\n\\r\\n데이터 처리량은 무선 모드에서 제한되며, 데이터 케이블을 이용하여 저장망에 연결하면 처리량을 100% 증가시킬 수 있습니다.\\r\\n\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)"
+
+msgid "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "홀로그램 템플릿을 사용하여 광자로부터 개체의 정확한 사본을 재구성합니다.\\r\\n홀로그램 데이터와 광자 스트림은 저장 연결체로부터 가져옵니다.\\r\\n\\r\\n데이터 처리량은 무선 모드에서 제한되며, 데이터 케이블을 이용하여 저장망에 연결하면 처리량을 100% 증가시킬 수 있습니다."
+
+msgctxt "ST_Klib,SlugDesc_Red.SlugDesc_Red_C.mDisplayName"
+msgid "Red Slug"
+msgstr "빨간색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Red.EggDesc_Red_C.mDisplayName"
+msgid "Red Slug Egg"
+msgstr "빨간색 슬러그 알"
+
+msgctxt "StringTable_KLib_Buildings,Build_SoldifierAndCooler_N"
+msgid "Reformer"
+msgstr "리포머"
+
+msgctxt "ST_Klib,Cat_Universal_Paint.Cat_Universal_Paint_C.mDisplayName"
+msgid "Repainting"
+msgstr "재도색"
+
+msgctxt "ST_Klib,Desc_Fluid_RocketFuel.Desc_Fluid_RocketFuel_C.mDisplayName"
+msgid "Rocket Fuel"
+msgstr "로켓 연료"
+
+msgctxt "ST_Klib,Desc_Fluid_RocketFuel.Desc_Fluid_RocketFuel_C.mDescription"
+msgid "Rocket propellant is the reaction mass of a rocket. This reaction mass is ejected at the highest achievable velocity from a rocket engine to produce thrust."
+msgstr "로켓 추진제는 로켓의 반응 질량입니다. 이 반응 질량은 로켓 엔진에서 달성 가능한 최고 속도로 분출되어 추진력을 생성합니다."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mDisplayName"
+msgid "Rubberized Belt Drive"
+msgstr "고무 벨트 드라이브"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mAbbreviatedDisplayName"
+msgid "Rutil"
+msgstr "금홍석"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mid.Desc_SlugSlime_Mid_C.mAbbreviatedDisplayName"
+msgid "SSlime"
+msgstr "SSlime"
+
+msgctxt "ST_Klib,Desc_Salt.Desc_Salt_C.mDisplayName"
+msgid "Salt"
+msgstr "소금"
+
+msgctxt "ST_Klib,Desc_Sand.Desc_Sand_C.mDisplayName"
+msgid "Sand"
+msgstr "모래"
+
+msgid "Sand is almost purely made of fine quartz.\\r\\nCan be smelted down to Glass or Silica."
+msgstr "모래는 순수한 형태의 미세한 석영으로 이루어져 있으며, 유리나 실리카로 제련할 수 있습니다."
+
+msgctxt "ST_Klib,SSC_SFP.SSC_SFP_C.mDisplayName"
+msgid "Satisfactory Plus"
+msgstr "Satisfactory Plus"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.TextBlock_1.Text"
+msgid "Save"
+msgstr "저장"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock_1.Text"
+msgid "Section not in use"
+msgstr "섹션 미사용 중"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.TextBlock_3.Text"
+msgid "Set Value"
+msgstr "값 설정"
+
+msgid "Ship with the Space Elevator to complete Phases of Project Assembly.\\r\\n\\r\\nPower Management Relays are responsible for powering Project Assembly and managing its vast demand of energy. They are a core part of its power network."
+msgstr "프로젝트 어셈블리 단계를 완료하려면 우주 엘리베이터와 함께 배송하세요.\\r\\n\\r\\n전원 관리 릴레이는 프로젝트 어셈블리에 전력을 공급하고 방대한 에너지 수요를 관리하는 역할을 담당하는, 전력망의 핵심 부분입니다."
+
+msgctxt "StringTable_Categorys,SimpleSorting"
+msgid "Simple Sorting"
+msgstr "간단한 분류"
+
+msgctxt "ST_Klib,Desc_ColdSlag.Desc_ColdSlag_C.mDescription"
+msgid "Slag for processing to Cement"
+msgstr "시멘트 제조를 위한 슬래그"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Low.Desc_SlugSlime_Low_C.mAbbreviatedDisplayName"
+msgid "Slime"
+msgstr "점액"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Low.Desc_SlugSlime_Low_C.mDescription"
+msgid "Slime from Slugs in low concentration. Can be crystallized in the Filtrator to form Power Shard Crystals."
+msgstr "저농도 슬러그에서 나온 점액. 여과기에서 결정화하여 동력 조각 수정을 제작할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mid.Desc_SlugSlime_Mid_C.mDescription"
+msgid "Slime from Slugs, completely de-energized. Can be recharged with thermal energy in a Boiler or with high energy beams."
+msgstr "슬러그에서 나온 점액, 완전히 비활성화된 상태입니다. 보일러의 열 에너지나 고에너지 광선을 이용해 충전할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_EggDNA_Blue.Desc_EggDNA_Blue_C.mDisplayName"
+msgid "Slug DNA - Blue"
+msgstr "슬러그 DNA - 파란색"
+
+msgctxt "ST_Klib,Desc_EggDNA_Purple.Desc_EggDNA_Purple_C.mDisplayName"
+msgid "Slug DNA - Purple"
+msgstr "슬러그 DNA - 자주색"
+
+msgctxt "ST_Klib,Desc_EggDNA_Yellow.Desc_EggDNA_Yellow_C.mDisplayName"
+msgid "Slug DNA - Yellow"
+msgstr "슬러그 DNA - 노란색"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName_9.Text"
+msgid "Slug Food"
+msgstr "슬러그 먹이"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Name"
+msgid "Slug Hatchery"
+msgstr "슬러그 부화"
+
+msgctxt "ST_Klib,Cat_Slug.Cat_Slug_C.mDisplayName"
+msgid "Slug Slime"
+msgstr "슬러그 점액"
+
+msgctxt "StringTable_KLib_Buildings,Build_Terrarium_Name"
+msgid "Slug Terrarium"
+msgstr "슬러그 테라리움"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mSmelterModule.mFunction"
+msgid "Smelter"
+msgstr "제련기"
+
+msgctxt "StringTable_KLib_Buildings,Build_SmelterModule_N"
+msgid "Smelter Module"
+msgstr "제련 모듈"
+
+msgctxt "StringTable_Categorys,Smelting"
+msgid "Smelting"
+msgstr "제련"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mDisplayName"
+msgid "Smooth Belt Drive"
+msgstr "부드러운 벨트 드라이브"
+
+msgctxt "ST_Klib,Desc_PhotovoltaicCell.Desc_PhotovoltaicCell_C.mDisplayName"
+msgid "Solar Cell"
+msgstr "태양 전지"
+
+msgctxt "ST_Klib,Desc_SolderWire.Desc_SolderWire_C.mAbbreviatedDisplayName"
+msgid "Sold"
+msgstr "Sold"
+
+msgctxt "ST_Klib,Desc_SolderRod.Desc_SolderRod_C.mDisplayName"
+msgid "Solder Rod"
+msgstr "떔납 봉"
+
+msgctxt "ST_Klib,Desc_SolderWire.Desc_SolderWire_C.mDisplayName"
+msgid "Solder Wire"
+msgstr "떔납 전선"
+
+msgid "Sometimes called Kerosene or White Oil, a middle distillate of Crude Oil.\\r\\n It is also an important intermediate for reforming and cracking."
+msgstr "원유의 중간 생산품인 이 물질은, 등유나 백유라고도 불리며, 개질이나 열분해에 사용되는 중요한 물질이기도 합니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_SorterMk1_N"
+msgid "Sorter"
+msgstr "분류기"
+
+msgctxt "ST_Klib,Desc_Sulfurtrixid.Desc_Sulfurtrixid_C.mAbbreviatedDisplayName"
+msgid "Sour"
+msgstr "사워"
+
+msgctxt "ST_Klib,Desc_Sulfurtrixid.Desc_Sulfurtrixid_C.mDisplayName"
+msgid "Sour Gas"
+msgstr "사워 가스"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mid.Desc_SlugSlime_Mid_C.mDisplayName"
+msgid "Spent Slug Slime"
+msgstr "사용된 슬러그 점액"
+
+msgctxt "ST_Klib,KL_Buildmode_Sphere.KL_Buildmode_Sphere_C.mDisplayName"
+msgid "Sphere"
+msgstr "구형"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk1_N"
+msgid "Standard Mining Head"
+msgstr "표준형 드릴날"
+
+msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mDisplayName"
+msgid "Steam"
+msgstr "증기"
+
+msgctxt "ST_Klib,Desc_Gas_Steam.Desc_Gas_Steam_C.mDescription"
+msgid "Steam uses very versatile"
+msgstr "증기는 매우 다재다능한 장소에 사용됩니다"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam.Desc_PackagedGas_Steam_C.mDescription"
+msgid "Steam, packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 증기."
+
+msgctxt "ST_Klib,Desc_SteelBolt.Desc_SteelBolt_C.mDisplayName"
+msgid "Steel Bolt"
+msgstr "강철 볼트"
+
+msgctxt "ST_Klib,Desc_SteelRod.Desc_SteelRod_C.mDisplayName"
+msgid "Steel Rod"
+msgstr "강철 봉"
+
+msgctxt "ST_Klib,BuildCat_CS_Network.BuildCat_CS_Network_C.mDisplayName"
+msgid "Storage Network"
+msgstr "저장소 네트워크"
+
+msgctxt "StringTable_KLib_Buildings,Build_CS_Core_N"
+msgid "Storage Network Storage Processor"
+msgstr "저장소 네트워크 저장고 프로세서"
+
+msgctxt "StringTable_KLib_Buildings,Build_CS_Cable_N"
+msgid "Storage Network Wire"
+msgstr "저장소 네트워크 전선"
+
+msgctxt "ST_Klib,Desc_SulfurPowder.Desc_SulfurPowder_C.mDisplayName"
+msgid "Sulfur Powder"
+msgstr "황 분말"
+
+msgid "Support for Hypertubes. Can be stacked on other stackable supports.\\r\\n\\r\\nWARNING: this is a experimental building and can have snap bugs in some cases!"
+msgstr "하이퍼튜브 지지대. 다른 중첩 가능 지지대 위에 지을 수 있습니다.\\r\\n\\r\\n경고: 실험적인 건물로 상황에 따른 스냅 버그가 있을 수 있습니다!"
+
+msgid "Support for Pipelines. Can be stacked on other stackable supports.\\r\\n\\r\\nWARNING: this is a experimental building and can have snap bugs in some cases!"
+msgstr "파이프라인 지지대. 다른 중첩 가능 지지대 위에 지을 수 있습니다.\\r\\n\\r\\n경고: 실험적인 건물로 상황에 따른 스냅 버그가 있을 수 있습니다!"
+
+msgid "Support for conveyor belts. Can be stacked on other stackable supports.\\r\\n\\r\\nWARNING: this is a experimental building and can have snap bugs in some cases!"
+msgstr "컨베이어 벨트 지지대. 다른 중첩 가능 지지대 위에 지을 수 있습니다.\\r\\n\\r\\n경고: 실험적인 건물로 상황에 따른 스냅 버그가 있을 수 있습니다!"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_3.Desc_SnailFood_Tier_3_C.mDisplayName"
+msgid "Sweet Meal"
+msgstr "달콤한 식사"
+
+msgctxt "ST_Klib,Desc_SyntheticOil.Desc_SyntheticOil_C.mDisplayName"
+msgid "Synthetic Oil"
+msgstr "합성유"
+
+msgctxt "ST_Klib,Desc_SyntheticOil.Desc_SyntheticOil_C.mDescription"
+msgid "Synthetic Oil, packaged for alternative transport."
+msgstr "대체 운송을 위해 포장된 합성유."
+
+msgctxt "ST_Klib,Desc_TitanModularFrame.Desc_TitanModularFrame_C.mDisplayName"
+msgid "TITAN Frame"
+msgstr "TITAN 프레임"
+
+msgctxt "ST_Klib,Desc_LiquidSlag.Desc_LiquidSlag_C.mDisplayName"
+msgid "Tailings Slurry"
+msgstr "자갈 혼합물"
+
+msgid "Tailings are by-products from ore processing which are not desired in the finished product.\\r\\nThis includes rocks, silicates and other metal oxides."
+msgstr "광석 가공 중 발생하는 원하지 않는 부산물.\\r\\n암석, 규산염 및 기타 금속 산화물 등이 여기에 포함됩니다."
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName.Text"
+msgid "Temp:"
+msgstr "온도: "
+
+msgctxt "ST_Klib,Node_Select.Option_1_04"
+msgid "Temperature"
+msgstr "온도"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Temperature_Module_Name"
+msgid "Temperature Module"
+msgstr "온도 모듈"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.ItemName_3.Text"
+msgid "Temperature:"
+msgstr "온도: "
+
+msgctxt "ST_Klib,Node_Format_Text.Format_33"
+msgid "Temperature: {TEMP}°C"
+msgstr "온도: {TEMP}°C"
+
+msgid "Temperature\\r\\n{value}°C"
+msgstr "온도\\r\\n{value}°C"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Desc"
+msgid "The Slug Hatchery provides a controlled environment to make slug eggs hatch into adult slugs.  Testing is required to find the best conditions for hatching!  Adult slugs require a separate habitat."
+msgstr "슬러그 부화장은 슬러그 알이 성충으로 부화할 수 있도록 통제된 환경을 제공합니다. 부화를 위한 최적의 조건을 찾으려면 여러 번 실험해볼 필요가 있습니다! 성체 슬러그는 별도의 서식지가 필요합니다."
+
+msgid "The Storage Network Nexus is the heath of the network he manage all items and transfers.\\r\\n\\r\\nWIP Description"
+msgstr "저장소 네트워크 연결체는 모든 아이템과 전송을 관리하는 네트워크의 핵심입니다.\\r\\n\\r\\n설명 추가 예정"
+
+msgid "The Weaver can transform simple materials into something beautiful!\\r\\n\\r\\nATTENTION: Keep your fingers out of the way, otherwise you'll turn into Swiss cheese! "
+msgstr "위버는 단순한 재료를 아름다운 것으로 변신시킬 수 있도록 돕습니다!\\r\\n\\r\\n주의: 항상 손을 조심하세요. 스위스 치즈가 되어버릴 수 있습니다!"
+
+msgid "The most concentrated form of Slug Slime.\\r\\nThe energy from it can be used in varying ways, be it in the form of heat or electromagnetic radiation.\\r\\n\\r\\nCharging Power Shard Fragments with this energy leads to the creation of Power Shards.\\r\\nCan be used to power Steam Turbines."
+msgstr "슬러그 점액의 가장 농축된 형태입니다.\\r\\n발산되는 에너지를 열이나 전자기 복사와 같은 다양한 방식으로 사용할 수 있습니다.\\r\\n\\n이 에너지로 동력 조각 파편을 충전하면 동력 조각이 생성됩니다.\\r\\n증기 터빈에 동력을 공급하는 데 사용할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_TitanPipe.Desc_TitanPipe_C.mDescription"
+msgid "The most robust pipes known to mankind. Used in superconducting magnets and nuclear fuel production."
+msgstr "인류에게 알려져있는 가장 견고한 파이프. 초전도 자석이나 핵연료 생산에 사용됩니다."
+
+msgid "The slugs can reproduce happily in the terrarium. We need the eggs!\\r\\n\\r\\nNote: The Slugs need the same settings (Except the Time) as the egg type of them. you can adjust the temperature and the humidity in the terrarium. "
+msgstr "테라리움을 이용하면 슬러그를 행복하게 번식시킬 수 있습니다. 알만 더 있으면 됩니다!\\r\\n\\r\\n참고: 슬러그 부화에는 대응하는 알과 동일한 설정(시간 제외)이 필요합니다. 테라리움의 온도와 습도를 조절할 수 있습니다."
+
+msgid "This building is responsible for the transfer of resources in the network. The maximum rate depends on the Nexus each fax machine can have.\\r\\n\\r\\nIf Fluid: Head Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "이 건물은 네트워크의 리소스 전송을 담당합니다. 최대 속도는 각 Fax 기계에서 사용할 수 있는 연결체에 따라 달라집니다.\\r\\n\\r\\n헤드리프트: 10미터.\\r\\n(유체를 위로 10미터까지 운송할 수 있게 해줍니다.)"
+
+msgid "This module is used to regulate the temperature in the Hatchery. \\r\\n\\r\\nNote: This module can be built more than once on a Hatchery. The values are added!"
+msgstr "이 모듈은 부화장의 온도를 조절하는 데 사용됩니다.\\r\\n\\r\\n참고: 이 모듈은 부화장에 여러 개 배치할 수 있으며, 배치할수록 값이 추가됩니다!"
+
+msgid "This module regulates the humidity... Yes, some slugs like it dry on these planets! \\r\\n\\r\\nNote: This module can be built more than once on a Hatchery. The values are added!"
+msgstr "이 모듈은 습도를 조절합니다... 네, 어떤 슬러그는 건조한 것을 좋아합니다!\\r\\n\\r\\n참고: 이 모듈은 부화장에 여러 개 배치할 수 있으며, 배치할수록 값이 추가됩니다!"
+
+msgctxt "ST_Klib,Desc_Gas_Titantetrachlorid.Desc_Gas_Titantetrachlorid_C.mAbbreviatedDisplayName"
+msgid "TiCl"
+msgstr "TiCl"
+
+msgctxt "ST_Klib,Desc_Gas_Titantetrachlorid.Desc_Gas_Titantetrachlorid_C.mDisplayName"
+msgid "TiCl Gas"
+msgstr "염화티타늄 가스"
+
+msgctxt "ST_Klib,Desc_TiHy.Desc_TiHy_C.mDisplayName"
+msgid "TiHy Solution"
+msgstr "수소화티타늄 용액"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[5]"
+msgid "Time"
+msgstr "시간"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Night_Module_Name"
+msgid "Time Module"
+msgstr "시간 모듈"
+
+msgctxt "ST_Klib,USC_SFP_Time.USC_SFP_Time_C.mDisplayName"
+msgid "Time System"
+msgstr "시간 시스템"
+
+msgid "Time to Hatch: {HatchingTime} seconds\\r\\nTemperature: {MinHeat}-{MaxHeat}°C\\r\\nHumidity: {MinHumidity}-{MaxHumidity}%\\r\\nDay Time: {SlugTime}\\r\\nNeed Fluid: {IsFluidConsume}\\r\\nIncubator Tier: {IncubatorTier}\\r\\n\\r\\nNote: can't sink!"
+msgstr ""
+"부화 시간: {HatchingTime} seconds\\r\\n온도: {MinHeat}-{MaxHeat}°C\\r\\n습도: {MinHumidity}-{MaxHumidity}%\\r\\n낮 시간: {SlugTime}\\r\\n유체 필요: {IsFluidConsume}\\r\\n인큐베이터 티어 필요: {IncubatorTier}\\r\\n\\r\\n참고: 싱크 불가!\n"
+""
+
+msgctxt "ST_Klib,Desc_TinPlates.Desc_TinPlates_C.mAbbreviatedDisplayName"
+msgid "Tin"
+msgstr "주석"
+
+msgctxt "ST_Klib,Desc_TinIngot.Desc_TinIngot_C.mDisplayName"
+msgid "Tin Ingot"
+msgstr "주석 주괴"
+
+msgctxt "ST_Klib,Desc_TinPlates.Desc_TinPlates_C.mDisplayName"
+msgid "Tin Plate"
+msgstr "주석 판"
+
+msgctxt "ST_Klib,Desc_TinRod.Desc_TinRod_C.mDisplayName"
+msgid "Tin Rod"
+msgstr "주석 봉"
+
+msgctxt "ST_Klib,Desc_TinSheet.Desc_TinSheet_C.mDisplayName"
+msgid "Tinned Sheet"
+msgstr "주석 박판"
+
+msgctxt "ST_Klib,Desc_TinnedWire.Desc_TinnedWire_C.mDisplayName"
+msgid "Tinned Wire"
+msgstr "주석 전선"
+
+msgctxt "ST_Klib,Desc_TitanPlates.Desc_TitanPlates_C.mAbbreviatedDisplayName"
+msgid "Titan"
+msgstr "Titan"
+
+msgid "Titanium Hydride, refered to as 'TiHy' or 'TeeHee' by FICSIT personnel, dissolved in Hydrochloric Acid.\\r\\nUsed to produce Titanium parts or to store and transport Hydrogen."
+msgstr "'티히'라는 약자로 불리기도 하는 염산에 용해된 티타늄 하이드레이드.\\r\\n티타늄 부품 제작이나 수소 저장, 운송에 사용됩니다."
+
+msgctxt "ST_Klib,Desc_TitanPipe.Desc_TitanPipe_C.mDisplayName"
+msgid "Titanium Pipe"
+msgstr "티타늄 파이프"
+
+msgctxt "ST_Klib,Desc_TitanPlates.Desc_TitanPlates_C.mDisplayName"
+msgid "Titanium Plates"
+msgstr "티타늄 판"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Titantetrachlorid.Desc_PackagedGas_Titantetrachlorid_C.mDescription"
+msgid "Titantetrachlorid, packaged for alternative transport."
+msgstr "대체 수송을 위해 포장된 티타늄테트라클로라이드."
+
+msgctxt "ST_Klib,Desc_ToxicAir.Desc_ToxicAir_C.mAbbreviatedDisplayName"
+msgid "Tox"
+msgstr "Tox"
+
+msgctxt "ST_Klib,Desc_ToxicAir.Desc_ToxicAir_C.mDisplayName"
+msgid "Toxic Air"
+msgstr "유독한 공기"
+
+msgctxt "ST_Klib,Recipe_CentralStorageSink.Recipe_CentralStorageSink_C.mDisplayName"
+msgid "Trading Post"
+msgstr "교역소"
+
+msgctxt "ST_Klib,SlugDesc_Turquise.SlugDesc_Turquise_C.mDisplayName"
+msgid "Turquoise Slug"
+msgstr "청록색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_Turquise.EggDesc_Turquise_C.mDisplayName"
+msgid "Turquoise Slug Egg"
+msgstr "청록색 슬러그 알"
+
+msgctxt "ST_Klib,Desc_UranChloride.Desc_UranChloride_C.mAbbreviatedDisplayName"
+msgid "UC"
+msgstr "UC"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mineral.Desc_SlugSlime_Mineral_C.mDisplayName"
+msgid "Universal Paint"
+msgstr "전우주적 페인트"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Acid.Cat_Unpackaging_Acid_C.mDisplayName"
+msgid "Unpackaging - Acid"
+msgstr "포장 풀기 - 산"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Oil.Cat_Unpackaging_Oil_C.mDisplayName"
+msgid "Unpackaging - Barrel"
+msgstr "포장 풀기 - 배럴"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Bottle.Cat_Unpackaging_Bottle_C.mDisplayName"
+msgid "Unpackaging - Bottle"
+msgstr "포장 풀기 - 병"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Canister.Cat_Unpackaging_Canister_C.mDisplayName"
+msgid "Unpackaging - Canister"
+msgstr "포장 풀기 - 용기"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Cold.Cat_Unpackaging_Cold_C.mDisplayName"
+msgid "Unpackaging - Cold / Energetic"
+msgstr "포장 풀기 - 저온 / 에너지"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Gas.Cat_Unpackaging_Gas_C.mDisplayName"
+msgid "Unpackaging - Gas"
+msgstr "포장 풀기 - 가스"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Hot.Cat_Unpackaging_Hot_C.mDisplayName"
+msgid "Unpackaging - Hot"
+msgstr "포장 풀기 - 고온"
+
+msgctxt "ST_Klib,BuildMode_KL_Upgrade.BuildMode_KL_Upgrade_C.mDisplayName"
+msgid "Upgrade"
+msgstr "업그레이드"
+
+msgctxt "ST_Klib,Desc_UranChloride.Desc_UranChloride_C.mDisplayName"
+msgid "Uranium Chloride"
+msgstr "염화 우라늄"
+
+msgctxt "ST_Klib,Desc_UranChloride.Desc_UranChloride_C.mDescription"
+msgid "Uranium Chloride in gassesous form. Used to seperate Uranium into fissile and non-Fissile material."
+msgstr "기체 형태의 염화우라늄. 우라늄을 분열성 물질과 비분열성 물질로 분리하는 데 사용됩니다."
+
+msgctxt "ST_Klib,Desc_UraniumFuel.Desc_UraniumFuel_C.mDisplayName"
+msgid "Uranium Fuel"
+msgstr "우라늄 연료"
+
+msgid "Used for crafting advanced parts.\\r\\nOne of the most basic steel parts.\\r\\nMany Pioneers can't tell the difference between screws and bolts."
+msgstr "고급 부품 제작에 사용됩니다.\\r\\n가장 기본적인 강철 부품 중 한 종류.\\r\\n참고: 많은 개척자들은 나사와 볼트의 차이를 구분하지 못합니다."
+
+msgid "Used for crafting.\\r\\nCrafted into parts and buildings."
+msgstr "제작에 사용됩니다.\\r\\n부품 제작에 사용하거나 건물로 조립할 수 있습니다."
+
+msgid "Used for crafting.\\r\\nCrafted into the most basic parts."
+msgstr "제작에 사용됩니다.\\r\\n가장 기본적인 부품 제작에 필요합니다."
+
+msgid "Used for crafting.\\r\\nMulti-purpose building block."
+msgstr "제작에 사용됩니다.\\r\\n다목적 건축 블록입니다."
+
+msgid "Used for lossless long distance transportation of optical signals.\\r\\nFundamental for optical computing."
+msgstr "광신호의 무손실 장거리 전송에 사용됩니다.\\r\\n광컴퓨팅의 기본 소재입니다."
+
+msgid "Used to connect Network poles, Network core and Network buildings.\\r\\nThis Cable transfer power and informations."
+msgstr "네트워크 전신주, 네트워크 코어, 네트워크 건물을 연결하는 데 사용됩니다.\\r\\n전원 및 정보를 전송하는 전선입니다."
+
+msgid "Used to seperate crushed ores into their primary, secondary and tertiary components.\\r\\nDifferent sorting tiers have different requirements for additional inputs, such as Air or Water.\\r\\n\\r\\nSolid Output: The first solid output port is on the right, the second one on the left."
+msgstr "분쇄된 광석을 1차, 2차, 3차 구성 요소로 분리하는 데 사용됩니다.\\r\\n선별 단계마다 공기나 물과 같은 추가 입력 요구 사항이 달라집니다.\\r\\n\\r\\n아이템 출력: 첫 번째 아이템 출력부는 오른쪽에, 두 번째 포트는 왼쪽에 위치해 있습니다."
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_2.Desc_SnailFood_Tier_2_C.mDisplayName"
+msgid "Vegetable Meal"
+msgstr "야채 식사"
+
+msgctxt "StringTable_KLib_Buildings,NetworkTerminal_D"
+msgid "WIP CONTENT!"
+msgstr "개발 중인 컨텐츠!"
+
+msgctxt "StringTable_Categorys,Washing"
+msgid "Washing"
+msgstr "세척"
+
+msgctxt "ST_Klib,Desc_Wastewater.Desc_Wastewater_C.mAbbreviatedDisplayName"
+msgid "Waste"
+msgstr "폐기물"
+
+msgctxt "ST_Klib,Desc_Wastewater.Desc_Wastewater_C.mDisplayName"
+msgid "Wastewater"
+msgstr "폐수"
+
+msgid "Wastewater (or Leachate) is a watery solution which remains after wet washing of impure ores.\\r\\n\\r\\nCan be processed in the Filtrator to extract remaining ores."
+msgstr "폐수는 (침출수라고도 불림) 광석을 세척한 후 나오는 용액으로,\\r\\n\\r\\n여과기에서 처리하여 남아 있는 광석을 추출할 수 있습니다."
+
+msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mDescription"
+msgid "Water in vapor form. A common intermediate in energy production, chemical reactions and Hydrogen generation."
+msgstr "증기 형태의 물. 에너지 생산, 화학 반응 및 수소 생성의 일반적인 중간 단계입니다."
+
+msgctxt "StringTable_KLib_Buildings,Build_Weavingmachine_D"
+msgid "Weaver"
+msgstr "방직기"
+
+msgctxt "StringTable_Categorys,Weaving"
+msgid "Weaving"
+msgstr "방직"
+
+msgctxt "StringTable_KLib_Buildings,Build_OreWascher_N"
+msgid "Wet Washer"
+msgstr "습식 세척기"
+
+msgctxt "ST_Klib,SlugDesc_WhiteSlug.SlugDesc_WhiteSlug_C.mDisplayName"
+msgid "White Slug"
+msgstr "하얀색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_EggWhite.EggDesc_EggWhite_C.mDisplayName"
+msgid "White Slug Egg"
+msgstr "하얀색 슬러그 알"
+
+msgid "Wire that has been coated with tin, increasing corrosion resistance.\\r\\nCommonly used in electronics."
+msgstr "주석으로 코팅되어 내식성을 높인 전선.\\r\\n주로 전자제품에 사용됩니다."
+
+msgctxt "ST_Klib,SlugDesc_YellowSlug.SlugDesc_YellowSlug_C.mDisplayName"
+msgid "Yellow Slug"
+msgstr "노란색 슬러그"
+
+msgctxt "ST_Klib,EggDesc_EggYellow.EggDesc_EggYellow_C.mDisplayName"
+msgid "Yellow Slug Egg"
+msgstr "노란색 슬러그 알"
+
+msgctxt "ST_Klib,Desc_ZincIngot.Desc_ZincIngot_C.mDisplayName"
+msgid "Zinc Ingot"
+msgstr "아연 주괴"
+
+msgctxt "ST_Klib,Desc_ZincPlates.Desc_ZincPlates_C.mDisplayName"
+msgid "Zinc Plates"
+msgstr "아연 판"
+
+msgctxt "ST_Klib,Res_GasOxygen.Res_GasOxygen_C.mDescription"
+msgid "its Oxygen"
+msgstr "그냥 산소"

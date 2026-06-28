@@ -1,6 +1,7 @@
 ﻿//
 #include "Subsystems/HelperClasses/KBFLCDOCategoryOrder.h"
 
+#include "FGBuildSubCategory.h"
 #include "FGCategory.h"
 #include "FGItemCategory.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
@@ -64,5 +65,104 @@ void UKBFLCDOCategoryOrder::ApplyToInstances()
 					  "{AssetPath}",
 					  *TargetCategory->GetName(), *TargetSubCategory->GetName(), Index, *Class->GetName(), AssetPath);
 		}
+	}
+}
+
+bool UKBFLCDOCategoryOrder::ShouldCallForInstance(UClass* NewClass)
+{
+	if (!IsValid(NewClass))
+	{
+		return false;
+	}
+
+	// Category / subcategory priority targets (only when a priority is actually set).
+	if (mTargetCategoryPrio > -1000.f && mTargetCategory.Get() == NewClass)
+	{
+		UObject* CDO = NewClass->GetDefaultObject();
+		return IsValid(CDO) && Requirements_IsMet(CDO);
+	}
+	if (mSubTargetCategoryPrio > -1000.f && mSubTargetCategory.Get() == NewClass)
+	{
+		UObject* CDO = NewClass->GetDefaultObject();
+		return IsValid(CDO) && Requirements_IsMet(CDO);
+	}
+
+	// Build descriptor ordering — only valid when both category + subcategory resolve.
+	bool bInOrder = false;
+	for (const TSoftClassPtr<UFGBuildDescriptor>& Cls : mTargetOrder)
+	{
+		if (Cls.Get() == NewClass)
+		{
+			bInOrder = true;
+			break;
+		}
+	}
+	if (!bInOrder)
+	{
+		return false;
+	}
+
+	if (!IsValid(LoadSoftClass(mTargetCategory)) || !IsValid(LoadSoftClass(mSubTargetCategory)))
+	{
+		return false;
+	}
+
+	UObject* CDO = NewClass->GetDefaultObject();
+	return IsValid(CDO) && Requirements_IsMet(CDO);
+}
+
+void UKBFLCDOCategoryOrder::ApplyToInstance(UObject* Instance)
+{
+	if (!IsValid(Instance))
+	{
+		return;
+	}
+
+	UClass* InstanceClass = Instance->GetClass();
+
+	// Category priority
+	if (InstanceClass == mTargetCategory.Get())
+	{
+		if (UFGBuildCategory* Cat = Cast<UFGBuildCategory>(Instance))
+		{
+			Cat->mMenuPriority = mTargetCategoryPrio;
+		}
+		return;
+	}
+
+	// SubCategory priority
+	if (InstanceClass == mSubTargetCategory.Get())
+	{
+		if (UFGBuildSubCategory* Sub = Cast<UFGBuildSubCategory>(Instance))
+		{
+			Sub->mMenuPriority = mSubTargetCategoryPrio;
+		}
+		return;
+	}
+
+	// Build descriptor ordering
+	if (UFGBuildDescriptor* Desc = Cast<UFGBuildDescriptor>(Instance))
+	{
+		TSubclassOf<UFGBuildCategory> TargetCategory = LoadSoftClass(mTargetCategory);
+		TSubclassOf<UFGBuildSubCategory> TargetSubCategory = LoadSoftClass(mSubTargetCategory);
+		if (!IsValid(TargetCategory) || !IsValid(TargetSubCategory))
+		{
+			return;
+		}
+
+		int32 Index = 0;
+		for (int32 i = 0; i < mTargetOrder.Num(); i++)
+		{
+			if (mTargetOrder[i].Get() == InstanceClass)
+			{
+				Index = i;
+				break;
+			}
+		}
+
+		Desc->mCategory = TargetCategory;
+		Desc->mSubCategories.Empty();
+		Desc->mSubCategories.Add(TargetSubCategory);
+		Desc->mMenuPriority = Index;
 	}
 }

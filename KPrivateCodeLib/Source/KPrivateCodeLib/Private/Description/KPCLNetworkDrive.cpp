@@ -66,12 +66,6 @@ FText UKPCLNetworkDrive::GetItemNameInternal() const
 	return FText::Format(MainTxt, FormatPatternArgs);
 }
 
-FText UKPCLNetworkDrive::GetItemNameInternal_BP_Implementation() const
-{
-	return mDisplayName;
-}
+FText UKPCLNetworkDrive::GetItemNameInternal_BP_Implementation() const { return mDisplayName; }
 
-FText UKPCLNetworkDrive::GetItemDescriptionInternal_BP_Implementation() const
-{
-	return mDescription;
-}
+FText UKPCLNetworkDrive::GetItemDescriptionInternal_BP_Implementation() const { return mDescription; }

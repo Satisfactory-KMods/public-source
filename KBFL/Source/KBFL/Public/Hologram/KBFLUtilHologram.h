@@ -57,7 +57,7 @@ public:
 	TSubclassOf<UKBFLUtilWidget> WidgetClass;
 
 	UPROPERTY(Transient)
-	UKBFLUtilWidget* Widget;
+	TObjectPtr<UKBFLUtilWidget> Widget;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Utils")
 	TArray<TSubclassOf<UFGHologramBuildModeDescriptor>> mBuildModes;

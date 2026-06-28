@@ -18,6 +18,7 @@ public:
 	virtual void Factory_Tick(float dt) override;
 	virtual void PostInitializeComponents() override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
 
 	virtual void BeginPlay() override;
 
@@ -37,10 +38,13 @@ public:
 	FORCEINLINE TSubclassOf<UFGItemDescriptor> GetPipeItem() const { return mPipeItemClassToGenerate; }
 
 private:
-	UPROPERTY(SaveGame, Replicated)
+	UPROPERTY(EditAnywhere, Category = "KBFL|ItemCreater")
+	float mPowerProduction;
+	
+	UPROPERTY(SaveGame, meta=(FGReplicated))
 	TSubclassOf<UFGItemDescriptor> mBeltItemClassToGenerate;
 
-	UPROPERTY(SaveGame, Replicated)
+	UPROPERTY(SaveGame, meta=(FGReplicated))
 	TSubclassOf<UFGItemDescriptor> mPipeItemClassToGenerate;
 
 	UPROPERTY(Transient)
@@ -63,7 +67,7 @@ class KBFL_API UKBFLDefaultRCO : public UFGRemoteCallObject
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Server, WithValidation, Unreliable)
+	UFUNCTION(BlueprintCallable, Server, WithValidation, Reliable)
 	void Server_CheatBuilding_SetPipeItem(AKBFLUtilItemCreaterBuildable* Building,
 										  TSubclassOf<UFGItemDescriptor> ItemToSet);
 
@@ -73,7 +77,7 @@ public:
 		return true;
 	}
 
-	UFUNCTION(BlueprintCallable, Server, WithValidation, Unreliable)
+	UFUNCTION(BlueprintCallable, Server, WithValidation, Reliable)
 	void Server_CheatBuilding_SetBeltItem(AKBFLUtilItemCreaterBuildable* Building,
 										  TSubclassOf<UFGItemDescriptor> ItemToSet);
 

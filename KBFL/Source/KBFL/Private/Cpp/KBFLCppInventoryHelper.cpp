@@ -346,7 +346,7 @@ void UKBFLCppInventoryHelper::PullPipe(UFGInventoryComponent* Inventory, int Inv
 		return;
 	}
 
-	for (const auto ItemClass : AllowedItem)
+	for (const auto& ItemClass : AllowedItem)
 	{
 		PullPipe(Inventory, InventoryIndex, dt, ItemClass, PipeInputComp);
 	}

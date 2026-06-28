@@ -2,7 +2,7 @@
 
 #include "Modules/ModuleManager.h"
 
-#define LOCTEXT_NAMESPACE "KBFL"
+#undef LOCTEXT_CPP_STRING_TABLE
 #define LOCTEXT_CPP_STRING_TABLE "KBFL/ST_KBFL_CPP"
 
 /**
@@ -79,6 +79,12 @@ class FKBFLModule : public FDefaultGameModuleImpl
 {
 public:
 	virtual void StartupModule() override;
+	virtual void ShutdownModule() override;
 
 	virtual bool IsGameModule() const override { return true; }
+
+#if WITH_EDITOR
+	/** Registers the "KMods" Content Browser context-menu actions for KBFL module blueprints. */
+	static void RegisterContentBrowserMenu();
+#endif
 };

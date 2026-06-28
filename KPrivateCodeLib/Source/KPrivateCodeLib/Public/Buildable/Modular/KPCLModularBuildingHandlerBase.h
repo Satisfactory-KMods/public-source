@@ -1,12 +1,13 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FGSaveInterface.h"
-#include "KPCLModularBuildingInterface.h"
+
 #include "Buildables/FGBuildable.h"
 #include "Components/ActorComponent.h"
+#include "FGSaveInterface.h"
+#include "KPCLModularBuildingInterface.h"
 
 #include "KPCLModularBuildingHandlerBase.generated.h"
 
@@ -32,20 +33,21 @@ struct FAttachmentLocations
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(EditCondition="!mDisplayinEditor"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = "!mDisplayinEditor"))
 	TArray<FAttachmentPointLocation> mLocations;
 
 	void GetTransformSortedByIndex(TArray<FTransform>& Transforms, bool rev = false)
 	{
 		Transforms.Empty();
-		mLocations.Sort([rev](const FAttachmentPointLocation& A, const FAttachmentPointLocation& B)
-		{
-			if (rev)
+		mLocations.Sort(
+			[rev](const FAttachmentPointLocation& A, const FAttachmentPointLocation& B)
 			{
-				return A.mIndex > B.mIndex;
-			}
-			return A.mIndex < B.mIndex;
-		});
+				if (rev)
+				{
+					return A.mIndex > B.mIndex;
+				}
+				return A.mIndex < B.mIndex;
+			});
 
 		for (FAttachmentPointLocation Location : mLocations)
 		{
@@ -56,33 +58,32 @@ struct FAttachmentLocations
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHandlerTriggerUpdate);
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class KPRIVATECODELIB_API UKPCLModularBuildingHandlerBase : public UActorComponent, public IFGSaveInterface
 {
 	GENERATED_BODY()
 
-	// Begin IFGSaveInterface
+	//~ Begin IFGSaveInterface
 	FORCEINLINE virtual bool ShouldSave_Implementation() const override { return true; }
-	// End IFGSaveInterface
+	//~ End IFGSaveInterface
 
 public:
-	bool HasAuthority() const;
-
-	// Sets default values for this component's properties
 	UKPCLModularBuildingHandlerBase();
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	bool HasAuthority() const;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
 
-	virtual void InitArrays()
-	{
-	}
+	virtual void InitArrays() {}
 
 	virtual int FindAttachmentIndex(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment) const;
 
 	virtual bool AddNewActorToAttachment(AFGBuildable* Actor, TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-	                                     FTransform Location, float Distance = 500.0f) { return false; }
+										 FTransform Location, float Distance = 500.0f)
+	{
+		return false;
+	}
 
 	virtual void AttachedActorRemoved(AFGBuildable* Actor);
 	virtual void TryToConnectPower(AFGBuildable* OtherActor);
@@ -97,21 +98,23 @@ public:
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	virtual bool CanAttachToLocation(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment, FTransform TestLocation,
-	                                 FTransform& OutLocation, float Distance = 500.0f) const { return false; };
+									 FTransform& OutLocation, float Distance = 500.0f) const
+	{
+		return false;
+	};
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	virtual bool GetSnapPointInRange(FTransform TestLocation, FTransform& SnapLocation, float AllowedDistance,
-	                                 TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment) { return false; };
+									 TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+	{
+		return false;
+	};
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	virtual AFGBuildable* GetAttachedActorByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment);
 
-	/**
-	* Internal version for GetAttachedActorByClass
-	*/
 	template <class T>
 	T* GetAttachedActor_Internal(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment);
-
 
 	UPROPERTY(BlueprintAssignable)
 	FOnHandlerTriggerUpdate OnHandlerTriggerUpdate;
@@ -135,9 +138,6 @@ public:
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	virtual TArray<AFGBuildable*> GetAttachedActorsByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment);
 
-	/**
-	* Internal version for GetAttachedActorsByClass
-	*/
 	template <class T>
 	void GetAttachedActors_Internal(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment, TArray<T*>& OutActors);
 
@@ -147,9 +147,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void GetAttachedActorsByIndex(TArray<AFGBuildable*>& Out, uint8 index);
 
-	/**
-	* Internal version for GetAttachedActorsByClass
-	*/
 	template <class T>
 	void GetAttachedActorByIndex(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment, TArray<T*>& OutActors);
 
@@ -195,7 +192,7 @@ void UKPCLModularBuildingHandlerBase::GetAllAttachedActors_Internal(TArray<T*>& 
 
 template <class T>
 void UKPCLModularBuildingHandlerBase::GetAttachedActorByIndex(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-                                                              TArray<T*>& OutActors)
+															  TArray<T*>& OutActors)
 {
 	TArray<AFGBuildable*> Actors = GetAttachedActorsByClass(Attachment);
 	for (AFGBuildable* Actor : Actors)

@@ -1,13 +1,14 @@
-﻿// 
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BFL/KBFL_Math.h"
 #include "Buildables/FGBuildableFactory.h"
+
 #include "KPCLOverclockingInterface.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE()
 class UKPCLOverclockingInterface : public UInterface
 {
@@ -19,9 +20,7 @@ struct FKPCLOverclockingProductionInfo
 {
 	GENERATED_BODY()
 
-	FKPCLOverclockingProductionInfo(): mAmount(0), mDefaultProductionTime(0)
-	{
-	}
+	FKPCLOverclockingProductionInfo() : mAmount(0), mDefaultProductionTime(0) {}
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UFGItemDescriptor> mItemClass;
@@ -38,12 +37,9 @@ struct FKPCLOverclockingProductionResults
 {
 	GENERATED_BODY()
 
-	FKPCLOverclockingProductionResults(): mAmount(0), mProductionTime(0)
-	{
-	}
+	FKPCLOverclockingProductionResults() : mAmount(0), mProductionTime(0) {}
 
-	FKPCLOverclockingProductionResults(FItemAmount InAmount,
-	                                   float InProductionTime)
+	FKPCLOverclockingProductionResults(FItemAmount InAmount, float InProductionTime)
 	{
 		mItemClass = InAmount.ItemClass;
 		mAmount = InAmount.Amount;
@@ -52,7 +48,7 @@ struct FKPCLOverclockingProductionResults
 	}
 
 	FKPCLOverclockingProductionResults(TSubclassOf<UFGItemDescriptor> InItemClass, int32 InAmount,
-	                                   float InProductionTime)
+									   float InProductionTime)
 	{
 		mItemClass = InItemClass;
 		mAmount = InAmount;
@@ -73,14 +69,10 @@ struct FKPCLOverclockingProductionResults
 	bool bIsSolid = false;
 };
 
-/**
- * 
- */
 class KPRIVATECODELIB_API IKPCLOverclockingInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KMods|Overclocking")
 	bool Overclocking_ShouldUse();
@@ -102,9 +94,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KMods|Overclocking")
 	void Overclocking_GetCostSlots(TArray<FItemAmount>& OutSlots);
+
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KMods|Overclocking")
 	void Overclocking_GetProductionResults(TArray<FKPCLOverclockingProductionResults>& OutIngredients,
-	                                       TArray<FKPCLOverclockingProductionResults>& OutProducts);
+										   TArray<FKPCLOverclockingProductionResults>& OutProducts);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KMods|Overclocking")
 	void UI_ApplyRelevantItems(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots);

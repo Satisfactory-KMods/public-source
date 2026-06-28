@@ -1,4 +1,8 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
+
+#include "CoreMinimal.h"
 
 #include "KPCLNetworkStructures.generated.h"
 
@@ -7,14 +11,9 @@ struct KPRIVATECODELIB_API FTeleporterInformation
 {
 	GENERATED_BODY()
 
-	FTeleporterInformation()
-	{
-	};
+	FTeleporterInformation() {};
 
-	FTeleporterInformation(int32 OverwriteIconID)
-	{
-		mIconID = OverwriteIconID;
-	}
+	FTeleporterInformation(int32 OverwriteIconID) { mIconID = OverwriteIconID; }
 
 	UPROPERTY(EditAnywhere, SaveGame, BlueprintReadWrite)
 	int32 mIconID = 782;

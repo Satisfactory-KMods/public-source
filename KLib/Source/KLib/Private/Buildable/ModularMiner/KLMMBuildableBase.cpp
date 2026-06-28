@@ -3,15 +3,38 @@
 
 #include "Buildable/ModularMiner/KLMMBuildableBase.h"
 
-#include "FGPowerInfoComponent.h"
-#include "Logging.h"
 #include "BFL/KBFL_Player.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildable/ModularMiner/KLMMBuildableModule.h"
+#include "FGPowerInfoComponent.h"
+#include "Logging.h"
 
 #include "Net/UnrealNetwork.h"
 
 #include "Replication/KLDefaultRCO.h"
+
+void AKLMMBuildableBase::SetUIProductionBuff(float NewBuff)
+{
+	mUIProductionBuff = NewBuff;
+	CommitUIProductionBuff();
+}
+
+void AKLMMBuildableBase::SetResourceToProduceInternal(TSubclassOf<UFGItemDescriptor> NewResource)
+{
+	mResourceToProduce = NewResource;
+	mPropertyReplicator.MarkPropertyDirty(FName("mResourceToProduce"));
+}
+
+void AKLMMBuildableBase::CommitMinerTask() { mPropertyReplicator.MarkPropertyDirty(FName("mMinerTask")); }
+
+void AKLMMBuildableBase::CommitModuleProductionTask()
+{
+	mPropertyReplicator.MarkPropertyDirty(FName("mModuleProductionTask"));
+}
+
+void AKLMMBuildableBase::CommitFluidConsumeTask() { mPropertyReplicator.MarkPropertyDirty(FName("mFluidConsumeTask")); }
+
+void AKLMMBuildableBase::CommitUIProductionBuff() { mPropertyReplicator.MarkPropertyDirty(FName("mUIProductionBuff")); }
 
 AKLMMBuildableBase::AKLMMBuildableBase()
 {
@@ -33,32 +56,32 @@ void AKLMMBuildableBase::BeginPlay()
 	}
 }
 
-void AKLMMBuildableBase::Factory_Tick(float dt)
+void AKLMMBuildableBase::Factory_TickAuthOnly(float dt)
 {
-	Super::Factory_Tick(dt);
+	Super::Factory_TickAuthOnly(dt);
+	HandlePower(dt);
+	HandleState();
+	SetResourceToProduce();
 
-	if (HasAuthority())
+	mMinerTask.mProductionTime = GetNodeProductionTime();
+	mMinerTask.TickHandle(dt, IsProducing(), [&]() { OnMainProductionFinial(); });
+	CommitMinerTask();
+
+	AKLMMBuildableModule* Module = GetFirstModule(mWasteProducerAttachment);
+	bool ModuleIsProducing = IsProducing() && IsValid(Module);
+
+	mModuleProductionTask.TickHandle(dt, ModuleIsProducing,
+									 [&]()
+									 {
+										 OnModuleProductionFinial();
+										 Module->OnModuleProductionCompleted();
+									 });
+	CommitModuleProductionTask();
+
+	float NewUiBuff = GetProductionCycleBuff();
+	if (NewUiBuff != mUIProductionBuff)
 	{
-		HandlePower(dt);
-		HandleState();
-		SetResourceToProduce();
-
-		mMinerTask.mProductionTime = GetNodeProductionTime();
-		mMinerTask.TickHandle(dt, IsProducing(), [&]()
-		{
-			OnMainProductionFinial();
-		});
-
-		AKLMMBuildableModule* Module = GetFirstModule(mWasteProducerAttachment);
-		bool ModuleIsProducing = IsProducing() && IsValid(Module);
-
-		mModuleProductionTask.TickHandle(dt, ModuleIsProducing, [&]()
-		{
-			OnModuleProductionFinial();
-			Module->OnModuleProductionCompleted();
-		});
-
-		mUIProductionBuff = GetProductionCycleBuff();
+		SetUIProductionBuff(NewUiBuff);
 	}
 }
 
@@ -69,16 +92,12 @@ void AKLMMBuildableBase::GetLifetimeReplicatedProps(TArray<class FLifetimeProper
 
 bool AKLMMBuildableBase::CanProduce_Implementation() const
 {
-	if (IsPlayingBuildEffect() || !HasPower())
+	if (IsPlayingBuildEffect() || !HasPower() || IsProductionPaused())
 	{
 		return false;
 	}
 
-	if (HasPower())
-	{
-		return CheckProduction();
-	}
-	return false;
+	return CheckProduction();
 }
 
 void AKLMMBuildableBase::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
@@ -106,14 +125,9 @@ void AKLMMBuildableBase::GetChildDismantleActors_Implementation(TArray<AActor*>&
 	}
 }
 
-bool AKLMMBuildableBase::Factory_HasPower() const
-{
-	return Super::Factory_HasPower();
-}
+bool AKLMMBuildableBase::Factory_HasPower() const { return Super::Factory_HasPower(); }
 
-void AKLMMBuildableBase::SetupInventory()
-{
-}
+void AKLMMBuildableBase::SetupInventory() {}
 
 float AKLMMBuildableBase::GetNodeProductionTime() const
 {
@@ -130,9 +144,7 @@ float AKLMMBuildableBase::GetNodeProductionTime() const
 	}
 }
 
-void AKLMMBuildableBase::Factory_ProductionCycleCompleted(float overProductionRate)
-{
-}
+void AKLMMBuildableBase::Factory_ProductionCycleCompleted(float overProductionRate) {}
 
 void AKLMMBuildableBase::EndProductionTime()
 {
@@ -142,20 +154,17 @@ void AKLMMBuildableBase::EndProductionTime()
 	mMinerTask.mPendingPotential = GetPendingPotential();
 	mModuleProductionTask.mCurrentPotential = GetCurrentPotential();
 	mModuleProductionTask.mPendingPotential = GetPendingPotential();
+
+	CommitMinerTask();
+	CommitModuleProductionTask();
+	CommitUIProductionBuff();
 }
 
-void AKLMMBuildableBase::Factory_TickProducing(float dt)
-{
-}
+void AKLMMBuildableBase::Factory_TickProducing(float dt) {}
 
-void AKLMMBuildableBase::OnMainProductionFinial_Implementation()
-{
-}
+void AKLMMBuildableBase::OnMainProductionFinial_Implementation() {}
 
-float AKLMMBuildableBase::GetProductionsPerMin() const
-{
-	return 60.00f / GetProductionCycleTime();
-}
+float AKLMMBuildableBase::GetProductionsPerMin() const { return 60.00f / GetProductionCycleTime(); }
 
 void AKLMMBuildableBase::FlushFluids()
 {
@@ -176,16 +185,24 @@ void AKLMMBuildableBase::Server_Flush()
 
 void AKLMMBuildableBase::SetResourceToProduce()
 {
+	bool bChanged = false;
 	if (!mResourceToProduce)
 	{
-		mResourceToProduce = GetResourceClass();
+		SetResourceToProduceInternal(GetResourceClass());
 		OnResourceToProduceChanged();
+		bChanged = true;
 	}
 
 	if (mResourceToProduce != GetResourceToProduce())
 	{
-		mResourceToProduce = GetResourceToProduce();
+		SetResourceToProduceInternal(GetResourceToProduce());
 		OnResourceToProduceChanged();
+		bChanged = true;
+	}
+
+	if (bChanged)
+	{
+		CommitUIProductionBuff();
 	}
 }
 
@@ -246,10 +263,7 @@ float AKLMMBuildableBase::GetPowerConsume() const
 	return Consume;
 }
 
-float AKLMMBuildableBase::GetProductionTime() const
-{
-	return GetMinerProductionHandle().GetProductionTime();
-}
+float AKLMMBuildableBase::GetProductionTime() const { return GetMinerProductionHandle().GetProductionTime(); }
 
 float AKLMMBuildableBase::GetPendingProductionTime() const
 {
@@ -283,125 +297,139 @@ TSubclassOf<UFGResourceDescriptor> AKLMMBuildableBase::GetResourceClass() const
 	return nullptr;
 }
 
-EResourceForm AKLMMBuildableBase::GetResourceForm() const
-{
-	return UFGItemDescriptor::GetForm(GetResourceClass());
-}
+EResourceForm AKLMMBuildableBase::GetResourceForm() const { return UFGItemDescriptor::GetForm(GetResourceClass()); }
 
 EResourcePurity AKLMMBuildableBase::GetPurity() const
 {
 	if (Cast<AFGResourceNode>(GetExtractableResourceActor()))
 	{
-		return Cast<AFGResourceNode>(GetExtractableResourceActor())->GetResoucePurity();
+		return Cast<AFGResourceNode>(GetExtractableResourceActor())->GetResourcePurity();
 	}
 	return RP_MAX;
 }
 
+void AKLMMBuildableBase::OnModulesUpdated_Implementation()
+{
+	Super::OnModulesUpdated_Implementation(); // calls OnMeshUpdate() + Event_OnMeshUpdate()
+	RecalculateMinerCaches();
+}
+
+void AKLMMBuildableBase::RecalculateMinerCaches()
+{
+	mCachedModules.Empty();
+	if (UKPCLModularBuildingHandlerBase* Handler = GetHandler<UKPCLModularBuildingHandlerBase>())
+	{
+		TArray<AFGBuildable*> BuildableModules;
+		Handler->GetAttachedActors(BuildableModules);
+		for (AFGBuildable* Module : BuildableModules)
+		{
+			if (AKLMMBuildableModule* MMModule = Cast<AKLMMBuildableModule>(Module))
+			{
+				mCachedModules.Add(MMModule);
+			}
+		}
+	}
+}
+
 int AKLMMBuildableBase::GetOccupiedPoints(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
 {
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	int32 Count = 0;
+	for (const auto& Module : mCachedModules)
 	{
-		TArray<AKLMMBuildableModule*> Modules;
-		Handler->GetAttachedActors_Internal(AttachmentClass, Modules);
-		return Modules.Num();
+		if (IsValid(Module) && Module->GetType() == AttachmentClass)
+		{
+			++Count;
+		}
 	}
-	return 0;
+	return Count;
 }
 
 bool AKLMMBuildableBase::HasModule(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
 {
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	for (const auto& Module : mCachedModules)
 	{
-		return Handler->GetAttachedActorByClass(AttachmentClass) != nullptr;
+		if (IsValid(Module) && Module->GetType() == AttachmentClass)
+		{
+			return true;
+		}
 	}
 	return false;
 }
 
 bool AKLMMBuildableBase::HasEnergyModuleSlot(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass,
-                                             int idx) const
+											 int idx) const
 {
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	for (const auto& Module : mCachedModules)
 	{
-		return Handler->GetActorFromModularIndex<AKLMMBuildableModule>(AttachmentClass, idx) != nullptr;
+		if (IsValid(Module) && Module->GetType() == AttachmentClass &&
+			IKPCLModularBuildingInterface::Execute_GetModularIndex(Module) == idx)
+		{
+			return true;
+		}
 	}
 	return false;
 }
 
-TArray<bool> AKLMMBuildableBase::GetBoolArrayOfEnergySlots(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
+TArray<bool>
+AKLMMBuildableBase::GetBoolArrayOfEnergySlots(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
 {
 	TArray<bool> lReturn = {false, false, false};
-
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	int32 SlotIdx = 0;
+	for (const auto& Module : mCachedModules)
 	{
-		TArray<AKLMMBuildableModule*> Modules;
-		Handler->GetAttachedActors_Internal(AttachmentClass, Modules);
-
-		for (int idx = 0; idx < Modules.Num(); ++idx)
+		if (IsValid(Module) && Module->GetType() == AttachmentClass)
 		{
-			if (lReturn.IsValidIndex(idx))
+			if (lReturn.IsValidIndex(SlotIdx))
 			{
-				lReturn[idx] = true;
+				lReturn[SlotIdx++] = true;
 			}
 		}
 	}
-
 	return lReturn;
 }
 
-AKLMMBuildableModule* AKLMMBuildableBase::GetFirstModule(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
+AKLMMBuildableModule*
+AKLMMBuildableBase::GetFirstModule(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
 {
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	for (const auto& Module : mCachedModules)
 	{
-		TArray<AFGBuildable*> Modules;
-		Handler->GetAttachedActors_Internal(AttachmentClass, Modules);
-
-		if (Modules.Num() > 0)
+		if (IsValid(Module) && Module->GetType() == AttachmentClass)
 		{
-			return Cast<AKLMMBuildableModule>(Modules[0]);
+			return Module;
 		}
 	}
-
 	return nullptr;
 }
 
 TArray<class AKLMMBuildableModule*> AKLMMBuildableBase::GetAllModules() const
 {
 	TArray<AKLMMBuildableModule*> AllModules;
-
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	AllModules.Reserve(mCachedModules.Num());
+	for (const auto& Module : mCachedModules)
 	{
-		TArray<AFGBuildable*> Modules;
-		Handler->GetAttachedActors(Modules);
-
-		for (AFGBuildable* Module : Modules)
+		if (IsValid(Module))
 		{
-			if (AKLMMBuildableModule* MMModule = Cast<AKLMMBuildableModule>(Module))
-			{
-				AllModules.Add(MMModule);
-			}
+			AllModules.Add(Module);
 		}
 	}
-
 	return AllModules;
 }
 
-TArray<class AKLMMBuildableModule*> AKLMMBuildableBase::GetModule(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
+TArray<class AKLMMBuildableModule*>
+AKLMMBuildableBase::GetModule(TSubclassOf<UKAPIModularAttachmentDescriptor> AttachmentClass) const
 {
-	if (UKPCLModularBuildingHandler* Handler = GetHandler<UKPCLModularBuildingHandler>())
+	TArray<AKLMMBuildableModule*> Result;
+	for (const auto& Module : mCachedModules)
 	{
-		TArray<AKLMMBuildableModule*> Modules;
-		Handler->GetAttachedActors_Internal<AKLMMBuildableModule>(AttachmentClass, Modules);
-		return Modules;
+		if (IsValid(Module) && Module->GetType() == AttachmentClass)
+		{
+			Result.Add(Module);
+		}
 	}
-	return {};
+	return Result;
 }
 
-void AKLMMBuildableBase::HandleState()
-{
-}
+void AKLMMBuildableBase::HandleState() {}
 
 void AKLMMBuildableBase::HandlePower(float dt)
 {
@@ -411,21 +439,18 @@ void AKLMMBuildableBase::HandlePower(float dt)
 	mPowerOptions.StructureTick(dt, IsProducing());
 }
 
-void AKLMMBuildableBase::HandlePowerInit()
-{
-	mPowerOptions.Init();
-}
+void AKLMMBuildableBase::HandlePowerInit() { mPowerOptions.Init(); }
 
-void AKLMMBuildableBase::OnModuleProductionFinial_Implementation()
-{
-	ApplyPotentialToModule();
-}
+void AKLMMBuildableBase::OnModuleProductionFinial_Implementation() { ApplyPotentialToModule(); }
 
 void AKLMMBuildableBase::ApplyPotentialToModule()
 {
 	mModuleProductionTask.mCurrentPotential = GetCurrentPotential();
 	mModuleProductionTask.mPendingPotential = GetPendingPotential();
 	mModuleProductionTask.mProductionTime = GetModuleProductionCycleTime();
+
+	CommitModuleProductionTask();
+	CommitUIProductionBuff();
 }
 
 void AKLMMBuildableBase::SetPendingPotential(float newPendingPotential)
@@ -435,8 +460,10 @@ void AKLMMBuildableBase::SetPendingPotential(float newPendingPotential)
 
 	mMinerTask.mPendingPotential = newPendingPotential;
 	mModuleProductionTask.mPendingPotential = newPendingPotential;
+
+	CommitMinerTask();
+	CommitModuleProductionTask();
+	CommitUIProductionBuff();
 }
 
-void AKLMMBuildableBase::OnFluidProductionFinial_Implementation()
-{
-}
+void AKLMMBuildableBase::OnFluidProductionFinial_Implementation() {}

@@ -6,6 +6,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Logging/StructuredLog.h"
 #include "Net/UnrealNetwork.h"
+#include "Replication/KPCLDefaultRCO.h"
 #include "Resources/FGAnyUndefinedDescriptor.h"
 #include "Resources/FGNoneDescriptor.h"
 #include "Resources/FGOverflowDescriptor.h"
@@ -71,7 +72,7 @@ bool FKPCLSplitterTimer::CanPushItem(TSubclassOf<UFGItemDescriptor> ItemClass, b
 
 void FKPCLSplitterTimer::Tick(float dt)
 {
-	// Nur ticken wenn ein Rate-Limit gesetzt ist und wir warten müssen
+	// Nur ticken wenn ein Rate-Limit gesetzt ist
 	if (mTargetPerMin <= 0.0f)
 	{
 		// Kein Limit = immer bereit
@@ -79,15 +80,19 @@ void FKPCLSplitterTimer::Tick(float dt)
 		return;
 	}
 
-	if (mCurrentTimeLeft > -(UKismetMathLibrary::SafeDivide(60.0f, mTargetPerMin) * 0.9f))
-	{
-		mCurrentTimeLeft -= dt;
-	}
+	// dt vollständig abziehen – auch wenn der Timer bereits bereit ist.
+	// Das ermöglicht mehrere Pushes pro Frame wenn dt > TargetDuration
+	// (z.B. Frame 50ms, Periode 12ms → ~4 Pushes erlaubt).
+	// Ungenutztes Guthaben (Belt voll etc.) wird nach der Verteilung
+	// in Factory_Tick auf 0 zurückgesetzt, damit es sich nicht aufstaut.
+	mCurrentTimeLeft -= dt;
 }
 
 bool FKPCLSplitterTimer::CanPush() const { return mCurrentTimeLeft <= 0.0f; }
 
 void FKPCLSplitterTimer::HasPushed() { mCurrentTimeLeft += UKismetMathLibrary::SafeDivide(60.0f, mTargetPerMin); }
+
+void FKPCLSplitterTimer::Reset() { mCurrentTimeLeft = 0.0f; }
 
 bool FKPCLSplitterTimer::HasOverrule() const { return HasItemOfClass(UFGOverflowDescriptor::StaticClass()); }
 
@@ -152,6 +157,8 @@ bool AKPCLBuildableBalanceSplitter::PasteSettings_Implementation(UFGFactoryClipb
 		Timer->HasPushed();
 		Idx++;
 	}
+	// Actor uses DORM_Initial dormancy; wake it so the replicated mOutputTimers change is sent.
+	FlushNetDormancy();
 	return true;
 }
 
@@ -174,6 +181,15 @@ bool AKPCLBuildableBalanceSplitter::CanPushForTimer(const FKPCLSplitterTimer& Ti
 
 void AKPCLBuildableBalanceSplitter::SetFilteredItems(int32 Idx, TArray<TSubclassOf<UFGItemDescriptor>> Items)
 {
+	if (!HasAuthority())
+	{
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::Get(this))
+		{
+			RCO->Server_Splitter_SetFilteredItems(this, Idx, Items);
+		}
+		return;
+	}
+
 	if (!mOutputTimers.IsValidIndex(Idx))
 	{
 		return;
@@ -194,10 +210,21 @@ void AKPCLBuildableBalanceSplitter::SetFilteredItems(int32 Idx, TArray<TSubclass
 	Timer->mFilteredItems = Items;
 
 	mOnSplitterRulesChanged.Broadcast(true, *Timer, Idx);
+	// Actor uses DORM_Initial dormancy; wake it so the replicated mOutputTimers change is sent.
+	FlushNetDormancy();
 }
 
 void AKPCLBuildableBalanceSplitter::SetItemsPerMin(int32 Idx, float ItemsPerMin)
 {
+	if (!HasAuthority())
+	{
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::Get(this))
+		{
+			RCO->Server_Splitter_SetItemsPerMin(this, Idx, ItemsPerMin);
+		}
+		return;
+	}
+
 	if (!mOutputTimers.IsValidIndex(Idx))
 	{
 		return;
@@ -205,12 +232,24 @@ void AKPCLBuildableBalanceSplitter::SetItemsPerMin(int32 Idx, float ItemsPerMin)
 	FKPCLSplitterTimer* Timer = &mOutputTimers[Idx];
 	Timer->mTargetPerMin = FMath::Clamp(ItemsPerMin, 0.0f, 1200.0f);
 	Timer->HasPushed();
+	Timer->Reset();
 
 	mOnSplitterRulesChanged.Broadcast(false, *Timer, Idx);
+	// Actor uses DORM_Initial dormancy; wake it so the replicated mOutputTimers change is sent.
+	FlushNetDormancy();
 }
 
 void AKPCLBuildableBalanceSplitter::RemoveFromFilter(int32 Idx, TSubclassOf<UFGItemDescriptor> Item)
 {
+	if (!HasAuthority())
+	{
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::Get(this))
+		{
+			RCO->Server_Splitter_RemoveFromFilter(this, Idx, Item);
+		}
+		return;
+	}
+
 	if (!mOutputTimers.IsValidIndex(Idx))
 	{
 		return;
@@ -227,10 +266,21 @@ void AKPCLBuildableBalanceSplitter::RemoveFromFilter(int32 Idx, TSubclassOf<UFGI
 	}
 
 	mOnSplitterRulesChanged.Broadcast(true, *Timer, Idx);
+	// Actor uses DORM_Initial dormancy; wake it so the replicated mOutputTimers change is sent.
+	FlushNetDormancy();
 }
 
 void AKPCLBuildableBalanceSplitter::AddOrSetFilter(int32 Idx, TSubclassOf<UFGItemDescriptor> Item)
 {
+	if (!HasAuthority())
+	{
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::Get(this))
+		{
+			RCO->Server_Splitter_AddOrSetFilter(this, Idx, Item);
+		}
+		return;
+	}
+
 	if (!mOutputTimers.IsValidIndex(Idx))
 	{
 		return;
@@ -265,6 +315,8 @@ void AKPCLBuildableBalanceSplitter::AddOrSetFilter(int32 Idx, TSubclassOf<UFGIte
 	{
 		Timer->mFilteredItems.Empty();
 	}
+	// Actor uses DORM_Initial dormancy; wake it so the replicated mOutputTimers change is sent.
+	FlushNetDormancy();
 }
 
 void AKPCLBuildableBalanceSplitter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -288,18 +340,36 @@ void AKPCLBuildableBalanceSplitter::Factory_Tick(float dt)
 
 		// Verteile Items von Slot 0 zu den Output-Slots (1+)
 		DistributeItemsToOutputSlots(dt);
+
+		// Ungenutztes Zeit-Guthaben zurücksetzen (verhindert Aufstauung
+		// wenn das Belt voll war und kein Item gepusht werden konnte)
+		for (FKPCLSplitterTimer& Timer : mOutputTimers)
+		{
+			if (Timer.CanPush())
+			{
+				Timer.mCurrentTimeLeft = 0.0f;
+			}
+		}
 	}
 }
 
 void AKPCLBuildableBalanceSplitter::Factory_HandleBelts(float dt)
 {
-	// Hole Items vom Input-Belt in Slot 0
+	// B14: Null-check buffer inventory before use in the per-tick path.
 	UFGInventoryComponent* BufferInventory = GetBufferInventory();
+	if (!IsValid(BufferInventory))
+	{
+		return;
+	}
+
+	// Hole Items vom Input-Belt in Slot 0
 	for (UFGFactoryConnectionComponent* Input : mInputs)
 	{
+		// B13: Use `continue` so later inputs are still processed when this
+		//      one is unconnected — `return` was skipping all remaining inputs.
 		if (!IsValid(Input) || !Input->IsConnected())
 		{
-			return;
+			continue;
 		}
 
 		int32 NumToGrab = Input->MaxNumGrab(dt);
@@ -308,26 +378,28 @@ void AKPCLBuildableBalanceSplitter::Factory_HandleBelts(float dt)
 			TArray<FInventoryItem> out_items;
 			if (!Input->Factory_PeekOutput(out_items) || out_items.IsEmpty())
 			{
-				return;
+				// B13: `break` to stop grabbing from *this* input; outer loop
+				//      continues to the next input belt.
+				break;
 			}
 
 			FInventoryItem Item = out_items[0];
 			if (!Item.IsValid())
 			{
-				return;
+				break; // B13: same — stop inner grab loop, not the whole function
 			}
 
 			FInventoryStack Stack;
 			BufferInventory->GetStackFromIndex(0, Stack);
 			if (Stack.HasItems() && Stack.Item.GetItemClass() != Item.GetItemClass())
 			{
-				return;
+				break; // B13: buffer holds a different item; try next input
 			}
 
 			int32 AmountAdded = BufferInventory->AddStackToIndex(0, FInventoryStack(Item), true);
 			if (AmountAdded <= 0)
 			{
-				return;
+				break; // B13: buffer full for this item type; try next input
 			}
 
 			float offset = 0.0f;
@@ -362,7 +434,10 @@ void AKPCLBuildableBalanceSplitter::DistributeItemsToOutputSlots(float dt)
 	switch (mSplitterType)
 	{
 	case EKPCLBalanceSplitterType::NORMAL:
-		DistributeNormalMode(BufferInventory, InputSlotIndex, dt);
+		// Schleife: mehrere Pushes pro Frame erlaubt wenn dt > TargetDuration
+		while (DistributeNormalMode(BufferInventory, InputSlotIndex, dt))
+		{
+		}
 		break;
 	case EKPCLBalanceSplitterType::SMART:
 	case EKPCLBalanceSplitterType::PROGRAMMABLE:
@@ -371,13 +446,13 @@ void AKPCLBuildableBalanceSplitter::DistributeItemsToOutputSlots(float dt)
 	}
 }
 
-void AKPCLBuildableBalanceSplitter::DistributeNormalMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex,
+bool AKPCLBuildableBalanceSplitter::DistributeNormalMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex,
 														 float dt)
 {
 	FInventoryStack InputStack;
 	if (!BufferInventory->GetStackFromIndex(InputSlotIndex, InputStack) || !InputStack.HasItems())
 	{
-		return;
+		return false;
 	}
 
 	for (int32 i = 0; i < mOutputs.Num(); ++i)
@@ -414,7 +489,7 @@ void AKPCLBuildableBalanceSplitter::DistributeNormalMode(UFGInventoryComponent* 
 			// Prüfe nochmal die ItemClass vor dem Verschieben
 			if (!StackToMove.HasItems())
 			{
-				return;
+				return false;
 			}
 
 			int32 AddedItems = BufferInventory->AddStackToIndex(OutputSlotIndex, StackToMove, true);
@@ -425,10 +500,11 @@ void AKPCLBuildableBalanceSplitter::DistributeNormalMode(UFGInventoryComponent* 
 				// Wechsle zum nächsten Output für Round-Robin (überspringe nicht-verbundene)
 				mCurrentOutputIndex = (OutputIndex + 1) % mOutputs.Num();
 				Timer->HasPushed();
-				return;
+				return true; // Item erfolgreich gepusht → Schleife kann erneut aufrufen
 			}
 		}
 	}
+	return false; // Kein Item konnte gepusht werden
 }
 
 void AKPCLBuildableBalanceSplitter::DistributeSmartOrProgrammableMode(UFGInventoryComponent* BufferInventory,
@@ -621,13 +697,18 @@ void AKPCLBuildableBalanceSplitter::BeginPlay()
 	if (HasAuthority())
 	{
 		UFGInventoryComponent* BufferInventory = GetBufferInventory();
+		if (!IsValid(BufferInventory))
+		{
+			return;
+		}
 
 		// BufferInventory->SetSuppressOnItemAddedDelegate(true);
 		// BufferInventory->SetSuppressOnItemRemovedDelegate(true);
 
+		BufferInventory->AddArbitrarySlotSize(0, mInputBufferSize);
 		for (int32 i = 1; i < BufferInventory->GetSizeLinear(); ++i)
 		{
-			BufferInventory->AddArbitrarySlotSize(i, 5);
+			BufferInventory->AddArbitrarySlotSize(i, mOutputBufferSize);
 		}
 
 		mOutputs.Empty();
@@ -638,26 +719,45 @@ void AKPCLBuildableBalanceSplitter::BeginPlay()
 			UFGFactoryConnectionComponent* TopConnection = GetOutputByName(TEXT("TopConnection"));
 			UFGFactoryConnectionComponent* BottomConnection = GetOutputByName(TEXT("BottomConnection"));
 
-			UFGFactoryConnectionComponent* MiddleConnection =
-				TopConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT ? TopConnection
-																						 : BottomConnection;
-			UFGFactoryConnectionComponent* Input =
-				TopConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT ? BottomConnection
-																						 : TopConnection;
+			if (IsValid(TopConnection) && IsValid(BottomConnection))
+			{
+				UFGFactoryConnectionComponent* MiddleConnection =
+					TopConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT ? TopConnection
+																							 : BottomConnection;
+				UFGFactoryConnectionComponent* Input =
+					TopConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT ? BottomConnection
+																							 : TopConnection;
 
-			mOutputs.Add(GetOutputByName(TEXT("Output1")));
-			mOutputs.Add(MiddleConnection);
-			mOutputs.Add(GetOutputByName(TEXT("Output2")));
-
-			mInputs.Add(Input);
+				if (UFGFactoryConnectionComponent* Out1 = GetOutputByName(TEXT("Output1")))
+				{
+					mOutputs.Add(Out1);
+				}
+				mOutputs.Add(MiddleConnection);
+				if (UFGFactoryConnectionComponent* Out2 = GetOutputByName(TEXT("Output2")))
+				{
+					mOutputs.Add(Out2);
+				}
+				mInputs.Add(Input);
+			}
 		}
 		else
 		{
-			mOutputs.Add(GetOutputByName(TEXT("Output3")));
-			mOutputs.Add(GetOutputByName(TEXT("Output1")));
-			mOutputs.Add(GetOutputByName(TEXT("Output2")));
-
-			mInputs.Add(GetOutputByName(TEXT("Input1")));
+			if (UFGFactoryConnectionComponent* Out3 = GetOutputByName(TEXT("Output3")))
+			{
+				mOutputs.Add(Out3);
+			}
+			if (UFGFactoryConnectionComponent* Out1 = GetOutputByName(TEXT("Output1")))
+			{
+				mOutputs.Add(Out1);
+			}
+			if (UFGFactoryConnectionComponent* Out2 = GetOutputByName(TEXT("Output2")))
+			{
+				mOutputs.Add(Out2);
+			}
+			if (UFGFactoryConnectionComponent* In1 = GetOutputByName(TEXT("Input1")))
+			{
+				mInputs.Add(In1);
+			}
 		}
 
 		for (int32 i = 0; i < mInputs.Num(); ++i)
@@ -673,6 +773,12 @@ void AKPCLBuildableBalanceSplitter::BeginPlay()
 		if (mOutputTimers.Num() != mOutputs.Num())
 		{
 			mOutputTimers.SetNum(mOutputs.Num());
+		}
+
+		// Clamp saved round-robin index to valid range after load (B11).
+		if (mOutputs.Num() > 0)
+		{
+			mCurrentOutputIndex = FMath::Clamp(mCurrentOutputIndex, 0, mOutputs.Num() - 1);
 		}
 
 		// Leere die Map und befülle sie neu
@@ -850,7 +956,6 @@ bool AKPCLBuildableBalanceSplitter::Factory_PeekOutput_Implementation(
 	return true;
 }
 
-
 UFGFactoryConnectionComponent* AKPCLBuildableBalanceSplitter::GetOutputByName(FName ConnectionName) const
 {
 	UFGFactoryConnectionComponent* FoundConnection = nullptr;
@@ -868,105 +973,20 @@ UFGFactoryConnectionComponent* AKPCLBuildableBalanceSplitter::GetOutputByName(FN
 	return FoundConnection;
 }
 
-int32 AKPCLBuildableBalanceSplitter::GetNextConnectedOutputIndex(int32 StartIndex) const
-{
-	if (mOutputs.Num() == 0)
-	{
-		return INDEX_NONE;
-	}
-
-	// Stelle sicher, dass StartIndex gültig ist
-	StartIndex = StartIndex % mOutputs.Num();
-
-	// Suche ab StartIndex nach einem verbundenen Output
-	for (int32 i = 0; i < mOutputs.Num(); ++i)
-	{
-		int32 CheckIndex = (StartIndex + i) % mOutputs.Num();
-		UFGFactoryConnectionComponent* Output = mOutputs[CheckIndex];
-
-		if (Output && Output->IsConnected())
-		{
-			return CheckIndex;
-		}
-	}
-
-	// Kein verbundener Output gefunden, gib StartIndex zurück
-	return StartIndex;
-}
-
-bool AKPCLBuildableBalanceSplitter::CanOutputGrabAnyItem(int32 OutputIndex, TSubclassOf<UFGItemDescriptor> type) const
-{
-	if (!mOutputTimers.IsValidIndex(OutputIndex))
-	{
-		return false;
-	}
-
-	const FKPCLSplitterTimer& Timer = mOutputTimers[OutputIndex];
-
-	// Prüfe zuerst ob der Timer bereit ist
-	if (!Timer.CanPush())
-	{
-		return false;
-	}
-
-	UFGInventoryComponent* BufferInventory = GetBufferInventory();
-	if (!IsValid(BufferInventory) || BufferInventory->IsEmpty())
-	{
-		return false;
-	}
-
-	// Durchlaufe alle Slots im Buffer-Inventory und prüfe ob mindestens ein Item genommen werden kann
-	for (int32 SlotIdx = 0; SlotIdx < BufferInventory->GetSizeLinear(); ++SlotIdx)
-	{
-		FInventoryStack Stack;
-		if (!BufferInventory->GetStackFromIndex(SlotIdx, Stack) || !Stack.HasItems())
-		{
-			continue;
-		}
-
-		TSubclassOf<UFGItemDescriptor> ItemClass = Stack.Item.GetItemClass();
-		if (!ItemClass)
-		{
-			continue;
-		}
-
-		// Wenn ein spezifischer Typ angefordert wird, prüfe ob es passt
-		if (type && ItemClass != type)
-		{
-			continue;
-		}
-
-		// Prüfe, ob dieses Item an einem anderen Output spezifisch definiert ist
-		bool bIsItemDefinedElsewhere = IsItemDefinedOnAnyOutput(ItemClass);
-
-		// Prüfe ob das Item gepusht werden kann (ohne Overflow zuerst)
-		if (Timer.CanPushItem(ItemClass, false, bIsItemDefinedElsewhere))
-		{
-			return true;
-		}
-
-		// Prüfe mit Overflow-Modus
-		if (Timer.CanPushItem(ItemClass, true, bIsItemDefinedElsewhere))
-		{
-			return true;
-		}
-	}
-
-	return false;
-}
 
 FKPCLSplitterTimer* AKPCLBuildableBalanceSplitter::GetTimerForConnection(UFGFactoryConnectionComponent* Connection)
 {
+	// Phase 3: O(1) lookup via the map built in BeginPlay instead of a linear scan.
 	if (!Connection)
 	{
 		return nullptr;
 	}
 
-	for (int32 i = 0; i < mOutputs.Num() && i < mOutputTimers.Num(); ++i)
+	if (const int32* IndexPtr = mOutputConnectionToIndexMap.Find(Connection))
 	{
-		if (mOutputs[i] == Connection)
+		if (mOutputTimers.IsValidIndex(*IndexPtr))
 		{
-			return &mOutputTimers[i];
+			return &mOutputTimers[*IndexPtr];
 		}
 	}
 	return nullptr;
@@ -975,16 +995,17 @@ FKPCLSplitterTimer* AKPCLBuildableBalanceSplitter::GetTimerForConnection(UFGFact
 const FKPCLSplitterTimer*
 AKPCLBuildableBalanceSplitter::GetTimerForConnection(UFGFactoryConnectionComponent* Connection) const
 {
+	// Phase 3: O(1) lookup via the map built in BeginPlay instead of a linear scan.
 	if (!Connection)
 	{
 		return nullptr;
 	}
 
-	for (int32 i = 0; i < mOutputs.Num() && i < mOutputTimers.Num(); ++i)
+	if (const int32* IndexPtr = mOutputConnectionToIndexMap.Find(Connection))
 	{
-		if (mOutputs[i] == Connection)
+		if (mOutputTimers.IsValidIndex(*IndexPtr))
 		{
-			return &mOutputTimers[i];
+			return &mOutputTimers[*IndexPtr];
 		}
 	}
 	return nullptr;

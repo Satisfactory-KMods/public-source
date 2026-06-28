@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "KLBuildableSlugBuildingBase.h"
 #include "KLBuildableSlugHatchingModule.h"
 
@@ -30,9 +31,6 @@ enum class ESlugSlot : uint8
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnBreedingInformationHasChanged);
 
-/**
- * 
- */
 UCLASS(Blueprintable, BlueprintType)
 class KLIB_API AKLBuildableSlugBreeder : public AKLBuildableSlugBuildingBase
 {
@@ -41,129 +39,135 @@ class KLIB_API AKLBuildableSlugBreeder : public AKLBuildableSlugBuildingBase
 public:
 	AKLBuildableSlugBreeder();
 
-	virtual void UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) override;
-	virtual void Overclocking_GetInfo_Implementation(FKPCLOverclockingProductionInfo& OutProductionInfo) override;
-	virtual void Overclocking_GetProductionResults_Implementation(
-		TArray<FKPCLOverclockingProductionResults>& OutIngredients,
-		TArray<FKPCLOverclockingProductionResults>& OutProducts) override;
-
-
-	// Repl
+	//~ Begin AFGBuildableFactory Interface
+	virtual bool CanProduce_Implementation() const override;
+	virtual bool CanUseFactoryClipboard_Implementation() override;
+	virtual void CollectBelts() override;
+	virtual void Factory_TickAuthOnly(float dt) override;
 	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	virtual bool CanUseFactoryClipboard_Implementation() override;
+	virtual void onProducingFinal_Implementation() override;
 	virtual UFGFactoryClipboardSettings* CopySettings_Implementation() override;
+	virtual bool FilterInputInventory(TSubclassOf<UObject> object, int32 idx) const override;
 	virtual bool PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-	                                          class AFGPlayerController* player) override;
+											  class AFGPlayerController* player) override;
+	//~ End AFGBuildableFactory Interface
 
-	virtual void SetPendingPotential(float newPendingPotential) override;
+	//~ Begin AActor Interface
 	virtual void BeginPlay() override;
-	virtual void Factory_Tick(float dt) override;
-	virtual void CollectBelts() override;
+	//~ End AActor Interface
 
-	virtual bool CanProduce_Implementation() const override;
+	//~ Begin AKPCLProducerBase Interface
+	virtual void Overclocking_GetInfo_Implementation(FKPCLOverclockingProductionInfo& OutProductionInfo) override;
+	virtual void
+	Overclocking_GetProductionResults_Implementation(TArray<FKPCLOverclockingProductionResults>& OutIngredients,
+													 TArray<FKPCLOverclockingProductionResults>& OutProducts) override;
+	virtual void SetPendingPotential(float newPendingPotential) override;
+	virtual void UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) override;
+	//~ End AKPCLProducerBase Interface
 
-	UFUNCTION(BlueprintNativeEvent, Category="KMods|Breeder")
+	//~ Begin AKLBuildableSlugBuildingBase Interface
+	virtual void EndProductionTime() override;
+	//~ End AKLBuildableSlugBuildingBase Interface
+
+	UFUNCTION(BlueprintNativeEvent, Category = "KMods|Breeder")
+	void OnFoodFinial();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "KMods|Breeder")
+	void OnSlugDied(uint8 slot);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "KMods|Breeder")
 	void OnSlugInformationHasChanged();
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	bool AreSlugsComfortable() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	int32 GetNumOfFood() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	int32 GetNumOfFoodConsume() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	bool IsFoodCorrect() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
 	bool SlugFeeling() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	FFullProductionHandle GetDeadTimer(ESlugSlot Slot) const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	TSubclassOf<UFGItemDescriptor> GetCurrentFood() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	TSubclassOf<UFGItemDescriptor> GetStoredFoodClass() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	UKAPISugHatchingData* GetActiveData() const;
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	UKAPISugHatchingData* GetDataForSlot(ESlugSlot Slot) const;
+
+	UFUNCTION(BlueprintCallable, Category = "KMods|Breeder")
+	void ApplyNewHumidity(float Humidity);
+
+	UFUNCTION(BlueprintCallable, Category = "KMods|Breeder")
+	void ApplyNewTemperature(float Temperature);
+
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Breeder")
+	FFullProductionHandle GetFoodProductionHandle() const;
+
+	void ApplySlugData();
 	bool CanConsume() const;
 	bool CanStorage() const;
 	void CheckSlugs();
-
-	UFUNCTION(BlueprintNativeEvent, Category="KMods|Breeder")
-	void OnFoodFinial();
-
-	UFUNCTION(BlueprintNativeEvent, Category="KMods|Breeder")
-	void OnSlugDied(uint8 slot);
-
-	virtual void onProducingFinal_Implementation() override;
-	virtual void EndProductionTime() override;
-	void ApplySlugData();
-
-	// Native Helper
 	FInventoryStack GetFoodStack() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	bool IsFoodCorrect() const;
+	void SetActiveHatchingData(int32 SlotIdx, UKAPISugHatchingData* NewData);
+	void SetCurrentHatchingData(UKAPISugHatchingData* NewData);
+	void CommitFoodProductionHandle();
+	void CommitDeadTimers();
+	void CommitTemperature();
+	void CommitHumidity();
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	int32 GetNumOfFood() const;
+	static constexpr int32 FIRST_SLUG_IDX = 0;
+	static constexpr int32 SECOND_SLUG_IDX = 1;
+	static constexpr int32 FOOD_IDX = 2;
 
-	/** Works on Client and Host */
-	UFUNCTION(BlueprintCallable, Category="KMods|Breeder")
-	void ApplyNewHumidity(float Humidity);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Breeder")
+	int32 mMaxFoodStack = 50;
 
-	/** Works on Client and Host */
-	UFUNCTION(BlueprintCallable, Category="KMods|Breeder")
-	void ApplyNewTemperature(float Temperature);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Breeder")
+	int32 mMaxSlugPerSlot = 5;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	int32 GetNumOfFoodConsume() const;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Breeder")
+	TObjectPtr<UKAPISugHatchingData> mDefaultHatchingData;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	UKAPISugHatchingData* GetDataForSlot(ESlugSlot Slot) const;
+	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|Breeder")
+	FKLHatchingModeleStats mHumidity;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	UKAPISugHatchingData* GetActiveData() const;
+	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|Breeder")
+	FKLHatchingModeleStats mTemperature;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	TSubclassOf<UFGItemDescriptor> GetCurrentFood() const;
+	UPROPERTY(EditDefaultsOnly, SaveGame, meta = (FGReplicated), Category = "KMods|Breeder")
+	TArray<TObjectPtr<UKAPISugHatchingData>> mActiveHatchingDatas;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	TSubclassOf<UFGItemDescriptor> GetStoredFoodClass() const;
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	FFullProductionHandle mFoodProductionHandle;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Breeder")
-	bool AreSlugsComfortable() const;
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	TArray<FFullProductionHandle> mDeadTimer;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Breeder")
-	FFullProductionHandle GetDeadTimer(ESlugSlot Slot) const;
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	TObjectPtr<UKAPISugHatchingData> mCurrentHatchingData;
 
-	// Filter Inventorys to be Slug Classes!
-	virtual bool FilterInputInventory(TSubclassOf<UObject> object, int32 idx) const override;
+	UPROPERTY(Transient)
+	TObjectPtr<UKAPIDataAssetSubsystem> mDataSubsystem;
 
 	UPROPERTY(Transient)
 	TSet<TSubclassOf<UFGItemDescriptor>> mPossibleSlugs;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Breeder")
-	UKAPISugHatchingData* mDefaultHatchingData;
-
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	UKAPISugHatchingData* mCurrentHatchingData;
-
-	UPROPERTY(BlueprintReadOnly, SaveGame, meta = ( FGReplicated ))
-	FFullProductionHandle mFoodProductionHandle;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, meta = ( FGReplicated ), Category="KMods|Breeder")
-	TArray<UKAPISugHatchingData*> mActiveHatchingDatas = {
-		nullptr, nullptr
-	};
-
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	TArray<FFullProductionHandle> mDeadTimer = {FFullProductionHandle(60.f), FFullProductionHandle(60.f)};
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Breeder")
-	int32 mMaxSlugPerSlot = 5;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Breeder")
-	int32 mMaxFoodStack = 50;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = ( FGReplicated ), Category="KMods|Breeder")
-	FKLHatchingModeleStats mTemperature;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = ( FGReplicated ), Category="KMods|Breeder")
-	FKLHatchingModeleStats mHumidity;
-
-	UPROPERTY(BlueprintAssignable, Category="KMods|Events")
+	UPROPERTY(BlueprintAssignable, Category = "KMods|Events")
 	FOnBreedingInformationHasChanged OnBreedingInformationHasChanged;
-
-
-	UPROPERTY(Transient)
-	UKAPIDataAssetSubsystem* mDataSubsystem;
-
-	int32 FIRST_SLUG_IDX = 0;
-	int32 SECOND_SLUG_IDX = 1;
-	int32 FOOD_IDX = 2;
 };

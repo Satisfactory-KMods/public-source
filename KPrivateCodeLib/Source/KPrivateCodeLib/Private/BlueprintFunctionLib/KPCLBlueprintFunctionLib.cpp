@@ -6,19 +6,103 @@
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Buildables/FGBuildableRailroadTrack.h"
+#include "Components/HorizontalBoxSlot.h"
 #include "Components/ListViewBase.h"
 #include "Components/NamedSlotInterface.h"
+#include "Components/OverlaySlot.h"
 #include "Components/PanelWidget.h"
+#include "Components/VerticalBoxSlot.h"
 #include "Configuration/ModConfiguration.h"
 #include "Configuration/Properties/ConfigPropertyBool.h"
+#include "Engine/OverlapResult.h"
 #include "FGPowerConnectionComponent.h"
 #include "KPrivateCodeLibModule.h"
 #include "Logging/StructuredLog.h"
 #include "ModLoading/ModLoadingLibrary.h"
+#include "Replication/FGReplicationGraph.h"
 #include "Resources/FGBuildingDescriptor.h"
 #include "Resources/FGEquipmentDescriptor.h"
 #include "Resources/FGVehicleDescriptor.h"
 #include "Subsystems/KAPIDataAssetSubsystem.h"
+
+namespace KPCLSlotHelper
+{
+	struct FSlotProperties
+	{
+		FMargin Padding = FMargin(0);
+		TEnumAsByte<EHorizontalAlignment> HAlign = HAlign_Fill;
+		TEnumAsByte<EVerticalAlignment> VAlign = VAlign_Fill;
+		FSlateChildSize Size = FSlateChildSize(ESlateSizeRule::Automatic);
+
+		static FSlotProperties CaptureFromSlot(UPanelSlot* Slot)
+		{
+			FSlotProperties Props;
+			if (!Slot)
+			{
+				return Props;
+			}
+
+			if (UVerticalBoxSlot* VSlot = Cast<UVerticalBoxSlot>(Slot))
+			{
+				Props.Padding = VSlot->GetPadding();
+				Props.HAlign = VSlot->GetHorizontalAlignment();
+				Props.VAlign = VSlot->GetVerticalAlignment();
+				Props.Size = VSlot->GetSize();
+			}
+			else if (UHorizontalBoxSlot* HSlot = Cast<UHorizontalBoxSlot>(Slot))
+			{
+				Props.Padding = HSlot->GetPadding();
+				Props.HAlign = HSlot->GetHorizontalAlignment();
+				Props.VAlign = HSlot->GetVerticalAlignment();
+				Props.Size = HSlot->GetSize();
+			}
+			else if (UOverlaySlot* OSlot = Cast<UOverlaySlot>(Slot))
+			{
+				Props.Padding = OSlot->GetPadding();
+				Props.HAlign = OSlot->GetHorizontalAlignment();
+				Props.VAlign = OSlot->GetVerticalAlignment();
+			}
+			else
+			{
+				Props.Padding = UKAPTooltipWidgetInjector::GetPadding(Slot);
+			}
+			return Props;
+		}
+
+		void ApplyToSlot(UPanelSlot* Slot) const
+		{
+			if (!Slot)
+			{
+				return;
+			}
+
+			if (UVerticalBoxSlot* VSlot = Cast<UVerticalBoxSlot>(Slot))
+			{
+				VSlot->SetPadding(Padding);
+				VSlot->SetHorizontalAlignment(HAlign);
+				VSlot->SetVerticalAlignment(VAlign);
+				VSlot->SetSize(Size);
+			}
+			else if (UHorizontalBoxSlot* HSlot = Cast<UHorizontalBoxSlot>(Slot))
+			{
+				HSlot->SetPadding(Padding);
+				HSlot->SetHorizontalAlignment(HAlign);
+				HSlot->SetVerticalAlignment(VAlign);
+				HSlot->SetSize(Size);
+			}
+			else if (UOverlaySlot* OSlot = Cast<UOverlaySlot>(Slot))
+			{
+				OSlot->SetPadding(Padding);
+				OSlot->SetHorizontalAlignment(HAlign);
+				OSlot->SetVerticalAlignment(VAlign);
+			}
+			else
+			{
+				UKAPTooltipWidgetInjector::SetPadding(Slot, Padding);
+			}
+		}
+	};
+} // namespace KPCLSlotHelper
 
 void UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(UFGInventoryComponent* Component, int32 Index,
 														   TSubclassOf<UFGItemDescriptor> ItemClass)
@@ -40,6 +124,41 @@ void UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(UFGInventoryComponent
 			}
 		}
 	}
+}
+
+void UKPCLBlueprintFunctionLib::DestroyAndRemoveFromReplicationGraph(AActor* Actor)
+{
+	if (!IsValid(Actor))
+	{
+		return;
+	}
+
+	UWorld* World = Actor->GetWorld();
+	if (IsValid(World))
+	{
+		if (UNetDriver* NetDriver = World->GetNetDriver())
+		{
+			if (UFGReplicationGraph* FGGraph = Cast<UFGReplicationGraph>(NetDriver->GetReplicationDriver()))
+			{
+				FGGraph->RemoveNetworkActor(Actor);
+
+				for (auto& Pair : FGGraph->mAlwaysRelevantStreamingLevelActors)
+				{
+					FActorRepListRefView& RepView = Pair.Value;
+					for (int32 i = RepView.Num() - 1; i >= 0; --i)
+					{
+						if (RepView[i] == Actor)
+						{
+							RepView.RemoveAtSwap(i);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	Actor->Destroy();
 }
 
 UPanelSlot* UKPCLBlueprintFunctionLib::InjectWidgetAt(UPanelWidget* TargetPanel, UUserWidget* WidgetToInject,
@@ -65,13 +184,14 @@ UPanelSlot* UKPCLBlueprintFunctionLib::InjectWidgetAt(UPanelWidget* TargetPanel,
 					UConfigPropertySection* Section = UKBFL_ConfigTools::GetPropertySection(LoadedClass, TargetPanel);
 					if (IsValid(Section))
 					{
-						UConfigProperty** Property = Section->SectionProperties.Find(FString("Tooltips"));
+						const TObjectPtr<UConfigProperty>* Property =
+							Section->SectionProperties.Find(FString("Tooltips"));
 						if (Property && IsValid(*Property))
 						{
 							UConfigPropertySection* TooltipsSection = Cast<UConfigPropertySection>(*Property);
 							if (IsValid(TooltipsSection))
 							{
-								UConfigProperty** EnabledProperty =
+								const TObjectPtr<UConfigProperty>* EnabledProperty =
 									TooltipsSection->SectionProperties.Find(FString("Enabled"));
 								if (EnabledProperty && IsValid(*EnabledProperty))
 								{
@@ -97,20 +217,24 @@ UPanelSlot* UKPCLBlueprintFunctionLib::InjectWidgetAt(UPanelWidget* TargetPanel,
 	}
 
 	TArray<UWidget*> Childrens = TargetPanel->GetAllChildren();
-	TArray<FMargin> Margins;
+	TArray<KPCLSlotHelper::FSlotProperties> SlotProps;
 	for (UWidget* Child : Childrens)
 	{
-		Margins.Add(UKAPTooltipWidgetInjector::GetPadding(Child->Slot));
+		SlotProps.Add(KPCLSlotHelper::FSlotProperties::CaptureFromSlot(Child->Slot));
 	}
 
+	// Build a default FSlotProperties for the injected widget using the provided Padding
+	KPCLSlotHelper::FSlotProperties InjectedProps;
+	InjectedProps.Padding = Padding;
+
 	Childrens.Insert(WidgetToInject, Index);
-	Margins.Insert(Padding, Index);
+	SlotProps.Insert(InjectedProps, Index);
 
 	TargetPanel->ClearChildren();
 	for (int32 i = 0; i < Childrens.Num(); ++i)
 	{
 		UPanelSlot* AddedSlot = TargetPanel->AddChild(Childrens[i]);
-		UKAPTooltipWidgetInjector::SetPadding(AddedSlot, Margins[i]);
+		SlotProps[i].ApplyToSlot(AddedSlot);
 	}
 	return WidgetToInject->Slot;
 }
@@ -243,26 +367,6 @@ AActor* UKPCLBlueprintFunctionLib::ResolveHitResult(const FHitResult& InHitResul
 	return InHitResult.GetActor();
 }
 
-AActor* UKPCLBlueprintFunctionLib::ResolveOverlapResult(const FOverlapResult& InOverlapResult)
-{
-	AActor* ActorHit = InOverlapResult.GetActor();
-	if (!IsValid(ActorHit))
-	{
-		return nullptr;
-	}
-	FInstanceHandle Handle;
-	AAbstractInstanceManager* Manager = AAbstractInstanceManager::GetInstanceManager(ActorHit->GetWorld());
-	if (IsValid(Manager))
-	{
-		Manager->ResolveOverlap(InOverlapResult, Handle);
-	}
-
-	if (IsValid(Handle.GetOwner()))
-	{
-		return Handle.GetOwner();
-	}
-	return InOverlapResult.GetActor();
-}
 
 TArray<UWidget*> UKPCLBlueprintFunctionLib::FindChildWidgetsOfClassDeep(UUserWidget* CurrentWidget,
 																		TSubclassOf<UWidget> WidgetClass)

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "DataAssets/KBFLCustomizationProvider.h"
-#include "Interfaces/KBFLContentCDOHelperInterface.h"
 #include "Module/GameWorldModule.h"
 #include "Module/WorldModule.h"
 #include "UObject/Object.h"
@@ -15,18 +14,12 @@
  *
  */
 UCLASS(Blueprintable)
-class KBFL_API UKBFLWorldModule : public UGameWorldModule, public IKBFLContentCDOHelperInterface
+class KBFL_API UKBFLWorldModule : public UGameWorldModule
 {
 	GENERATED_BODY()
 
 public:
 	UKBFLWorldModule();
-
-	// BEGIN IKBFLContentCDOHelperInterface
-	virtual FKBFLCDOInformation GetCDOInformationFromPhase_Implementation(ELifecyclePhase Phase,
-																		  bool& HasPhase) override;
-
-	// END IKBFLContentCDOHelperInterface
 
 	// BEGIN UGameWorldModule
 	virtual void DispatchLifecycleEvent(ELifecyclePhase Phase) override;
@@ -42,17 +35,25 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "LifecyclePhase")
 	void PostInitPhase();
 
-	virtual void RegisterKBFLLogicContent();
+	/** Editor button: scan this mod's plugin path and AddUnique all schematics into mSchematics. */
+	UFUNCTION(BlueprintCallable, Category = "KMods|AssetRegistry")
+	void ScanSchematics();
 
-	virtual void FindAllCDOs();
+	/** Editor button: scan this mod's plugin path and AddUnique all research trees into mResearchTrees. */
+	UFUNCTION(BlueprintCallable, Category = "KMods|AssetRegistry")
+	void ScanResearchTrees();
 
-	virtual bool IsAllowedToRegister(TSubclassOf<UObject> Object) const;
+	/** Editor button: scan this mod's plugin path and AddUnique all chat commands into mChatCommands. */
+	UFUNCTION(BlueprintCallable, Category = "KMods|AssetRegistry")
+	void ScanChatCommands();
 
-	bool bScanForCDOsDone = false;
-	/** Information for CDO's */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DEPRECATED|CDOHelper")
-	TMap<ELifecyclePhase, FKBFLCDOInformation> mCDOInformationMap;
+private:
+	// Scans this module's own mod plugin path in the Asset Registry, loads each Blueprint class
+	// derived from T, and AddUnique's the valid ones into OutArray (skips null/abstract/blacklisted).
+	template <typename T>
+	void ScanModAssetsInto(TArray<TSubclassOf<T>>& OutArray, const TCHAR* Label);
 
+public:
 	/** Material Information for add to SF Material Desc */
 	UPROPERTY(VisibleDefaultsOnly, Category = "DEPRECATED|Swatches")
 	TArray<FKBFLMaterialDescriptorInformation> mMaterialInformation = {};
@@ -65,35 +66,9 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = "DEPRECATED|Swatches")
 	TMap<TSubclassOf<UFGSwatchGroup>, TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> mSwatchGroups;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|AssetRegistry")
-	bool mUseAssetRegistry = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DEPRECATED|CDOHelper|AssetRegistry",
-			  meta = (EditCondition = mUseAssetRegistry))
-	bool mRegisterCDOs = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|AssetRegistry",
-			  meta = (EditCondition = mUseAssetRegistry))
-	bool mRegisterRecipes = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|AssetRegistry",
-			  meta = (EditCondition = mUseAssetRegistry))
-	bool mRegisterSchematics = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|AssetRegistry",
-			  meta = (EditCondition = mUseAssetRegistry))
-	bool mRegisterResearchTrees = true;
-
 	/**
-	 * Path for automatic find classes to register
+	 * Classes excluded from the editor scan buttons (ScanSchematics / ScanResearchTrees / ScanChatCommands).
 	 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|AssetRegistry")
 	TArray<TSubclassOf<UObject>> mBlacklistedClasses;
-
-	/**
-	 * Path for automatic find classes to register
-	 */
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "DEPRECATED|CDOHelper|AssetRegistry",
-			  meta = (EditCondition = mRegisterCDOs))
-	TArray<TSubclassOf<UObject>> mBlacklistedCDOClasses;
 };

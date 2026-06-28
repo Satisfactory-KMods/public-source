@@ -11,20 +11,7 @@ bool FKAPISlugIncubation::Roll(float ChanceOverwrite) const
 	return FMath::FRandRange(0.0f, 100.0f) <= Chance;
 }
 
-bool FKAPISlugIncubation::Valid() const
-{
-	return IsValid(mSlug) && mProductionCount > 0 && mProbability > 0.0f;
-}
-
-bool FKAPISlugFeeling::IsTempInRange(float Temp) const
-{
-	return UKismetMathLibrary::InRange_FloatFloat(Temp, mMinHeat, mMaxHeat);
-}
-
-bool FKAPISlugFeeling::IsHumidityInRange(float Humidity) const
-{
-	return UKismetMathLibrary::InRange_FloatFloat(Humidity, mMinHumidity, mMaxHumidity);
-}
+bool FKAPISlugIncubation::Valid() const { return IsValid(mSlug) && mProductionCount > 0 && mProbability > 0.0f; }
 
 bool FKAPISlugFeeling::IsDayTimeValid(EKAPISlugTime Time) const
 {
@@ -40,9 +27,14 @@ bool FKAPISlugFeeling::IsDayTimeValid(EKAPISlugTime Time) const
 	return Time == mDayTime;
 }
 
-bool UKAPISugHatchingData::IncubationFluidRequired() const
+bool FKAPISlugFeeling::IsHumidityInRange(float Humidity) const
 {
-	return bRequireFluid && IsValid(mFluidClass);
+	return UKismetMathLibrary::InRange_FloatFloat(Humidity, mMinHumidity, mMaxHumidity);
+}
+
+bool FKAPISlugFeeling::IsTempInRange(float Temp) const
+{
+	return UKismetMathLibrary::InRange_FloatFloat(Temp, mMinHeat, mMaxHeat);
 }
 
 void UKAPISugHatchingData::GetComfortableSlugs(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlugs) const
@@ -51,32 +43,40 @@ void UKAPISugHatchingData::GetComfortableSlugs(TArray<TSubclassOf<UFGItemDescrip
 	OutSlugs.AddUnique(mSlug);
 }
 
-bool UKAPISugHatchingData::RollSlugs(TArray<FItemAmount>& OutSlugs,
-                                     TMap<TSubclassOf<UFGItemDescriptor>, float>& FixedChance,
-                                     bool bUseFixedChance) const
+FKAPISlugFeeling UKAPISugHatchingData::GetFeeling() const
 {
-	OutSlugs.Empty();
-	for (const FKAPISlugIncubation& Incubation : mPossibleSlugs)
+	return FKAPISlugFeeling{mMinHumidity, mMaxHumidity, mMinHeat, mMaxHeat, mDayTime};
+}
+
+UKAPISugHatchingData* UKAPISugHatchingData::GetHighterSlug(UKAPISugHatchingData* Other) const
+{
+	if (!IsValid(Other))
 	{
-		float Chance = Incubation.mProbability;
-		if (bUseFixedChance && FixedChance.Contains(Incubation.mSlug))
-		{
-			Chance = FixedChance[Incubation.mSlug];
-		}
-		if (Incubation.Roll(Chance))
-		{
-			OutSlugs.Add(FItemAmount(Incubation.mSlug, Incubation.mProductionCount));
-			FixedChance.Remove(Incubation.mSlug);
-		}
-		else if (bUseFixedChance && Incubation.bShouldUseFixedChance)
-		{
-			float CurrentBonus = FixedChance.FindOrAdd(Incubation.mSlug);
-			CurrentBonus = FMath::Max(CurrentBonus, Incubation.mProductionCount);
-			CurrentBonus += Incubation.mProbability * Incubation.mFixedChanceMultiplier;
-			FixedChance.Add(Incubation.mSlug, FMath::Clamp(CurrentBonus, 0.0f, 100.0f));
-		}
+		return const_cast<UKAPISugHatchingData*>(this);
 	}
-	return !OutSlugs.IsEmpty();
+	if (mSlugTier < Other->mSlugTier)
+	{
+		return Other;
+	}
+	return const_cast<UKAPISugHatchingData*>(this);
+}
+
+UKAPISugHatchingData* UKAPISugHatchingData::GetHighterSlugStatic(UKAPISugHatchingData* A, UKAPISugHatchingData* B)
+{
+	if (!IsValid(A) && !IsValid(B))
+	{
+		return nullptr;
+	}
+	if (!IsValid(A) && IsValid(B))
+	{
+		return B;
+	}
+	if (IsValid(A) && !IsValid(B))
+	{
+		return A;
+	}
+
+	return A->GetHighterSlug(B);
 }
 
 TArray<TSubclassOf<UFGItemDescriptor>> UKAPISugHatchingData::GetPossibleSlugs() const
@@ -92,29 +92,13 @@ TArray<TSubclassOf<UFGItemDescriptor>> UKAPISugHatchingData::GetPossibleSlugs() 
 	return Result;
 }
 
-FKAPISlugFeeling UKAPISugHatchingData::GetFeeling() const
-{
-	return FKAPISlugFeeling{
-		mMinHumidity,
-		mMaxHumidity,
-		mMinHeat,
-		mMaxHeat,
-		mDayTime
-	};
-}
-
 TArray<FKAPISlugIncubation> UKAPISugHatchingData::GetSlugIncubationsSortedByChance() const
 {
-	TArray<FKAPISlugIncubation> FilteredSlugs = mPossibleSlugs.FilterByPredicate(
-		[](const FKAPISlugIncubation& Incubation)
-		{
-			return Incubation.Valid();
-		});
+	TArray<FKAPISlugIncubation> FilteredSlugs =
+		mPossibleSlugs.FilterByPredicate([](const FKAPISlugIncubation& Incubation) { return Incubation.Valid(); });
 
 	FilteredSlugs.Sort([](const FKAPISlugIncubation& A, const FKAPISlugIncubation& B)
-	{
-		return A.mProbability > B.mProbability;
-	});
+					   { return A.mProbability > B.mProbability; });
 
 	return FilteredSlugs;
 }
@@ -136,33 +120,7 @@ TArray<FItemAmount> UKAPISugHatchingData::GetSlugsForThisCycle() const
 	return Result;
 }
 
-UKAPISugHatchingData* UKAPISugHatchingData::GetHighterSlugStatic(UKAPISugHatchingData* A,
-                                                                 UKAPISugHatchingData* B)
-{
-	if (!IsValid(A) && !IsValid(B))
-	{
-		return nullptr;
-	}
-	if (!IsValid(A) && IsValid(B))
-	{
-		return B;
-	}
-	if (IsValid(A) && !IsValid(B))
-	{
-		return B;
-	}
-
-	return A->GetHighterSlug(B);
-}
-
-UKAPISugHatchingData* UKAPISugHatchingData::GetHighterSlug(UKAPISugHatchingData* Other) const
-{
-	if (mSlugTier < Other->mSlugTier)
-	{
-		return Other;
-	}
-	return const_cast<UKAPISugHatchingData*>(this);
-}
+bool UKAPISugHatchingData::IncubationFluidRequired() const { return bRequireFluid && IsValid(mFluidClass); }
 
 bool UKAPISugHatchingData::IsComfortableWith(UKAPISugHatchingData* Other) const
 {
@@ -182,9 +140,48 @@ bool UKAPISugHatchingData::IsComfortableWith(UKAPISugHatchingData* Other) const
 	Other->GetComfortableSlugs(OtherComfortableSlugs);
 
 	// Intersect if the two arrays have at least one common slug
-	return ComfortableSlugs.ContainsByPredicate(
-		[&OtherComfortableSlugs](TSubclassOf<UFGItemDescriptor> Slug)
+	return ComfortableSlugs.ContainsByPredicate([&OtherComfortableSlugs](TSubclassOf<UFGItemDescriptor> Slug)
+												{ return OtherComfortableSlugs.Contains(Slug); });
+}
+
+bool UKAPISugHatchingData::RollSlugs(TArray<FItemAmount>& OutSlugs, TArray<FKAPISlugFixedChance>& FixedChance,
+									 bool bUseFixedChance) const
+{
+	OutSlugs.Empty();
+	for (const FKAPISlugIncubation& Incubation : mPossibleSlugs)
+	{
+		const int32 ExistingIndex = FixedChance.IndexOfByPredicate([&Incubation](const FKAPISlugFixedChance& Entry)
+																   { return Entry.mSlug == Incubation.mSlug; });
+
+		float Chance = Incubation.mProbability;
+		if (bUseFixedChance && ExistingIndex != INDEX_NONE)
 		{
-			return OtherComfortableSlugs.Contains(Slug);
-		});
+			Chance = FixedChance[ExistingIndex].mChance;
+		}
+		if (Incubation.Roll(Chance))
+		{
+			OutSlugs.Add(FItemAmount(Incubation.mSlug, Incubation.mProductionCount));
+			if (ExistingIndex != INDEX_NONE)
+			{
+				FixedChance.RemoveAt(ExistingIndex);
+			}
+		}
+		else if (bUseFixedChance && Incubation.bShouldUseFixedChance)
+		{
+			float CurrentBonus = ExistingIndex != INDEX_NONE ? FixedChance[ExistingIndex].mChance : 0.f;
+			CurrentBonus = FMath::Max(CurrentBonus, Incubation.mProbability);
+			CurrentBonus += Incubation.mProbability * Incubation.mFixedChanceMultiplier;
+			CurrentBonus = FMath::Clamp(CurrentBonus, 0.0f, 100.0f);
+
+			if (ExistingIndex != INDEX_NONE)
+			{
+				FixedChance[ExistingIndex].mChance = CurrentBonus;
+			}
+			else
+			{
+				FixedChance.Emplace(Incubation.mSlug, CurrentBonus);
+			}
+		}
+	}
+	return !OutSlugs.IsEmpty();
 }

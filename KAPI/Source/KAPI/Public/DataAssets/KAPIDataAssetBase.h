@@ -1,8 +1,9 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Engine/DataAsset.h"
 
 #include "KAPIDataAssetBase.generated.h"
@@ -13,10 +14,12 @@ class KAPI_API UKAPIDataAssetBase : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 protected:
+	//~ Begin UObject Interface
 	virtual FPrimaryAssetId GetPrimaryAssetId() const override
 	{
 		return FPrimaryAssetId(FPrimaryAssetType("KAPIDataAsset"), GetFName());
 	}
+	//~ End UObject Interface
 
 public:
 	UFUNCTION(BlueprintPure)
@@ -29,22 +32,19 @@ public:
 		return Asset->IsEnabled_Internal(WorldContextObject);
 	};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI")
-	FText mName = FText::FromString("");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI", meta=(MultiLine=true))
-	FText mDescription = FText::FromString("");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="UI")
-	UTexture* mIcon;
-
 	/**
 	 * Can be overridden to disable the asset or make some other checks
 	 */
-	virtual bool IsEnabled_Internal(UObject* WorldContextObject) const
-	{
-		return !mIsDisabled;
-	}
+	virtual bool IsEnabled_Internal(UObject* WorldContextObject) const { return !mIsDisabled; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	FText mName = FText::FromString("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (MultiLine = true))
+	FText mDescription = FText::FromString("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TObjectPtr<UTexture> mIcon;
 
 	/**
 	 * Disable this asset from being used in the game

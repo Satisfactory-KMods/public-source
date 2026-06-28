@@ -1,19 +1,18 @@
 ﻿#include "Buildable/ModularMiner/Hologram/KLHologramModularMinerModule.h"
 
 #include "AITypes.h"
-#include "FGConstructDisqualifier.h"
 #include "Buildable/ModularMiner/KLMMBuildableMiner.h"
+#include "FGConstructDisqualifier.h"
 #include "Resources/FGResourceNode.h"
 
-AKLHologramModularMinerModule::AKLHologramModularMinerModule()
-	: mCanUpdate(false)
+AKLHologramModularMinerModule::AKLHologramModularMinerModule() : mCanUpdate(false)
 {
 	mValidHitClasses.Add(AKLMMBuildableMiner::StaticClass());
 	mValidHitClasses.Add(AKLMMBuildableModule::StaticClass());
 }
 
 bool AKLHologramModularMinerModule::IsModuleAllowed(UKPCLModularBuildingHandlerBase* Handler,
-                                                    AFGBuildable* TargetBuildable, const FHitResult& hitResult)
+													AFGBuildable* TargetBuildable, const FHitResult& hitResult)
 {
 	TSubclassOf<AKLMMBuildableModule> ModuleClass = TSubclassOf<AKLMMBuildableModule>(mBuildClass);
 	if (ModuleClass)
@@ -28,10 +27,7 @@ bool AKLHologramModularMinerModule::IsModuleAllowed(UKPCLModularBuildingHandlerB
 }
 
 
-AActor* AKLHologramModularMinerModule::GetUpgradedActor() const
-{
-	return mCanUpdate ? mUpgradedActor : nullptr;
-}
+AActor* AKLHologramModularMinerModule::GetUpgradedActor() const { return mCanUpdate ? mUpgradedActor : nullptr; }
 
 bool AKLHologramModularMinerModule::TryUpgrade(const FHitResult& hitResult)
 {
@@ -59,7 +55,7 @@ bool AKLHologramModularMinerModule::TryUpgrade(const FHitResult& hitResult)
 
 void AKLHologramModularMinerModule::ConfigureComponents(AFGBuildable* inBuildable) const
 {
-	if (mCanUpdate)
+	if (mCanUpdate && IsValid(mModuleMasterHit))
 	{
 		IKPCLModularBuildingInterface::Execute_RemoveAttachedActor(mModuleMasterHit, mUpgradedActor);
 	}

@@ -1,0 +1,62 @@
+{
+	"FileVersion": 3,
+	"Version": 2026,
+	"VersionName": "9999.9.9",
+	"SemVersion": "9999.9.9",
+	"FriendlyName": "RSS: Really Simple Signs",
+	"Description": "RSS: Really Simple Signs",
+	"Category": "Modding",
+	"CreatedBy": "Kyri123",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "RSS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.12.0",
+			"Enabled": true
+		},
+		{
+			"Name": "KBFL",
+			"Enabled": true,
+			"SemVersion": ">=9999.9.9"
+		},
+		{
+			"Name": "KUI",
+			"Enabled": true,
+			"SemVersion": ">=9999.9.9"
+		},
+		{
+			"Name": "KAPI",
+			"Enabled": true,
+			"SemVersion": ">=9999.9.9"
+		},
+		{
+			"Name": "KPrivateCodeLib",
+			"Enabled": true,
+			"SemVersion": ">=9999.9.9"
+		}
+	],
+	"LocalizationTargets": [
+		{
+			"Name": "RSS",
+			"LoadingPolicy": "Always",
+			"ConfigGenerationPolicy": "Never"
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=491125",
+	"GameFeatures": true
+}

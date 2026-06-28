@@ -1,33 +1,117 @@
 #include "Subsystems/KBFLContentCDOHelperSubsystem.h"
 
+#include "Async/Async.h"
+#include "Engine/BlueprintGeneratedClass.h"
 #include "Engine/Engine.h"
 #include "Engine/GameInstance.h"
-#include "FGGameState.h"
-#include "FGItemCategory.h"
+#include "KBFLDeveloperSettings.h"
 #include "KBFLLogging.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "Subsystems/HelperClasses/KBFL_CDOHelperClass_Recipes.h"
+#include "TimerManager.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 #include "Subsystems/KBFLWorldCDOSubsystem.h"
+#include "UObject/UObjectGlobals.h"
+
+// Several functions below use the `#if WITH_EDITOR return; #endif` editor-skip pattern, which makes
+// the remaining bodies unreachable in editor builds and triggers C4702. The dead code is intentional
+// (editor-skip), so the warning is suppressed for this translation unit.
+#pragma warning(push)
+#pragma warning(disable : 4702)
 
 
 void UKBFLContentCDOHelperSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	// Optionally mute CDO logs. Setting the category to NoLogging makes every UE_LOG/UE_LOGFMT
+	// short-circuit before building its (often large) string args — a big speedup with many CDOs.
+	if (UKBFLDeveloperSettings::Get()->bMuteCDOLogs)
+	{
+		LogKBFLCDOOverwrite.SetVerbosity(ELogVerbosity::NoLogging);
+		ContentCDOHelperSubsystem.SetVerbosity(ELogVerbosity::NoLogging);
+	}
+
 	Collection.InitializeDependency(UKBFLAssetDataSubsystem::StaticClass());
 
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UKBFLContentCDOHelperSubsystem::OnTimerCallback, 5.0f,
-										   false);
+	// Cache once — the lazy-load listener uses it per newly-loaded class.
+	mAssetDataSubsystem = GetGameInstance()->GetSubsystem<UKBFLAssetDataSubsystem>();
+
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	// Must wait until all assets are discovered before populating list of assets.
+	if (AssetRegistry.IsLoadingAssets())
+	{
+		AssetRegistry.OnFilesLoaded().AddWeakLambda(this, [this]() { WaitForWorldAndScheduleCallback(); });
+	}
+	else
+	{
+		WaitForWorldAndScheduleCallback();
+	}
 
 	Super::Initialize(Collection);
 }
 
+void UKBFLContentCDOHelperSubsystem::WaitForWorldAndScheduleCallback()
+{
+	if (UWorld* World = GetWorld())
+	{
+		UE_LOGFMT(ContentCDOHelperSubsystem, Log,
+				  "WaitForWorldAndScheduleCallback > World '{0}' already valid, scheduling callback", World->GetName());
+		World->GetTimerManager().SetTimerForNextTick(this, &UKBFLContentCDOHelperSubsystem::OnTimerCallback);
+		return;
+	}
+
+	// World not yet available – wait for the engine to add a game world that belongs to our GameInstance.
+	UE_LOGFMT(ContentCDOHelperSubsystem, Warning,
+			  "WaitForWorldAndScheduleCallback > GetWorld() returned null, waiting for first game UWorld");
+
+	mWorldAddedHandle = GEngine->OnWorldAdded().AddWeakLambda(
+		this,
+		[this](UWorld* World)
+		{
+			if (!World || World->WorldType != EWorldType::Game)
+			{
+				return;
+			}
+			if (World->GetGameInstance() != GetGameInstance())
+			{
+				return;
+			}
+
+			UE_LOGFMT(ContentCDOHelperSubsystem, Log,
+					  "WaitForWorldAndScheduleCallback > Received game world '{0}', scheduling callback",
+					  World->GetName());
+
+			GEngine->OnWorldAdded().Remove(mWorldAddedHandle);
+			mWorldAddedHandle.Reset();
+
+			World->GetTimerManager().SetTimerForNextTick(this, &UKBFLContentCDOHelperSubsystem::OnTimerCallback);
+		});
+}
+
 void UKBFLContentCDOHelperSubsystem::Deinitialize()
 {
+	mCalledClasses.Empty();
+
+	// Remove world-added listener in case we never received a valid world.
+	if (mWorldAddedHandle.IsValid() && GEngine)
+	{
+		GEngine->OnWorldAdded().Remove(mWorldAddedHandle);
+		mWorldAddedHandle.Reset();
+	}
+
+#if WITH_EDITOR
+	if (mPackageLoadHandle.IsValid())
+	{
+		FCoreUObjectDelegates::OnEndLoadPackage.Remove(mPackageLoadHandle);
+		mPackageLoadHandle.Reset();
+	}
+#else
+	GUObjectArray.RemoveUObjectCreateListener(this);
+#endif
+
 	Initialized = false;
 
 	mModulesToCall.Empty();
-	mCDOCalled.Empty();
 	mCalledObjects.Empty();
 
 	for (UKBFLCDOOverwriteBase* ToCall : mCDOOverwritesToCall)
@@ -40,6 +124,7 @@ void UKBFLContentCDOHelperSubsystem::Deinitialize()
 		ToCall->Clear();
 	}
 	mCDOOverwritesToCall.Empty();
+	mNonWorldOverwritesToCall.Empty();
 
 	Super::Deinitialize();
 }
@@ -82,6 +167,9 @@ void UKBFLContentCDOHelperSubsystem::OnTimerCallback()
 		UE_LOGFMT(ContentCDOHelperSubsystem, Log, "Start CDO Call for Overwrite: {0}", ToCall->GetName());
 		ToCall->mSubsystem = this;
 		ToCall->Start();
+
+		// Cache for the lazy-load listener (no per-class Cast/skip).
+		mNonWorldOverwritesToCall.Add(ToCall);
 	}
 
 	// Register world-based overwrites to all existing worlds
@@ -120,282 +208,59 @@ void UKBFLContentCDOHelperSubsystem::OnTimerCallback()
 		}
 	}
 
-	for (UKBFL_CDOHelperClass_CategoryOrder* CDOHelper : mCategoriesToCall)
+	// Re-apply non-world overwrites when a class is lazily loaded after the initial CDO pass.
+	// Editor: OnEndLoadPackage fires once per package after its objects are fully loaded & linked.
+	// Shipping: that delegate is WITH_EDITOR-only, so use the FUObjectArray create listener
+	// (NotifyUObjectCreated), which defers per-class work to the game thread once linking is done.
+#if WITH_EDITOR
+	if (!mPackageLoadHandle.IsValid())
 	{
-		CDOHelper->ModifyValues();
-		CDOHelper->DoCDO();
-		CDOHelper->ExecuteBlueprintCDO();
-		UE_LOG(ContentCDOHelperSubsystem, Log, TEXT("Do CDO Call for Helper: %s"), *CDOHelper->GetName());
-	}
-	UE_LOG(ContentCDOHelperSubsystem, Error, TEXT("UKBFLContentCDOHelperSubsystem::OnTimerCallback %d"),
-		   mCategoriesToCall.Num());
-}
-
-void UKBFLContentCDOHelperSubsystem::MoveRecipesFromBuilding(TSoftClassPtr<> From, TSoftClassPtr<> To,
-															 TArray<TSubclassOf<UFGItemCategory>> IgnoreCategory,
-															 TArray<TSubclassOf<UFGRecipe>> IgnoreRecipe)
-{
-	TSubclassOf<UObject> SubFrom = nullptr;
-	TSubclassOf<UObject> SubTo = nullptr;
-
-	if (From.IsPending() || To.IsValid())
-	{
-		SubFrom = From.LoadSynchronous();
-	}
-
-	if (To.IsPending() || To.IsValid())
-	{
-		SubTo = To.LoadSynchronous();
-	}
-
-	if (!SubFrom)
-		UE_LOG(ContentCDOHelperSubsystem, Error, TEXT("CDO_MoveRecipesFromBuilding -> Cannot load From"));
-
-	if (!SubTo)
-		UE_LOG(ContentCDOHelperSubsystem, Error, TEXT("CDO_MoveRecipesFromBuilding -> Cannot load To"));
-
-	if (SubTo && SubFrom)
-	{
-		UKBFLAssetDataSubsystem* AssetDataSubsystem = UKBFLAssetDataSubsystem::Get(GetWorld());
-
-		TArray<TSubclassOf<UFGRecipe>> Recipes;
-		AssetDataSubsystem->GetRecipesOfProducer({SubFrom}, Recipes);
-
-		for (auto Recipe : Recipes)
-		{
-			if (IsValid(Recipe) && !IgnoreRecipe.Contains(Recipe))
+		mPackageLoadHandle = FCoreUObjectDelegates::OnEndLoadPackage.AddWeakLambda(
+			this,
+			[this](const FEndLoadPackageContext& Params)
 			{
-				UFGRecipe* Default = GetAndStoreDefaultObject_Native<UFGRecipe>(Recipe);
-				if (IsValid(Default))
+				for (UPackage* Package : Params.LoadedPackages)
 				{
-					if (!IgnoreCategory.Contains(Default->mOverriddenCategory) ||
-						Default->mOverriddenCategory == nullptr)
+					if (!Package)
 					{
-						Default->mProducedIn.Remove(From);
-						Default->mProducedIn.Add(To);
-						UE_LOG(ContentCDOHelperSubsystem, Error,
-							   TEXT("CDO_MoveRecipesFromBuilding -> Move Recipe %s : %s -> %s"), *Default->GetName(),
-							   *From->GetName(), *To->GetName());
-
-						Default->MarkPackageDirty();
+						continue;
+					}
+					TArray<UObject*> PackageObjects;
+					GetObjectsWithOuter(Package, PackageObjects, true, RF_NoFlags);
+					for (UObject* Obj : PackageObjects)
+					{
+						UClass* NewClass = Cast<UClass>(Obj);
+						if (!NewClass || !NewClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
+						{
+							continue;
+						}
+						for (UKBFLCDOOverwriteBase* Overwrite : mCDOOverwritesToCall)
+						{
+							if (!Overwrite || Cast<UKBFLCDOOverwriteWorldBasedBase>(Overwrite))
+							{
+								continue;
+							}
+							Overwrite->TryApplyToClass(NewClass);
+						}
 					}
 				}
-			}
-		}
+			});
 	}
-}
-
-void UKBFLContentCDOHelperSubsystem::BeginCDOForModule(UModModule* Module, ELifecyclePhase Phase)
-{
-#if WITH_EDITOR
-	return;
+#else
+	GUObjectArray.AddUObjectCreateListener(this);
 #endif
-	UE_LOGFMT(ContentCDOHelperSubsystem, Log, "BeginCDOForModule > Was Called - Mod: {0}, Phase: {1}",
-			  Module->GetOwnerModReference().ToString(), Module->LifecyclePhaseToString(Phase));
-
-	if (UKismetSystemLibrary::DoesImplementInterface(Module, UKBFLContentCDOHelperInterface::StaticClass()))
-	{
-		UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-				  "BeginCDOForModule > Module {0} implements KBFLContentCDOHelperInterface",
-				  Module->GetOwnerModReference().ToString());
-
-		if (!WasCDOForModuleCalled(Module, Phase))
-		{
-			UE_LOGFMT(ContentCDOHelperSubsystem, Log, "BeginCDOForModule > CDO not yet called for Phase {0} - Mod: {1}",
-					  Module->LifecyclePhaseToString(Phase), Module->GetOwnerModReference().ToString());
-
-			bool HasPhase;
-			FKBFLCDOInformation Info =
-				IKBFLContentCDOHelperInterface::Execute_GetCDOInformationFromPhase(Module, Phase, HasPhase);
-
-			UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-					  "BeginCDOForModule > GetCDOInformationFromPhase returned HasPhase: {0} - Mod: {1}", HasPhase,
-					  Module->GetOwnerModReference().ToString());
-
-			if (HasPhase)
-			{
-				UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-						  "BeginCDOForModule > Starting CDO on Phase: {0} - Mod: {1}, CDOHelperClasses: {2}, "
-						  "ItemStackSizeCDO: {3}",
-						  Module->LifecyclePhaseToString(Phase), Module->GetOwnerModReference().ToString(),
-						  Info.mCDOHelperClasses.Num(), Info.mItemStackSizeCDO.Num());
-
-				DoCDOFromInfo(Info);
-
-				if (!mCDOCalled.Contains(Module))
-				{
-					mCDOCalled.Add(Module);
-					UE_LOGFMT(ContentCDOHelperSubsystem, Log, "BeginCDOForModule > Added Module {0} to mCDOCalled",
-							  Module->GetOwnerModReference().ToString());
-				}
-				mCDOCalled[Module].mCalledPhases.Add(Phase);
-
-				UE_LOGFMT(ContentCDOHelperSubsystem, Log, "BeginCDOForModule > CDO completed for Phase: {0} - Mod: {1}",
-						  Module->LifecyclePhaseToString(Phase), Module->GetOwnerModReference().ToString());
-			}
-			else
-			{
-				UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-						  "BeginCDOForModule > Skip phase (no CDO info) - Mod: {0}, Phase: {1}",
-						  Module->GetOwnerModReference().ToString(), Module->LifecyclePhaseToString(Phase));
-			}
-		}
-		else
-		{
-			UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-					  "BeginCDOForModule > CDO Was Already Called for this phase: {0} - Mod: {1}",
-					  Module->LifecyclePhaseToString(Phase), Module->GetOwnerModReference().ToString());
-		}
-	}
-	else
-	{
-		UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-				  "BeginCDOForModule > Module {0} does NOT implement KBFLContentCDOHelperInterface, skipping",
-				  Module->GetOwnerModReference().ToString());
-	}
-}
-
-bool UKBFLContentCDOHelperSubsystem::WasCDOForModuleCalled(UModModule* Module, ELifecyclePhase Phase) const
-{
-	if (Module)
-	{
-		if (mCDOCalled.Contains(Module))
-		{
-			return mCDOCalled[Module].mCalledPhases.Contains(Phase);
-		}
-	}
-	return false;
-}
-
-void UKBFLContentCDOHelperSubsystem::ResetCDOCallFromModule(UModModule* Module)
-{
-	if (Module)
-	{
-		if (mCDOCalled.Contains(Module))
-		{
-			mCDOCalled[Module].mCalledPhases.Empty();
-		}
-	}
-}
-
-void UKBFLContentCDOHelperSubsystem::DoCDOFromInfo(FKBFLCDOInformation Info)
-{
-#if WITH_EDITOR
-	return;
-#endif
-	UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-			  "DoCDOFromInfo > Starting with {0} CDOHelperClasses and {1} ItemStackSizeCDO entries",
-			  Info.mCDOHelperClasses.Num(), Info.mItemStackSizeCDO.Num());
-
-	Info.mCDOHelperClasses.Sort(
-		[&](const TSubclassOf<UKBFL_CDOHelperClass_Base> A, const TSubclassOf<UKBFL_CDOHelperClass_Base> B)
-		{ return A.GetDefaultObject()->mCallOrder > B.GetDefaultObject()->mCallOrder; });
-
-	UE_LOGFMT(ContentCDOHelperSubsystem, Log, "DoCDOFromInfo > CDOHelperClasses sorted by mCallOrder");
-
-	int32 HelperIndex = 0;
-	for (TSubclassOf<UKBFL_CDOHelperClass_Base> CDOHelper : Info.mCDOHelperClasses)
-	{
-		if (IsValid(CDOHelper))
-		{
-			UE_LOGFMT(ContentCDOHelperSubsystem, Log, "DoCDOFromInfo > Processing CDOHelper [{0}/{1}]: {2}",
-					  HelperIndex + 1, Info.mCDOHelperClasses.Num(), CDOHelper->GetName());
-			CallCDOHelper(CDOHelper);
-		}
-		else
-		{
-			UE_LOGFMT(ContentCDOHelperSubsystem, Warning, "DoCDOFromInfo > CDOHelper [{0}/{1}] is invalid, skipping",
-					  HelperIndex + 1, Info.mCDOHelperClasses.Num());
-		}
-		HelperIndex++;
-	}
-
-	UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-			  "DoCDOFromInfo > Finished processing {0} CDOHelperClasses, now processing ItemStackSizeCDO",
-			  Info.mCDOHelperClasses.Num());
-
-	int32 StackSizeIndex = 0;
-	for (auto CDO : Info.mItemStackSizeCDO)
-	{
-		UE_LOGFMT(ContentCDOHelperSubsystem, Log,
-				  "DoCDOFromInfo > Processing StackSize entry [{0}/{1}]: StackSize={2}, Items={3}", StackSizeIndex + 1,
-				  Info.mItemStackSizeCDO.Num(), static_cast<int32>(CDO.Key), CDO.Value.mItems.Num());
-
-		int32 ItemIndex = 0;
-		for (auto Item : CDO.Value.mItems)
-		{
-			if (Item)
-			{
-				UE_LOGFMT(ContentCDOHelperSubsystem, Log, "DoCDOFromInfo > Setting StackSize for Item [{0}/{1}]: {2}",
-						  ItemIndex + 1, CDO.Value.mItems.Num(), Item->GetName());
-				DoSetNewStackSize(Item, CDO.Key);
-			}
-			else
-			{
-				UE_LOGFMT(ContentCDOHelperSubsystem, Warning, "DoCDOFromInfo > Item [{0}/{1}] is null, skipping",
-						  ItemIndex + 1, CDO.Value.mItems.Num());
-			}
-			ItemIndex++;
-		}
-		StackSizeIndex++;
-	}
-
-	UE_LOGFMT(ContentCDOHelperSubsystem, Log, "DoCDOFromInfo > Completed processing all CDO info");
-}
-
-void UKBFLContentCDOHelperSubsystem::DoSetNewStackSize(TSubclassOf<UFGItemDescriptor> Item, EStackSize StackSize)
-{
-	if (IsValid(Item))
-	{
-		if (UFGItemDescriptor* Default = GetAndStoreDefaultObject_Native<UFGItemDescriptor>(Item))
-		{
-			UE_LOG(ContentCDOHelperSubsystem, Log, TEXT("ContentCDOHelperSubsystem > DoSetNewStackSize for item %s"),
-				   *Item->GetName());
-			Default->mStackSize = StackSize;
-			Default->mCachedStackSize = UFGItemDescriptor::GetStackSize(Item);
-			Default->MarkPackageDirty();
-		}
-	}
-}
-
-void UKBFLContentCDOHelperSubsystem::CallCDOHelper(TSubclassOf<UKBFL_CDOHelperClass_Base> CDOHelperClass,
-												   bool IgnoreCallCheck)
-{
-#if WITH_EDITOR
-	return;
-#endif
-	if (IsValid(CDOHelperClass))
-	{
-		if (UKBFL_CDOHelperClass_Base* CDOHelper =
-				GetAndStoreDefaultObject_Native<UKBFL_CDOHelperClass_Base>(CDOHelperClass))
-		{
-			if (CDOHelper->ExecuteAllowed() || IgnoreCallCheck)
-			{
-				CDOHelper->mSubsystem = this;
-
-				if (UKBFL_CDOHelperClass_CategoryOrder* CategoryOrderHelper =
-						Cast<UKBFL_CDOHelperClass_CategoryOrder>(CDOHelper))
-				{
-					mCategoriesToCall.Add(CategoryOrderHelper);
-					UE_LOG(ContentCDOHelperSubsystem, Log, TEXT("Defer call for: %s"), *CDOHelper->GetName());
-					return;
-				}
-
-				CDOHelper->ModifyValues();
-				CDOHelper->DoCDO();
-				CDOHelper->ExecuteBlueprintCDO();
-				UE_LOG(ContentCDOHelperSubsystem, Log, TEXT("Do CDO Call for Helper: %s"), *CDOHelper->GetName());
-			}
-		}
-	}
 }
 
 UObject* UKBFLContentCDOHelperSubsystem::GetAndStoreDefaultObject(UClass* Class)
 {
+#if WITH_EDITOR
+	return Class->GetDefaultObject();
+#endif
+
 	if (IsValid(Class))
 	{
-		mCalledClasses.AddUnique(Class);
-		mCalledObjects.AddUnique(Class->GetDefaultObject());
+		mCalledClasses.Add(Class);
+		mCalledObjects.Add(Class->GetDefaultObject());
 		return Class->GetDefaultObject();
 	}
 	return nullptr;
@@ -410,17 +275,94 @@ UObject* UKBFLContentCDOHelperSubsystem::GetAndStoreCDO(UClass* Class, UObject* 
 	return nullptr;
 }
 
-void UKBFLContentCDOHelperSubsystem::StoreClass(UClass* Class) { mCalledClasses.AddUnique(Class); }
+void UKBFLContentCDOHelperSubsystem::StoreClass(UClass* Class) { mCalledClasses.Add(Class); }
 
-void UKBFLContentCDOHelperSubsystem::StoreObject(UObject* Object) { mCalledObjects.AddUnique(Object); }
+void UKBFLContentCDOHelperSubsystem::StoreObject(UObject* Object) { mCalledObjects.Add(Object); }
 
 void UKBFLContentCDOHelperSubsystem::RemoveClass(UClass* Class) { mCalledClasses.Remove(Class); }
 
 void UKBFLContentCDOHelperSubsystem::RemoveObject(UObject* Object) { mCalledObjects.Remove(Object); }
 
-TArray<UModModule*> UKBFLContentCDOHelperSubsystem::GetCalledModules() const
+void UKBFLContentCDOHelperSubsystem::NotifyUObjectCreated(const UObjectBase* Object, int32 /*Index*/)
 {
-	TArray<UModModule*> Modules;
-	mCDOCalled.GenerateKeyArray(Modules);
-	return Modules;
+#if !WITH_EDITOR
+	if (!Object || mNonWorldOverwritesToCall.IsEmpty())
+	{
+		return;
+	}
+
+	// We only care about newly-created class objects (their meta-class is UBlueprintGeneratedClass).
+	// Instances of blueprint classes are filtered out: their GetClass() (the generated class) is a child
+	// of AActor/UObject, not of UBlueprintGeneratedClass.
+	const UClass* MetaClass = Object->GetClass();
+	if (!MetaClass || !MetaClass->IsChildOf(UBlueprintGeneratedClass::StaticClass()))
+	{
+		return;
+	}
+
+	// The created object IS the new class. Dedupe on it so each class is processed at most once
+	// (and so classes already handled by the initial pass are skipped).
+	UClass* NewClass = (UClass*)static_cast<const UClass*>(Object);
+	if (!NewClass || mCalledClasses.Contains(NewClass))
+	{
+		return;
+	}
+	mCalledClasses.Add(NewClass);
+
+	// On the game thread we can apply immediately (avoids one task per loaded class). Off-thread we must
+	// defer: TryApplyToClass touches UObject/CDO state that is game-thread-only. Exactly one of the two
+	// paths runs (else), so a class is never applied twice (important for additive numeric behaviors).
+	if (IsInGameThread())
+	{
+		if (mAssetDataSubsystem)
+		{
+			mAssetDataSubsystem->NotifyClassLoaded(NewClass);
+		}
+
+		for (UKBFLCDOOverwriteBase* Overwrite : mNonWorldOverwritesToCall)
+		{
+			if (Overwrite)
+			{
+				Overwrite->TryApplyToClass(NewClass);
+			}
+		}
+	}
+	else
+	{
+		TWeakObjectPtr<UKBFLContentCDOHelperSubsystem> WeakThis(this);
+		TWeakObjectPtr<UClass> WeakClass(NewClass);
+		AsyncTask(ENamedThreads::GameThread,
+				  [WeakThis, WeakClass]()
+				  {
+					  UKBFLContentCDOHelperSubsystem* Sub = WeakThis.Get();
+					  UClass* Cls = WeakClass.Get();
+					  if (!Sub || !Cls)
+					  {
+						  return;
+					  }
+
+					  if (Sub->mAssetDataSubsystem)
+					  {
+						  Sub->mAssetDataSubsystem->NotifyClassLoaded(Cls);
+					  }
+
+					  for (UKBFLCDOOverwriteBase* Overwrite : Sub->mNonWorldOverwritesToCall)
+					  {
+						  if (Overwrite)
+						  {
+							  Overwrite->TryApplyToClass(Cls);
+						  }
+					  }
+				  });
+	}
+#endif
 }
+
+void UKBFLContentCDOHelperSubsystem::OnUObjectArrayShutdown()
+{
+#if !WITH_EDITOR
+	GUObjectArray.RemoveUObjectCreateListener(this);
+#endif
+}
+
+#pragma warning(pop)

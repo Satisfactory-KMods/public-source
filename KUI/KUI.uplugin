@@ -1,8 +1,8 @@
 {
 	"FileVersion": 3,
-	"Version": 3,
-	"VersionName": "3.4.0",
-	"SemVersion": "3.4.0",
+	"Version": 2026,
+	"VersionName": "9999.9.9",
+	"SemVersion": "9999.9.9",
 	"FriendlyName": "KUI",
 	"Description": "",
 	"Category": "Modding",
@@ -18,16 +18,23 @@
 	"Plugins": [
 		{
 			"Name": "SML",
-			"SemVersion": "^3.11.1",
+			"SemVersion": "^3.12.0",
+			"Enabled": true
+		},
+		{
+			"Name": "KBFL",
+			"SemVersion": ">=9999.9.9",
 			"Enabled": true
 		}
 	],
 	"LocalizationTargets": [
 		{
 			"Name": "KUI",
-			"LoadingPolicy": "Always"
+			"LoadingPolicy": "Always",
+			"ConfigGenerationPolicy": "Never"
 		}
 	],
 	"AcceptsAnyRemoteVersion": false,
-	"GameVersion": ">=416835"
+	"GameVersion": ">=491125",
+	"GameFeatures": true
 }

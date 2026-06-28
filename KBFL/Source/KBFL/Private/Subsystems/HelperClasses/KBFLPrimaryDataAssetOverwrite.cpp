@@ -45,8 +45,16 @@ void UKBFLPrimaryDataAssetOverwrite::PostLoad()
 			}
 			else if (mTargetDataAssetClass != nullptr)
 			{
-				TSubclassOf<UPrimaryDataAsset> LoadedClass = mTargetDataAssetClass;
-				if (LoadedClass && !mPropertyContainer->IsA(LoadedClass))
+				TSubclassOf<UDataAsset> LoadedClass = mTargetDataAssetClass;
+
+				// For abstract target classes the container is created from mAbstractContainerClass,
+				// so check against that instead.
+				TSubclassOf<UDataAsset> ContainerCheckClass =
+					(LoadedClass && LoadedClass->HasAnyClassFlags(CLASS_Abstract) && mAbstractContainerClass)
+					? mAbstractContainerClass
+					: LoadedClass;
+
+				if (ContainerCheckClass && !mPropertyContainer->IsA(ContainerCheckClass))
 				{
 					UE_LOG(LogKBFLCDOOverwrite, Warning,
 						   TEXT("PostLoad: Property container class mismatch for class target '%s'. Recreating..."),
@@ -77,6 +85,13 @@ void UKBFLPrimaryDataAssetOverwrite::PostEditChangeProperty(FPropertyChangedEven
 		// Clear modified properties when target class changes
 		mModifiedProperties.Empty();
 		mManuelPropertiesOverwrite.Empty();
+		mAbstractContainerClass = nullptr; // reset container class when target changes
+		RefreshPropertyContainer();
+	}
+	else if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(UKBFLPrimaryDataAssetOverwrite, mAbstractContainerClass))
+	{
+		// Recreate container when the concrete container class for an abstract target is changed
+		mModifiedProperties.Empty();
 		RefreshPropertyContainer();
 	}
 	else if (ChangedPropertyName == GET_MEMBER_NAME_CHECKED(UKBFLPrimaryDataAssetOverwrite, mTargetDataAssetInstance))
@@ -120,7 +135,17 @@ void UKBFLPrimaryDataAssetOverwrite::PostEditChangeChainProperty(FPropertyChange
 
 EDataValidationResult UKBFLPrimaryDataAssetOverwrite::IsDataValid(FDataValidationContext& Context) const
 {
-	EDataValidationResult Result = Super::IsDataValid(Context);
+	// Determine if the target is an abstract class early so we can adjust validation.
+	const bool bTargetIsAbstract = mTargetDataAssetClass && mTargetDataAssetClass->HasAnyClassFlags(CLASS_Abstract) &&
+		!IsValid(mTargetDataAssetInstance);
+
+	// When the target is abstract and mAbstractContainerClass is set (concrete subclass),
+	// the mPropertyContainer will be of that concrete type — Super validation is safe.
+	// When abstract but NO container class is set yet, mPropertyContainer is null and Super
+	// would fail on the missing Instanced sub-object, so skip Super in that case only.
+	const bool bSkipSuper = bTargetIsAbstract && !mAbstractContainerClass;
+
+	EDataValidationResult Result = bSkipSuper ? EDataValidationResult::Valid : Super::IsDataValid(Context);
 
 	if (!mTargetDataAssetClass)
 	{
@@ -128,9 +153,31 @@ EDataValidationResult UKBFLPrimaryDataAssetOverwrite::IsDataValid(FDataValidatio
 		Result = EDataValidationResult::Invalid;
 	}
 
-	// Validate manual property overrides
-	if (TSubclassOf<UPrimaryDataAsset> LoadedTargetClass = mTargetDataAssetClass)
+	if (TSubclassOf<UDataAsset> LoadedTargetClass = mTargetDataAssetClass)
 	{
+		if (bTargetIsAbstract)
+		{
+			// Must provide a concrete container class when target is abstract
+			if (!mAbstractContainerClass)
+			{
+				Context.AddError(FText::Format(NSLOCTEXT("KBFLPrimaryDataAssetOverwrite", "AbstractNoContainer",
+														 "Target DataAsset Class '{0}' is abstract. "
+														 "Please set 'Abstract Container Class' to a concrete subclass "
+														 "so the property container can be created."),
+											   FText::FromString(LoadedTargetClass->GetName())));
+				Result = EDataValidationResult::Invalid;
+			}
+			else if (!mAbstractContainerClass->IsChildOf(LoadedTargetClass))
+			{
+				Context.AddError(
+					FText::Format(NSLOCTEXT("KBFLPrimaryDataAssetOverwrite", "AbstractContainerWrongBase",
+											"Abstract Container Class '{0}' is not a subclass of target class '{1}'."),
+								  FText::FromString(mAbstractContainerClass->GetName()),
+								  FText::FromString(LoadedTargetClass->GetName())));
+				Result = EDataValidationResult::Invalid;
+			}
+		}
+
 		for (const FKBFLCDOOverwriteProperty& ManualProp : mManuelPropertiesOverwrite)
 		{
 			FProperty* Property = FindFProperty<FProperty>(LoadedTargetClass, ManualProp.mPropertyName);
@@ -155,7 +202,7 @@ void UKBFLPrimaryDataAssetOverwrite::ValidateManualProperties()
 		return;
 	}
 
-	TSubclassOf<UPrimaryDataAsset> LoadedTargetClass = mTargetDataAssetClass;
+	TSubclassOf<UDataAsset> LoadedTargetClass = mTargetDataAssetClass;
 	if (!LoadedTargetClass)
 	{
 		return;
@@ -196,7 +243,7 @@ void UKBFLPrimaryDataAssetOverwrite::RebuildModifiedProperties()
 		// Compare with the specific instance
 		ComparisonObject = mTargetDataAssetInstance;
 	}
-	else if (TSubclassOf<UPrimaryDataAsset> LoadedClass = mTargetDataAssetClass)
+	else if (TSubclassOf<UDataAsset> LoadedClass = mTargetDataAssetClass)
 	{
 		// Compare with the CDO
 		ComparisonObject = LoadedClass->GetDefaultObject();
@@ -293,11 +340,35 @@ void UKBFLPrimaryDataAssetOverwrite::RefreshPropertyContainer()
 			mTargetDataAssetClass = mTargetDataAssetInstance->GetClass();
 		}
 	}
-	else if (TSubclassOf<UPrimaryDataAsset> LoadedClass = mTargetDataAssetClass)
+	else if (TSubclassOf<UDataAsset> LoadedClass = mTargetDataAssetClass)
 	{
-		// Use the CDO as source
-		SourceObject = LoadedClass->GetDefaultObject();
-		SourceDescription = FString::Printf(TEXT("class '%s' CDO"), *LoadedClass->GetName());
+		// If the target class is abstract, we cannot duplicate its CDO directly because UE's asset
+		// validation rejects Instanced sub-objects of abstract classes. Use mAbstractContainerClass
+		// (a concrete subclass) as the container template instead. mTargetDataAssetClass is still
+		// used as the targeting identifier when searching/applying to assets.
+		if (LoadedClass->HasAnyClassFlags(CLASS_Abstract))
+		{
+			TSubclassOf<UDataAsset> ContainerClass = mAbstractContainerClass;
+			if (!ContainerClass)
+			{
+				UE_LOG(LogKBFLCDOOverwrite, Warning,
+					   TEXT("RefreshPropertyContainer: mTargetDataAssetClass '%s' is abstract but "
+							"mAbstractContainerClass is not set. Please set a concrete subclass as container. "
+							"| Asset: '%s'"),
+					   *LoadedClass->GetName(), *GetPathName());
+				return;
+			}
+
+			SourceObject = ContainerClass->GetDefaultObject();
+			SourceDescription = FString::Printf(TEXT("abstract target '%s' via concrete container class '%s' CDO"),
+												*LoadedClass->GetName(), *ContainerClass->GetName());
+		}
+		else
+		{
+			// Normal case: use the CDO of the (concrete) target class
+			SourceObject = LoadedClass->GetDefaultObject();
+			SourceDescription = FString::Printf(TEXT("class '%s' CDO"), *LoadedClass->GetName());
+		}
 	}
 
 	if (!SourceObject)
@@ -314,7 +385,7 @@ void UKBFLPrimaryDataAssetOverwrite::RefreshPropertyContainer()
 	DupParams.DestName = MakeUniqueObjectName(this, SourceObject->GetClass(), FName(TEXT("PropertyContainer")));
 	DupParams.FlagMask = RF_AllFlags & ~(RF_ClassDefaultObject | RF_ArchetypeObject | RF_DefaultSubObject);
 	DupParams.ApplyFlags = RF_NoFlags;
-	DupParams.InternalFlagMask = EInternalObjectFlags::AllFlags;
+	DupParams.InternalFlagMask = EInternalObjectFlags_AllFlags;
 
 	mPropertyContainer = StaticDuplicateObjectEx(DupParams);
 
@@ -492,45 +563,73 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyNumericProperty(FProperty* Property, v
 	{
 		int32 CurrentValue = IntProp->GetPropertyValue(DestValuePtr);
 		int32 ModifierValue = IntProp->GetPropertyValue(ContainerValuePtr);
+		int32 OldValue = CurrentValue;
 		ApplyNumericOp(CurrentValue, ModifierValue);
 		IntProp->SetPropertyValue(DestValuePtr, CurrentValue);
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Int32 operation on '{PropertyName}' on '{TargetName}' | Asset: "
-				  "{AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue);
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
 	}
 	else if (FInt64Property* Int64Prop = CastField<FInt64Property>(Property))
 	{
 		int64 CurrentValue = Int64Prop->GetPropertyValue(DestValuePtr);
 		int64 ModifierValue = Int64Prop->GetPropertyValue(ContainerValuePtr);
+		int64 OldValue = CurrentValue;
 		ApplyNumericOp(CurrentValue, ModifierValue);
 		Int64Prop->SetPropertyValue(DestValuePtr, CurrentValue);
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Int64 operation on '{PropertyName}' on '{TargetName}' | Asset: "
-				  "{AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue);
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
 	}
 	else if (FFloatProperty* FloatProp = CastField<FFloatProperty>(Property))
 	{
 		float CurrentValue = FloatProp->GetPropertyValue(DestValuePtr);
 		float ModifierValue = FloatProp->GetPropertyValue(ContainerValuePtr);
+		float OldValue = CurrentValue;
 		ApplyNumericOp(CurrentValue, ModifierValue);
 		FloatProp->SetPropertyValue(DestValuePtr, CurrentValue);
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Float operation on '{PropertyName}' on '{TargetName}' | Asset: "
-				  "{AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue);
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
 	}
 	else if (FDoubleProperty* DoubleProp = CastField<FDoubleProperty>(Property))
 	{
 		double CurrentValue = DoubleProp->GetPropertyValue(DestValuePtr);
 		double ModifierValue = DoubleProp->GetPropertyValue(ContainerValuePtr);
+		double OldValue = CurrentValue;
 		ApplyNumericOp(CurrentValue, ModifierValue);
 		DoubleProp->SetPropertyValue(DestValuePtr, CurrentValue);
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Double operation on '{PropertyName}' on '{TargetName}' | Asset: "
-				  "{AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue);
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
+	}
+	else if (FUInt32Property* UInt32Prop = CastField<FUInt32Property>(Property))
+	{
+		uint32 CurrentValue = UInt32Prop->GetPropertyValue(DestValuePtr);
+		uint32 ModifierValue = UInt32Prop->GetPropertyValue(ContainerValuePtr);
+		uint32 OldValue = CurrentValue;
+		ApplyNumericOp(CurrentValue, ModifierValue);
+		UInt32Prop->SetPropertyValue(DestValuePtr, CurrentValue);
+		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+				  "ApplyToDataAssetInstance: UInt32 operation on '{PropertyName}' on '{TargetName}' | Asset: "
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
+	}
+	else if (FUInt64Property* UInt64Prop = CastField<FUInt64Property>(Property))
+	{
+		uint64 CurrentValue = UInt64Prop->GetPropertyValue(DestValuePtr);
+		uint64 ModifierValue = UInt64Prop->GetPropertyValue(ContainerValuePtr);
+		uint64 OldValue = CurrentValue;
+		ApplyNumericOp(CurrentValue, ModifierValue);
+		UInt64Prop->SetPropertyValue(DestValuePtr, CurrentValue);
+		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+				  "ApplyToDataAssetInstance: UInt64 operation on '{PropertyName}' on '{TargetName}' | Asset: "
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValue, CurrentValue);
 	}
 }
 
@@ -567,8 +666,8 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyBoolProperty(FProperty* Property, void
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Bool operation on '{PropertyName}' on '{TargetName}' | Asset: {AssetPath} "
-				  "| Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue);
+				  "| {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
 	}
 }
 
@@ -603,8 +702,8 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyStringProperty(FProperty* Property, vo
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: String operation on '{PropertyName}' on '{TargetName}' | Asset: "
-				  "{AssetPath} | Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue);
+				  "{AssetPath} | {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath, CurrentValue, ResultValue);
 	}
 	else if (FNameProperty* NameProp = CastField<FNameProperty>(Property))
 	{
@@ -632,8 +731,9 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyStringProperty(FProperty* Property, vo
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Name operation on '{PropertyName}' on '{TargetName}' | Asset: {AssetPath} "
-				  "| Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue.ToString());
+				  "| {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath,
+				  CurrentValue.ToString(), ResultValue.ToString());
 	}
 	else if (FTextProperty* TextProp = CastField<FTextProperty>(Property))
 	{
@@ -661,8 +761,9 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyStringProperty(FProperty* Property, vo
 
 		UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 				  "ApplyToDataAssetInstance: Text operation on '{PropertyName}' on '{TargetName}' | Asset: {AssetPath} "
-				  "| Result: {NewValue}",
-				  Property->GetName(), TargetInstance->GetName(), AssetPath, ResultValue.ToString());
+				  "| {OldValue} -> {NewValue}",
+				  Property->GetName(), TargetInstance->GetName(), AssetPath,
+				  CurrentValue.ToString(), ResultValue.ToString());
 	}
 }
 
@@ -701,11 +802,18 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyPropertyWithBehavior(FProperty* Proper
 		}
 		else
 		{
+			FString OldValueStr;
+			Property->ExportTextItem_Direct(OldValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			Property->CopyCompleteValue(DestValuePtr, ContainerValuePtr);
+
+			FString NewValueStr;
+			Property->ExportTextItem_Direct(NewValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 					  "ApplyToDataAssetInstance: Replacing numeric property '{PropertyName}' on '{TargetName}' | "
-					  "Asset: {AssetPath}",
-					  Property->GetName(), TargetInstance->GetName(), AssetPath);
+					  "Asset: {AssetPath} | {OldValue} -> {NewValue}",
+					  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValueStr, NewValueStr);
 		}
 		break;
 
@@ -724,11 +832,18 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyPropertyWithBehavior(FProperty* Proper
 		}
 		else
 		{
+			FString OldValueStr;
+			Property->ExportTextItem_Direct(OldValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			Property->CopyCompleteValue(DestValuePtr, ContainerValuePtr);
+
+			FString NewValueStr;
+			Property->ExportTextItem_Direct(NewValueStr, DestValuePtr, nullptr, nullptr, PPF_None);
+
 			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
 					  "ApplyToDataAssetInstance: Replacing string property '{PropertyName}' on '{TargetName}' | Asset: "
-					  "{AssetPath}",
-					  Property->GetName(), TargetInstance->GetName(), AssetPath);
+					  "{AssetPath} | {OldValue} -> {NewValue}",
+					  Property->GetName(), TargetInstance->GetName(), AssetPath, OldValueStr, NewValueStr);
 		}
 		break;
 
@@ -804,7 +919,7 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToDataAssetInstance(UObject* TargetIns
 	}
 
 	// Determine which class to check against
-	TSubclassOf<UPrimaryDataAsset> ClassToCheck =
+	TSubclassOf<UDataAsset> ClassToCheck =
 		bTargetOnlyAsContainer ? LoadSoftClass(mRealTargetClass) : mTargetDataAssetClass;
 
 	// In container mode, if mRealTargetClass is not set, we still apply to any matching target from mOtherTargetClasses
@@ -812,9 +927,9 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToDataAssetInstance(UObject* TargetIns
 	{
 		// Check if instance matches any of the other target classes
 		bool bMatchesOtherTarget = false;
-		for (const TSoftClassPtr<UPrimaryDataAsset>& SoftClass : mOtherTargetClasses)
+		for (const TSoftClassPtr<UDataAsset>& SoftClass : mOtherTargetClasses)
 		{
-			if (TSubclassOf<UPrimaryDataAsset> LoadedClass = SoftClass.LoadSynchronous())
+			if (TSubclassOf<UDataAsset> LoadedClass = SoftClass.LoadSynchronous())
 			{
 				if (TargetInstance->IsA(LoadedClass))
 				{
@@ -927,7 +1042,7 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToInstances()
 	}
 
 	// Determine which class to use for targeting
-	TSubclassOf<UPrimaryDataAsset> EffectiveTargetClass =
+	TSubclassOf<UDataAsset> EffectiveTargetClass =
 		bTargetOnlyAsContainer ? LoadSoftClass(mRealTargetClass) : mTargetDataAssetClass;
 
 	// In non-container mode, EffectiveTargetClass must be set
@@ -953,7 +1068,7 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToInstances()
 	}
 
 	// Collect all target classes
-	TSet<TSubclassOf<UPrimaryDataAsset>> TargetClasses;
+	TSet<TSubclassOf<UDataAsset>> TargetClasses;
 
 	// Add effective target class
 	if (EffectiveTargetClass)
@@ -962,25 +1077,25 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToInstances()
 	}
 
 	// Add other target classes
-	for (const TSoftClassPtr<UPrimaryDataAsset>& SoftClass : mOtherTargetClasses)
+	for (const TSoftClassPtr<UDataAsset>& SoftClass : mOtherTargetClasses)
 	{
-		if (TSubclassOf<UPrimaryDataAsset> LoadedClass = SoftClass.LoadSynchronous())
+		if (TSubclassOf<UDataAsset> LoadedClass = SoftClass.LoadSynchronous())
 		{
 			TargetClasses.Add(LoadedClass);
 		}
 	}
 
 	// Collect all PrimaryDataAsset instances to process
-	TArray<UPrimaryDataAsset*> AssetsToProcess;
+	TArray<UDataAsset*> AssetsToProcess;
 
 	// Add specific assets
-	for (const TSoftObjectPtr<UPrimaryDataAsset>& SoftAsset : mSpecificAssets)
+	for (const TSoftObjectPtr<UDataAsset>& SoftAsset : mSpecificAssets)
 	{
-		if (UPrimaryDataAsset* Asset = SoftAsset.LoadSynchronous())
+		if (UDataAsset* Asset = SoftAsset.LoadSynchronous())
 		{
 			// Check if asset matches any target class
 			bool bMatchesTargetClass = false;
-			for (const TSubclassOf<UPrimaryDataAsset>& TargetClass : TargetClasses)
+			for (const TSubclassOf<UDataAsset>& TargetClass : TargetClasses)
 			{
 				if (Asset->IsA(TargetClass))
 				{
@@ -1003,97 +1118,110 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToInstances()
 			FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 		IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
-		// Convert paths to proper format
-		TArray<FName> PathNames;
-		for (const FString& Path : mFindAssetsInPaths)
+		// Safety guard: do not query the Asset Registry while it is still loading assets.
+		// Calling GetAssetsByPath during asset discovery can cause an EXCEPTION_ACCESS_VIOLATION.
+		if (AssetRegistry.IsLoadingAssets())
 		{
-			PathNames.Add(FName(*Path));
+			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
+					  "ApplyToInstances: AssetRegistry is still loading assets - skipping path-based search for '{0}'. "
+					  "mFindAssetsInPaths will not be processed. | Asset: {AssetPath}",
+					  *GetName(), AssetPath);
 		}
-
-		// Find all assets in these paths
-		TArray<FAssetData> FoundAssets;
-		for (const FName& PathName : PathNames)
+		else
 		{
-			TArray<FAssetData> PathAssets;
-			AssetRegistry.GetAssetsByPath(PathName, PathAssets, true);
-			FoundAssets.Append(PathAssets);
-		}
 
-		// Filter by class and load
-		for (const FAssetData& AssetData : FoundAssets)
-		{
-			// Get the native class of the asset (not the Blueprint class)
-			UClass* AssetNativeClass = AssetData.GetClass();
-			if (!AssetNativeClass)
+			// Convert paths to proper format
+			TArray<FName> PathNames;
+			for (const FString& Path : mFindAssetsInPaths)
 			{
-				continue;
+				PathNames.Add(FName(*Path));
 			}
 
-			// Check if this is a PrimaryDataAsset by checking the asset's native class
-			// For data assets, we need to load them to check their actual type
-			if (!AssetNativeClass->IsChildOf(UPrimaryDataAsset::StaticClass()))
+			// Find all assets in these paths
+			TArray<FAssetData> FoundAssets;
+			for (const FName& PathName : PathNames)
 			{
-				// Try to load and check - some assets may be PrimaryDataAssets
-				UObject* LoadedObject = AssetData.GetAsset();
-				if (!LoadedObject)
+				TArray<FAssetData> PathAssets;
+				AssetRegistry.GetAssetsByPath(PathName, PathAssets, true);
+				FoundAssets.Append(PathAssets);
+			}
+
+			// Filter by class and load
+			for (const FAssetData& AssetData : FoundAssets)
+			{
+				// Get the native class of the asset (not the Blueprint class)
+				UClass* AssetNativeClass = AssetData.GetClass();
+				if (!AssetNativeClass)
 				{
 					continue;
 				}
 
-				if (!LoadedObject->IsA(UPrimaryDataAsset::StaticClass()))
+				// Check if this is a PrimaryDataAsset by checking the asset's native class
+				// For data assets, we need to load them to check their actual type
+				if (!AssetNativeClass->IsChildOf(UDataAsset::StaticClass()))
+				{
+					// Try to load and check - some assets may be PrimaryDataAssets
+					UObject* LoadedObject = AssetData.GetAsset();
+					if (!LoadedObject)
+					{
+						continue;
+					}
+
+					if (!LoadedObject->IsA(UDataAsset::StaticClass()))
+					{
+						continue;
+					}
+				}
+
+				// Load the asset to get its actual class for proper IsA checking
+				UDataAsset* LoadedAsset = Cast<UDataAsset>(AssetData.GetAsset());
+				if (!LoadedAsset)
 				{
 					continue;
 				}
-			}
 
-			// Load the asset to get its actual class for proper IsA checking
-			UPrimaryDataAsset* LoadedAsset = Cast<UPrimaryDataAsset>(AssetData.GetAsset());
-			if (!LoadedAsset)
-			{
-				continue;
-			}
-
-			// Check if asset matches any target class using IsA on the loaded asset
-			bool bMatchesTargetClass = false;
-			for (const TSubclassOf<UPrimaryDataAsset>& TargetClass : TargetClasses)
-			{
-				if (TargetClass && LoadedAsset->IsA(TargetClass))
+				// Check if asset matches any target class using IsA on the loaded asset
+				bool bMatchesTargetClass = false;
+				for (const TSubclassOf<UDataAsset>& TargetClass : TargetClasses)
 				{
-					bMatchesTargetClass = true;
-					break;
+					if (TargetClass && LoadedAsset->IsA(TargetClass))
+					{
+						bMatchesTargetClass = true;
+						break;
+					}
+				}
+
+				if (!bMatchesTargetClass)
+				{
+					continue;
+				}
+
+				// Check if not in ignore list
+				bool bShouldIgnore = false;
+				for (const TSoftObjectPtr<UDataAsset>& IgnoreAsset : mIgnoreAssets)
+				{
+					if (IgnoreAsset.Get() == LoadedAsset)
+					{
+						bShouldIgnore = true;
+						break;
+					}
+				}
+
+				if (bShouldIgnore)
+				{
+					continue;
+				}
+
+				if (!AssetsToProcess.Contains(LoadedAsset))
+				{
+					AssetsToProcess.Add(LoadedAsset);
 				}
 			}
-
-			if (!bMatchesTargetClass)
-			{
-				continue;
-			}
-
-			// Check if not in ignore list
-			bool bShouldIgnore = false;
-			for (const TSoftObjectPtr<UPrimaryDataAsset>& IgnoreAsset : mIgnoreAssets)
-			{
-				if (IgnoreAsset.Get() == LoadedAsset)
-				{
-					bShouldIgnore = true;
-					break;
-				}
-			}
-
-			if (bShouldIgnore)
-			{
-				continue;
-			}
-
-			if (!AssetsToProcess.Contains(LoadedAsset))
-			{
-				AssetsToProcess.Add(LoadedAsset);
-			}
-		}
+		} // end else (AssetRegistry not loading)
 	}
 
 	// Sort assets by path hash for consistent ordering
-	AssetsToProcess.Sort([](const UPrimaryDataAsset& A, const UPrimaryDataAsset& B)
+	AssetsToProcess.Sort([](const UDataAsset& A, const UDataAsset& B)
 						 { return GetTypeHash(A.GetPathName()) < GetTypeHash(B.GetPathName()); });
 
 	UE_LOGFMT(LogKBFLCDOOverwrite, Log,
@@ -1101,7 +1229,7 @@ void UKBFLPrimaryDataAssetOverwrite::ApplyToInstances()
 			  AssetsToProcess.Num(), AssetPath);
 
 	// Apply overrides to all collected assets
-	for (UPrimaryDataAsset* Asset : AssetsToProcess)
+	for (UDataAsset* Asset : AssetsToProcess)
 	{
 		Requirements_NotifyOnModify(Asset);
 		ApplyToDataAssetInstance(Asset);

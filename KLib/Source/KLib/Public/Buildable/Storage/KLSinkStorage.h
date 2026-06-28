@@ -1,11 +1,13 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Buildables/FGBuildableStorage.h"
 #include "FGPowerConnectionComponent.h"
 #include "FGResourceSinkSubsystem.h"
-#include "Buildables/FGBuildableStorage.h"
+
 #include "KLSinkStorage.generated.h"
 
 UCLASS()
@@ -16,17 +18,32 @@ class KLIB_API AKLSinkStorage : public AFGBuildableStorage
 public:
 	AKLSinkStorage();
 
-	virtual void BeginPlay() override;
-	virtual void Factory_Tick(float dt) override;
+	//~ Begin AFGBuildableFactory Interface
 	virtual bool CanProduce_Implementation() const override;
+	//~ End AFGBuildableFactory Interface
 
-	void HandleLastSlot();
+	//~ Begin AActor Interface
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
 	void CacheSubsystem();
 
-	/** Cached resource sink subsystem */
-	UPROPERTY()
-	AFGResourceSinkSubsystem* mResourceSinkSubsystem;
+	/** Drains the last inventory slot if it holds a sinkable item. Only the last slot acts as the sink slot. */
+	void TrySinkOverflow();
+
+	void OnInventoryItemAdded(TSubclassOf<UFGItemDescriptor> ItemClass, int32 NumAdded,
+							  UFGInventoryComponent* SourceInventory);
+
+	UFUNCTION()
+	void OnPowerStateChanged(bool bNewHasPower);
+
+	/** Max items to sink per item-added event. 0 = drain the entire eligible slot. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|SinkStorage")
+	int32 mMaxItemsToSinkPerCycle = 0;
 
 	UPROPERTY()
-	UFGPowerConnectionComponent* mPowerConnection;
+	TObjectPtr<UFGPowerConnectionComponent> mPowerConnection;
+
+	UPROPERTY()
+	TObjectPtr<AFGResourceSinkSubsystem> mResourceSinkSubsystem;
 };

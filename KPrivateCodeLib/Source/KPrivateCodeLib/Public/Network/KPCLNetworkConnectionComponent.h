@@ -1,17 +1,18 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGPowerConnectionComponent.h"
-#include "KPCLNetwork.h"
 #include "UObject/Object.h"
+
+#include "KPCLNetwork.h"
+
 #include "KPCLNetworkConnectionComponent.generated.h"
 
-/**
- * only for indicator
- */
-UCLASS(ClassGroup = ( Custom ), meta = ( BlueprintSpawnableComponent ))
+/** Connection component for the Faxit network — wraps UFGPowerConnectionComponent. */
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class KPRIVATECODELIB_API UKPCLNetworkConnectionComponent : public UFGPowerConnectionComponent
 {
 	GENERATED_BODY()

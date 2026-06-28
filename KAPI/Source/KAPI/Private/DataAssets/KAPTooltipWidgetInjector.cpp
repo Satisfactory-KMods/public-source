@@ -4,6 +4,30 @@
 #include "Components/VerticalBoxSlot.h"
 #include "Subsystems/KAPIDataAssetSubsystem.h"
 
+FMargin UKAPTooltipWidgetInjector::GetPadding(UPanelSlot* Slot)
+{
+	if (UVerticalBoxSlot* AsVBoxSlot = Cast<UVerticalBoxSlot>(Slot))
+	{
+		return AsVBoxSlot->GetPadding();
+	}
+	if (UHorizontalBoxSlot* AsHBoxSlot = Cast<UHorizontalBoxSlot>(Slot))
+	{
+		return AsHBoxSlot->GetPadding();
+	}
+	return FMargin();
+}
+
+void UKAPTooltipWidgetInjector::SetPadding(UPanelSlot* Slot, FMargin Padding)
+{
+	if (UVerticalBoxSlot* AsVBoxSlot = Cast<UVerticalBoxSlot>(Slot))
+	{
+		AsVBoxSlot->SetPadding(Padding);
+	}
+	else if (UHorizontalBoxSlot* AsHBoxSlot = Cast<UHorizontalBoxSlot>(Slot))
+	{
+		AsHBoxSlot->SetPadding(Padding);
+	}
+}
 
 bool UKAPTooltipWidgetInjector::ShouldInjectForItem(TSubclassOf<UFGItemDescriptor> ItemClass) const
 {
@@ -29,29 +53,4 @@ bool UKAPTooltipWidgetInjector::ShouldInjectForItem(TSubclassOf<UFGItemDescripto
 	}
 
 	return false;
-}
-
-void UKAPTooltipWidgetInjector::SetPadding(UPanelSlot* Slot, FMargin Padding)
-{
-	if (UVerticalBoxSlot* AsVBoxSlot = Cast<UVerticalBoxSlot>(Slot))
-	{
-		AsVBoxSlot->SetPadding(Padding);
-	}
-	else if (UHorizontalBoxSlot* AsHBoxSlot = Cast<UHorizontalBoxSlot>(Slot))
-	{
-		AsHBoxSlot->SetPadding(Padding);
-	}
-}
-
-FMargin UKAPTooltipWidgetInjector::GetPadding(UPanelSlot* Slot)
-{
-	if (UVerticalBoxSlot* AsVBoxSlot = Cast<UVerticalBoxSlot>(Slot))
-	{
-		return AsVBoxSlot->GetPadding();
-	}
-	if (UHorizontalBoxSlot* AsHBoxSlot = Cast<UHorizontalBoxSlot>(Slot))
-	{
-		return AsHBoxSlot->GetPadding();
-	}
-	return FMargin();
 }

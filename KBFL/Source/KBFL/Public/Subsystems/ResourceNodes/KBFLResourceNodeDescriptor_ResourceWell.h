@@ -32,13 +32,13 @@ struct FKBFLCoreInformations
 	TMap<TEnumAsByte<EResourcePurity>, FKBFLTransformArray> mPurityLocations;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Materials")
-	TMap<uint8, UMaterialInterface*> mFrackingCoreMaterialInfo;
+	TMap<uint8, TObjectPtr<UMaterialInterface>> mFrackingCoreMaterialInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Materials")
-	TMap<uint8, UMaterialInterface*> mFrackingSatelliteMaterialInfo;
+	TMap<uint8, TObjectPtr<UMaterialInterface>> mFrackingSatelliteMaterialInfo;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Materials")
-	TMap<uint8, UMaterialInterface*> mCrackMaterialInfo;
+	TMap<uint8, TObjectPtr<UMaterialInterface>> mCrackMaterialInfo;
 };
 
 /**
@@ -101,7 +101,7 @@ public:
 	;
 
 	UPROPERTY(BlueprintReadWrite)
-	AFGResourceNodeFrackingCore* mLastCore;
+	TObjectPtr<AFGResourceNodeFrackingCore> mLastCore;
 
 	UPROPERTY(BlueprintReadWrite)
 	TArray<FTransform> mCoreTransforms;

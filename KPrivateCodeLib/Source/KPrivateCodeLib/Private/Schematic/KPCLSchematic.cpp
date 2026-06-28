@@ -2,12 +2,10 @@
 
 #include "FGSchematicManager.h"
 
-UKPCLSchematic::UKPCLSchematic()
-{
-}
+UKPCLSchematic::UKPCLSchematic() {}
 
 void UKPCLSchematic::GetUnlockedSchematicsByType(UObject* WorldContext, EKPCLSchematicType SchematicType,
-                                                 TArray<TSubclassOf<UKPCLSchematic>>& OutSchematics)
+												 TArray<TSubclassOf<UKPCLSchematic>>& OutSchematics)
 {
 	OutSchematics.Empty();
 

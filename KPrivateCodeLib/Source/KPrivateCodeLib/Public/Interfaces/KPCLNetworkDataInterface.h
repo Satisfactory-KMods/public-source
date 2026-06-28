@@ -1,10 +1,12 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Subsystem/KPCLFaxitSubsystem.h"
 #include "UObject/Interface.h"
+
 #include "KPCLNetworkDataInterface.generated.h"
 
 UENUM(BlueprintType)
@@ -24,7 +26,9 @@ enum class EKPCLNetworkError : uint8
 	NoNetwork,
 	NetworkOverloaded,
 	NoPower,
-	NetworkToManyAddresses
+	NetworkToManyAddresses,
+	GlobalNetworkToManyAddresses,
+	NoDrivesAvailable,
 };
 
 USTRUCT(BlueprintType)
@@ -70,40 +74,35 @@ struct FNetworkUIData
 	}
 };
 
-// This class does not need to be modified.
 UINTERFACE()
 class UKPCLNetworkDataInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class KPRIVATECODELIB_API IKPCLNetworkDataInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	class AKPCLNetworkCore* GetCore();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	bool HasCore() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	bool HasCoreInNetwork() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	class UKPCLNetwork* GetNetwork() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	FNetworkUIData GetUIDData() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	FKPCLFaxitNetwork GetNetworkData() const;
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="KPCLCustomDataInterface")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KPCLCustomDataInterface")
 	TArray<EKPCLNetworkError> GetNetworkErrors() const;
 };

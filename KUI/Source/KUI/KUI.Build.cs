@@ -45,7 +45,6 @@ public class KUI : ModuleRules
 		PublicDependencyModuleNames.AddRange(new[]
 		{
 			"AbstractInstance",
-			"InstancedSplinesComponent",
 			"SignificanceISPC"
 		});
 

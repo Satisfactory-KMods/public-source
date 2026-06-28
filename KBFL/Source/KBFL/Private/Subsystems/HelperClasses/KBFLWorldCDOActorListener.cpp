@@ -1,5 +1,6 @@
 ﻿#include "Subsystems/HelperClasses/KBFLWorldCDOActorListener.h"
 
+#include "Engine/Level.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "Logging/StructuredLog.h"
@@ -29,6 +30,11 @@ void UKBFLWorldCDOActorListener::Start()
 	case EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent:
 		mActorHandle = GetWorld()->AddOnActorSpawnedHandler(
 			FOnActorSpawned::FDelegate::CreateUObject(this, &UKBFLWorldCDOActorListener::OnActorEvent));
+		if (bListenStreamingLevel)
+		{
+			mLevelAddedHandle =
+				FWorldDelegates::LevelAddedToWorld.AddUObject(this, &UKBFLWorldCDOActorListener::OnLevelAddedToWorld);
+		}
 		break;
 	case EKBFLWorldCDOActorListenerEvent::DestroyedActorEvent:
 		mActorHandle = GetWorld()->AddOnActorDestroyedHandler(
@@ -91,10 +97,15 @@ void UKBFLWorldCDOActorListener::Clear()
 		switch (mEventToListenFor)
 		{
 		case EKBFLWorldCDOActorListenerEvent::DestroyedActorEvent:
-			GetWorld()->RemoveOnActorDestroyededHandler(mActorHandle);
+			GetWorld()->RemoveOnActorDestroyedHandler(mActorHandle);
 			break;
 		case EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent:
 			GetWorld()->RemoveOnActorSpawnedHandler(mActorHandle);
+			if (mLevelAddedHandle.IsValid())
+			{
+				FWorldDelegates::LevelAddedToWorld.Remove(mLevelAddedHandle);
+				mLevelAddedHandle.Reset();
+			}
 			break;
 		default:
 			break;
@@ -105,6 +116,23 @@ void UKBFLWorldCDOActorListener::Clear()
 	}
 
 	Super::Clear();
+}
+
+void UKBFLWorldCDOActorListener::OnLevelAddedToWorld(ULevel* Level, UWorld* World)
+{
+	if (!IsValid(Level) || World != GetWorld())
+	{
+		return;
+	}
+
+	UE_LOGFMT(LogKBFLActorListener, Log,
+			  "OnLevelAddedToWorld: Processing {Count} actors in level {LevelName} | Asset: {AssetPath}",
+			  Level->Actors.Num(), *Level->GetName(), GetPathName());
+
+	for (AActor* Actor : Level->Actors)
+	{
+		OnActorEvent(Actor);
+	}
 }
 
 void UKBFLWorldCDOActorListener::OnActorEvent(AActor* Actor)
@@ -134,6 +162,7 @@ void UKBFLWorldCDOActorListener::OnActorEvent(AActor* Actor)
 					EventTypeStr, Actor->GetName(), Actor->GetClass()->GetName(), GetPathName());
 
 				Requirements_NotifyOnModify(Actor);
+				OnActorMatched(Actor);
 				Requirements_NotifyOnModified(Actor);
 			}
 			else

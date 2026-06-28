@@ -1,24 +1,22 @@
 // ILikeBanas
 
-
 #include "Buildable/KPCLExtractorBase.h"
 
 #include "AbstractInstanceManager.h"
+#include "Async/TaskGraphInterfaces.h"
+#include "Components/KPCLBetterIndicator.h"
 #include "FGCrate.h"
 #include "FGFactoryConnectionComponent.h"
 #include "FGPowerConnectionComponent.h"
 #include "FGPowerInfoComponent.h"
 #include "KPrivateCodeLibModule.h"
-#include "Components/KPCLBetterIndicator.h"
 #include "Net/UnrealNetwork.h"
 #include "Replication/KPCLDefaultRCO.h"
 #include "Resources/FGPowerShardDescriptor.h"
 #include "Structures/KPCLFunctionalStructure.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
-AKPCLExtractorBase::AKPCLExtractorBase()
-	: mFGPowerConnection(nullptr)
-	  , mCustomProductionStateIndicator(nullptr)
+AKPCLExtractorBase::AKPCLExtractorBase() : mFGPowerConnection(nullptr), mCustomProductionStateIndicator(nullptr)
 {
 	bReplicates = true;
 	mFactoryTickFunction.bCanEverTick = true;
@@ -47,10 +45,7 @@ void AKPCLExtractorBase::PostEditChangeChainProperty(FPropertyChangedChainEvent&
 }
 #endif
 
-bool AKPCLExtractorBase::Overclocking_IsConsumer_Implementation()
-{
-	return false;
-}
+bool AKPCLExtractorBase::Overclocking_IsConsumer_Implementation() { return false; }
 
 void AKPCLExtractorBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
 {
@@ -66,13 +61,12 @@ void AKPCLExtractorBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf
 	if (IsValid(AssetSubsystem))
 	{
 		TArray<TSubclassOf<UFGItemDescriptor>> Items;
-		AssetSubsystem->GetItemsOfChilds({UFGPowerShardDescriptor::StaticClass()},
-		                                 Items, true);
+		AssetSubsystem->GetItemsOfChilds({UFGPowerShardDescriptor::StaticClass()}, Items, true);
 		for (TSubclassOf<UFGItemDescriptor> Item : Items)
 		{
 			TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(Item);
-			if (IsValid(PowerShard) && UFGPowerShardDescriptor::GetPowerShardType(PowerShard) ==
-				EPowerShardType::PST_Overclock)
+			if (IsValid(PowerShard) &&
+				UFGPowerShardDescriptor::GetPowerShardType(PowerShard) == EPowerShardType::PST_Overclock)
 			{
 				OutSlots.AddUnique(PowerShard);
 			}
@@ -85,10 +79,7 @@ UFGInventoryComponent* AKPCLExtractorBase::Overclocking_GetInventory_Implementat
 	return GetPotentialInventory();
 }
 
-bool AKPCLExtractorBase::Overclocking_ShouldUse_Implementation()
-{
-	return bEnableCustomOverclocking;
-}
+bool AKPCLExtractorBase::Overclocking_ShouldUse_Implementation() { return bEnableCustomOverclocking; }
 
 bool AKPCLExtractorBase::Overclocking_UseInventory_Implementation(int32& UnlockedSlots)
 {
@@ -104,8 +95,8 @@ bool AKPCLExtractorBase::Overclocking_UseInventory_Implementation(int32& Unlocke
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
@@ -139,8 +130,8 @@ void AKPCLExtractorBase::Overclocking_GetCostSlots_Implementation(TArray<FItemAm
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
@@ -171,7 +162,7 @@ UFGFactoryClipboardSettings* AKPCLExtractorBase::CopySettings_Implementation()
 }
 
 bool AKPCLExtractorBase::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                      class AFGPlayerController* player)
+													  class AFGPlayerController* player)
 {
 	if (UKPCLBaseClipboardSettings* Settings = Cast<UKPCLBaseClipboardSettings>(factoryClipboard))
 	{
@@ -197,8 +188,8 @@ void AKPCLExtractorBase::WriteClipboardSettings(UKPCLBaseClipboardSettings* Clip
 					continue;
 				}
 
-				if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-					Stack.Item.GetItemClass()))
+				if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+						TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 				{
 					EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 					if (Type == EPowerShardType::PST_Overclock)
@@ -210,27 +201,29 @@ void AKPCLExtractorBase::WriteClipboardSettings(UKPCLBaseClipboardSettings* Clip
 		}
 	}
 	ClipboardSettings->bIsPaused = IsProductionPaused();
+	ClipboardSettings->mTargetPotential = GetPendingPotential();
 }
 
 void AKPCLExtractorBase::ApplyClipboardSettings(UKPCLBaseClipboardSettings* ClipboardSettings,
-                                                AFGPlayerController* Player)
+												AFGPlayerController* Player)
 {
 	int32 UnlockedSlots = 0;
-	if (Execute_Overclocking_UseInventory(this, UnlockedSlots) && IsValid(GetPotentialInventory()))
+	if (Execute_Overclocking_UseInventory(this, UnlockedSlots) && IsValid(GetPotentialInventory()) && IsValid(Player))
 	{
 		if (AFGCharacterPlayer* Char = Cast<AFGCharacterPlayer>(Player->GetCharacter()))
 		{
-			for (FItemAmount ItemAmount : ClipboardSettings->mShards)
+			if (IsValid(Char->GetInventory()))
 			{
-				FInventoryStack Stack;
-
-				if (Char->GetInventory()->HasItems(ItemAmount.ItemClass, ItemAmount.Amount))
+				for (FItemAmount ItemAmount : ClipboardSettings->mShards)
 				{
-					int32 Added = GetPotentialInventory()->AddStack(
-						FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
-					if (Added > 0)
+					if (Char->GetInventory()->HasItems(ItemAmount.ItemClass, ItemAmount.Amount))
 					{
-						Char->GetInventory()->Remove(ItemAmount.ItemClass, ItemAmount.Amount);
+						int32 Added =
+							GetPotentialInventory()->AddStack(FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
+						if (Added > 0)
+						{
+							Char->GetInventory()->Remove(ItemAmount.ItemClass, ItemAmount.Amount);
+						}
 					}
 				}
 			}
@@ -246,10 +239,7 @@ void AKPCLExtractorBase::Overclocking_GetInfo_Implementation(FKPCLOverclockingPr
 	OutProductionInfo.mDefaultProductionTime = mProductionHandle.mProductionTime;
 }
 
-bool AKPCLExtractorBase::ShouldSave_Implementation() const
-{
-	return true;
-}
+bool AKPCLExtractorBase::ShouldSave_Implementation() const { return true; }
 
 void AKPCLExtractorBase::InitInventories()
 {
@@ -271,7 +261,7 @@ void AKPCLExtractorBase::InitInventories()
 		if (mCachedInventorys.Contains(ComponentName))
 		{
 			UE_LOG(LogKPCL, Error, TEXT("InitInventories, with duplicate inventory %s in actor %s! > SKIP!"),
-			       *ComponentName.ToString(), *GetName());
+				   *ComponentName.ToString(), *GetName());
 			continue;
 		}
 		mCachedInventorys.Add(ComponentName, Component);
@@ -309,8 +299,8 @@ void AKPCLExtractorBase::SetBelts()
 			{
 				BeltConnection->SetInventory(GetInventory());
 			}
-			else if (IsValid(GetOutputInventory()) && BeltConnection->GetDirection() ==
-				EFactoryConnectionDirection::FCD_OUTPUT)
+			else if (IsValid(GetOutputInventory()) &&
+					 BeltConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT)
 			{
 				BeltConnection->SetInventory(GetOutputInventory());
 			}
@@ -325,7 +315,8 @@ void AKPCLExtractorBase::SetBelts()
 			if (PipeConnection->GetPipeConnectionType() != EPipeConnectionType::PCT_CONSUMER && IsValid(GetInventory()))
 			{
 				PipeConnection->SetInventory(GetInventory());
-			} else if(IsValid(GetOutputInventory()) && PipeConnection->GetPipeConnectionType() == EPipeConnectionType::PCT_CONSUMER)
+			} else if(IsValid(GetOutputInventory()) && PipeConnection->GetPipeConnectionType() ==
+	EPipeConnectionType::PCT_CONSUMER)
 			{
 				PipeConnection->SetInventory(GetOutputInventory());
 			}
@@ -337,30 +328,49 @@ void AKPCLExtractorBase::HandleIndicator()
 {
 	if (!GetHasPower())
 	{
-		mCurrentState = ENewProductionState::NoPower;
+		SetCurrentProductionState(ENewProductionState::NoPower);
 		return;
 	}
 	if (IsProductionPaused())
 	{
-		mCurrentState = ENewProductionState::Paused;
+		SetCurrentProductionState(ENewProductionState::Paused);
 		return;
 	}
 	if (IsProducing())
 	{
-		mCurrentState = ENewProductionState::Producing;
+		SetCurrentProductionState(ENewProductionState::Producing);
 		return;
 	}
-	mCurrentState = ENewProductionState::Idle;
+	SetCurrentProductionState(ENewProductionState::Idle);
 }
 
 void AKPCLExtractorBase::ApplyNewProductionState(ENewProductionState NewState)
 {
 	mLastState = NewState;
-	mCurrentState = NewState;
+	SetCurrentProductionState(NewState);
 
 	if (mCustomProductionStateIndicator)
 	{
-		mCustomProductionStateIndicator->SetState(NewState);
+		// Factory_Tick runs on a worker thread. UObject method calls must happen on the game
+		// thread to avoid GC/visibility races. Self-marshal when called off the game thread
+		// (Phase 2 fix). When already on the game thread (OnRep, BeginPlay, etc.) call directly.
+		if (IsInGameThread())
+		{
+			mCustomProductionStateIndicator->SetState(NewState);
+		}
+		else
+		{
+			TObjectPtr<UKPCLBetterIndicator> Indicator = mCustomProductionStateIndicator;
+			FFunctionGraphTask::CreateAndDispatchWhenReady(
+				[Indicator, NewState]()
+				{
+					if (IsValid(Indicator))
+					{
+						Indicator->SetState(NewState);
+					}
+				},
+				TStatId(), nullptr, ENamedThreads::GameThread);
+		}
 	}
 
 	bOneStateWasNotApplied = false;
@@ -375,7 +385,7 @@ void AKPCLExtractorBase::ApplyNewProductionState(ENewProductionState NewState)
 			}
 			AIO_UpdateCustomFloat(mDefaultIndex, mIntensity, CustomIndicatorHandleIndex, true);
 			AIO_UpdateCustomFloatAsColor(mDefaultIndex + 1, mStateColors[static_cast<uint8>(NewState)],
-			                             CustomIndicatorHandleIndex, true);
+										 CustomIndicatorHandleIndex, true);
 			AIO_UpdateCustomFloat(mDefaultIndex + 4, mPulsStates.Contains(NewState), CustomIndicatorHandleIndex, true);
 		}
 	}
@@ -383,14 +393,14 @@ void AKPCLExtractorBase::ApplyNewProductionState(ENewProductionState NewState)
 
 UFGFactoryConnectionComponent* AKPCLExtractorBase::GetConv(int Index, ECKPCLDirection Direction) const
 {
-	if ((Direction == KPCLInput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::ConvIn].
-		IsValidIndex(Index))
+	if ((Direction == KPCLInput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::ConvIn].IsValidIndex(Index))
 	{
 		return Cast<UFGFactoryConnectionComponent>(mConnectionMap[EKPCLConnectionType::ConvIn][Index]);
 	}
 
-	if ((Direction == KPCLOutput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::ConvOut].
-		IsValidIndex(Index))
+	if ((Direction == KPCLOutput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::ConvOut].IsValidIndex(Index))
 	{
 		return Cast<UFGFactoryConnectionComponent>(mConnectionMap[EKPCLConnectionType::ConvOut][Index]);
 	}
@@ -425,14 +435,14 @@ TArray<UFGFactoryConnectionComponent*> AKPCLExtractorBase::GetAllConv(ECKPCLDire
 
 UFGPipeConnectionFactory* AKPCLExtractorBase::GetPipe(int Index, ECKPCLDirection Direction) const
 {
-	if ((Direction == KPCLInput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::PipeIn].
-		IsValidIndex(Index))
+	if ((Direction == KPCLInput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::PipeIn].IsValidIndex(Index))
 	{
 		return Cast<UFGPipeConnectionFactory>(mConnectionMap[EKPCLConnectionType::PipeIn][Index]);
 	}
 
-	if ((Direction == KPCLOutput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::PipeOut].
-		IsValidIndex(Index))
+	if ((Direction == KPCLOutput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::PipeOut].IsValidIndex(Index))
 	{
 		return Cast<UFGPipeConnectionFactory>(mConnectionMap[EKPCLConnectionType::PipeOut][Index]);
 	}
@@ -554,7 +564,7 @@ void AKPCLExtractorBase::StartIsAimedAtForColor_Implementation(AFGCharacterPlaye
 }
 
 void AKPCLExtractorBase::StartIsLookedAtForConnection(AFGCharacterPlayer* byCharacter,
-                                                      UFGCircuitConnectionComponent* overlappingConnection)
+													  UFGCircuitConnectionComponent* overlappingConnection)
 {
 	UpdateInstancesForOutline();
 	Super::StartIsLookedAtForConnection(byCharacter, overlappingConnection);
@@ -633,7 +643,6 @@ void AKPCLExtractorBase::ReApplyColorForIndex(int32 Idx, const FFactoryCustomiza
 				Datas[Result.Key] = Result.Value;
 			}
 		}
-		UE_LOG(LogKPCL, Warning, TEXT("ReApplyColorForIndex SetCustomPrimitiveDataOnHandle %d to %d"), Idx, NewNum);
 		AAbstractInstanceManager::SetCustomPrimitiveDataOnHandle(mInstanceHandles[Idx], Datas, true);
 	}
 }
@@ -652,7 +661,7 @@ void AKPCLExtractorBase::ApplyCustomizationData_Native(const FFactoryCustomizati
 }
 
 void AKPCLExtractorBase::SetCustomizationData_Native(const FFactoryCustomizationData& customizationData,
-                                                     bool skipCombine)
+													 bool skipCombine)
 {
 	Super::SetCustomizationData_Native(customizationData, skipCombine);
 
@@ -695,7 +704,7 @@ void AKPCLExtractorBase::ApplyMeshInformation(FKPCLMeshOverwriteInformation Info
 	else
 	{
 		AIO_OverwriteInstanceData_Transform(Information.mOverwriteMesh, Information.mCustomTransform,
-		                                    Information.mOverwriteHandleIndex);
+											Information.mOverwriteHandleIndex);
 	}
 }
 
@@ -708,14 +717,13 @@ bool AKPCLExtractorBase::AIO_OverwriteInstanceData(UStaticMesh* Mesh, int32 Idx)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, Mesh, Idx ]()
-		{
-			AIO_OverwriteInstanceData(Mesh, Idx);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady([&, Mesh, Idx]() { AIO_OverwriteInstanceData(Mesh, Idx); },
+													   GET_STATID(STAT_TaskGraph_OtherTasks), nullptr,
+													   ENamedThreads::GameThread);
 		return true;
 	}
 
-	if (Idx > INDEX_NONE && IsValid(Mesh))
+	if (Idx > INDEX_NONE && IsValid(Mesh) && IsValid(mInstanceDataCDO))
 	{
 		TArray<FInstanceData> Datas = mInstanceDataCDO->GetInstanceData();
 		if (Datas.IsValidIndex(Idx))
@@ -727,18 +735,18 @@ bool AKPCLExtractorBase::AIO_OverwriteInstanceData(UStaticMesh* Mesh, int32 Idx)
 }
 
 bool AKPCLExtractorBase::AIO_OverwriteInstanceData_Transform(UStaticMesh* Mesh, FTransform NewRelativTransform,
-                                                             int32 Idx)
+															 int32 Idx)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, Mesh, NewRelativTransform, Idx ]()
-		{
-			AIO_OverwriteInstanceData_Transform(Mesh, NewRelativTransform, Idx);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, Mesh, NewRelativTransform, Idx]()
+			{ AIO_OverwriteInstanceData_Transform(Mesh, NewRelativTransform, Idx); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
-	if (Idx > INDEX_NONE && IsValid(Mesh))
+	if (Idx > INDEX_NONE && IsValid(Mesh) && IsValid(mInstanceDataCDO))
 	{
 		AAbstractInstanceManager* Manager = AAbstractInstanceManager::GetInstanceManager(GetWorld());
 		TArray<FInstanceData> Datas = mInstanceDataCDO->GetInstanceData();
@@ -772,10 +780,10 @@ bool AKPCLExtractorBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, FloatIndex, Data, InstanceIdx, MarkDirty ]()
-		{
-			AIO_UpdateCustomFloat(FloatIndex, Data, InstanceIdx, MarkDirty);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, FloatIndex, Data, InstanceIdx, MarkDirty]()
+			{ AIO_UpdateCustomFloat(FloatIndex, Data, InstanceIdx, MarkDirty); }, GET_STATID(STAT_TaskGraph_OtherTasks),
+			nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -783,9 +791,12 @@ bool AKPCLExtractorBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int
 	{
 		if (mInstanceHandles[InstanceIdx]->IsInstanced())
 		{
-			//UE_LOG( LogKPCL, Error, TEXT("mInstanceHandles[ %d ]->SetPrimitiveDataByID( %f, %d, %d ); IsValid(%d), Component(%d), Owner(%d)"), InstanceIdx, Data, FloatIndex, MarkDirty, mInstanceHandles[ InstanceIdx ]->IsValid(), IsValid( mInstanceHandles[ InstanceIdx ]->GetInstanceComponent() ), mInstanceHandles[ InstanceIdx ]->GetOwner() == this )
-			mInstanceHandles[InstanceIdx]->SetPrimitiveDataByID(Data/** float that we want to set */,
-			                                                    FloatIndex /** Index where we want to set */, true);
+			// UE_LOG( LogKPCL, Error, TEXT("mInstanceHandles[ %d ]->SetPrimitiveDataByID( %f, %d, %d ); IsValid(%d),
+			// Component(%d), Owner(%d)"), InstanceIdx, Data, FloatIndex, MarkDirty, mInstanceHandles[ InstanceIdx
+			// ]->IsValid(), IsValid( mInstanceHandles[ InstanceIdx ]->GetInstanceComponent() ), mInstanceHandles[
+			// InstanceIdx ]->GetOwner() == this )
+			mInstanceHandles[InstanceIdx]->SetPrimitiveDataByID(Data /** float that we want to set */,
+																FloatIndex /** Index where we want to set */, true);
 			if (mCachedCustomData.Contains(InstanceIdx))
 			{
 				mCachedCustomData[InstanceIdx].Add(FloatIndex, Data);
@@ -804,14 +815,14 @@ bool AKPCLExtractorBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int
 }
 
 bool AKPCLExtractorBase::AIO_UpdateCustomFloatAsColor(int32 StartFloatIndex, FLinearColor Data, int32 InstanceIdx,
-                                                      bool MarkDirty)
+													  bool MarkDirty)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, StartFloatIndex, Data, InstanceIdx, MarkDirty ]()
-		{
-			AIO_UpdateCustomFloatAsColor(StartFloatIndex, Data, InstanceIdx, MarkDirty);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, StartFloatIndex, Data, InstanceIdx, MarkDirty]()
+			{ AIO_UpdateCustomFloatAsColor(StartFloatIndex, Data, InstanceIdx, MarkDirty); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -824,10 +835,9 @@ bool AKPCLExtractorBase::AIO_SetInstanceHidden(int32 InstanceIdx, bool IsHidden)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, InstanceIdx, IsHidden ]()
-		{
-			AIO_SetInstanceHidden(InstanceIdx, IsHidden);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, InstanceIdx, IsHidden]() { AIO_SetInstanceHidden(InstanceIdx, IsHidden); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -835,10 +845,19 @@ bool AKPCLExtractorBase::AIO_SetInstanceHidden(int32 InstanceIdx, bool IsHidden)
 	{
 		if (mInstanceHandles[InstanceIdx]->IsInstanced())
 		{
-			FTransform T = mCachedTransforms.Contains(InstanceIdx)
-				               ? mCachedTransforms[InstanceIdx]
-				               : mInstanceDataCDO->GetInstanceData()[InstanceIdx].RelativeTransform *
-				               GetActorTransform();
+			FTransform T;
+			if (mCachedTransforms.Contains(InstanceIdx))
+			{
+				T = mCachedTransforms[InstanceIdx];
+			}
+			else if (IsValid(mInstanceDataCDO) && mInstanceDataCDO->GetInstanceData().IsValidIndex(InstanceIdx))
+			{
+				T = mInstanceDataCDO->GetInstanceData()[InstanceIdx].RelativeTransform * GetActorTransform();
+			}
+			else
+			{
+				T = GetActorTransform();
+			}
 			T.SetScale3D(!IsHidden ? T.GetScale3D() : FVector(0.001f));
 			T.SetLocation(!IsHidden ? T.GetLocation() : FVector(0.001f));
 
@@ -854,10 +873,9 @@ bool AKPCLExtractorBase::AIO_SetInstanceWorldTransform(int32 InstanceIdx, FTrans
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, InstanceIdx, Transform ]()
-		{
-			AIO_SetInstanceWorldTransform(InstanceIdx, Transform);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, InstanceIdx, Transform]() { AIO_SetInstanceWorldTransform(InstanceIdx, Transform); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -897,51 +915,42 @@ void AKPCLExtractorBase::Factory_Tick(float dt)
 		float MinLimit = GetCurrentMinPotential();
 		if (Pending > Limit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, Limit]
-				                                                     {
-					                                                     SetPendingPotential(Limit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, Limit] { SetPendingPotential(Limit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 		else if (Pending < MinLimit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, MinLimit]
-				                                                     {
-					                                                     SetPendingPotential(MinLimit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, MinLimit] { SetPendingPotential(MinLimit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 
 		float Current = GetCurrentPotential();
 		if (Current > Limit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, Limit]
-				                                                     {
-					                                                     SetCurrentPotential(Limit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, Limit] { SetCurrentPotential(Limit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 		else if (Current < MinLimit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, MinLimit]
-				                                                     {
-					                                                     SetCurrentPotential(MinLimit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, MinLimit] { SetCurrentPotential(MinLimit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 
 		BeltPipeGrab(dt);
 		HandleUiTick(dt);
 
-		mProductionHandle.TickHandle(dt, IsProducing(), [&]()
-		{
-			EndProductionTime();
-			onProducingFinal();
-		});
+		mProductionHandle.TickHandle(dt, IsProducing(),
+									 [&]()
+									 {
+										 EndProductionTime();
+										 onProducingFinal();
+									 });
+		mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
+
 		mPowerOptions.mCurrentPotential = mProductionHandle.mCurrentPotential;
 
 		if (!mPowerOptions.bWasInit)
@@ -953,6 +962,7 @@ void AKPCLExtractorBase::Factory_Tick(float dt)
 		{
 			HandlePower(dt);
 		}
+		mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 	}
 
 	if (mCustomProductionStateIndicator || mCustomIndicatorHandleIndexes.Num() > 0)
@@ -980,13 +990,9 @@ void AKPCLExtractorBase::Factory_Tick(float dt)
 	}
 }
 
-void AKPCLExtractorBase::Factory_TickAuthOnly(float dt)
-{
-}
+void AKPCLExtractorBase::Factory_TickAuthOnly(float dt) {}
 
-void AKPCLExtractorBase::Factory_TickClientOnly(float dt)
-{
-}
+void AKPCLExtractorBase::Factory_TickClientOnly(float dt) {}
 
 bool AKPCLExtractorBase::CanProduce_Implementation() const
 {
@@ -998,43 +1004,35 @@ bool AKPCLExtractorBase::CanProduce_Implementation() const
 	return !IsProductionPaused();
 }
 
-void AKPCLExtractorBase::EndProductionTime()
-{
-	SetCurrentPotential(GetPendingPotential());
-}
+void AKPCLExtractorBase::EndProductionTime() { SetCurrentPotential(GetPendingPotential()); }
 
-void AKPCLExtractorBase::BeltPipeGrab(float dt)
-{
-}
+void AKPCLExtractorBase::BeltPipeGrab(float dt) {}
 
 void AKPCLExtractorBase::HandlePower(float dt)
 {
 	mPowerOptions.bHasPower = HasPower();
 	mPowerOptions.StructureTick(dt, IsProducing());
-	GetPowerInfo()->SetTargetConsumption(mPowerOptions.mIsProducer
-		                                     ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
-		                                     : mPowerOptions.GetPowerConsume());
+	GetPowerInfo()->SetTargetConsumption(mPowerOptions.mIsProducer ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
+																   : mPowerOptions.GetPowerConsume());
 	GetPowerInfo()->SetMaximumTargetConsumption(mPowerOptions.mIsProducer
-		                                            ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
-		                                            : mPowerOptions.GetMaxPowerConsume());
-	GetPowerInfo()->SetBaseProduction(
-		!mPowerOptions.mIsProducer || (!mPowerOptions.mIsProducer && mPowerOptions.mIsDynamicProducer)
-			? 0.0f
-			: mPowerOptions.GetMaxPowerConsume());
-	GetPowerInfo()->SetDynamicProductionCapacity(!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer
-		                                             ? 0.0f
-		                                             : mPowerOptions.GetMaxPowerConsume());
+													? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
+													: mPowerOptions.GetMaxPowerConsume());
+	GetPowerInfo()->SetBaseProduction(!mPowerOptions.mIsProducer ||
+											  (!mPowerOptions.mIsProducer && mPowerOptions.mIsDynamicProducer)
+										  ? 0.0f
+										  : mPowerOptions.GetMaxPowerConsume());
+	GetPowerInfo()->SetDynamicProductionCapacity(
+		!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer ? 0.0f : mPowerOptions.GetMaxPowerConsume());
 	GetPowerInfo()->SetFullBlast((!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer));
 }
 
 void AKPCLExtractorBase::HandlePowerInit()
 {
 	mPowerOptions.Init();
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-void AKPCLExtractorBase::HandleUiTick(float dt)
-{
-}
+void AKPCLExtractorBase::HandleUiTick(float dt) {}
 
 void AKPCLExtractorBase::InitComponents()
 {
@@ -1094,44 +1092,28 @@ void AKPCLExtractorBase::InitComponents()
 	}
 }
 
-float AKPCLExtractorBase::GetMaxPowerConsume() const
-{
-	return mPowerOptions.GetMaxPowerConsume();
-}
+float AKPCLExtractorBase::GetMaxPowerConsume() const { return mPowerOptions.GetMaxPowerConsume(); }
 
-float AKPCLExtractorBase::GetPowerConsume() const
-{
-	return mPowerOptions.GetPowerConsume();
-}
+float AKPCLExtractorBase::GetPowerConsume() const { return mPowerOptions.GetPowerConsume(); }
 
-bool AKPCLExtractorBase::GetHasPower() const
-{
-	return mPowerOptions.bHasPower;
-}
+bool AKPCLExtractorBase::GetHasPower() const { return mPowerOptions.bHasPower; }
 
-UFGPowerConnectionComponent* AKPCLExtractorBase::GetPowerConnection() const
-{
-	return mFGPowerConnection;
-}
+UFGPowerConnectionComponent* AKPCLExtractorBase::GetPowerConnection() const { return mFGPowerConnection; }
 
-float AKPCLExtractorBase::GetCurrentPowerMultiplier() const
-{
-	return mPowerOptions.mPowerMultiplier;
-}
+float AKPCLExtractorBase::GetCurrentPowerMultiplier() const { return mPowerOptions.mPowerMultiplier; }
 
 void AKPCLExtractorBase::SetPowerMultiplier(float NewMultiplier)
 {
 	mPowerOptions.mPowerMultiplier = NewMultiplier;
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-float AKPCLExtractorBase::GetDefaultProductionCycleTime() const
-{
-	return mProductionHandle.mProductionTime;
-}
+float AKPCLExtractorBase::GetDefaultProductionCycleTime() const { return mProductionHandle.mProductionTime; }
 
 float AKPCLExtractorBase::GetProductionProgress() const
 {
-	return mProductionHandle.mCurrentTime / mProductionHandle.mProductionTime;
+	return mProductionHandle.mProductionTime > 0.f ? mProductionHandle.mCurrentTime / mProductionHandle.mProductionTime
+												   : 0.f;
 }
 
 void AKPCLExtractorBase::SetPendingPotential(float NewPendingPotential)
@@ -1139,6 +1121,7 @@ void AKPCLExtractorBase::SetPendingPotential(float NewPendingPotential)
 	NewPendingPotential = FMath::Clamp(NewPendingPotential, GetCurrentMinPotential(), GetCurrentMaxPotential());
 	Super::SetPendingPotential(NewPendingPotential);
 	mProductionHandle.mPendingPotential = NewPendingPotential;
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 float AKPCLExtractorBase::GetCurrentMaxPotential() const
@@ -1155,8 +1138,8 @@ float AKPCLExtractorBase::GetCurrentMaxPotential() const
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
@@ -1169,15 +1152,22 @@ float AKPCLExtractorBase::GetCurrentMaxPotential() const
 	return Result;
 }
 
-float AKPCLExtractorBase::CalcProductionCycleTimeForPotential(float potential) const
+void AKPCLExtractorBase::OnBoosterItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
+											UFGInventoryComponent* sourceInventory)
 {
-	return mProductionHandle.mProductionTime / potential;
 }
 
-float AKPCLExtractorBase::GetProducingPowerConsumptionBase() const
+void AKPCLExtractorBase::OnBoosterItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
+											  UFGInventoryComponent* sourceInventory)
 {
-	return mPowerOptions.mNormalPowerConsume;
 }
+
+float AKPCLExtractorBase::CalcProductionCycleTimeForPotential(float potential) const
+{
+	return potential != 0.f ? mProductionHandle.mProductionTime / potential : 0.f;
+}
+
+float AKPCLExtractorBase::GetProducingPowerConsumptionBase() const { return mPowerOptions.mNormalPowerConsume; }
 
 void AKPCLExtractorBase::Overclocking_GetProductionResults_Implementation(
 	TArray<FKPCLOverclockingProductionResults>& OutIngredients, TArray<FKPCLOverclockingProductionResults>& OutProducts)
@@ -1216,69 +1206,68 @@ void AKPCLExtractorBase::Factory_PushPipeOutput_Implementation(float dt)
 	}
 }
 
-void AKPCLExtractorBase::CollectBelts()
-{
-}
+void AKPCLExtractorBase::CollectBelts() {}
 
-void AKPCLExtractorBase::CollectAndPushPipes(float dt, bool IsPush)
-{
-}
+void AKPCLExtractorBase::CollectAndPushPipes(float dt, bool IsPush) {}
 
 void AKPCLExtractorBase::ResetProduction()
 {
 	mProductionHandle.Reset();
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 void AKPCLExtractorBase::SetProductionTime(float NewTime, bool ShouldResetProduction)
 {
 	mProductionHandle.SetNewTime(NewTime, ShouldResetProduction);
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 void AKPCLExtractorBase::SetPowerOption(FPowerOptions NewPowerOption)
 {
 	mPowerOptions.OverWritePowerOptions(NewPowerOption);
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-FPowerOptions AKPCLExtractorBase::GetPowerOption() const
-{
-	return mPowerOptions;
-}
+FPowerOptions AKPCLExtractorBase::GetPowerOption() const { return mPowerOptions; }
 
-FPowerOptions& AKPCLExtractorBase::GetPowerOptionRef()
-{
-	return mPowerOptions;
-}
-
+FPowerOptions& AKPCLExtractorBase::GetPowerOptionRef() { return mPowerOptions; }
 
 void AKPCLExtractorBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// Production
-	DOREPLIFETIME(AKPCLExtractorBase, mProductionHandle);
-	DOREPLIFETIME(AKPCLExtractorBase, mPowerOptions);
-	DOREPLIFETIME(AKPCLExtractorBase, mCurrentState);
 	DOREPLIFETIME(AKPCLExtractorBase, mMeshOverwriteInformations);
+	DOREPLIFETIME(AKPCLExtractorBase, mCurrentState);
 }
 
-void AKPCLExtractorBase::onProducingFinal_Implementation()
+void AKPCLExtractorBase::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
 {
+	Super::GetConditionalReplicatedProps(outProps);
+
+	FG_DOREPCONDITIONAL(ThisClass, mProductionHandle);
+	FG_DOREPCONDITIONAL(ThisClass, mPowerOptions);
 }
 
-float AKPCLExtractorBase::GetProductionTime() const
+void AKPCLExtractorBase::OnRep_MeshOverwriteInformations() { ReadyForVisuelUpdate(); }
+
+void AKPCLExtractorBase::OnRep_CurrentState() { ApplyNewProductionState(mCurrentState); }
+
+void AKPCLExtractorBase::SetCurrentProductionState(ENewProductionState NewState)
 {
-	return mProductionHandle.GetProductionTime();
+	if (mCurrentState == NewState)
+	{
+		return;
+	}
+	mCurrentState = NewState;
 }
 
-float AKPCLExtractorBase::GetPendingProductionTime() const
-{
-	return mProductionHandle.GetPendingProductionTime();
-}
+void AKPCLExtractorBase::onProducingFinal_Implementation() {}
 
-FFullProductionHandle AKPCLExtractorBase::GetProductionHandle() const
-{
-	return mProductionHandle;
-}
+float AKPCLExtractorBase::GetProductionTime() const { return mProductionHandle.GetProductionTime(); }
+
+float AKPCLExtractorBase::GetPendingProductionTime() const { return mProductionHandle.GetPendingProductionTime(); }
+
+FFullProductionHandle AKPCLExtractorBase::GetProductionHandle() const { return mProductionHandle; }
 
 void AKPCLExtractorBase::FlushFluids()
 {
@@ -1295,10 +1284,7 @@ void AKPCLExtractorBase::FlushFluids()
 	}
 }
 
-float AKPCLExtractorBase::GetProductionCycleTime() const
-{
-	return mProductionHandle.GetProductionTime();
-}
+float AKPCLExtractorBase::GetProductionCycleTime() const { return mProductionHandle.GetProductionTime(); }
 
 UFGInventoryComponent* AKPCLExtractorBase::GetInventory() const
 {
@@ -1370,7 +1356,7 @@ UFGInventoryComponent* AKPCLExtractorBase::GetInventoryFromType(EKPCLInventoryTy
 	case EKPCLInventoryType::Booster:
 		return GetBoosterInventory();
 	case EKPCLInventoryType::Output:
-		return GetBoosterInventory();
+		return GetOutputInventory();
 	default:
 		return GetInventory();
 	}

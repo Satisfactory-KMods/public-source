@@ -1,4 +1,3 @@
-﻿#pragma once
 #include "Subsystems/ResourceNodes/KBFLActorSpawnDescriptorBase.h"
 
 #include "EngineUtils.h"
@@ -22,7 +21,7 @@ bool UKBFLSpawnRequirement::IsRequirementMetActor_Implementation(class UKBFLActo
 void UKBFLActorSpawnDescriptorBase::BeginSpawning()
 {
 	UE_LOGFMT(KBFLActorSpawnerLog, Log, "BeginSpawning called for descriptor: {0}", GetName());
-	
+
 	if (!AreRequirementsMet())
 	{
 		UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Skipping BeginSpawning for '{0}' - requirements not met", GetName());
@@ -45,15 +44,17 @@ void UKBFLActorSpawnDescriptorBase::BeginSpawning()
 	ModifyValues();
 
 	TArray<TSubclassOf<AActor>> SearchingClasses = GetSearchingActorClasses();
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - searching for {1} actor class(es)", GetName(), SearchingClasses.Num());
-	
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - searching for {1} actor class(es)", GetName(),
+			  SearchingClasses.Num());
+
 	for (TSubclassOf<AActor> ActorClass : SearchingClasses)
 	{
 		TArray<AActor*> Founded;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ActorClass, Founded);
 		if (Founded.Num() > 0)
 		{
-			UE_LOGFMT(KBFLActorSpawnerLog, Log, "Found {0} existing actor(s) of class {1}", Founded.Num(), ActorClass->GetName());
+			UE_LOGFMT(KBFLActorSpawnerLog, Log, "Found {0} existing actor(s) of class {1}", Founded.Num(),
+					  ActorClass->GetName());
 			mAllActors.Append(Founded);
 		}
 	}
@@ -62,14 +63,15 @@ void UKBFLActorSpawnDescriptorBase::BeginSpawning()
 
 	if (GetActorClass() && GetActorFreeClass())
 	{
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - actor classes valid (ActorClass: {1}, FreeClass: {2})", 
-			GetName(), GetActorClass()->GetName(), GetActorFreeClass()->GetName());
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - actor classes valid (ActorClass: {1}, FreeClass: {2})",
+				  GetName(), GetActorClass()->GetName(), GetActorFreeClass()->GetName());
 
 		TArray<AActor*> ActorArray;
 		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - processing locations", GetName());
 		ForeachLocations(ActorArray);
-		
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - processed {1} location(s)", GetName(), ActorArray.Num());
+
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - processed {1} location(s)", GetName(),
+				  ActorArray.Num());
 		AfterSpawning();
 
 		if (mRemoveOld)
@@ -80,8 +82,9 @@ void UKBFLActorSpawnDescriptorBase::BeginSpawning()
 	}
 	else
 	{
-		UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Descriptor '{0}' - invalid actor classes (ActorClass valid: {1}, FreeClass valid: {2})", 
-			GetName(), GetActorClass() != nullptr, GetActorFreeClass() != nullptr);
+		UE_LOGFMT(KBFLActorSpawnerLog, Warning,
+				  "Descriptor '{0}' - invalid actor classes (ActorClass valid: {1}, FreeClass valid: {2})", GetName(),
+				  GetActorClass() != nullptr, GetActorFreeClass() != nullptr);
 	}
 
 	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Descriptor '{0}' - cleaning up for garbage collection", GetName());
@@ -111,18 +114,19 @@ void UKBFLActorSpawnDescriptorBase::ClearRequirements()
 }
 bool UKBFLActorSpawnDescriptorBase::AreRequirementsMet()
 {
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Checking requirements for descriptor '{0}' ({1} requirement(s))", GetName(), mRequirements.Num());
-	
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Checking requirements for descriptor '{0}' ({1} requirement(s))", GetName(),
+			  mRequirements.Num());
+
 	for (TObjectPtr<UKBFLSpawnRequirement> Requirement : mRequirements)
 	{
 		if (!Requirement->IsRequirementMet(this))
 		{
-			UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Requirement '{0}' not met for descriptor '{1}'", 
-				Requirement->GetName(), GetName());
+			UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Requirement '{0}' not met for descriptor '{1}'",
+					  Requirement->GetName(), GetName());
 			return false;
 		}
 	}
-	
+
 	UE_LOGFMT(KBFLActorSpawnerLog, Log, "All requirements met for descriptor '{0}'", GetName());
 	return true;
 }
@@ -171,17 +175,18 @@ bool UKBFLActorSpawnDescriptorBase::CheckActorInRange(FTransform Transform, AAct
 	if (Free && OutActors.Num() > 0)
 	{
 		OutActor = OutActors[0];
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckActorInRange: Found actor '{0}' via sphere overlap at location {1}", 
-			OutActor->GetName(), Transform.GetLocation().ToString());
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckActorInRange: Found actor '{0}' via sphere overlap at location {1}",
+				  OutActor->GetName(), Transform.GetLocation().ToString());
 		ModifyCheckActor(OutActor, Transform);
 	}
 	else
 	{
 		if (mAllActors.Num() > 0)
 		{
-			UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckActorInRange: Sphere overlap failed, checking {0} cached actors by distance", 
-				mAllActors.Num());
-			
+			UE_LOGFMT(KBFLActorSpawnerLog, Log,
+					  "CheckActorInRange: Sphere overlap failed, checking {0} cached actors by distance",
+					  mAllActors.Num());
+
 			for (AActor* Actor : mAllActors)
 			{
 				if (ensure(Actor))
@@ -193,8 +198,8 @@ bool UKBFLActorSpawnDescriptorBase::CheckActorInRange(FTransform Transform, AAct
 
 					if (FVector::Distance(Actor->GetActorLocation(), Transform.GetLocation()) < mCheckRange)
 					{
-						UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Found actor '{0}' only by distance checking at {1}", 
-							Actor->GetName(), Actor->GetActorLocation().ToString());
+						UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Found actor '{0}' only by distance checking at {1}",
+								  Actor->GetName(), Actor->GetActorLocation().ToString());
 						OutActor = Actor;
 						ModifyCheckActor(OutActor, Transform);
 						return true;
@@ -204,21 +209,21 @@ bool UKBFLActorSpawnDescriptorBase::CheckActorInRange(FTransform Transform, AAct
 		}
 	}
 
-	UE_LOGFMT(KBFLActorSpawnerLog, Warning, 
-		"CheckActorInRange: Found {0} actor(s), Class: {1}, Range: {2}, Location: {3}",
-		OutActors.Num(), GetActorClass()->GetName(), mCheckRange, Transform.GetLocation().ToString());
+	UE_LOGFMT(KBFLActorSpawnerLog, Warning,
+			  "CheckActorInRange: Found {0} actor(s), Class: {1}, Range: {2}, Location: {3}", OutActors.Num(),
+			  GetActorClass()->GetName(), mCheckRange, Transform.GetLocation().ToString());
 	return Free;
 }
 
 void UKBFLActorSpawnDescriptorBase::ModifyCheckActor(AActor*& InActor, FTransform FoundTransform)
 {
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "ModifyCheckActor: Processing actor '{0}', AllowToMove: {1}", 
-		InActor->GetName(), mAllowToMove);
-	
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "ModifyCheckActor: Processing actor '{0}', AllowToMove: {1}",
+			  InActor->GetName(), mAllowToMove);
+
 	if (mAllowToMove)
 	{
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Moving actor '{0}' from {1} to {2}", 
-			InActor->GetName(), InActor->GetActorLocation().ToString(), FoundTransform.GetLocation().ToString());
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Moving actor '{0}' from {1} to {2}", InActor->GetName(),
+				  InActor->GetActorLocation().ToString(), FoundTransform.GetLocation().ToString());
 		InActor->SetActorTransform(FoundTransform);
 	}
 }
@@ -239,9 +244,9 @@ bool UKBFLActorSpawnDescriptorBase::IsRangeFree(FTransform Transform)
 																 ActorsToIgnore, OutActors);
 
 	const bool Result = Free && OutActors.Num() == 0;
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsRangeFree: Location {0}, Range: {1}, Free: {2}, Overlapping actors: {3}", 
-		Transform.GetLocation().ToString(), mCheckRange, Result, OutActors.Num());
-	
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsRangeFree: Location {0}, Range: {1}, Free: {2}, Overlapping actors: {3}",
+			  Transform.GetLocation().ToString(), mCheckRange, Result, OutActors.Num());
+
 	return Result;
 }
 
@@ -250,9 +255,9 @@ void UKBFLActorSpawnDescriptorBase::RemoveWrongActors(TArray<AActor*>& ActorArra
 	if (GetActorClass())
 	{
 		int32 RemovedCount = 0;
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "RemoveWrongActors: Checking actors of class '{0}', Valid actors: {1}", 
-			GetActorClass()->GetName(), ActorArray.Num());
-		
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "RemoveWrongActors: Checking actors of class '{0}', Valid actors: {1}",
+				  GetActorClass()->GetName(), ActorArray.Num());
+
 		for (TActorIterator Actor(GetWorld(), GetActorClass()); Actor; ++Actor)
 		{
 			AActor* ActorPointer = *Actor;
@@ -260,21 +265,21 @@ void UKBFLActorSpawnDescriptorBase::RemoveWrongActors(TArray<AActor*>& ActorArra
 
 			if (!IsActorCorrect && IsAllowedToRemoveActor(ActorPointer))
 			{
-				UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Destroying wrong actor '{0}' at {1}",
-					ActorPointer->GetName(), ActorPointer->GetTransform().ToString());
+				UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Destroying wrong actor '{0}' at {1}", ActorPointer->GetName(),
+						  ActorPointer->GetTransform().ToString());
 				Actor->Destroy();
 				RemovedCount++;
 			}
 		}
-		
+
 		UE_LOGFMT(KBFLActorSpawnerLog, Log, "RemoveWrongActors: Removed {0} actor(s)", RemovedCount);
 	}
 }
 
-void UKBFLActorSpawnDescriptorBase::ApplyMaterialData(AActor* Actor, TMap<uint8, UMaterialInterface*> MaterialInfo)
+void UKBFLActorSpawnDescriptorBase::ApplyMaterialData(AActor* Actor, TMap<uint8, TObjectPtr<UMaterialInterface>> MaterialInfo)
 {
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "ApplyMaterialData: Actor '{0}', Materials: {1}", 
-		Actor->GetName(), MaterialInfo.Num());
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "ApplyMaterialData: Actor '{0}', Materials: {1}", Actor->GetName(),
+			  MaterialInfo.Num());
 
 	if (Actor && MaterialInfo.Num() > 0)
 	{
@@ -295,7 +300,8 @@ void UKBFLActorSpawnDescriptorBase::ApplyMaterialData(AActor* Actor, TMap<uint8,
 						AppliedCount++;
 					}
 				}
-				UE_LOGFMT(KBFLActorSpawnerLog, Log, "Applied {0} material(s) to actor '{1}'", AppliedCount, Actor->GetName());
+				UE_LOGFMT(KBFLActorSpawnerLog, Log, "Applied {0} material(s) to actor '{1}'", AppliedCount,
+						  Actor->GetName());
 			}
 		}
 		else
@@ -322,17 +328,17 @@ bool UKBFLActorSpawnDescriptorBase::CheckWorld() const
 	{
 #if WITH_EDITOR
 		const bool bMatches = FString("UEDPIE_0_").Append(mMapName) != GetWorld()->GetMapName();
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckWorld (Editor): Expected '{0}', Current '{1}', Match: {2}", 
-			FString("UEDPIE_0_").Append(mMapName), GetWorld()->GetMapName(), bMatches);
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckWorld (Editor): Expected '{0}', Current '{1}', Match: {2}",
+				  FString("UEDPIE_0_").Append(mMapName), GetWorld()->GetMapName(), bMatches);
 		return bMatches;
 #else
 		const bool bMatches = mMapName == GetWorld()->GetMapName();
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckWorld: Expected '{0}', Current '{1}', Match: {2}", 
-			mMapName, GetWorld()->GetMapName(), bMatches);
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "CheckWorld: Expected '{0}', Current '{1}', Match: {2}", mMapName,
+				  GetWorld()->GetMapName(), bMatches);
 		return bMatches;
 #endif
 	}
-	
+
 	UE_LOGFMT(KBFLActorSpawnerLog, Error, "CheckWorld failed - World is null");
 	return false;
 }
@@ -345,18 +351,28 @@ TSubclassOf<AActor> UKBFLActorSpawnDescriptorBase::GetActorFreeClass()
 	return mActorFreeClass ? mActorFreeClass : GetActorClass();
 }
 
+class UWorld* UKBFLActorSpawnDescriptorBase::GetWorld() const
+{
+	if (mSubsystem)
+	{
+		return mSubsystem->GetWorld();
+	}
+	return Super::GetWorld();
+}
+
 AActor* UKBFLActorSpawnDescriptorBase::SpawnActorAtLocation(FTransform Transform, TSubclassOf<AActor> ClassToSpawn)
 {
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Attempting to spawn actor of class '{0}' at location {1}", 
-		ClassToSpawn->GetName(), Transform.GetLocation().ToString());
-	
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "Attempting to spawn actor of class '{0}' at location {1}",
+			  ClassToSpawn->GetName(), Transform.GetLocation().ToString());
+
 	if (AActor* NewActor = GetWorld()->SpawnActorDeferred<AActor>(ClassToSpawn, Transform))
 	{
 		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Actor deferred spawn successful, checking requirements");
-		
+
 		if (!AreRequirementsMetActor(NewActor))
 		{
-			UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Actor '{0}' failed requirements check, destroying", NewActor->GetName());
+			UE_LOGFMT(KBFLActorSpawnerLog, Warning, "Actor '{0}' failed requirements check, destroying",
+					  NewActor->GetName());
 			NewActor->Destroy();
 			return nullptr;
 		}
@@ -367,12 +383,12 @@ AActor* UKBFLActorSpawnDescriptorBase::SpawnActorAtLocation(FTransform Transform
 		OnActorSpawned(NewActor);
 		ModifySpawnedActorPostSpawn(NewActor);
 
-		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Actor spawned successfully: '{0}' at {1}", 
-			NewActor->GetName(), Transform.ToString());
+		UE_LOGFMT(KBFLActorSpawnerLog, Log, "Actor spawned successfully: '{0}' at {1}", NewActor->GetName(),
+				  Transform.ToString());
 
 		return NewActor;
 	}
-	
+
 	UE_LOGFMT(KBFLActorSpawnerLog, Error, "Failed to spawn actor of class '{0}'", ClassToSpawn->GetName());
 	return nullptr;
 }

@@ -1,17 +1,16 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
-#include "FactoryGame.h"
-#include "FGColoredInstanceMeshProxy.h"
+#include "CoreMinimal.h"
+
 #include "Components/StaticMeshComponent.h"
+#include "FGColoredInstanceMeshProxy.h"
+#include "FactoryGame.h"
+
 #include "KLCustomIndicator.generated.h"
 
-
-/**
-* Proxy placed in buildings to be replaced with an instance on creation, supports coloring.
-*/
-UCLASS(Blueprintable, meta = ( BlueprintSpawnableComponent ))
+UCLASS(Blueprintable, meta = (BlueprintSpawnableComponent))
 class KLIB_API UKLCustomIndicator : public UFGColoredInstanceMeshProxy
 {
 	GENERATED_BODY()
@@ -19,28 +18,28 @@ class KLIB_API UKLCustomIndicator : public UFGColoredInstanceMeshProxy
 public:
 	UKLCustomIndicator();
 
-	// Begin AActorComponent interface
+	//~ Begin UActorComponent Interface
 	virtual void BeginPlay() override;
-	// End AActorComponent interface
+	//~ End UActorComponent Interface
 
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
-	void UpdateColors(const TArray<FLinearColor>& ColorArray);
-
-	UFUNCTION(BlueprintCallable, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
 	void UpdateColorIndex(int NewIndex);
 
-	UFUNCTION(BlueprintNativeEvent, Category="KMods Indicator")
+	UFUNCTION(BlueprintCallable, Category = "KMods Indicator")
+	void UpdateColors(const TArray<FLinearColor>& ColorArray);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "KMods Indicator")
 	void onUpdatedColorIndex(int NewIndex);
 
-	UPROPERTY(BlueprintReadOnly, Category="KMods Indicator")
-	UMaterialInstanceDynamic* mDynamicMaterial;
-
-	UPROPERTY(EditDefaultsOnly, Category="KMods Indicator")
+	UPROPERTY(EditDefaultsOnly, Category = "KMods Indicator")
 	int mMaterialIndex = 0;
 
-	UPROPERTY(BlueprintReadWrite, Category="KMods Indicator")
-	int mActiveColorIndex = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="KMods Indicator")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "KMods Indicator")
 	TArray<FLinearColor> mColorArray;
+
+	UPROPERTY(BlueprintReadOnly, Category = "KMods Indicator")
+	TObjectPtr<UMaterialInstanceDynamic> mDynamicMaterial;
+
+	UPROPERTY(BlueprintReadWrite, Category = "KMods Indicator")
+	int mActiveColorIndex = 0;
 };

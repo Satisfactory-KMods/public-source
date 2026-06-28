@@ -2,11 +2,9 @@
 #include "Subsystem/KPCLUnlockSubsystem.h"
 
 #include "BFL/KBFL_Util.h"
-#include "Components/KPCLNetworkPlayerComponent.h"
 #include "FGSchematicManager.h"
 #include "KPrivateCodeLibModule.h"
 #include "Net/UnrealNetwork.h"
-#include "Subsystems/KBFLAssetDataSubsystem.h"
 
 class AFGSchematicManager;
 DECLARE_LOG_CATEGORY_EXTERN(KPCLUnlockSubsystemLog, Log, All)
@@ -28,23 +26,22 @@ void AKPCLUnlockSubsystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ThisClass, mPlayerStates);
+	DOREPLIFETIME(ThisClass, mRegisteredLootChests);
 }
 
 void AKPCLUnlockSubsystem::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UKBFLAssetDataSubsystem* Subsystem = UKBFLAssetDataSubsystem::Get(GetWorld());
-
-	if (HasAuthority())
+	if (!HasAuthority())
 	{
-		AFGSchematicManager* SchematicManager = AFGSchematicManager::Get(GetWorld());
-		if (IsValid(SchematicManager))
-		{
-			SchematicManager->PurchasedSchematicDelegate.AddUniqueDynamic(this,
-																		  &AKPCLUnlockSubsystem::OnSchematicUnlocked);
-		}
+		return;
+	}
+
+	AFGSchematicManager* SchematicManager = AFGSchematicManager::Get(GetWorld());
+	if (IsValid(SchematicManager))
+	{
+		SchematicManager->PurchasedSchematicDelegate.AddUniqueDynamic(this, &AKPCLUnlockSubsystem::OnSchematicUnlocked);
 	}
 }
 
@@ -57,38 +54,17 @@ void AKPCLUnlockSubsystem::Init()
 	SetActorTickInterval(1 / 15);
 }
 
-void AKPCLUnlockSubsystem::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	for (AFGPlayerState* Player : mPlayerStates)
-	{
-		if (IsValid(Player))
-		{
-			UKPCLNetworkPlayerComponent* Comp = UKPCLNetworkPlayerComponent::GetOrCreateNetworkComponentToPlayerState(
-				GetWorld(), Player, mStateComponentClass);
-			if (IsValid(Comp))
-			{
-				Comp->CustomTick(DeltaSeconds);
-			}
-		}
-	}
-}
-
-void AKPCLUnlockSubsystem::RegisterPlayerState(AFGPlayerState* State)
-{
-	if (IsValid(State))
-	{
-		mPlayerStates.AddUnique(State);
-		UE_LOG(LogKPCL, Warning, TEXT("Register PlayerState by BeginPlay! %s"), *State->GetName())
-		UKPCLNetworkPlayerComponent::GetOrCreateNetworkComponentToPlayerState(GetWorld(), State, mStateComponentClass);
-	}
-}
+void AKPCLUnlockSubsystem::Tick(float DeltaSeconds) { Super::Tick(DeltaSeconds); }
 
 void AKPCLUnlockSubsystem::RegisterLootChest(AKPCLLootChest* Chest) { mRegisteredLootChests.Add(Chest); }
 
 void AKPCLUnlockSubsystem::UnregisterLootChest(AKPCLLootChest* Chest)
 {
+	if (!HasAuthority())
+	{
+		return;
+	}
+
 	if (mRegisteredLootChests.Contains(Chest))
 	{
 		mRegisteredLootChests.Remove(Chest);

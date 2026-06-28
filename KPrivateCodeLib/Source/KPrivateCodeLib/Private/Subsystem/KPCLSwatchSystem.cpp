@@ -1,13 +1,11 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Subsystem/KPCLSwatchSystem.h"
 
 #include "BFL/KBFL_Player.h"
 #include "BFL/KBFL_Util.h"
 #include "Net/UnrealNetwork.h"
 #include "Replication/KPCLDefaultRCO.h"
-
 
 void AKPCLSwatchSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -21,6 +19,7 @@ AKPCLSwatchSystem::AKPCLSwatchSystem()
 {
 	mShouldSave = true;
 	PrimaryActorTick.bCanEverTick = true;
+	ReplicationPolicy = ESubsystemReplicationPolicy::SpawnOnServer_Replicate;
 }
 
 AKPCLSwatchSystem* AKPCLSwatchSystem::Get(UObject* worldContext)

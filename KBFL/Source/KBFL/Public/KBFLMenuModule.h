@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Interfaces/KBFLContentCDOHelperInterface.h"
 #include "Module/MenuWorldModule.h"
 
 #include "KBFLMenuModule.generated.h"
@@ -12,7 +11,7 @@
  *
  */
 UCLASS(Blueprintable)
-class KBFL_API UKBFLMenuModule : public UMenuWorldModule, public IKBFLContentCDOHelperInterface
+class KBFL_API UKBFLMenuModule : public UMenuWorldModule
 {
 	GENERATED_BODY()
 

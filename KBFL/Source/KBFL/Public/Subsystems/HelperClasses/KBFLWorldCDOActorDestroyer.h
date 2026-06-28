@@ -20,8 +20,18 @@ public:
 	virtual void Start() override;
 	virtual void Clear() override;
 
-	// Specify which actor classes to destroy
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Actor Destroyer")
+	// ===== Destroyer Settings =====
+	/** If true, destroy actors that spawn after initialization */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Destroyer Settings")
+	bool bShouldDestroySpawnedActors = true;
+
+	/** If true, also destroy subclasses of the specified actor classes */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Destroyer Settings")
+	bool bUseSubclassCheck = true;
+
+	// ===== Target Actors =====
+	/** Specify which actor classes to destroy */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Target Actors")
 	TArray<TSubclassOf<AActor>> mActorClassesToDestroy;
 
 	// Called when a relevant actor is spawned
@@ -33,10 +43,4 @@ protected:
 
 	// Override this to implement custom destruction logic
 	virtual void HandleDestroyActor(AActor* Actor);
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor Destroyer")
-	bool bShouldDestroySpawnedActors = true;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Actor Destroyer")
-	bool bUseSubclassCheck = true;
 };

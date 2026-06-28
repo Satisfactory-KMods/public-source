@@ -4,28 +4,18 @@
 #include "KBFLWorldModule.h"
 
 #include "KBFLLogging.h"
-#include "Registry/ModContentRegistry.h"
-#include "Subsystems/KBFLAssetDataSubsystem.h"
 #include "Subsystems/KBFLCustomizerSubsystem.h"
 #include "Subsystems/KBFLResourceNodeSubsystem.h"
 
-UKBFLWorldModule::UKBFLWorldModule()
-{
-	bRootModule = false;
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "Command/ChatCommandInstance.h"
+#include "Engine/Blueprint.h"
+#include "Engine/BlueprintGeneratedClass.h"
+#include "FGResearchTree.h"
+#include "FGSchematic.h"
+#include "Misc/PackageName.h"
 
-	mCDOInformationMap.Add(ELifecyclePhase::CONSTRUCTION, FKBFLCDOInformation());
-	mCDOInformationMap.Add(ELifecyclePhase::INITIALIZATION, FKBFLCDOInformation());
-	mCDOInformationMap.Add(ELifecyclePhase::POST_INITIALIZATION, FKBFLCDOInformation());
-}
-
-FKBFLCDOInformation UKBFLWorldModule::GetCDOInformationFromPhase_Implementation(ELifecyclePhase Phase, bool& bHasPhase)
-{
-	if (mCDOInformationMap.Contains(Phase))
-	{
-		return mCDOInformationMap[Phase];
-	}
-	return FKBFLCDOInformation();
-}
+UKBFLWorldModule::UKBFLWorldModule() { bRootModule = false; }
 
 void UKBFLWorldModule::DispatchLifecycleEvent(ELifecyclePhase Phase)
 {
@@ -36,7 +26,6 @@ void UKBFLWorldModule::DispatchLifecycleEvent(ELifecyclePhase Phase)
 
 	if (Phase == ELifecyclePhase::INITIALIZATION)
 	{
-		RegisterKBFLLogicContent();
 		InitPhase();
 	}
 
@@ -54,185 +43,124 @@ void UKBFLWorldModule::ConstructionPhase_Implementation() {}
 
 void UKBFLWorldModule::PostInitPhase_Implementation() {}
 
-void UKBFLWorldModule::RegisterKBFLLogicContent()
+void UKBFLWorldModule::ScanSchematics()
 {
-	if (!mUseAssetRegistry)
-	{
-		bScanForCDOsDone = true;
-		return;
-	}
-
-	UWorld* WorldObject = GetWorld();
-	UModContentRegistry* ModContentRegistry = UModContentRegistry::Get(WorldObject);
-	fgcheck(ModContentRegistry);
-
-	UKBFLAssetDataSubsystem* AssetDataSub = UKBFLAssetDataSubsystem::Get(WorldObject);
-	fgcheck(AssetDataSub);
-
-	FKBFLAssetData Datas = AssetDataSub->GetModRelatedData(this);
-
-	if (mRegisterSchematics)
-	{
-		for (UClass* Class : Datas.mAllFoundedSchematics)
-		{
-			if (TSubclassOf<UFGSchematic> SchematicClass = Class)
-			{
-				if (IsAllowedToRegister(SchematicClass))
-				{
-					// UE_LOG(KBFLWorldModuleLog, Warning, TEXT("Register Schematic (%s) in ModContentRegistry"),
-					// *SchematicClass->GetName());
-					// ModContentRegistry->RegisterSchematic(GetOwnerModReference(), SchematicClass);
-
-					// is a fix for SF+ Content remover!
-					int32 AddedAt = mSchematics.AddUnique(SchematicClass);
-					// ModContentRegistry->RegisterSchematic(GetOwnerModReference(), SchematicClass);
-#
-					if (AddedAt != INDEX_NONE)
-					{
-						UE_LOG(KBFLWorldModuleLog, Warning, TEXT("Register Schematic (%s) in ModContentRegistry"),
-							   *SchematicClass->GetName());
-					}
-				}
-				else
-				{
-					UE_LOG(KBFLWorldModuleLog, Warning,
-						   TEXT("Cancle Register Schematic (%s) in ModContentRegistry because it not allowed!"),
-						   *SchematicClass->GetName());
-				}
-			}
-		}
-	}
-
-	if (mRegisterResearchTrees)
-	{
-		for (UClass* Class : Datas.mAllFoundResearchTrees)
-		{
-			if (TSubclassOf<UFGResearchTree> ResearchTreeClass = Class)
-			{
-				if (IsAllowedToRegister(ResearchTreeClass))
-				{
-					// UE_LOG( KBFLWorldModuleLog, Warning, TEXT("Register ResearchTrees (%s) in ModContentRegistry"),
-					// *ResearchTreeClass->GetName() );
-					// ModContentRegistry->RegisterResearchTree(GetOwnerModReference(), ResearchTreeClass);
-
-					// is a fix for SF+ Content remover!
-					mResearchTrees.AddUnique(ResearchTreeClass);
-				}
-				else
-				{
-					UE_LOG(KBFLWorldModuleLog, Warning,
-						   TEXT("Cancle Register ResearchTree (%s) in ModContentRegistry because it not allowed!"),
-						   *ResearchTreeClass->GetName());
-				}
-			}
-		}
-	}
-
-	if (mRegisterRecipes)
-	{
-		for (UClass* Class : Datas.mAllFoundedRecipes)
-		{
-			if (TSubclassOf<UFGRecipe> RecipeClass = Class)
-			{
-
-				if (IsAllowedToRegister(RecipeClass))
-				{
-					// UE_LOG(KBFLWorldModuleLog, Warning, TEXT("Register Schematic (%s) in ModContentRegistry"),
-					// *SchematicClass->GetName());
-					ModContentRegistry->RegisterRecipe(GetOwnerModReference(), RecipeClass);
-				}
-				else
-				{
-					UE_LOG(KBFLWorldModuleLog, Warning,
-						   TEXT("Cancle Register Recipe (%s) in ModContentRegistry because it not allowed!"),
-						   *RecipeClass->GetName());
-				}
-			}
-		}
-	}
+	UE_LOG(LogTemp, Error, TEXT("[KBFL] ScanSchematics button pressed on '%s'"), *GetPathName());
+	ScanModAssetsInto<UFGSchematic>(mSchematics, TEXT("Schematic"));
 }
 
-bool UKBFLWorldModule::IsAllowedToRegister(TSubclassOf<UObject> Object) const
+void UKBFLWorldModule::ScanResearchTrees()
 {
-	if (!IsValid(Object))
-	{
-		return false;
-	}
-
-	UModContentRegistry* ModContentRegistry = UModContentRegistry::Get(GetWorld());
-	fgcheck(ModContentRegistry);
-
-	TSubclassOf<UFGSchematic> AsSchematic = TSubclassOf<UFGSchematic>(Object);
-	TSubclassOf<UFGResearchTree> AsTree = TSubclassOf<UFGResearchTree>(Object);
-	TSubclassOf<UFGRecipe> AsRecipe = TSubclassOf<UFGRecipe>(Object);
-
-	if (AsSchematic)
-	{
-		if (const FGameObjectRegistration* State =
-				ModContentRegistry->RecipeRegistryState.FindObjectRegistration(AsSchematic))
-		{
-			UE_LOG(KBFLWorldModuleLog, Warning,
-				   TEXT("Schematic (%s) already registered in ModContentRegistry, skip register! (%s)"),
-				   *AsSchematic->GetName(), *State->OwnedByModReference.ToString());
-			return false;
-		}
-	}
-	else if (AsRecipe)
-	{
-		if (const FGameObjectRegistration* State =
-				ModContentRegistry->SchematicRegistryState.FindObjectRegistration(AsRecipe))
-		{
-			UE_LOG(KBFLWorldModuleLog, Warning,
-				   TEXT("Recipe (%s) already registered in ModContentRegistry, skip register! (%s)"),
-				   *AsRecipe->GetName(), *State->OwnedByModReference.ToString());
-			return false;
-		}
-	}
-	else if (AsTree)
-	{
-		if (const FGameObjectRegistration* State =
-				ModContentRegistry->ResearchTreeRegistryState.FindObjectRegistration(AsTree))
-		{
-			UE_LOG(KBFLWorldModuleLog, Warning,
-				   TEXT("Tree (%s) already registered in ModContentRegistry, skip register! (%s)"), *AsTree->GetName(),
-				   *State->OwnedByModReference.ToString());
-			return false;
-		}
-	}
-	return !mBlacklistedClasses.Contains(Object);
+	UE_LOG(LogTemp, Error, TEXT("[KBFL] ScanResearchTrees button pressed on '%s'"), *GetPathName());
+	ScanModAssetsInto<UFGResearchTree>(mResearchTrees, TEXT("ResearchTree"));
 }
 
-void UKBFLWorldModule::FindAllCDOs()
+void UKBFLWorldModule::ScanChatCommands()
 {
-	if (!mUseAssetRegistry || !mRegisterCDOs)
+	UE_LOG(LogTemp, Error, TEXT("[KBFL] ScanChatCommands button pressed on '%s'"), *GetPathName());
+	ScanModAssetsInto<AChatCommandInstance>(mChatCommands, TEXT("ChatCommand"));
+}
+
+template <typename T>
+void UKBFLWorldModule::ScanModAssetsInto(TArray<TSubclassOf<T>>& OutArray, const TCHAR* Label)
+{
+	// Derive this asset's mod plugin root (e.g. "/KLib") from its package path.
+	const FString PackageName = GetPackage()->GetName();
+	TArray<FString> Segments;
+	PackageName.ParseIntoArray(Segments, TEXT("/"), true);
+	if (Segments.Num() == 0)
 	{
-		bScanForCDOsDone = true;
+		UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: could not derive mod root from '%s'"), Label,
+			   *PackageName);
 		return;
 	}
-	UKBFLAssetDataSubsystem* AssetDataSub = UKBFLAssetDataSubsystem::Get(GetWorld());
-	fgcheck(AssetDataSub);
+	const FName MountRoot(*(FString(TEXT("/")) + Segments[0]));
 
-	constexpr ELifecyclePhase CdoPhase = ELifecyclePhase::CONSTRUCTION;
-	FKBFLAssetData Datas = AssetDataSub->GetModRelatedData(this);
-	if (!mCDOInformationMap.Find(CdoPhase))
-	{
-		mCDOInformationMap.Add(CdoPhase, FKBFLCDOInformation());
-	}
-	FKBFLCDOInformation* CDOInfo = mCDOInformationMap.Find(CdoPhase);
-	fgcheck(CDOInfo);
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
-	for (UClass* CDOHelper : Datas.mAllFoundedCDOHelpers)
+	FARFilter Filter;
+	Filter.bRecursivePaths = true;
+	Filter.bRecursiveClasses = true;
+	Filter.PackagePaths.Add(MountRoot);
+	Filter.ClassPaths.Add(UBlueprint::StaticClass()->GetClassPathName());
+	Filter.ClassPaths.Add(UBlueprintGeneratedClass::StaticClass()->GetClassPathName());
+
+	UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: package '%s' -> mod root '%s'"), Label,
+		   *PackageName, *MountRoot.ToString());
+
+	TArray<FAssetData> Assets;
+	AssetRegistry.GetAssets(Filter, Assets);
+
+	UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: scanning '%s' found %d blueprint asset(s)"), Label,
+		   *MountRoot.ToString(), Assets.Num());
+
+	Modify();
+
+	int32 Added = 0;
+	int32 Skipped = 0;
+	for (const FAssetData& Asset : Assets)
 	{
-		if (TSubclassOf<UKBFL_CDOHelperClass_Base> CDOHelperClass = CDOHelper)
+		FString GeneratedClassExportedPath;
+		if (!Asset.GetTagValue(FBlueprintTags::GeneratedClassPath, GeneratedClassExportedPath))
 		{
-			if (mBlacklistedCDOClasses.Contains(CDOHelperClass))
-			{
-				continue;
-			}
-			UE_LOG(KBFLWorldModuleLog, Warning, TEXT("Found CDO helper (%s) and add to map"),
-				   *CDOHelperClass->GetName());
-			CDOInfo->mCDOHelperClasses.AddUnique(CDOHelperClass);
+			UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: skip '%s' (no GeneratedClassPath tag)"),
+				   Label, *Asset.AssetName.ToString());
+			Skipped++;
+			continue;
 		}
+
+		// The tag is export-text wrapped (e.g. BlueprintGeneratedClass'/Game/...X.X_C') — unwrap it.
+		FString GeneratedClassPath;
+		if (!FPackageName::ParseExportTextPath(GeneratedClassExportedPath, nullptr, &GeneratedClassPath))
+		{
+			UE_LOG(KBFLWorldModuleLog, Warning,
+				   TEXT("ScanModAssetsInto<%s>: skip '%s' (could not parse class path '%s')"), Label,
+				   *Asset.AssetName.ToString(), *GeneratedClassExportedPath);
+			Skipped++;
+			continue;
+		}
+
+		UClass* LoadedClass = FSoftClassPath(GeneratedClassPath).TryLoadClass<T>();
+		if (!IsValid(LoadedClass) || !LoadedClass->IsChildOf(T::StaticClass()) ||
+			LoadedClass->HasAnyClassFlags(CLASS_Abstract))
+		{
+			UE_LOG(KBFLWorldModuleLog, Warning,
+				   TEXT("ScanModAssetsInto<%s>: skip '%s' (not a concrete %s subclass: %s)"), Label,
+				   *Asset.AssetName.ToString(), Label, *GeneratedClassPath);
+			Skipped++;
+			continue;
+		}
+
+		const TSubclassOf<UObject> AsObject = LoadedClass;
+		if (mBlacklistedClasses.Contains(AsObject))
+		{
+			UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: skip '%s' (blacklisted)"), Label,
+				   *LoadedClass->GetName());
+			Skipped++;
+			continue;
+		}
+
+		const TSubclassOf<T> AsTarget = LoadedClass;
+		if (OutArray.Contains(AsTarget))
+		{
+			UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: already present '%s'"), Label,
+				   *LoadedClass->GetName());
+			continue;
+		}
+
+		OutArray.Add(AsTarget);
+		Added++;
+		UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: + added '%s'"), Label,
+			   *LoadedClass->GetName());
 	}
-	bScanForCDOsDone = true;
+
+#if WITH_EDITOR
+	PostEditChange();
+#endif
+	MarkPackageDirty();
+
+	UE_LOG(KBFLWorldModuleLog, Warning, TEXT("ScanModAssetsInto<%s>: done '%s' — added %d, skipped %d, total now %d"),
+		   Label, *MountRoot.ToString(), Added, Skipped, OutArray.Num());
 }

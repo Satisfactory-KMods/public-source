@@ -10,13 +10,13 @@
 /**
  *
  */
-UCLASS(Blueprintable, EditInlineNew, abstract, DefaultToInstanced)
+UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class KBFL_API UKBFLResourceNodeDescriptor : public UKBFLActorSpawnDescriptorBase
 {
 	GENERATED_BODY()
 
 public:
-	UKBFLResourceNodeDescriptor() : mLastPur() { mActorFreeClass = AFGResourceNodeBase::StaticClass(); }
+	UKBFLResourceNodeDescriptor();
 
 	virtual bool IsAllowedToRemoveActor(AActor* InActor) override;
 

@@ -1,11 +1,14 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGConstructDisqualifier.h"
 #include "Hologram/FGFactoryHologram.h"
-#include "Buildings/KPCLNetworkCore.h"
+
+#include "Network/Buildings/KPCLNetworkCore.h"
+
 #include "KPCLNetworkCoreHologram.generated.h"
 
 UCLASS()
@@ -15,12 +18,11 @@ class KPRIVATECODELIB_API AKPCLNetworkCoreHologram : public AFGFactoryHologram
 
 public:
 	virtual void BeginPlay() override;
-
 	virtual void CheckValidPlacement() override;
 
 private:
 	UPROPERTY(Transient)
-	AKPCLFaxitSubsystem* mFaxitSubsystem;
+	TObjectPtr<AKPCLFaxitSubsystem> mFaxitSubsystem;
 };
 
 UCLASS()
@@ -33,7 +35,7 @@ class KPRIVATECODELIB_API UKPCLCDMaxCountReached : public UFGConstructDisqualifi
 	UKPCLCDMaxCountReached()
 	{
 		mDisqfualifyingText = NSLOCTEXT("KPrivateCodeLib", "ConstructDisqualifier_MaxCountReached",
-		                                "Reached global max count for this building (5)");
+										"Reached global max count for this building (5)");
 	}
 
 	static void UpdateCount(int32 NewCount)
@@ -41,8 +43,7 @@ class KPRIVATECODELIB_API UKPCLCDMaxCountReached : public UFGConstructDisqualifi
 		UKPCLCDMaxCountReached* Instance = GetMutableDefault<UKPCLCDMaxCountReached>();
 		FFormatNamedArguments Args;
 		Args.Add(TEXT("Count"), NewCount);
-		Instance->mDisqfualifyingText = FText::Format(
-			FText::FromString(TEXT("Reached global max count for this building ({Count})")), Args
-		);
+		Instance->mDisqfualifyingText =
+			FText::Format(FText::FromString(TEXT("Reached global max count for this building ({Count})")), Args);
 	}
 };

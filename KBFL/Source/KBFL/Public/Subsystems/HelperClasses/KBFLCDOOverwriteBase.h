@@ -28,6 +28,18 @@ public:
 
 	virtual void ApplyToInstances() {};
 
+	/**
+	 * Called by the lazy-load listener when a single class finishes loading.
+	 * Dispatches to ShouldCallForInstance + ApplyToInstance.
+	 */
+	void TryApplyToClass(UClass* NewClass);
+
+	/** Returns true if this overwrite should be applied to the given class. Override in subclasses. */
+	virtual bool ShouldCallForInstance(UClass* NewClass) { return false; }
+
+	/** Applies this overwrite to a single CDO instance. Override in subclasses. */
+	virtual void ApplyToInstance(UObject* Instance) {};
+
 	virtual void Clear();
 
 	template <typename T>
@@ -36,12 +48,6 @@ public:
 	template <typename T>
 	static TArray<TSubclassOf<T>> LoadSoftClassesArray(TArray<TSoftClassPtr<T>> SoftClassPtrs);
 
-	template <typename T>
-	static TArray<T*> LoadSoftObjectCDOsArray(TArray<TSoftClassPtr<T>> SoftObjectPtrs);
-
-	template <typename T>
-	static T* LoadSoftObjectCDO(TSoftClassPtr<T> SoftObjectPtr);
-
 	virtual bool Requirements_IsMet(UObject* TargetInstance);
 	virtual void Requirements_NotifyOnModify(UObject* TargetInstance);
 	virtual void Requirements_NotifyOnModified(UObject* TargetInstance);
@@ -49,36 +55,41 @@ public:
 
 	virtual void LoadRequirements();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
+	// ===== Basic Settings =====
+	/** Enable or disable this CDO overwrite */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Basic Settings")
+	bool bEnabled = true;
+
+	/**
+	 * Execution priority - lower numbers are applied first.
+	 * If multiple have the same priority, the order is undefined.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Basic Settings")
+	int32 mCallPrio = 0;
+
+	// ===== Requirements =====
+	/** Requirements that must be met before applying this overwrite */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Requirements")
 	TArray<TSubclassOf<class UKBFLCDOCallRequirement>> mRequirements;
 
 protected:
 	UPROPERTY(Transient)
-	TArray<UKBFLCDOCallRequirement*> mCachedRequirements;
+	TArray<TObjectPtr<UKBFLCDOCallRequirement>> mCachedRequirements;
 
 public:
+	// ===== Internal State =====
 	/**
 	 * Will be set by the subsystem when registering
 	 * Can be used to call other functions from the subsystem
 	 */
 	UPROPERTY(BlueprintReadWrite)
-	class UKBFLContentCDOHelperSubsystem* mSubsystem = nullptr;
+	TObjectPtr<class UKBFLContentCDOHelperSubsystem> mSubsystem = nullptr;
 
 	bool bWasApplied = false;
 
-	/** The target class whose properties we want to override */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	bool bEnabled = true;
-
-	/**
-	 * First are all applied in order of ascending priority (lower numbers first).
-	 * If multiple have the same priority, the order is undefined.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	int32 mCallPrio = 0;
 
 	UPROPERTY(Transient)
-	TSet<UObject*> mAppliedInstances;
+	TSet<TObjectPtr<UObject>> mAppliedInstances;
 };
 
 template <typename T>
@@ -106,30 +117,6 @@ TArray<TSubclassOf<T>> UKBFLCDOOverwriteBase::LoadSoftClassesArray(TArray<TSoftC
 		}
 	}
 	return Result;
-}
-
-template <typename T>
-TArray<T*> UKBFLCDOOverwriteBase::LoadSoftObjectCDOsArray(TArray<TSoftClassPtr<T>> SoftObjectPtrs)
-{
-	TArray<T*> Result;
-	for (TSoftClassPtr<T> SoftObjectPtr : SoftObjectPtrs)
-	{
-		if (T* LoadedCDO = LoadSoftObjectCDO<T>(SoftObjectPtr))
-		{
-			Result.Add(LoadedCDO);
-		}
-	}
-	return Result;
-}
-
-template <typename T>
-T* UKBFLCDOOverwriteBase::LoadSoftObjectCDO(TSoftClassPtr<T> SoftObjectPtr)
-{
-	if (TSubclassOf<T> LoadedClass = LoadSoftClass<T>(SoftObjectPtr))
-	{
-		return Cast<T>(LoadedClass->GetDefaultObject());
-	}
-	return nullptr;
 }
 
 /**
@@ -161,15 +148,17 @@ public:
 	virtual bool ShouldTick() const { return bTickable; }
 	virtual void Tick(float dt);
 
+	// ===== World Settings =====
+	/** Enable tick functionality for this world-based overwrite */
+	UPROPERTY(EditDefaultsOnly, Category = "World Settings")
+	bool bTickable = false;
+
 protected:
 	UPROPERTY()
-	UWorld* mWorld;
+	TObjectPtr<UWorld> mWorld;
 
 	UPROPERTY(Transient)
-	TSet<class UKBFLWorldCDOCallRequirement*> mTickableRequirements;
-
-	UPROPERTY(EditDefaultsOnly, Category = "CDO|World Based")
-	bool bTickable = false;
+	TSet<TObjectPtr<class UKBFLWorldCDOCallRequirement>> mTickableRequirements;
 };
 
 template <typename T>

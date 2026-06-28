@@ -1,16 +1,17 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Replication/KPCLDefaultRCO.h"
 
+#include "Buildable/Conveyor/KPCLBuildableBalanceSplitter.h"
 #include "Buildable/KPCLExtractorBase.h"
+#include "Buildable/KPCLPressureRegulatorValve.h"
 #include "Buildable/KPCLProducerBase.h"
 #include "Looting/KPCLLootChest.h"
 #include "Net/UnrealNetwork.h"
 #include "Network/Buildings/KPCLNetworkConnectionBuilding.h"
 #include "Network/Buildings/KPCLNetworkCore.h"
-
+#include "Subsystem/KPCLFaxitSubsystem.h"
 
 // Start Outline
-
 
 void UKPCLDefaultRCO::Server_CreateOutlineForActor_Implementation(AKPCLOutlineSubsystem* Subsystem, FOutlineData Data)
 {
@@ -31,7 +32,7 @@ void UKPCLDefaultRCO::Server_ClearOutlines_Implementation(AKPCLOutlineSubsystem*
 }
 
 void UKPCLDefaultRCO::Server_SetOutlineColor_Implementation(AKPCLOutlineSubsystem* Subsystem, FLinearColor Color,
-                                                            EOutlineColorSlot ColorSlot)
+															EOutlineColorSlot ColorSlot)
 {
 	if (Subsystem)
 	{
@@ -49,8 +50,7 @@ void UKPCLDefaultRCO::Server_ClearOutlineForActor_Implementation(AKPCLOutlineSub
 	}
 }
 
-
-// End Outline
+//~ End Outline
 
 void UKPCLDefaultRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -75,7 +75,6 @@ void UKPCLDefaultRCO::Server_FlushFluids_Implementation(AFGBuildable* Building)
 	}
 }
 
-
 void UKPCLDefaultRCO::Server_LootChest_Implementation(AKPCLLootChest* Target, AFGCharacterPlayer* Player)
 {
 	if (ensure(Target))
@@ -85,7 +84,7 @@ void UKPCLDefaultRCO::Server_LootChest_Implementation(AKPCLLootChest* Target, AF
 }
 
 int32 UKPCLDefaultRCO::MoveItemAmount(UFGInventoryComponent* Source, int32 SourceIndex, UFGInventoryComponent* Target,
-                                      FItemAmount Amount, bool ResizeToFit)
+									  FItemAmount Amount, bool ResizeToFit)
 {
 	if (ensure(Source && Target && Amount.ItemClass && Amount.Amount > 0))
 	{
@@ -114,14 +113,14 @@ int32 UKPCLDefaultRCO::MoveItemAmount(UFGInventoryComponent* Source, int32 Sourc
 }
 
 void UKPCLDefaultRCO::Server_MoveItemAmount_Implementation(UFGInventoryComponent* Source, int32 SourceIndex,
-                                                           UFGInventoryComponent* Target, FItemAmount Amount,
-                                                           bool ResizeToFit)
+														   UFGInventoryComponent* Target, FItemAmount Amount,
+														   bool ResizeToFit)
 {
 	MoveItemAmount(Source, SourceIndex, Target, Amount, ResizeToFit);
 }
 
 void UKPCLDefaultRCO::Server_UpdateCustomSwatchData_Implementation(AKPCLSwatchSystem* Target, FCustomSwatchData Data,
-                                                                   int32 Idx)
+																   int32 Idx)
 {
 	if (ensureMsgf(Target, TEXT("Cant Found AKPCLSwatchSystem Server_AddCustomSwatchData")))
 	{
@@ -148,9 +147,8 @@ void UKPCLDefaultRCO::Server_RemoveCustomSwatchData_Implementation(AKPCLSwatchSy
 	}
 }
 
-
 void UKPCLDefaultRCO::Server_Faxit_GrabFromNetwork_Implementation(class AKPCLNetworkCore* Target,
-                                                                  AFGCharacterPlayer* Player, FItemAmount Amount)
+																  AFGCharacterPlayer* Player, FItemAmount Amount)
 {
 	if (IsValid(Target))
 	{
@@ -158,8 +156,28 @@ void UKPCLDefaultRCO::Server_Faxit_GrabFromNetwork_Implementation(class AKPCLNet
 	}
 }
 
+void UKPCLDefaultRCO::Server_Faxit_StorageFromPlayerToNetwork_Implementation(class AKPCLNetworkCore* Target,
+																			 AFGCharacterPlayer* Player,
+																			 FItemAmount Amount)
+{
+	if (IsValid(Target))
+	{
+		Target->StorageFromPlayerToNetwork(Player, Amount);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Faxit_UpdateNetworkName_Implementation(class AKPCLFaxitSubsystem* Target,
+																	class AKPCLNetworkCore* Core,
+																	const FString& NewName)
+{
+	if (IsValid(Target))
+	{
+		Target->UpdateNetworkName(Core, NewName);
+	}
+}
+
 void UKPCLDefaultRCO::Server_Faxit_SetSpeedOverride_Implementation(class AKPCLNetworkConnectionBuilding* Target,
-                                                                   float Value)
+																   float Value)
 {
 	if (IsValid(Target))
 	{
@@ -176,10 +194,81 @@ void UKPCLDefaultRCO::Server_Faxit_ClearSpeedOverride_Implementation(class AKPCL
 }
 
 void UKPCLDefaultRCO::Server_Faxit_SetFilterItem_Implementation(class AKPCLNetworkConnectionBuilding* Target,
-                                                                TSubclassOf<UFGItemDescriptor> NewItem)
+																TSubclassOf<UFGItemDescriptor> NewItem)
 {
 	if (IsValid(Target))
 	{
 		Target->SetFilterItem(NewItem);
 	}
 }
+
+//~ Begin PressureRegulatorValve
+
+void UKPCLDefaultRCO::Server_Valve_SetOnThreshold_Implementation(AKPCLPressureRegulatorValve* Target,
+																 float NewThreshold)
+{
+	if (IsValid(Target))
+	{
+		Target->SetOnThreshold(NewThreshold);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Valve_SetOffThreshold_Implementation(AKPCLPressureRegulatorValve* Target,
+																  float NewThreshold)
+{
+	if (IsValid(Target))
+	{
+		Target->SetOffThreshold(NewThreshold);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Valve_SetInvertThresholdBehavior_Implementation(AKPCLPressureRegulatorValve* Target,
+																			 bool bInvert)
+{
+	if (IsValid(Target))
+	{
+		Target->SetInvertThresholdBehavior(bInvert);
+	}
+}
+
+//~ End PressureRegulatorValve
+
+//~ Begin BalanceSplitter
+
+void UKPCLDefaultRCO::Server_Splitter_SetFilteredItems_Implementation(
+	AKPCLBuildableBalanceSplitter* Target, int32 Idx, const TArray<TSubclassOf<UFGItemDescriptor>>& Items)
+{
+	if (IsValid(Target))
+	{
+		Target->SetFilteredItems(Idx, Items);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Splitter_SetItemsPerMin_Implementation(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+																	float ItemsPerMin)
+{
+	if (IsValid(Target))
+	{
+		Target->SetItemsPerMin(Idx, ItemsPerMin);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Splitter_RemoveFromFilter_Implementation(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+																	  TSubclassOf<UFGItemDescriptor> Item)
+{
+	if (IsValid(Target))
+	{
+		Target->RemoveFromFilter(Idx, Item);
+	}
+}
+
+void UKPCLDefaultRCO::Server_Splitter_AddOrSetFilter_Implementation(AKPCLBuildableBalanceSplitter* Target, int32 Idx,
+																	TSubclassOf<UFGItemDescriptor> Item)
+{
+	if (IsValid(Target))
+	{
+		Target->AddOrSetFilter(Idx, Item);
+	}
+}
+
+//~ End BalanceSplitter

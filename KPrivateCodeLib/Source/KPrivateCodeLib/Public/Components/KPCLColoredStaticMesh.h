@@ -1,10 +1,12 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
-#include "FactoryGame.h"
+#include "CoreMinimal.h"
+
 #include "FGColoredInstanceMeshProxy.h"
 #include "FGSaveInterface.h"
+#include "FactoryGame.h"
 #include "Structures/KPCLFunctionalStructure.h"
 
 #include "KPCLColoredStaticMesh.generated.h"
@@ -52,7 +54,7 @@ struct FKPCLLinearColorData
 };
 
 UENUM(BlueprintType)
-enum class EKPCLDefaultColorIndex: uint8
+enum class EKPCLDefaultColorIndex : uint8
 {
 	Primary = 0,
 	Secondary = 2,
@@ -60,11 +62,10 @@ enum class EKPCLDefaultColorIndex: uint8
 };
 
 /**
-* Proxy placed in buildings to be replaced with an instance on creation, supports coloring.
-* Modding Version: Can apply colours in thread (FactoryTick) and will only update if its dirty (Custom Extra Data)
-* automatic set custom extra Num based on CustomExtraData > Check if not enough Num and dont crash the game because that > give a Error in log!
-*/
-UCLASS(Blueprintable, meta = ( BlueprintSpawnableComponent ))
+ * Proxy placed in buildings to be replaced with an instance on creation, supports coloring.
+ * Modding version: can apply colours in thread (FactoryTick) and will only update if dirty.
+ */
+UCLASS(Blueprintable, meta = (BlueprintSpawnableComponent))
 class KPRIVATECODELIB_API UKPCLColoredStaticMesh : public UFGColoredInstanceMeshProxy, public IFGSaveInterface
 {
 	GENERATED_BODY()
@@ -74,70 +75,69 @@ public:
 
 	virtual bool ShouldSave_Implementation() const override;
 
-	// Begin AActorComponent interface
+	//~ Begin UActorComponent Interface
 	virtual void BeginPlay() override;
-	// End AActorComponent interface
+	//~ End UActorComponent Interface
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewColorDatas(TArray<FKPCLColorData> ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewColorData(FKPCLColorData ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewLinearColorDatas(TArray<FKPCLLinearColorData> ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewLinearColorData(FKPCLLinearColorData ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewFGLinearColorDatas(TArray<FKPCLLinearColorData> ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewFGLinearColorData(FKPCLLinearColorData ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyFGNewColorDatas(TArray<FKPCLColorData> ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyFgNewColorData(FKPCLColorData ColorData, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyFgNewColorToType(FLinearColor Color, EKPCLDefaultColorIndex Type, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void RemoveFGIndex(int32 Idx, bool MarkStateDirty = true);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void GetAllFGOverwriteData(TArray<FKPCLColorData>& Datas);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void ApplyNewData();
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	bool CheckIndex(FKPCLColorData ColorData, bool IsFG = false);
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	void UpdateWorldTransform(FTransform Transform);
 	void ApplyTransformToComponent();
 
-	UFUNCTION(BlueprintCallable, Category="KMods|ColoredStaticMesh")
+	UFUNCTION(BlueprintCallable, Category = "KMods|ColoredStaticMesh")
 	static void UpdateStaticMesh(UKPCLColoredStaticMesh* Proxy, AActor* Owner, UStaticMesh* Mesh);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, SaveGame, Category="KMods")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, SaveGame, Category = "KMods")
 	TArray<float> mCustomExtraData = {};
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, SaveGame, Category="KMods")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, SaveGame, Category = "KMods")
 	TMap<int32, float> mFGOverwriteMap = {};
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods")
 	bool mStartWithDirtyState = true;
 
 private:
 	FSmartTimer mTimer = FSmartTimer(1.f);
-
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
-	bool mShouldSave = false;
-
 	FTransform mLastWorldTransform;
+
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
+	bool mShouldSave = false;
 };

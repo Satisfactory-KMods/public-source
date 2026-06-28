@@ -1,7 +1,5 @@
 #include "KUIModule.h"
 
-void FKUIModule::StartupModule()
-{
-}
+void FKUIModule::StartupModule() {}
 
 IMPLEMENT_GAME_MODULE(FKUIModule, KUI);

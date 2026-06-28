@@ -70,14 +70,14 @@ public:
 	TArray<TSoftObjectPtr<UWorld>> mSubLevelArray;
 
 	UPROPERTY(Transient, BlueprintReadWrite)
-	class UKBFLResourceNodeSubsystem* mSubsystem = nullptr;
+	TObjectPtr<class UKBFLResourceNodeSubsystem> mSubsystem = nullptr;
 
 	UPROPERTY()
-	TArray<ULevelStreaming*> mLevelStreaming;
+	TArray<TObjectPtr<ULevelStreaming>> mLevelStreaming;
 
 	UPROPERTY()
-	TArray<ULevelStreaming*> mAddedLevel;
+	TArray<TObjectPtr<ULevelStreaming>> mAddedLevel;
 
 	UPROPERTY()
-	TArray<ULevel*> mCachedLevels;
+	TArray<TObjectPtr<ULevel>> mCachedLevels;
 };

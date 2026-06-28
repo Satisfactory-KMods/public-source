@@ -6,24 +6,21 @@
 #include "FGPowerConnectionComponent.h"
 #include "Net/UnrealNetwork.h"
 
-AKPCLModularBuildingBase::AKPCLModularBuildingBase()
-	: mModularHandler(nullptr)
-{
-}
+AKPCLModularBuildingBase::AKPCLModularBuildingBase() : mModularHandler(nullptr) {}
 
 FText AKPCLModularBuildingBase::GetLookAtDecription_Implementation(AFGCharacterPlayer* byCharacter,
-                                                                   const FUseState& state) const
+																   const FUseState& state) const
 {
 	return mShouldUseUiFromMaster && GetMasterBuildable() != this && IsValid(GetMasterBuildable())
-		       ? Execute_GetLookAtDecription(GetMasterBuildable(), byCharacter, state)
-		       : Super::GetLookAtDecription_Implementation(byCharacter, state);
+		? Execute_GetLookAtDecription(GetMasterBuildable(), byCharacter, state)
+		: Super::GetLookAtDecription_Implementation(byCharacter, state);
 }
 
 bool AKPCLModularBuildingBase::IsUseable_Implementation() const
 {
 	return mShouldUseUiFromMaster && GetMasterBuildable() != this && IsValid(GetMasterBuildable())
-		       ? Execute_IsUseable(GetMasterBuildable())
-		       : Super::IsUseable_Implementation();
+		? Execute_IsUseable(GetMasterBuildable())
+		: Super::IsUseable_Implementation();
 }
 
 void AKPCLModularBuildingBase::OnUseStop_Implementation(AFGCharacterPlayer* byCharacter, const FUseState& State)
@@ -57,7 +54,7 @@ UFGFactoryClipboardSettings* AKPCLModularBuildingBase::CopySettings_Implementati
 }
 
 bool AKPCLModularBuildingBase::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                            class AFGPlayerController* player)
+															class AFGPlayerController* player)
 {
 	if (mShouldUseUiFromMaster && GetMasterBuildable() != this && IsValid(GetMasterBuildable()))
 	{
@@ -72,15 +69,9 @@ TSubclassOf<UKAPIModularAttachmentDescriptor> AKPCLModularBuildingBase::GetModul
 	return mUpgradeClass;
 }
 
-int32 AKPCLModularBuildingBase::GetModularIndex_Implementation()
-{
-	return mModularIndex;
-}
+int32 AKPCLModularBuildingBase::GetModularIndex_Implementation() { return mModularIndex; }
 
-void AKPCLModularBuildingBase::ApplyModularIndex_Implementation(int32 Index)
-{
-	mModularIndex = Index;
-}
+void AKPCLModularBuildingBase::ApplyModularIndex_Implementation(int32 Index) { mModularIndex = Index; }
 
 void AKPCLModularBuildingBase::SetAttachedActor_Implementation(AFGBuildable* Actor)
 {
@@ -112,8 +103,8 @@ void AKPCLModularBuildingBase::RemoveAttachedActor_Implementation(AFGBuildable* 
 }
 
 bool AKPCLModularBuildingBase::AttachedActor_Implementation(AFGBuildable* Actor,
-                                                            TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-                                                            FTransform Location, float Distance)
+															TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
+															FTransform Location, float Distance)
 {
 	if (mModularHandler)
 	{
@@ -192,17 +183,24 @@ void AKPCLModularBuildingBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 }
 
-void AKPCLModularBuildingBase::OnModulesWasUpdated_Implementation()
+void AKPCLModularBuildingBase::OnModulesWasUpdated_Implementation() {}
+
+void AKPCLModularBuildingBase::OnRep_MasterBuilding()
 {
+	if (mMasterBuilding.IsValid())
+	{
+		OnMasterBuildingReceived(mMasterBuilding.Get());
+	}
 }
+
+void AKPCLModularBuildingBase::OnRep_ModularIndex() { ReadyForVisuelUpdate(); }
 
 void AKPCLModularBuildingBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//UI
-	DOREPLIFETIME(AKPCLModularBuildingBase, mMasterBuilding);
 	DOREPLIFETIME(AKPCLModularBuildingBase, mModularHandler);
+	DOREPLIFETIME(AKPCLModularBuildingBase, mMasterBuilding);
 	DOREPLIFETIME(AKPCLModularBuildingBase, mModularIndex);
 }
 

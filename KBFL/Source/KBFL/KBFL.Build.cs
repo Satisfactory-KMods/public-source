@@ -24,7 +24,7 @@ public class KBFL : ModuleRules
 				//"AkAudio",
 				"AssetRegistry",
 				"NavigationSystem",
-				//"ReplicationGraph",
+				"ReplicationGraph",
 				"AIModule",
 				"GameplayTasks",
 				"SlateCore", "Slate", "UMG",
@@ -47,7 +47,6 @@ public class KBFL : ModuleRules
 			new[]
 			{
 				"AbstractInstance"
-				//"InstancedSplinesComponent",
 				//"SignificanceISPC"
 			});
 
@@ -62,6 +61,14 @@ public class KBFL : ModuleRules
 			{
 				/*"OnlineBlueprintSupport",*/ "AnimGraph"
 			});
+
+		// Editor-only: Content Browser right-click actions (ToolMenus) for KBFL module assets.
+		if (Target.bBuildEditor)
+			PrivateDependencyModuleNames.AddRange(new[]
+			{
+				"ToolMenus", "UnrealEd", "ContentBrowser"
+			});
+
 		PublicDependencyModuleNames.AddRange(new[] { "FactoryGame", "SML" });
 	}
 }

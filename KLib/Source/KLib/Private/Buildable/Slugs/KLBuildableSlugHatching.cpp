@@ -3,14 +3,15 @@
 
 #include "Buildable/Slugs/KLBuildableSlugHatching.h"
 
-#include "FGColoredInstanceMeshProxy.h"
-#include "Logging.h"
-#include "TimerManager.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildable/Modular/KPCLModularBuildingHandlerStacker.h"
 #include "Buildable/Slugs/KLBuildableSlugHatchingModule.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Cpp/KBFLCppInventoryHelper.h"
+#include "FGColoredInstanceMeshProxy.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Logging.h"
+#include "TimerManager.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -19,8 +20,67 @@
 
 class UKBFLAssetDataSubsystem;
 
-AKLBuildableSlugHatching::AKLBuildableSlugHatching()
-	: mTimeSub(nullptr)
+void AKLBuildableSlugHatching::SetHasIncubatorModule(bool bNewValue)
+{
+	bHasIncubatorModule = bNewValue;
+	mPropertyReplicator.MarkPropertyDirty(FName("bHasIncubatorModule"));
+}
+
+void AKLBuildableSlugHatching::SetHasTankModule(bool bNewValue)
+{
+	bHasTankModule = bNewValue;
+	mPropertyReplicator.MarkPropertyDirty(FName("bHasTankModule"));
+}
+
+void AKLBuildableSlugHatching::SetHasTimeModule(bool bNewValue)
+{
+	bHasTimeModule = bNewValue;
+	mPropertyReplicator.MarkPropertyDirty(FName("bHasTimeModule"));
+}
+
+void AKLBuildableSlugHatching::SetOverwriteTime(EKAPISlugTime NewTime)
+{
+	mOverwriteTime = NewTime;
+	mPropertyReplicator.MarkPropertyDirty(FName("mOverwriteTime"));
+}
+
+void AKLBuildableSlugHatching::SetSlugTime(EKAPISlugTime NewTime)
+{
+	mTime = NewTime;
+	mPropertyReplicator.MarkPropertyDirty(FName("mTime"));
+}
+
+void AKLBuildableSlugHatching::SetHatching_Humidity(float NewHumidity)
+{
+	mHumidity = NewHumidity;
+	mPropertyReplicator.MarkPropertyDirty(FName("mHumidity"));
+}
+
+void AKLBuildableSlugHatching::SetHatching_Temperature(float NewTemperature)
+{
+	mTemperature = NewTemperature;
+	mPropertyReplicator.MarkPropertyDirty(FName("mTemperature"));
+}
+
+void AKLBuildableSlugHatching::CommitFluidProductionHandle()
+{
+	mPropertyReplicator.MarkPropertyDirty(FName("mFluidProductionHandle"));
+}
+
+void AKLBuildableSlugHatching::CommitFixedChanceList()
+{
+	mPropertyReplicator.MarkPropertyDirty(FName("mFixedChanceList"));
+}
+
+void AKLBuildableSlugHatching::SetCurrentHatchingData(UKAPISugHatchingData* NewData)
+{
+	mCurrentHatchingData = NewData;
+	ForceNetUpdate();
+}
+
+void AKLBuildableSlugHatching::OnRep_CurrentHatchingData() { OnNewEgg(mCurrentHatchingData, false); }
+
+AKLBuildableSlugHatching::AKLBuildableSlugHatching() : mTimeSub(nullptr)
 {
 	mInputInventory->SetDefaultSize(2);
 	mOutputInventory->SetDefaultSize(8);
@@ -34,16 +94,17 @@ AKLBuildableSlugHatching::AKLBuildableSlugHatching()
 	mModuleTypeLimit.Add(EHatchingModuleType::None, 0);
 }
 
-bool AKLBuildableSlugHatching::Overclocking_IsConsumer_Implementation()
-{
-	return true;
-}
+bool AKLBuildableSlugHatching::Overclocking_IsConsumer_Implementation() { return true; }
 
 void AKLBuildableSlugHatching::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
 {
 	Super::UI_ApplyRelevantItems_Implementation(OutSlots);
 
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return;
+	}
 	OutSlots.Add(HatchingData->mEgg);
 	OutSlots.Append(HatchingData->GetPossibleSlugs());
 }
@@ -53,6 +114,10 @@ void AKLBuildableSlugHatching::Overclocking_GetInfo_Implementation(FKPCLOvercloc
 	Super::Overclocking_GetInfo_Implementation(OutProductionInfo);
 
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return;
+	}
 	OutProductionInfo.mItemClass = HatchingData->mEgg;
 	OutProductionInfo.mAmount = mEggsToConsume;
 }
@@ -63,35 +128,31 @@ void AKLBuildableSlugHatching::Overclocking_GetProductionResults_Implementation(
 	Super::Overclocking_GetProductionResults_Implementation(OutIngredients, OutProducts);
 
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return;
+	}
 
-	OutIngredients.Add(FKPCLOverclockingProductionResults(
-		HatchingData->mEgg,
-		1,
-		mProductionHandle.mProductionTime
-	));
+	OutIngredients.Add(FKPCLOverclockingProductionResults(HatchingData->mEgg, 1, mProductionHandle.mProductionTime));
 
 	if (HatchingData->IncubationFluidRequired())
 	{
-		OutIngredients.Add(FKPCLOverclockingProductionResults(
-			HatchingData->mFluidClass,
-			HatchingData->mFluidConsume,
-			HatchingData->mFluidConsumeTime
-		));
+		OutIngredients.Add(FKPCLOverclockingProductionResults(HatchingData->mFluidClass, HatchingData->mFluidConsume,
+															  HatchingData->mFluidConsumeTime));
 	}
 
 	for (FKAPISlugIncubation Slug : HatchingData->mPossibleSlugs)
 	{
-		OutProducts.Add(FKPCLOverclockingProductionResults(
-			Slug.mSlug,
-			Slug.mProductionCount,
-			HatchingData->mHatchDuration
-		));
+		OutProducts.Add(
+			FKPCLOverclockingProductionResults(Slug.mSlug, Slug.mProductionCount, HatchingData->mHatchDuration));
 	}
 }
 
 void AKLBuildableSlugHatching::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AKLBuildableSlugHatching, mCurrentHatchingData);
 }
 
 void AKLBuildableSlugHatching::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
@@ -105,6 +166,8 @@ void AKLBuildableSlugHatching::GetConditionalReplicatedProps(TArray<FFGCondRepli
 	FG_DOREPCONDITIONAL(ThisClass, bHasTimeModule);
 	FG_DOREPCONDITIONAL(ThisClass, mTime);
 	FG_DOREPCONDITIONAL(ThisClass, mOverwriteTime);
+	FG_DOREPCONDITIONAL(ThisClass, mFluidProductionHandle);
+	FG_DOREPCONDITIONAL(ThisClass, mFixedChanceList);
 }
 
 UFGFactoryClipboardSettings* AKLBuildableSlugHatching::CopySettings_Implementation()
@@ -139,7 +202,7 @@ UFGFactoryClipboardSettings* AKLBuildableSlugHatching::CopySettings_Implementati
 }
 
 bool AKLBuildableSlugHatching::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                            class AFGPlayerController* player)
+															class AFGPlayerController* player)
 {
 	bool bResult = Super::PasteSettings_Implementation(factoryClipboard, player);
 	if (UKLSlugHatcherClipboardSettings* Settings = Cast<UKLSlugHatcherClipboardSettings>(factoryClipboard))
@@ -194,16 +257,14 @@ bool AKLBuildableSlugHatching::PasteSettings_Implementation(UFGFactoryClipboardS
 	return bResult;
 }
 
-bool AKLBuildableSlugHatching::CanUseFactoryClipboard_Implementation()
-{
-	return true;
-}
+bool AKLBuildableSlugHatching::CanUseFactoryClipboard_Implementation() { return true; }
 
 void AKLBuildableSlugHatching::SetPendingPotential(float NewPendingPotential)
 {
 	NewPendingPotential = FMath::Clamp(NewPendingPotential, GetCurrentMinPotential(), GetCurrentMaxPotential());
 	Super::SetPendingPotential(NewPendingPotential);
 	mFluidProductionHandle.mPendingPotential = NewPendingPotential;
+	CommitFluidProductionHandle();
 }
 
 void AKLBuildableSlugHatching::BeginPlay()
@@ -222,9 +283,11 @@ void AKLBuildableSlugHatching::BeginPlay()
 			mTimeSub->mOnDayStateDelegate.AddDynamic(this, &AKLBuildableSlugHatching::OnDayTimeUpdated);
 			mTime = mTimeSub->IsDay() ? EKAPISlugTime::Day : EKAPISlugTime::Night;
 		}
+		SetSlugTime(mTime);
 
 		DoGatherStats();
 		CheckEgg();
+		OnNewEgg_Native(GetHatchingData(), false);
 	}
 }
 
@@ -234,10 +297,8 @@ void AKLBuildableSlugHatching::Factory_Tick(float dt)
 	{
 		CheckEgg();
 
-		mFluidProductionHandle.TickHandle(dt, bHasTankModule && IsProducing(), [&]()
-		{
-			OnFluidFinial();
-		});
+		mFluidProductionHandle.TickHandle(dt, bHasTankModule && IsProducing(), [&]() { OnFluidFinial(); });
+		CommitFluidProductionHandle();
 	}
 
 	Super::Factory_Tick(dt);
@@ -246,8 +307,7 @@ void AKLBuildableSlugHatching::Factory_Tick(float dt)
 void AKLBuildableSlugHatching::CollectBelts()
 {
 	Super::CollectBelts();
-	UKBFLCppInventoryHelper::PullBeltChildClass(GetInventory(), 0, 0.f, UFGItemDescriptor::StaticClass(),
-	                                            GetConv(0));
+	UKBFLCppInventoryHelper::PullBeltChildClass(GetInventory(), 0, 0.f, UFGItemDescriptor::StaticClass(), GetConv(0));
 }
 
 void AKLBuildableSlugHatching::CollectAndPushPipes(float dt, bool IsPush)
@@ -256,7 +316,7 @@ void AKLBuildableSlugHatching::CollectAndPushPipes(float dt, bool IsPush)
 
 	if (bHasTankModule && !IsPush)
 	{
-		UKBFLCppInventoryHelper::PullPipe(GetInventory(), 1, dt, GetFluidClass(), GetPipe(0));
+		UKBFLCppInventoryHelper::PullPipe(GetInventory(), FLUID_IDX, dt, GetFluidClass(), GetPipe(0));
 	}
 }
 
@@ -277,8 +337,8 @@ void AKLBuildableSlugHatching::HandlePower(float dt)
 			{
 				if (AKLBuildableSlugHatchingModule* Module = Cast<AKLBuildableSlugHatchingModule>(Buildable))
 				{
-					PowerOptions.mNormalPowerConsume += FMath::Max(Module->GetPowerOption().mNormalPowerConsume,
-					                                               Module->mPowerConsumption);
+					PowerOptions.mNormalPowerConsume +=
+						FMath::Max(Module->GetPowerOption().mNormalPowerConsume, Module->mPowerConsumption);
 				}
 			}
 		}
@@ -317,10 +377,7 @@ bool AKLBuildableSlugHatching::IsAllowedToSnap_Implementation(AFGBuildable* Acto
 	return false;
 }
 
-void AKLBuildableSlugHatching::POST_RemoveAttachedActor_Implementation()
-{
-	DoGatherStats();
-}
+void AKLBuildableSlugHatching::POST_RemoveAttachedActor_Implementation() { DoGatherStats(); }
 
 void AKLBuildableSlugHatching::OnModulesWasUpdated_Implementation()
 {
@@ -329,8 +386,8 @@ void AKLBuildableSlugHatching::OnModulesWasUpdated_Implementation()
 }
 
 bool AKLBuildableSlugHatching::AttachedActor_Implementation(AFGBuildable* Actor,
-                                                            TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-                                                            FTransform Location, float Distance)
+															TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
+															FTransform Location, float Distance)
 {
 	bool success = Super::AttachedActor_Implementation(Actor, Attachment, Location, Distance);
 	DoGatherStats();
@@ -345,9 +402,15 @@ void AKLBuildableSlugHatching::onProducingFinal_Implementation()
 	}
 
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return;
+	}
 	TArray<FItemAmount> ProductedSlugs;
 
-	if (HatchingData->RollSlugs(ProductedSlugs, mFixedChanceMap))
+	const bool bRolled = HatchingData->RollSlugs(ProductedSlugs, mFixedChanceList);
+	CommitFixedChanceList();
+	if (bRolled)
 	{
 		for (FItemAmount Amount : ProductedSlugs)
 		{
@@ -355,13 +418,14 @@ void AKLBuildableSlugHatching::onProducingFinal_Implementation()
 			UKBFLCppInventoryHelper::AddStackInInventory(GetOutputInventory(), Stack);
 			if (IsValid(mSlugSubsystem) && !mSlugSubsystem->WasSlugBreeded(Amount.ItemClass))
 			{
-				AsyncTask(ENamedThreads::GameThread, [this, Amount]()
-				{
-					if (IsValid(mSlugSubsystem))
-					{
-						mSlugSubsystem->AddBreededSlugs(Amount.ItemClass);
-					}
-				});
+				AsyncTask(ENamedThreads::GameThread,
+						  [this, Amount]()
+						  {
+							  if (IsValid(mSlugSubsystem))
+							  {
+								  mSlugSubsystem->AddBreededSlugs(Amount.ItemClass);
+							  }
+						  });
 			}
 		}
 	}
@@ -369,13 +433,14 @@ void AKLBuildableSlugHatching::onProducingFinal_Implementation()
 	TSubclassOf<UFGItemDescriptor> EggClass = GetInventoryEgg();
 	if (IsValid(mSlugSubsystem) && !mSlugSubsystem->WasEggBreeded(EggClass))
 	{
-		AsyncTask(ENamedThreads::GameThread, [this, EggClass]()
-		{
-			if (IsValid(mSlugSubsystem))
-			{
-				mSlugSubsystem->AddBreededSlugs(EggClass);
-			}
-		});
+		AsyncTask(ENamedThreads::GameThread,
+				  [this, EggClass]()
+				  {
+					  if (IsValid(mSlugSubsystem))
+					  {
+						  mSlugSubsystem->AddBreededSlugs(EggClass);
+					  }
+				  });
 	}
 
 	GetInventory()->RemoveFromIndex(EGG_IDX, mEggsToConsume);
@@ -417,9 +482,9 @@ void AKLBuildableSlugHatching::Server_DoFlush()
 
 	if (GetInventory())
 	{
-		if (!GetInventory()->IsIndexEmpty(1))
+		if (!GetInventory()->IsIndexEmpty(FLUID_IDX))
 		{
-			GetInventory()->RemoveAllFromIndex(1);
+			GetInventory()->RemoveAllFromIndex(FLUID_IDX);
 		}
 	}
 }
@@ -476,12 +541,40 @@ bool AKLBuildableSlugHatching::FilterInputInventory(TSubclassOf<UObject> object,
 		}
 	}
 
-	return object->IsChildOf(UFGItemDescriptor::StaticClass());
+	if (TSubclassOf<UFGItemDescriptor> Item = TSubclassOf<UFGItemDescriptor>(object))
+	{
+		if (!IsValid(mAssetSubsystem))
+		{
+			return false;
+		}
+
+		UKAPISugHatchingData* HatchingData;
+		mAssetSubsystem->Slug_GetForItem(Item, HatchingData);
+
+		return IsValid(HatchingData) && HatchingData->mEgg == Item;
+	}
+
+	return false;
 }
 
 bool AKLBuildableSlugHatching::FilterOutputInventory(TSubclassOf<UObject> object, int32 idx) const
 {
-	return object->IsChildOf(UFGItemDescriptor::StaticClass());
+	// if (TSubclassOf<UFGItemDescriptor> Item = TSubclassOf<UFGItemDescriptor>(object))
+	//{
+	//	UKAPISugHatchingData* HatchingData;
+	//	mAssetSubsystem->Slug_GetForItem(Item, HatchingData);
+	//	TSubclassOf<UFGItemDescriptor> SlotItem = nullptr;
+	//
+	//	if (IsValid(HatchingData) && HatchingData->mPossibleSlugs.IsValidIndex(idx))
+	//	{
+	//		const FKAPISlugIncubation& Incubation = HatchingData->mPossibleSlugs[idx];
+	//		SlotItem = Incubation.mSlug;
+	//	}
+	//
+	//	return IsValid(SlotItem) && SlotItem == Item;
+	//}
+
+	return true;
 }
 
 void AKLBuildableSlugHatching::CheckEgg()
@@ -502,7 +595,7 @@ void AKLBuildableSlugHatching::OnMeshUpdate()
 	UKPCLModularBuildingHandlerStacker* Handler = GetHandler<UKPCLModularBuildingHandlerStacker>();
 	if (!IsValid(Handler))
 	{
-		UE_LOG(LogKLIB, Error, TEXT("OnMeshUpdate called without Handler on %s"), *GetName());
+		UE_LOGFMT(LogKLIB, Error, "OnMeshUpdate called without Handler on {0}", GetName());
 		return;
 	}
 
@@ -510,8 +603,8 @@ void AKLBuildableSlugHatching::OnMeshUpdate()
 	{
 		if (AFGBuildableSubsystem* BuildableSubsystem = AFGBuildableSubsystem::Get(this))
 		{
-			UFGColoredInstanceManager* Manager = BuildableSubsystem->GetColoredInstanceManager(
-				mCustomProductionStateIndicator);
+			UFGColoredInstanceManager* Manager =
+				BuildableSubsystem->GetColoredInstanceManager(mCustomProductionStateIndicator);
 			if (IsValid(Manager))
 			{
 				FTransform Transform = Handler->mAttachmentDatas[0].GetSnapLocation();
@@ -533,8 +626,8 @@ void AKLBuildableSlugHatching::OnMeshUpdate()
 	{
 		const FInstanceOwnerHandlePtr newHandle;
 		const FInstanceOwnerHandlePtr Handle = mInstanceHandles.IsValidIndex(mCustomIndicatorHandleIndexes[0])
-			                                       ? mInstanceHandles[mCustomIndicatorHandleIndexes[0]]
-			                                       : newHandle;
+			? mInstanceHandles[mCustomIndicatorHandleIndexes[0]]
+			: newHandle;
 		if (Handle.IsValid() && Handle->IsInstanced())
 		{
 			FTransform Transform = Handler->mAttachmentDatas[0].GetSnapLocation();
@@ -543,11 +636,14 @@ void AKLBuildableSlugHatching::OnMeshUpdate()
 			Transform.SetLocation(Location);
 
 			mInstanceHandles[mCustomIndicatorHandleIndexes[0]]->SetLocalTransform(Transform);
-			FindComponentByClass<USkeletalMeshComponent>()->SetWorldLocation(Location);
+			if (USkeletalMeshComponent* SkeletalMesh = FindComponentByClass<USkeletalMeshComponent>())
+			{
+				SkeletalMesh->SetWorldLocation(Location);
+			}
 		}
 		else
 		{
-			UE_LOG(LogKLIB, Error, TEXT("Handle->IsInstanced is false on %s"), *GetName());
+			UE_LOGFMT(LogKLIB, Error, "Handle->IsInstanced is false on {0}", *GetName());
 		}
 	}
 }
@@ -631,11 +727,11 @@ bool AKLBuildableSlugHatching::CheckModules() const
 
 	if (HatchingData->IncubationFluidRequired())
 	{
-		const FInventoryStack Stack = GetStackFromIndex(1);
+		const FInventoryStack Stack = GetStackFromIndex(FLUID_IDX);
 		if (Stack.HasItems())
 		{
-			return Stack.Item.GetItemClass() == HatchingData->mFluidClass && Stack.NumItems >= HatchingData->
-				mFluidConsume;
+			return Stack.Item.GetItemClass() == HatchingData->mFluidClass &&
+				Stack.NumItems >= HatchingData->mFluidConsume;
 		}
 	}
 
@@ -644,22 +740,19 @@ bool AKLBuildableSlugHatching::CheckModules() const
 
 bool AKLBuildableSlugHatching::CanStoreSlugs() const
 {
-	if (GetOutputInventory())
+	UFGInventoryComponent* Inventory = GetOutputInventory();
+	if (IsValid(Inventory))
 	{
 		TArray<TSubclassOf<UFGItemDescriptor>> AllSlugs = GetAllPossibleSlugs();
-		for (int i = 0; i < AllSlugs.Num(); ++i)
+		for (int32 i = 0; i < AllSlugs.Num(); ++i)
 		{
-			if (!UKBFLCppInventoryHelper::CanStoreItem(GetOutputInventory(), i, AllSlugs[i]))
+			if (!UKBFLCppInventoryHelper::CanStoreItem(Inventory, i, AllSlugs[i]))
 			{
 				return false;
 			}
 		}
 	}
-	else
-	{
-		return false;
-	}
-	return true;
+	return IsValid(Inventory);
 }
 
 bool AKLBuildableSlugHatching::IsHatchingValid() const
@@ -670,36 +763,39 @@ bool AKLBuildableSlugHatching::IsHatchingValid() const
 float AKLBuildableSlugHatching::GetDefaultProductionCycleTime() const
 {
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return 0.f;
+	}
 	return HatchingData->mHatchDuration;
 }
 
 float AKLBuildableSlugHatching::GetPendingProductionTime() const
 {
 	UKAPISugHatchingData* HatchingData = GetHatchingData();
+	if (!IsValid(HatchingData))
+	{
+		return 0.f;
+	}
 	return UKismetMathLibrary::SafeDivide(HatchingData->mHatchDuration, mProductionHandle.mPendingPotential);
 }
 
-float AKLBuildableSlugHatching::GetRawProductionTime() const
-{
-	return GetDefaultProductionCycleTime();
-}
+float AKLBuildableSlugHatching::GetRawProductionTime() const { return GetDefaultProductionCycleTime(); }
 
-float AKLBuildableSlugHatching::GetProductionTime() const
-{
-	return mProductionHandle.GetProductionTime();
-}
+float AKLBuildableSlugHatching::GetProductionTime() const { return mProductionHandle.GetProductionTime(); }
 
 void AKLBuildableSlugHatching::OnDayTimeUpdated(bool isDayTime)
 {
-	mTime = isDayTime ? EKAPISlugTime::Day : EKAPISlugTime::Night;
+	SetSlugTime(isDayTime ? EKAPISlugTime::Day : EKAPISlugTime::Night);
 }
 
 void AKLBuildableSlugHatching::DoGatherStats()
 {
-	if (!HasAuthority())
+	if (!HasAuthority() || bGatherStatsPending)
 	{
 		return;
 	}
+	bGatherStatsPending = true;
 
 	EKAPISlugTime NewTime = EKAPISlugTime::NONE;
 	float Temperature = 25.0f;
@@ -752,43 +848,40 @@ void AKLBuildableSlugHatching::DoGatherStats()
 		}
 	}
 
-	mOverwriteTime = NewTime;
-	mTemperature = Temperature;
-	mHumidity = FMath::Clamp(Humidity, .0f, 1.f);
+	SetOverwriteTime(NewTime);
+	SetHatching_Temperature(Temperature);
+	SetHatching_Humidity(FMath::Clamp(Humidity, .0f, 1.f));
 
 	if (bHasIncubatorModule != bNewHasIncubatorModule)
 	{
-		bHasIncubatorModule = bNewHasIncubatorModule;
+		SetHasIncubatorModule(bNewHasIncubatorModule);
 		OnIncubatorChanged(bNewHasIncubatorModule);
 	}
 
 	if (bHasTankModule != bNewHasTankModule)
 	{
-		bHasTankModule = bNewHasTankModule;
+		SetHasTankModule(bNewHasTankModule);
 		OnTankChanged(bNewHasTankModule);
 	}
 
 	if (bHasTimeModule != bNewHasTimeModule)
 	{
-		bHasTimeModule = bNewHasTimeModule;
+		SetHasTimeModule(bNewHasTimeModule);
 		OnTimeModuleChanged(bNewHasTimeModule);
 	}
 
 	if (GetInventory())
 	{
-		GetInventory()->AddArbitrarySlotSize(1, 50000);
+		GetInventory()->AddArbitrarySlotSize(FLUID_IDX, 50000);
 	}
 
 	mProductionHandle.SetNewTime(GetRawProductionTime(), false);
+	bGatherStatsPending = false;
 }
 
-void AKLBuildableSlugHatching::OnIncubatorChanged_Implementation(bool bHas)
-{
-}
+void AKLBuildableSlugHatching::OnIncubatorChanged_Implementation(bool bHas) {}
 
-void AKLBuildableSlugHatching::OnTankChanged_Implementation(bool bHas)
-{
-}
+void AKLBuildableSlugHatching::OnTankChanged_Implementation(bool bHas) {}
 
 void AKLBuildableSlugHatching::OnFluidFinial_Implementation()
 {
@@ -799,9 +892,7 @@ void AKLBuildableSlugHatching::OnFluidFinial_Implementation()
 	}
 }
 
-void AKLBuildableSlugHatching::OnTimeModuleChanged_Implementation(bool bHas)
-{
-}
+void AKLBuildableSlugHatching::OnTimeModuleChanged_Implementation(bool bHas) {}
 
 UKAPISugHatchingData* AKLBuildableSlugHatching::GetHatchingData() const
 {
@@ -811,6 +902,12 @@ UKAPISugHatchingData* AKLBuildableSlugHatching::GetHatchingData() const
 	}
 	return mCurrentHatchingData;
 }
+
+FFullProductionHandle AKLBuildableSlugHatching::GetFluidHandle() const { return mFluidProductionHandle; }
+
+float AKLBuildableSlugHatching::GetFluidRawProductionTime() const { return mFluidProductionHandle.mProductionTime; }
+
+float AKLBuildableSlugHatching::GetFluidProductionTime() const { return mFluidProductionHandle.GetProductionTime(); }
 
 EKAPISlugTime AKLBuildableSlugHatching::GetCurrentSlugTime() const
 {
@@ -846,21 +943,40 @@ float AKLBuildableSlugHatching::GetChanceForSlug(TSubclassOf<UFGItemDescriptor> 
 		return 0.f;
 	}
 
-	return mFixedChanceMap.Contains(SlugClass) ? mFixedChanceMap.FindRef(SlugClass) : Incubation.mProbability;
+	for (const FKAPISlugFixedChance& Fixed : mFixedChanceList)
+	{
+		if (Fixed.mSlug == SlugClass)
+		{
+			return Fixed.mChance;
+		}
+	}
+	return Incubation.mProbability;
 }
 
-void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingData* NewEgg,
-                                                              bool bSlugTypeChanged)
+void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingData* NewEgg, bool bSlugTypeChanged)
 {
 	if (HasAuthority() && IsValid(GetOutputInventory()) && IsValid(NewEgg))
 	{
-		mFixedChanceMap.Reset();
-		mCurrentHatchingData = NewEgg;
+		SetCurrentHatchingData(NewEgg);
 		if (!IsValid(mCurrentHatchingData))
 		{
-			mCurrentHatchingData = mDefaultHatchingData;
+			SetCurrentHatchingData(mDefaultHatchingData);
 		}
 		TArray<FKAPISlugIncubation> SlugHatchingInformation = mCurrentHatchingData->mPossibleSlugs;
+
+		if (bSlugTypeChanged)
+		{
+			mFixedChanceList.Reset(SlugHatchingInformation.Num());
+			for (const FKAPISlugIncubation& Incubation : SlugHatchingInformation)
+			{
+				if (Incubation.Valid() && Incubation.bShouldUseFixedChance)
+				{
+					mFixedChanceList.Emplace(Incubation.mSlug, Incubation.mProbability);
+				}
+			}
+			CommitFixedChanceList();
+		}
+		TArray<TSubclassOf<UFGItemDescriptor>> Slugs = GetAllPossibleSlugs();
 
 		if (SlugHatchingInformation.Num() > 0)
 		{
@@ -869,13 +985,9 @@ void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingDa
 			{
 				if (GetOutputInventory()->IsValidIndex(i))
 				{
-					TSubclassOf<UFGItemDescriptor> ItemClass = SlugHatchingInformation.IsValidIndex(i)
-						                                           ? TSubclassOf<UFGItemDescriptor>{
-							                                           SlugHatchingInformation[i].mSlug
-						                                           }
-						                                           : TSubclassOf<UFGItemDescriptor>{
-							                                           UFGNoneDescriptor::StaticClass()
-						                                           };
+					TSubclassOf<UFGItemDescriptor> ItemClass = Slugs.IsValidIndex(i)
+						? TSubclassOf<UFGItemDescriptor>{Slugs[i]}
+						: TSubclassOf<UFGItemDescriptor>{UFGNoneDescriptor::StaticClass()};
 					if (!ItemClass)
 					{
 						ItemClass = UFGNoneDescriptor::StaticClass();
@@ -885,7 +997,7 @@ void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingDa
 			}
 
 			// Set Time & Make sure that the Hatching starting again from 0 if a new Hatching is beginning...
-			mProductionHandle = mCurrentHatchingData->mHatchDuration;
+			mProductionHandle.mProductionTime = mCurrentHatchingData->mHatchDuration;
 			if (bSlugTypeChanged)
 			{
 				mProductionHandle.Reset();
@@ -894,23 +1006,23 @@ void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingDa
 			// Flush Fluids
 			if (mCurrentHatchingData->IncubationFluidRequired())
 			{
-				FInventoryStack Stack = GetStackFromIndex(1);
+				FInventoryStack Stack = GetStackFromIndex(FLUID_IDX);
 				if (Stack.HasItems())
 				{
 					if (Stack.Item.GetItemClass() != mCurrentHatchingData->mFluidClass)
 					{
-						GetInventory()->RemoveAllFromIndex(1);
+						GetInventory()->RemoveAllFromIndex(FLUID_IDX);
 					}
 				}
 
 				UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), FLUID_IDX,
-				                                                      mCurrentHatchingData->mFluidClass);
+																	  mCurrentHatchingData->mFluidClass);
 				mFluidProductionHandle.SetNewTime(mCurrentHatchingData->mFluidConsumeTime);
 			}
 			else
 			{
 				UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), FLUID_IDX,
-				                                                      UFGNoneDescriptor::StaticClass());
+																	  UFGNoneDescriptor::StaticClass());
 				GetInventory()->RemoveAllFromIndex(FLUID_IDX);
 				mFluidProductionHandle.SetNewTime(0);
 			}
@@ -918,11 +1030,21 @@ void AKLBuildableSlugHatching::OnNewEgg_Native_Implementation(UKAPISugHatchingDa
 		DoGatherStats();
 	}
 
-	mCurrentHatchingData = NewEgg;
+	SetCurrentHatchingData(NewEgg);
 	if (!IsValid(mCurrentHatchingData))
 	{
-		mCurrentHatchingData = mDefaultHatchingData;
+		SetCurrentHatchingData(mDefaultHatchingData);
 	}
+	CommitFluidProductionHandle();
+
+	if (!IsValid(mCurrentHatchingData))
+	{
+		UE_LOGFMT(LogKLIB, Warning,
+				  "OnNewEgg_Native called with invalid data on {0} default hatching data should be: {1}", GetName(),
+				  mDefaultHatchingData ? *mDefaultHatchingData->GetName() : TEXT("NULLPETER!!!"));
+		return;
+	}
+
 	TArray<FKAPISlugIncubation> SlugHatchingInformation = mCurrentHatchingData->mPossibleSlugs;
 
 	if (SlugHatchingInformation.Num() > 0)

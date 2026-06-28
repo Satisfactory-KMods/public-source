@@ -1,8 +1,13 @@
+// ILikeBanas
+
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Components/PostProcessComponent.h"
+
 #include "Subsystem/KPCLModSubsystem.h"
+
 #include "KPCLOutlineSubsystem.generated.h"
 
 UENUM(BlueprintType)
@@ -36,7 +41,7 @@ struct FOutlineData
 	EOutlineColorSlot mOutlineColorSlot = EOutlineColorSlot::ColorSlot0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* mActorToOutline = nullptr;
+	TObjectPtr<AActor> mActorToOutline = nullptr;
 };
 
 USTRUCT(BlueprintType)
@@ -51,9 +56,7 @@ struct FParameterInfo
 	FLinearColor mDefaultColor = FLinearColor();
 };
 
-/**
-Subsystem To create and replicate Outlines
-*/
+/** Subsystem to create and replicate outlines on actors. */
 UCLASS()
 class KPRIVATECODELIB_API AKPCLOutlineSubsystem : public AKPCLModSubsystem
 {
@@ -61,7 +64,7 @@ class KPRIVATECODELIB_API AKPCLOutlineSubsystem : public AKPCLModSubsystem
 
 public:
 	UFUNCTION(BlueprintPure, Category = "Subsystem", DisplayName = "GetCustomOutlineSubsystem",
-		meta = ( DefaultToSelf = "WorldContext" ))
+			  meta = (DefaultToSelf = "WorldContext"))
 	static AKPCLOutlineSubsystem* Get(UObject* worldContext);
 
 	AKPCLOutlineSubsystem();
@@ -79,23 +82,23 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MultiCast_SetOutlineColor(FLinearColor Color, EOutlineColorSlot ColorSlot);
 
-	/** Create a new Outline Actor based on the target Actor */
+	/** Create a new outline actor based on the target actor. */
 	UFUNCTION(BlueprintCallable)
 	void CreateOutline(FOutlineData OutlineData, bool Multicast = false);
 
-	/** Remove all Outline Actors */
+	/** Remove all outline actors. */
 	UFUNCTION(BlueprintCallable)
 	void ClearOutlines(bool Multicast = false);
 
-	/** Remove all Outline Actors */
+	/** Remove all outline actors for a specific actor. */
 	UFUNCTION(BlueprintCallable)
 	void ClearOutlinesForActor(AActor* Actor, bool Multicast = false);
 
-	/** Overwrite the DismantleColor */
+	/** Overwrite the dismantle color. */
 	UFUNCTION(BlueprintCallable)
 	void SetOutlineColor(FLinearColor Color, EOutlineColorSlot ColorSlot, bool Multicast = false);
 
-	/** Get Outline Actor for Actor if it exsists */
+	/** Get the outline actor for a given actor if it exists. */
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE class AKPCLOutlineActor* GetOutlineActorForActor(AActor* Actor) const
 	{
@@ -106,34 +109,29 @@ public:
 		return nullptr;
 	};
 
-	/** Check if we have any outlines */
+	/** Check if we have any outlines. */
 	UFUNCTION(BlueprintPure)
-	FORCEINLINE bool HasAnyOutlines() const
-	{
-		return mOutlineMap.Num() > 0;
-	};
+	FORCEINLINE bool HasAnyOutlines() const { return mOutlineMap.Num() > 0; };
 
 	UPROPERTY(Transient)
-	TMap<AActor*, class AKPCLOutlineActor*> mOutlineMap;
+	TMap<TObjectPtr<AActor>, TObjectPtr<class AKPCLOutlineActor>> mOutlineMap;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
-	TArray<UMaterialInterface*> mPPMaterials;
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
+	TArray<TObjectPtr<UMaterialInterface>> mPPMaterials;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
-	UMaterialParameterCollection* mMaterialCollection;
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
+	TObjectPtr<UMaterialParameterCollection> mMaterialCollection;
 
 	UPROPERTY()
-	UMaterialParameterCollectionInstance* mMaterialCollectionInstance;
+	TObjectPtr<UMaterialParameterCollectionInstance> mMaterialCollectionInstance;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods")
-	TArray<FParameterInfo> mMaterialCollectionTags = {
-		FParameterInfo(), FParameterInfo(), FParameterInfo(), FParameterInfo(), FParameterInfo()
-	};
-
-	// Components
-	UPROPERTY(EditAnywhere)
-	USceneComponent* mScene;
+	UPROPERTY(EditDefaultsOnly, Category = "KMods")
+	TArray<FParameterInfo> mMaterialCollectionTags = {FParameterInfo(), FParameterInfo(), FParameterInfo(),
+													  FParameterInfo(), FParameterInfo()};
 
 	UPROPERTY(EditAnywhere)
-	UPostProcessComponent* mPostProcess;
+	TObjectPtr<USceneComponent> mScene;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UPostProcessComponent> mPostProcess;
 };

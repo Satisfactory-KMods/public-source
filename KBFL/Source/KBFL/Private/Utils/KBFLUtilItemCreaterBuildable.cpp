@@ -1,18 +1,20 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-#pragma once
 
 #include "Utils/KBFLUtilItemCreaterBuildable.h"
 
 #include "Cpp/KBFLCppInventoryHelper.h"
 #include "FGCharacterPlayer.h"
 #include "FGFactoryConnectionComponent.h"
+#include "FGPlayerController.h"
+#include "FGPowerInfoComponent.h"
 
 #include "Net/UnrealNetwork.h"
 
 AKBFLUtilItemCreaterBuildable::AKBFLUtilItemCreaterBuildable() :
 	mPipeInput(nullptr), mPipeOutput(nullptr), mBeltInput(nullptr), mBeltOutput(nullptr)
 {
+	mPowerProduction = 1000000000.f;
 }
 
 void AKBFLUtilItemCreaterBuildable::Factory_Tick(float dt)
@@ -82,6 +84,11 @@ void AKBFLUtilItemCreaterBuildable::BeginPlay()
 	if (GetStorageInventory() && HasAuthority())
 	{
 		GetStorageInventory()->Resize(4);
+
+		if (GetPowerInfo())
+		{
+			GetPowerInfo()->SetBaseProduction(mPowerProduction);
+		}
 	}
 }
 
@@ -123,7 +130,20 @@ void AKBFLUtilItemCreaterBuildable::CreateItems()
 
 void AKBFLUtilItemCreaterBuildable::SetBeltItem(TSubclassOf<UFGItemDescriptor> Item)
 {
+	if (!HasAuthority())
+	{
+		if (AFGPlayerController* PlayerController = Cast<AFGPlayerController>(GetWorld()->GetFirstPlayerController()))
+		{
+			if (UKBFLDefaultRCO* RCO = PlayerController->GetRemoteCallObjectOfClass<UKBFLDefaultRCO>())
+			{
+				RCO->Server_CheatBuilding_SetBeltItem(this, Item);
+			}
+		}
+		return;
+	}
+
 	mBeltItemClassToGenerate = Item;
+	mPropertyReplicator.MarkPropertyDirty(FName("mBeltItemClassToGenerate"));
 
 	FInventoryStack Stack;
 	GetStorageInventory()->GetStackFromIndex(0, Stack);
@@ -135,7 +155,20 @@ void AKBFLUtilItemCreaterBuildable::SetBeltItem(TSubclassOf<UFGItemDescriptor> I
 
 void AKBFLUtilItemCreaterBuildable::SetPipeItem(TSubclassOf<UFGItemDescriptor> Item)
 {
+	if (!HasAuthority())
+	{
+		if (AFGPlayerController* PlayerController = Cast<AFGPlayerController>(GetWorld()->GetFirstPlayerController()))
+		{
+			if (UKBFLDefaultRCO* RCO = PlayerController->GetRemoteCallObjectOfClass<UKBFLDefaultRCO>())
+			{
+				RCO->Server_CheatBuilding_SetPipeItem(this, Item);
+			}
+		}
+		return;
+	}
+
 	mPipeItemClassToGenerate = Item;
+	mPropertyReplicator.MarkPropertyDirty(FName("mPipeItemClassToGenerate"));
 
 	FInventoryStack Stack;
 	GetStorageInventory()->GetStackFromIndex(1, Stack);
@@ -148,9 +181,14 @@ void AKBFLUtilItemCreaterBuildable::SetPipeItem(TSubclassOf<UFGItemDescriptor> I
 void AKBFLUtilItemCreaterBuildable::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+}
 
-	DOREPLIFETIME(AKBFLUtilItemCreaterBuildable, mBeltItemClassToGenerate);
-	DOREPLIFETIME(AKBFLUtilItemCreaterBuildable, mPipeItemClassToGenerate);
+void AKBFLUtilItemCreaterBuildable::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
+{
+	Super::GetConditionalReplicatedProps(outProps);
+
+	FG_DOREPCONDITIONAL(ThisClass, mBeltItemClassToGenerate);
+	FG_DOREPCONDITIONAL(ThisClass, mPipeItemClassToGenerate);
 }
 
 

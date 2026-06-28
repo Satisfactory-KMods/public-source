@@ -21,11 +21,13 @@ void UKBFLResourceNodeSubsystem::Initialize(FSubsystemCollectionBase& Collection
 	Collection.InitializeDependency(USubsystemActorManager::StaticClass());
 
 #if WITH_EDITOR
-	return;
-#endif
-
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] Initialize: Editor detected, skipping execution");
+#else
 	if (GetWorld()->GetMapName().Contains("Untitled"))
 	{
+		UE_LOGFMT(ResourceNodeSubsystem, Log,
+				  "[KBFLResourceNodeSubsystem] Initialize: Map name contains 'Untitled', skipping custom spawning");
 		Super::Initialize(Collection);
 		return;
 	}
@@ -37,89 +39,148 @@ void UKBFLResourceNodeSubsystem::Initialize(FSubsystemCollectionBase& Collection
 
 	if (AssetRegistry.IsLoadingAssets())
 	{
+		UE_LOGFMT(
+			ResourceNodeSubsystem, Log,
+			"[KBFLResourceNodeSubsystem] Initialize: Assets still loading, subscribing to OnFilesLoaded event...");
 		AssetRegistry.OnFilesLoaded().AddUObject(this, &UKBFLResourceNodeSubsystem::SpawnSubLevel);
 	}
 	else
 	{
+		UE_LOGFMT(ResourceNodeSubsystem, Log,
+				  "[KBFLResourceNodeSubsystem] Initialize: Assets ready, triggering SpawnSubLevel immediately");
 		SpawnSubLevel();
 	}
 
-	UE_LOG(ResourceNodeSubsystem, Log, TEXT("Initialize Subsystem"));
+	UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Initialize Subsystem complete");
 
 	mCalledDescriptors.Empty();
+#endif
 
 	Super::Initialize(Collection);
 }
 
 void UKBFLResourceNodeSubsystem::Deinitialize()
 {
+	UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Deinitializing Subsystem...");
 	mCalledDescriptors.Empty();
 	for (UKBFLSubLevelSpawning* SubLevelSpawning : mCalledSubLevelSpawning)
 	{
-		SubLevelSpawning->Reset();
+		if (SubLevelSpawning)
+		{
+			SubLevelSpawning->Reset();
+		}
 	}
 	mCalledSubLevelSpawning.Empty();
 	Initialized = false;
 
+	UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Deinitialized cleanly.");
 	Super::Deinitialize();
 }
 
 
 void UKBFLResourceNodeSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
-	UE_LOGFMT(ResourceNodeSubsystem, Log, "OnWorldBeginPlay called for world: {0}, Initialized: {1}", InWorld.GetName(),
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] OnWorldBeginPlay called for world: {0}, Initialized: {1}", InWorld.GetName(),
 			  Initialized);
 
 	if (!Initialized)
 	{
-		UE_LOGFMT(ResourceNodeSubsystem, Log, "Starting descriptor spawning process...");
+		UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Starting descriptor spawning process...");
 		SpawnDescriptors();
 
 		Initialized = true;
-		UE_LOGFMT(ResourceNodeSubsystem, Log, "Subsystem initialized successfully");
+		UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Subsystem initialized successfully");
 	}
 	else
 	{
-		UE_LOGFMT(ResourceNodeSubsystem, Warning, "OnWorldBeginPlay called but subsystem already initialized");
+		UE_LOGFMT(ResourceNodeSubsystem, Warning,
+				  "[KBFLResourceNodeSubsystem] OnWorldBeginPlay called but subsystem already initialized");
 	}
 
-	UE_LOGFMT(ResourceNodeSubsystem, Log, "Triggering Server_FinishedSpawningNodes");
+	UE_LOGFMT(ResourceNodeSubsystem, Log, "[KBFLResourceNodeSubsystem] Triggering Server_FinishedSpawningNodes");
 	Server_FinishedSpawningNodes();
 }
 
 void UKBFLResourceNodeSubsystem::SpawnSubLevel()
 {
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Starting sub-level spawning search...");
+
 	if (!GetWorld() || !GetWorld()->GetGameInstance())
 	{
+		UE_LOGFMT(ResourceNodeSubsystem, Error,
+				  "[KBFLResourceNodeSubsystem] SpawnSubLevel: World or GameInstance is invalid, aborting");
 		return;
 	}
 
 	TSet<UKBFLSubLevelSpawning*> SpawnerClasses;
 	UKBFLAssetDataSubsystem* AssetSubsystem = UKBFLAssetDataSubsystem::Get(GetWorld());
+	if (!AssetSubsystem)
+	{
+		UE_LOGFMT(ResourceNodeSubsystem, Error,
+				  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Failed to get AssetDataSubsystem");
+		return;
+	}
+
 	AssetSubsystem->FindAllDataAssetsOfClass(SpawnerClasses);
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Found {0} sub-level spawning asset(s)", SpawnerClasses.Num());
 
 	for (UKBFLSubLevelSpawning* Spawner : SpawnerClasses)
 	{
-		if (!Spawner->mNeedAuth || GetWorld()->GetAuthGameMode())
+		if (IsValid(Spawner))
 		{
-			if (Spawner->ExecuteAllowed())
+			// Safe check for authority since GetAuthGameMode() can be null during early subsystem initialize phase.
+			const bool bHasAuthority = !GetWorld()->IsNetMode(NM_Client) || (GetWorld()->GetAuthGameMode() != nullptr);
+			if (!Spawner->mNeedAuth || bHasAuthority)
 			{
-				Spawner->mSubsystem = this;
-				Spawner->InitSpawning();
-				mCalledSubLevelSpawning.Add(Spawner);
+				if (Spawner->ExecuteAllowed())
+				{
+					UE_LOGFMT(ResourceNodeSubsystem, Log,
+							  "[KBFLResourceNodeSubsystem] SpawnSubLevel: InitSpawning called on '{0}'",
+							  Spawner->GetName());
+					Spawner->mSubsystem = this;
+					Spawner->InitSpawning();
+					mCalledSubLevelSpawning.Add(Spawner);
+				}
+				else
+				{
+					UE_LOGFMT(
+						ResourceNodeSubsystem, Log,
+						"[KBFLResourceNodeSubsystem] SpawnSubLevel: Spawner '{0}' execution not allowed, skipping",
+						Spawner->GetName());
+				}
 			}
+			else
+			{
+				UE_LOGFMT(ResourceNodeSubsystem, Log,
+						  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Skipping spawner '{0}' - requires authority but "
+						  "not auth mode",
+						  Spawner->GetName());
+			}
+		}
+		else
+		{
+			UE_LOGFMT(ResourceNodeSubsystem, Warning,
+					  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Null spawner encountered, skipping");
 		}
 	}
 
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] SpawnSubLevel: Finished spawning sub-levels. Called count: {0}",
+			  mCalledSubLevelSpawning.Num());
 	Server_FinishedSpawningNodes();
 }
 void UKBFLResourceNodeSubsystem::SpawnDescriptors()
 {
-	UE_LOGFMT(ResourceNodeSubsystem, Log, "SpawnDescriptors: Starting descriptor spawning process");
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Starting descriptor spawning process");
 
 	if (!GetWorld() || !GetWorld()->GetGameInstance())
 	{
-		UE_LOGFMT(ResourceNodeSubsystem, Error, "SpawnDescriptors: World or GameInstance is invalid, aborting");
+		UE_LOGFMT(ResourceNodeSubsystem, Error,
+				  "[KBFLResourceNodeSubsystem] SpawnDescriptors: World or GameInstance is invalid, aborting");
 		return;
 	}
 
@@ -128,12 +189,14 @@ void UKBFLResourceNodeSubsystem::SpawnDescriptors()
 
 	if (!AssetSubsystem)
 	{
-		UE_LOGFMT(ResourceNodeSubsystem, Error, "SpawnDescriptors: Failed to get AssetDataSubsystem");
+		UE_LOGFMT(ResourceNodeSubsystem, Error,
+				  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Failed to get AssetDataSubsystem");
 		return;
 	}
 
 	AssetSubsystem->FindAllDataAssetsOfClass(SpawnerClasses);
-	UE_LOGFMT(ResourceNodeSubsystem, Log, "SpawnDescriptors: Found {0} spawner descriptor(s)", SpawnerClasses.Num());
+	UE_LOGFMT(ResourceNodeSubsystem, Log,
+			  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Found {0} spawner descriptor(s)", SpawnerClasses.Num());
 
 	int32 SpawnedCount = 0;
 	int32 SkippedAuthCount = 0;
@@ -142,15 +205,19 @@ void UKBFLResourceNodeSubsystem::SpawnDescriptors()
 	{
 		if (!Spawner)
 		{
-			UE_LOGFMT(ResourceNodeSubsystem, Warning, "SpawnDescriptors: Null spawner encountered, skipping");
+			UE_LOGFMT(ResourceNodeSubsystem, Warning,
+					  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Null spawner encountered, skipping");
 			continue;
 		}
 
 		const FString SpawnerName = Spawner->GetName();
 
-		if (!Spawner->mNeedAuth || GetWorld()->GetAuthGameMode())
+		const bool bHasAuthority =
+			(GetWorld()->GetNetMode() != NM_Client) || (GetWorld()->GetAuthGameMode() != nullptr);
+		if (!Spawner->mNeedAuth || bHasAuthority)
 		{
-			UE_LOGFMT(ResourceNodeSubsystem, Log, "SpawnDescriptors: Processing spawner '{0}'", SpawnerName);
+			UE_LOGFMT(ResourceNodeSubsystem, Log,
+					  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Processing spawner '{0}'", SpawnerName);
 			Spawner->mSubsystem = this;
 			Spawner->BeginSpawning();
 			mCalledDescriptors.Add(Spawner);
@@ -159,20 +226,27 @@ void UKBFLResourceNodeSubsystem::SpawnDescriptors()
 		else
 		{
 			UE_LOGFMT(ResourceNodeSubsystem, Log,
-					  "SpawnDescriptors: Skipping spawner '{0}' - requires authority but not auth mode", SpawnerName);
+					  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Skipping spawner '{0}' - requires authority but "
+					  "not auth mode",
+					  SpawnerName);
 			SkippedAuthCount++;
 		}
 	}
 
 	UE_LOGFMT(ResourceNodeSubsystem, Log,
-			  "SpawnDescriptors: Completed - Spawned: {0}, Skipped (Auth): {1}, Total Descriptors: {2}", SpawnedCount,
-			  SkippedAuthCount, mCalledDescriptors.Num());
+			  "[KBFLResourceNodeSubsystem] SpawnDescriptors: Completed - Spawned: {0}, Skipped (Auth): {1}, Total "
+			  "Descriptors: {2}",
+			  SpawnedCount, SkippedAuthCount, mCalledDescriptors.Num());
 
 	Server_FinishedSpawningNodes();
 }
 
-void UKBFLResourceNodeSubsystem::Server_FinishedSpawningNodes_Implementation()
+void UKBFLResourceNodeSubsystem::Server_FinishedSpawningNodes()
 {
+	UE_LOGFMT(
+		ResourceNodeSubsystem, Log,
+		"[KBFLResourceNodeSubsystem] Server_FinishedSpawningNodes called. Rebuilding scanner and radar clusters...");
+
 	for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
 	{
 		APlayerController* PC = Iterator->Get();
@@ -181,23 +255,39 @@ void UKBFLResourceNodeSubsystem::Server_FinishedSpawningNodes_Implementation()
 			AFGCharacterPlayer* Player = Cast<AFGCharacterPlayer>(PC->GetPawn());
 			if (Player)
 			{
+				UE_LOGFMT(ResourceNodeSubsystem, Log,
+						  "[KBFLResourceNodeSubsystem] Regenerating scanner cluster for player PC: {0}", PC->GetName());
 				AFGResourceScanner* scanner = Player->GetResourceScanner();
-				scanner->mNodeClusters.Empty();
-				scanner->GenerateNodeClusters();
+				if (scanner)
+				{
+					scanner->mNodeClusters.Empty();
+					scanner->GenerateNodeClusters();
+				}
 			}
 		}
 	}
 
-	for (TActorIterator<AFGBuildableRadarTower> It(GetWorld()); It; ++It)
+	// Radar tower scanning is server-authoritative; skip on clients to avoid redundant work
+	// on data that is replicated from the server anyway.
+	if (GetWorld()->GetNetMode() != NM_Client)
 	{
-		AFGBuildableRadarTower* tower = *It;
-		if (!IsValid(tower))
+		int32 RadarTowerCount = 0;
+		for (TActorIterator<AFGBuildableRadarTower> It(GetWorld()); It; ++It)
 		{
-			continue;
+			AFGBuildableRadarTower* tower = *It;
+			if (!IsValid(tower))
+			{
+				continue;
+			}
+			UE_LOGFMT(ResourceNodeSubsystem, Log,
+					  "[KBFLResourceNodeSubsystem] Rescanned resources for radar tower: {0}", tower->GetName());
+			tower->ClearScannedResources();
+			tower->ScanForResources();
+			RadarTowerCount++;
 		}
-		tower->ClearScannedResources();
-		tower->ScanForResources();
+
+		UE_LOGFMT(ResourceNodeSubsystem, Log,
+				  "[KBFLResourceNodeSubsystem] Finished rebuilding node clusters. Scanned radar towers count: {0}",
+				  RadarTowerCount);
 	}
 }
-
-bool UKBFLResourceNodeSubsystem::Server_FinishedSpawningNodes_Validate() { return true; }

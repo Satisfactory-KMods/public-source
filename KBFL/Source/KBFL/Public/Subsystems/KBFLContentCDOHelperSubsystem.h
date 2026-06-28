@@ -1,10 +1,11 @@
 ﻿#pragma once
 
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "CoreMinimal.h"
 #include "HelperClasses/KBFLCDOOverwrite.h"
-#include "HelperClasses/KBFL_CDOHelperClass_CategoryOrder.h"
-#include "Interfaces/KBFLContentCDOHelperInterface.h"
+#include "Module/ModModule.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "UObject/UObjectArray.h"
 
 #include "KBFLContentCDOHelperSubsystem.generated.h"
 
@@ -12,7 +13,8 @@
  *
  */
 UCLASS()
-class KBFL_API UKBFLContentCDOHelperSubsystem : public UGameInstanceSubsystem
+class KBFL_API UKBFLContentCDOHelperSubsystem : public UGameInstanceSubsystem,
+												public FUObjectArray::FUObjectCreateListener
 {
 	GENERATED_BODY()
 
@@ -25,30 +27,6 @@ public:
 
 	UFUNCTION()
 	void OnTimerCallback();
-
-	/** Moves all Recipes from a building to a other */
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void MoveRecipesFromBuilding(TSoftClassPtr<UObject> From, TSoftClassPtr<UObject> To,
-								 TArray<TSubclassOf<UFGItemCategory>> IgnoreCategory,
-								 TArray<TSubclassOf<UFGRecipe>> IgnoreRecipe);
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void BeginCDOForModule(UModModule* Module, ELifecyclePhase Phase);
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	bool WasCDOForModuleCalled(UModModule* Module, ELifecyclePhase Phase) const;
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void ResetCDOCallFromModule(UModModule* Module);
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void DoCDOFromInfo(FKBFLCDOInformation Info);
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void DoSetNewStackSize(TSubclassOf<UFGItemDescriptor> Item, EStackSize StackSize);
-
-	UFUNCTION(BlueprintCallable, Category = "KMods")
-	void CallCDOHelper(TSubclassOf<UKBFL_CDOHelperClass_Base> CDOHelperClass, bool IgnoreCallCheck = false);
 
 	UFUNCTION(BlueprintPure, Category = "KMods", meta = (DeterminesOutputType = "Class"))
 	UObject* GetAndStoreDefaultObject(UClass* Class);
@@ -74,46 +52,64 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KMods")
 	void RemoveObject(UObject* Object);
 
-	UFUNCTION(BlueprintPure)
-	TArray<UModModule*> GetCalledModules() const;
-
 	/**
 	 * Find all data assets of a specific class
 	 * @param OutDataAssets - Set of data assets
 	 * @return true if found any data assets
 	 */
 	template <class T>
-	bool FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets);
+	bool FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutDataAssets);
+
+	/** Schedules OnTimerCallback once a valid game UWorld is available. */
+	UFUNCTION()
+	void WaitForWorldAndScheduleCallback();
+
+	// Lazy-load CDO re-apply hooks (a class loaded after the initial pass).
+	// Editor: OnEndLoadPackage (fires after objects are linked).
+	// Shipping: FUObjectArray create listener — OnEndLoadPackage is WITH_EDITOR-only in the runtime loader.
+	virtual void NotifyUObjectCreated(const UObjectBase* Object, int32 Index) override;
+	virtual void OnUObjectArrayShutdown() override;
 
 private:
 	bool Initialized = false;
+	FDelegateHandle mWorldAddedHandle;
+	FDelegateHandle mPackageLoadHandle; // WITH_EDITOR only (OnEndLoadPackage)
+
+	// Cached once in Initialize so the lazy-load listener doesn't GetSubsystem on every class.
+	UPROPERTY()
+	TObjectPtr<class UKBFLAssetDataSubsystem> mAssetDataSubsystem;
 
 	UPROPERTY()
-	TSet<UKBFLCDOOverwriteBase*> mCDOOverwritesToCall;
+	TSet<TObjectPtr<UKBFLCDOOverwriteBase>> mCDOOverwritesToCall;
+
+	// Cached subset of mCDOOverwritesToCall excluding world-based overwrites. The lazy-load listener
+	// iterates this so it never has to Cast<UKBFLCDOOverwriteWorldBasedBase> + skip on every class.
+	UPROPERTY()
+	TArray<TObjectPtr<UKBFLCDOOverwriteBase>> mNonWorldOverwritesToCall;
 
 	UPROPERTY()
-	TArray<UKBFL_CDOHelperClass_CategoryOrder*> mCategoriesToCall;
+	TArray<TObjectPtr<UModModule>> mModulesToCall;
+
+	// TSet (not TArray) so Add/Remove are O(1) — these grow with every CDO class processed.
+	UPROPERTY()
+	TSet<TObjectPtr<UObject>> mCalledObjects;
 
 	UPROPERTY()
-	TArray<UModModule*> mModulesToCall;
-
-	UPROPERTY()
-	TMap<UModModule*, FKBFLPhases> mCDOCalled;
-
-	UPROPERTY()
-	TArray<UObject*> mCalledObjects;
-
-	UPROPERTY()
-	TArray<UClass*> mCalledClasses;
+	TSet<TObjectPtr<UClass>> mCalledClasses;
 };
 
 template <typename T>
 T* UKBFLContentCDOHelperSubsystem::GetAndStoreDefaultObject_Native(UClass* Class)
 {
+#if WITH_EDITOR
+	return Class->GetDefaultObject<T>();
+#endif
+
+
 	if (IsValid(Class))
 	{
-		mCalledClasses.AddUnique(Class);
-		mCalledObjects.AddUnique(Class->GetDefaultObject());
+		mCalledClasses.Add(Class);
+		mCalledObjects.Add(Class->GetDefaultObject());
 		return Cast<T>(Class->GetDefaultObject());
 	}
 	return nullptr;
@@ -130,7 +126,7 @@ T* UKBFLContentCDOHelperSubsystem::GetAndStoreDefaultObject_Native(UClass* Class
 }
 
 template <class T>
-bool UKBFLContentCDOHelperSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
+bool UKBFLContentCDOHelperSubsystem::FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutDataAssets)
 {
 	OutDataAssets.Empty();
 

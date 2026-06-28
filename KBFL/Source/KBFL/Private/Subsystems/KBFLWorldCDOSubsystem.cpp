@@ -19,7 +19,7 @@ void UKBFLWorldCDOSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	// Register for OnPostWorldInitialization event - called AFTER loading but BEFORE BeginPlay
 	if (UWorld* World = GetWorld())
 	{
-		World->OnWorldBeginPlay.AddUObject(this, &UKBFLWorldCDOSubsystem::OnWorldPostInit);
+		mOnWorldPostInitHandle = World->OnWorldBeginPlay.AddUObject(this, &UKBFLWorldCDOSubsystem::OnWorldPostInit);
 	}
 }
 
@@ -29,10 +29,13 @@ void UKBFLWorldCDOSubsystem::Deinitialize()
 
 	UE_LOGFMT(LogKBFLModule, Log, "UKBFLWorldCDOSubsystem::Deinitialize");
 
-	// Unregister from OnPostWorldInitialization event
+	// Unregister from OnWorldBeginPlay event
 	if (mOnWorldPostInitHandle.IsValid())
 	{
-		FWorldDelegates::OnPostWorldInitialization.Remove(mOnWorldPostInitHandle);
+		if (UWorld* World = GetWorld())
+		{
+			World->OnWorldBeginPlay.Remove(mOnWorldPostInitHandle);
+		}
 		mOnWorldPostInitHandle.Reset();
 	}
 

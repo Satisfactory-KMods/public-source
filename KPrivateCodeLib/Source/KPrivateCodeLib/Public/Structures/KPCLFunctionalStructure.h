@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+
 #include "BFL/KBFL_ConfigTools.h"
 #include "Components/AudioComponent.h"
 #include "Configuration/ModConfiguration.h"
@@ -20,18 +22,11 @@ struct KPRIVATECODELIB_API FPowerOptions
 {
 	GENERATED_BODY()
 
-	FPowerOptions()
-	{
-	}
+	FPowerOptions() {}
 
-	~FPowerOptions()
-	{
-	}
+	~FPowerOptions() {}
 
-	FPowerOptions(float Consume)
-	{
-		mNormalPowerConsume = Consume;
-	}
+	FPowerOptions(float Consume) { mNormalPowerConsume = Consume; }
 
 	FPowerOptions(UCurveFloat* Curve, float VariablePower, float VariablePowerTime)
 	{
@@ -51,7 +46,7 @@ struct KPRIVATECODELIB_API FPowerOptions
 	UPROPERTY(EditAnywhere, NotReplicated)
 	bool bUseExponent = true;
 
-	UPROPERTY(EditDefaultsOnly, meta = ( ClampMin = "1.0", ClampMax = 2 ))
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1.0", ClampMax = 2))
 	float mPowerConsumptionExponent = 1.321929;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
@@ -60,10 +55,10 @@ struct KPRIVATECODELIB_API FPowerOptions
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool mIsProducer = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(EditCondition = mIsProducer, EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = mIsProducer, EditConditionHides))
 	bool mIsDynamicProducer = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(EditCondition = mIsProducer, EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (EditCondition = mIsProducer, EditConditionHides))
 	float mForcePowerConsume = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -73,7 +68,7 @@ struct KPRIVATECODELIB_API FPowerOptions
 	float mOtherPowerConsume = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, NotReplicated)
-	UCurveFloat* mPowerCurve = nullptr;
+	TObjectPtr<UCurveFloat> mPowerCurve = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float mVariablePowerTime = 30.0f;
@@ -120,14 +115,9 @@ struct KPRIVATECODELIB_API FFullProductionHandle
 {
 	GENERATED_BODY()
 
-	FFullProductionHandle()
-	{
-	}
+	FFullProductionHandle() {}
 
-	FFullProductionHandle(float ProductionTime)
-	{
-		mProductionTime = ProductionTime;
-	}
+	FFullProductionHandle(float ProductionTime) { mProductionTime = ProductionTime; }
 
 	UPROPERTY(SaveGame, BlueprintReadWrite)
 	float mCurrentTime = 0.f;
@@ -154,10 +144,10 @@ struct KPRIVATECODELIB_API FFullProductionHandle
 	void TickHandle(float dt, bool IsProducing, TFunction<void()> Callback);
 
 	/** Productivity in the last 5 minutes
-	* \n\n
-	* Go up if IsProducing\n
-	* Go down if !IsProducing
-	*/
+	 * \n\n
+	 * Go up if IsProducing\n
+	 * Go down if !IsProducing
+	 */
 	void TickProductivity(float dt, bool IsProducing);
 
 	void SetNewTime(float NewTime, bool ShouldReset = true);
@@ -214,7 +204,7 @@ protected:
 
 private:
 	UPROPERTY()
-	UConfigProperty* mCachedProperty = nullptr;
+	TObjectPtr<UConfigProperty> mCachedProperty = nullptr;
 
 protected:
 	template <class T>
@@ -273,9 +263,7 @@ struct KPRIVATECODELIB_API FKPCLAudioComponent
 {
 	GENERATED_BODY()
 
-	FKPCLAudioComponent()
-	{
-	};
+	FKPCLAudioComponent() {};
 
 	FKPCLAudioComponent(UAudioComponent* Component)
 	{
@@ -292,6 +280,6 @@ struct KPRIVATECODELIB_API FKPCLAudioComponent
 
 private:
 	UPROPERTY()
-	UAudioComponent* mComponent = nullptr;
+	TObjectPtr<UAudioComponent> mComponent = nullptr;
 	float mCachedVolume = 1.0f;
 };

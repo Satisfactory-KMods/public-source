@@ -8,6 +8,8 @@
 #include "Subsystem/SubsystemActorManager.h"
 #include "Unlocks/FGUnlockScannableResource.h"
 
+#pragma warning(disable : 4702) // intentional early-return dead code
+
 void UKBFL_Util::SortItemArray(TArray<TSubclassOf<UFGItemDescriptor>>& Out_Items,
 							   const TArray<TSubclassOf<UFGItemDescriptor>>& In_Items,
 							   const TArray<TSubclassOf<UFGItemDescriptor>>& ForceFirstItems, bool Reverse)

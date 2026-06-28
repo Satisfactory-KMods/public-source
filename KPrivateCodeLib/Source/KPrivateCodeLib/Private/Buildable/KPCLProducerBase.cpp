@@ -1,16 +1,15 @@
 // ILikeBanas
 
-
 #include "Buildable/KPCLProducerBase.h"
 
 #include "AbstractInstanceManager.h"
+#include "BFL/KBFL_Player.h"
+#include "Components/KPCLBetterIndicator.h"
 #include "FGFactoryConnectionComponent.h"
 #include "FGItemPickup_Spawnable.h"
 #include "FGPowerConnectionComponent.h"
 #include "FGPowerInfoComponent.h"
 #include "KPrivateCodeLibModule.h"
-#include "BFL/KBFL_Player.h"
-#include "Components/KPCLBetterIndicator.h"
 #include "Net/UnrealNetwork.h"
 #include "Replication/KPCLDefaultRCO.h"
 #include "Resources/FGNoneDescriptor.h"
@@ -18,9 +17,7 @@
 #include "Structures/KPCLFunctionalStructure.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
-AKPCLProducerBase::AKPCLProducerBase()
-	: mFGPowerConnection(nullptr)
-	  , mCustomProductionStateIndicator(nullptr)
+AKPCLProducerBase::AKPCLProducerBase() : mFGPowerConnection(nullptr), mCustomProductionStateIndicator(nullptr)
 {
 	bReplicates = true;
 	mFactoryTickFunction.bCanEverTick = true;
@@ -49,10 +46,7 @@ void AKPCLProducerBase::PostEditChangeChainProperty(FPropertyChangedChainEvent& 
 }
 #endif
 
-bool AKPCLProducerBase::Overclocking_IsConsumer_Implementation()
-{
-	return false;
-}
+bool AKPCLProducerBase::Overclocking_IsConsumer_Implementation() { return false; }
 
 void AKPCLProducerBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
 {
@@ -68,13 +62,12 @@ void AKPCLProducerBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<
 	if (IsValid(AssetSubsystem))
 	{
 		TArray<TSubclassOf<UFGItemDescriptor>> Items;
-		AssetSubsystem->GetItemsOfChilds({UFGPowerShardDescriptor::StaticClass()},
-		                                 Items, true);
+		AssetSubsystem->GetItemsOfChilds({UFGPowerShardDescriptor::StaticClass()}, Items, true);
 		for (TSubclassOf<UFGItemDescriptor> Item : Items)
 		{
 			TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(Item);
-			if (IsValid(PowerShard) && UFGPowerShardDescriptor::GetPowerShardType(PowerShard) ==
-				EPowerShardType::PST_Overclock)
+			if (IsValid(PowerShard) &&
+				UFGPowerShardDescriptor::GetPowerShardType(PowerShard) == EPowerShardType::PST_Overclock)
 			{
 				OutSlots.AddUnique(PowerShard);
 			}
@@ -82,15 +75,9 @@ void AKPCLProducerBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<
 	}
 }
 
-UFGInventoryComponent* AKPCLProducerBase::Overclocking_GetInventory_Implementation()
-{
-	return GetPotentialInventory();
-}
+UFGInventoryComponent* AKPCLProducerBase::Overclocking_GetInventory_Implementation() { return GetPotentialInventory(); }
 
-bool AKPCLProducerBase::Overclocking_ShouldUse_Implementation()
-{
-	return bEnableCustomOverclocking;
-}
+bool AKPCLProducerBase::Overclocking_ShouldUse_Implementation() { return bEnableCustomOverclocking; }
 
 void AKPCLProducerBase::Overclocking_GetCostSlots_Implementation(TArray<FItemAmount>& OutSlots)
 {
@@ -105,8 +92,8 @@ void AKPCLProducerBase::Overclocking_GetCostSlots_Implementation(TArray<FItemAmo
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
@@ -137,13 +124,13 @@ bool AKPCLProducerBase::Overclocking_UseInventory_Implementation(int32& Unlocked
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
 				{
-					UnlockedSlots++;
+					UnlockedSlots += Stack.NumItems;
 				}
 			}
 		}
@@ -187,7 +174,7 @@ UFGFactoryClipboardSettings* AKPCLProducerBase::CopySettings_Implementation()
 }
 
 bool AKPCLProducerBase::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                     class AFGPlayerController* player)
+													 class AFGPlayerController* player)
 {
 	if (UKPCLBaseClipboardSettings* Settings = Cast<UKPCLBaseClipboardSettings>(factoryClipboard))
 	{
@@ -213,8 +200,8 @@ void AKPCLProducerBase::WriteClipboardSettings(UKPCLBaseClipboardSettings* Clipb
 					continue;
 				}
 
-				if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-					Stack.Item.GetItemClass()))
+				if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+						TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 				{
 					EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 					if (Type == EPowerShardType::PST_Overclock)
@@ -230,24 +217,25 @@ void AKPCLProducerBase::WriteClipboardSettings(UKPCLBaseClipboardSettings* Clipb
 }
 
 void AKPCLProducerBase::ApplyClipboardSettings(UKPCLBaseClipboardSettings* ClipboardSettings,
-                                               AFGPlayerController* Player)
+											   AFGPlayerController* Player)
 {
 	int32 UnlockedSlots = 0;
-	if (Execute_Overclocking_UseInventory(this, UnlockedSlots) && IsValid(GetPotentialInventory()))
+	if (Execute_Overclocking_UseInventory(this, UnlockedSlots) && IsValid(GetPotentialInventory()) && IsValid(Player))
 	{
 		if (AFGCharacterPlayer* Char = Cast<AFGCharacterPlayer>(Player->GetCharacter()))
 		{
-			for (FItemAmount ItemAmount : ClipboardSettings->mShards)
+			if (IsValid(Char->GetInventory()))
 			{
-				FInventoryStack Stack;
-
-				if (Char->GetInventory()->HasItems(ItemAmount.ItemClass, ItemAmount.Amount))
+				for (FItemAmount ItemAmount : ClipboardSettings->mShards)
 				{
-					int32 Added = GetPotentialInventory()->AddStack(
-						FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
-					if (Added > 0)
+					if (Char->GetInventory()->HasItems(ItemAmount.ItemClass, ItemAmount.Amount))
 					{
-						Char->GetInventory()->Remove(ItemAmount.ItemClass, ItemAmount.Amount);
+						int32 Added =
+							GetPotentialInventory()->AddStack(FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
+						if (Added > 0)
+						{
+							Char->GetInventory()->Remove(ItemAmount.ItemClass, ItemAmount.Amount);
+						}
 					}
 				}
 			}
@@ -258,11 +246,7 @@ void AKPCLProducerBase::ApplyClipboardSettings(UKPCLBaseClipboardSettings* Clipb
 	SetPendingPotential(ClipboardSettings->mTargetPotential);
 }
 
-
-bool AKPCLProducerBase::ShouldSave_Implementation() const
-{
-	return true;
-}
+bool AKPCLProducerBase::ShouldSave_Implementation() const { return true; }
 
 void AKPCLProducerBase::InitInventories()
 {
@@ -284,7 +268,7 @@ void AKPCLProducerBase::InitInventories()
 		if (mCachedInventorys.Contains(ComponentName))
 		{
 			UE_LOG(LogKPCL, Error, TEXT("InitInventories, with duplicate inventory %s in actor %s! > SKIP!"),
-			       *ComponentName.ToString(), *GetName());
+				   *ComponentName.ToString(), *GetName());
 			continue;
 		}
 		mCachedInventorys.Add(ComponentName, Component);
@@ -322,8 +306,8 @@ void AKPCLProducerBase::SetBelts()
 			{
 				BeltConnection->SetInventory(GetInventory());
 			}
-			else if (IsValid(GetOutputInventory()) && BeltConnection->GetDirection() ==
-				EFactoryConnectionDirection::FCD_OUTPUT)
+			else if (IsValid(GetOutputInventory()) &&
+					 BeltConnection->GetDirection() == EFactoryConnectionDirection::FCD_OUTPUT)
 			{
 				BeltConnection->SetInventory(GetOutputInventory());
 			}
@@ -338,7 +322,8 @@ void AKPCLProducerBase::SetBelts()
 			if (PipeConnection->GetPipeConnectionType() != EPipeConnectionType::PCT_CONSUMER && IsValid(GetInventory()))
 			{
 				PipeConnection->SetInventory(GetInventory());
-			} else if(IsValid(GetOutputInventory()) && PipeConnection->GetPipeConnectionType() == EPipeConnectionType::PCT_CONSUMER)
+			} else if(IsValid(GetOutputInventory()) && PipeConnection->GetPipeConnectionType() ==
+	EPipeConnectionType::PCT_CONSUMER)
 			{
 				PipeConnection->SetInventory(GetOutputInventory());
 			}
@@ -350,30 +335,49 @@ void AKPCLProducerBase::HandleIndicator()
 {
 	if (!GetHasPower())
 	{
-		mCurrentState = ENewProductionState::NoPower;
+		SetCurrentProductionState(ENewProductionState::NoPower);
 		return;
 	}
 	if (IsProductionPaused())
 	{
-		mCurrentState = ENewProductionState::Paused;
+		SetCurrentProductionState(ENewProductionState::Paused);
 		return;
 	}
 	if (IsProducing())
 	{
-		mCurrentState = ENewProductionState::Producing;
+		SetCurrentProductionState(ENewProductionState::Producing);
 		return;
 	}
-	mCurrentState = ENewProductionState::Idle;
+	SetCurrentProductionState(ENewProductionState::Idle);
 }
 
 void AKPCLProducerBase::ApplyNewProductionState(ENewProductionState NewState)
 {
 	mLastState = NewState;
-	mCurrentState = NewState;
+	SetCurrentProductionState(NewState);
 
 	if (mCustomProductionStateIndicator)
 	{
-		mCustomProductionStateIndicator->SetState(NewState);
+		// Factory_Tick runs on a worker thread. UObject method calls must happen on the game
+		// thread to avoid GC/visibility races. Self-marshal when called off the game thread
+		// (Phase 2 fix). When already on the game thread (OnRep, BeginPlay, etc.) call directly.
+		if (IsInGameThread())
+		{
+			mCustomProductionStateIndicator->SetState(NewState);
+		}
+		else
+		{
+			TObjectPtr<UKPCLBetterIndicator> Indicator = mCustomProductionStateIndicator;
+			FFunctionGraphTask::CreateAndDispatchWhenReady(
+				[Indicator, NewState]()
+				{
+					if (IsValid(Indicator))
+					{
+						Indicator->SetState(NewState);
+					}
+				},
+				TStatId(), nullptr, ENamedThreads::GameThread);
+		}
 	}
 
 	bOneStateWasNotApplied = false;
@@ -388,7 +392,7 @@ void AKPCLProducerBase::ApplyNewProductionState(ENewProductionState NewState)
 			}
 			AIO_UpdateCustomFloat(mDefaultIndex, mIntensity, CustomIndicatorHandleIndex, true);
 			AIO_UpdateCustomFloatAsColor(mDefaultIndex + 1, mStateColors[static_cast<uint8>(NewState)],
-			                             CustomIndicatorHandleIndex, true);
+										 CustomIndicatorHandleIndex, true);
 			AIO_UpdateCustomFloat(mDefaultIndex + 4, mPulsStates.Contains(NewState), CustomIndicatorHandleIndex, true);
 		}
 	}
@@ -396,14 +400,14 @@ void AKPCLProducerBase::ApplyNewProductionState(ENewProductionState NewState)
 
 UFGFactoryConnectionComponent* AKPCLProducerBase::GetConv(int Index, ECKPCLDirection Direction) const
 {
-	if ((Direction == KPCLInput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::ConvIn].
-		IsValidIndex(Index))
+	if ((Direction == KPCLInput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::ConvIn].IsValidIndex(Index))
 	{
 		return Cast<UFGFactoryConnectionComponent>(mConnectionMap[EKPCLConnectionType::ConvIn][Index]);
 	}
 
-	if ((Direction == KPCLOutput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::ConvOut].
-		IsValidIndex(Index))
+	if ((Direction == KPCLOutput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::ConvOut].IsValidIndex(Index))
 	{
 		return Cast<UFGFactoryConnectionComponent>(mConnectionMap[EKPCLConnectionType::ConvOut][Index]);
 	}
@@ -438,14 +442,14 @@ TArray<UFGFactoryConnectionComponent*> AKPCLProducerBase::GetAllConv(ECKPCLDirec
 
 UFGPipeConnectionFactory* AKPCLProducerBase::GetPipe(int Index, ECKPCLDirection Direction) const
 {
-	if ((Direction == KPCLInput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::PipeIn].
-		IsValidIndex(Index))
+	if ((Direction == KPCLInput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::PipeIn].IsValidIndex(Index))
 	{
 		return Cast<UFGPipeConnectionFactory>(mConnectionMap[EKPCLConnectionType::PipeIn][Index]);
 	}
 
-	if ((Direction == KPCLOutput || Direction == KPCLAny) && mConnectionMap[EKPCLConnectionType::PipeOut].
-		IsValidIndex(Index))
+	if ((Direction == KPCLOutput || Direction == KPCLAny) &&
+		mConnectionMap[EKPCLConnectionType::PipeOut].IsValidIndex(Index))
 	{
 		return Cast<UFGPipeConnectionFactory>(mConnectionMap[EKPCLConnectionType::PipeOut][Index]);
 	}
@@ -567,7 +571,7 @@ void AKPCLProducerBase::StartIsAimedAtForColor_Implementation(AFGCharacterPlayer
 }
 
 void AKPCLProducerBase::StartIsLookedAtForConnection(AFGCharacterPlayer* byCharacter,
-                                                     UFGCircuitConnectionComponent* overlappingConnection)
+													 UFGCircuitConnectionComponent* overlappingConnection)
 {
 	UpdateInstancesForOutline();
 	Super::StartIsLookedAtForConnection(byCharacter, overlappingConnection);
@@ -628,7 +632,7 @@ void AKPCLProducerBase::ApplyCustomizationData_Native(const FFactoryCustomizatio
 }
 
 void AKPCLProducerBase::SetCustomizationData_Native(const FFactoryCustomizationData& customizationData,
-                                                    bool skipCombine)
+													bool skipCombine)
 {
 	Super::SetCustomizationData_Native(customizationData, skipCombine);
 
@@ -703,7 +707,7 @@ void AKPCLProducerBase::ApplyMeshInformation(FKPCLMeshOverwriteInformation Infor
 	else
 	{
 		AIO_OverwriteInstanceData_Transform(Information.mOverwriteMesh, Information.mCustomTransform,
-		                                    Information.mOverwriteHandleIndex);
+											Information.mOverwriteHandleIndex);
 	}
 }
 
@@ -716,14 +720,13 @@ bool AKPCLProducerBase::AIO_OverwriteInstanceData(UStaticMesh* Mesh, int32 Idx)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, Mesh, Idx ]()
-		{
-			AIO_OverwriteInstanceData(Mesh, Idx);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady([&, Mesh, Idx]() { AIO_OverwriteInstanceData(Mesh, Idx); },
+													   GET_STATID(STAT_TaskGraph_OtherTasks), nullptr,
+													   ENamedThreads::GameThread);
 		return true;
 	}
 
-	if (Idx > INDEX_NONE && IsValid(Mesh))
+	if (Idx > INDEX_NONE && IsValid(Mesh) && IsValid(mInstanceDataCDO))
 	{
 		TArray<FInstanceData> Datas = mInstanceDataCDO->GetInstanceData();
 		if (Datas.IsValidIndex(Idx))
@@ -735,18 +738,18 @@ bool AKPCLProducerBase::AIO_OverwriteInstanceData(UStaticMesh* Mesh, int32 Idx)
 }
 
 bool AKPCLProducerBase::AIO_OverwriteInstanceData_Transform(UStaticMesh* Mesh, FTransform NewRelativTransform,
-                                                            int32 Idx)
+															int32 Idx)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, Mesh, NewRelativTransform, Idx ]()
-		{
-			AIO_OverwriteInstanceData_Transform(Mesh, NewRelativTransform, Idx);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, Mesh, NewRelativTransform, Idx]()
+			{ AIO_OverwriteInstanceData_Transform(Mesh, NewRelativTransform, Idx); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
-	if (Idx > INDEX_NONE && IsValid(Mesh))
+	if (Idx > INDEX_NONE && IsValid(Mesh) && IsValid(mInstanceDataCDO))
 	{
 		AAbstractInstanceManager* Manager = AAbstractInstanceManager::GetInstanceManager(GetWorld());
 		TArray<FInstanceData> Datas = mInstanceDataCDO->GetInstanceData();
@@ -780,10 +783,10 @@ bool AKPCLProducerBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int3
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, FloatIndex, Data, InstanceIdx, MarkDirty ]()
-		{
-			AIO_UpdateCustomFloat(FloatIndex, Data, InstanceIdx, MarkDirty);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, FloatIndex, Data, InstanceIdx, MarkDirty]()
+			{ AIO_UpdateCustomFloat(FloatIndex, Data, InstanceIdx, MarkDirty); }, GET_STATID(STAT_TaskGraph_OtherTasks),
+			nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -791,9 +794,12 @@ bool AKPCLProducerBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int3
 	{
 		if (mInstanceHandles[InstanceIdx]->IsInstanced())
 		{
-			//UE_LOG( LogKPCL, Error, TEXT("mInstanceHandles[ %d ]->SetPrimitiveDataByID( %f, %d, %d ); IsValid(%d), Component(%d), Owner(%d)"), InstanceIdx, Data, FloatIndex, MarkDirty, mInstanceHandles[ InstanceIdx ]->IsValid(), IsValid( mInstanceHandles[ InstanceIdx ]->GetInstanceComponent() ), mInstanceHandles[ InstanceIdx ]->GetOwner() == this )
-			mInstanceHandles[InstanceIdx]->SetPrimitiveDataByID(Data/** float that we want to set */,
-			                                                    FloatIndex /** Index where we want to set */, true);
+			// UE_LOG( LogKPCL, Error, TEXT("mInstanceHandles[ %d ]->SetPrimitiveDataByID( %f, %d, %d ); IsValid(%d),
+			// Component(%d), Owner(%d)"), InstanceIdx, Data, FloatIndex, MarkDirty, mInstanceHandles[ InstanceIdx
+			// ]->IsValid(), IsValid( mInstanceHandles[ InstanceIdx ]->GetInstanceComponent() ), mInstanceHandles[
+			// InstanceIdx ]->GetOwner() == this )
+			mInstanceHandles[InstanceIdx]->SetPrimitiveDataByID(Data /** float that we want to set */,
+																FloatIndex /** Index where we want to set */, true);
 			if (mCachedCustomData.Contains(InstanceIdx))
 			{
 				mCachedCustomData[InstanceIdx].Add(FloatIndex, Data);
@@ -812,14 +818,14 @@ bool AKPCLProducerBase::AIO_UpdateCustomFloat(int32 FloatIndex, float Data, int3
 }
 
 bool AKPCLProducerBase::AIO_UpdateCustomFloatAsColor(int32 StartFloatIndex, FLinearColor Data, int32 InstanceIdx,
-                                                     bool MarkDirty)
+													 bool MarkDirty)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, StartFloatIndex, Data, InstanceIdx, MarkDirty ]()
-		{
-			AIO_UpdateCustomFloatAsColor(StartFloatIndex, Data, InstanceIdx, MarkDirty);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, StartFloatIndex, Data, InstanceIdx, MarkDirty]()
+			{ AIO_UpdateCustomFloatAsColor(StartFloatIndex, Data, InstanceIdx, MarkDirty); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -832,10 +838,9 @@ bool AKPCLProducerBase::AIO_SetInstanceHidden(int32 InstanceIdx, bool IsHidden)
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, InstanceIdx, IsHidden ]()
-		{
-			AIO_SetInstanceHidden(InstanceIdx, IsHidden);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, InstanceIdx, IsHidden]() { AIO_SetInstanceHidden(InstanceIdx, IsHidden); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -843,10 +848,19 @@ bool AKPCLProducerBase::AIO_SetInstanceHidden(int32 InstanceIdx, bool IsHidden)
 	{
 		if (mInstanceHandles[InstanceIdx]->IsInstanced())
 		{
-			FTransform T = mCachedTransforms.Contains(InstanceIdx)
-				               ? mCachedTransforms[InstanceIdx]
-				               : mInstanceDataCDO->GetInstanceData()[InstanceIdx].RelativeTransform *
-				               GetActorTransform();
+			FTransform T;
+			if (mCachedTransforms.Contains(InstanceIdx))
+			{
+				T = mCachedTransforms[InstanceIdx];
+			}
+			else if (IsValid(mInstanceDataCDO) && mInstanceDataCDO->GetInstanceData().IsValidIndex(InstanceIdx))
+			{
+				T = mInstanceDataCDO->GetInstanceData()[InstanceIdx].RelativeTransform * GetActorTransform();
+			}
+			else
+			{
+				T = GetActorTransform();
+			}
 			T.SetScale3D(!IsHidden ? T.GetScale3D() : FVector(0.001f));
 			T.SetLocation(!IsHidden ? T.GetLocation() : FVector(0.001f));
 
@@ -862,10 +876,9 @@ bool AKPCLProducerBase::AIO_SetInstanceWorldTransform(int32 InstanceIdx, FTransf
 {
 	if (!IsInGameThread())
 	{
-		FFunctionGraphTask::CreateAndDispatchWhenReady([ &, InstanceIdx, Transform ]()
-		{
-			AIO_SetInstanceWorldTransform(InstanceIdx, Transform);
-		}, GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
+		FFunctionGraphTask::CreateAndDispatchWhenReady(
+			[&, InstanceIdx, Transform]() { AIO_SetInstanceWorldTransform(InstanceIdx, Transform); },
+			GET_STATID(STAT_TaskGraph_OtherTasks), nullptr, ENamedThreads::GameThread);
 		return true;
 	}
 
@@ -881,7 +894,6 @@ bool AKPCLProducerBase::AIO_SetInstanceWorldTransform(int32 InstanceIdx, FTransf
 
 	return false;
 }
-
 
 void AKPCLProducerBase::Factory_Tick(float dt)
 {
@@ -906,51 +918,42 @@ void AKPCLProducerBase::Factory_Tick(float dt)
 		float MinLimit = GetCurrentMinPotential();
 		if (Pending > Limit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, Limit]
-				                                                     {
-					                                                     SetPendingPotential(Limit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, Limit] { SetPendingPotential(Limit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 		else if (Pending < MinLimit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, MinLimit]
-				                                                     {
-					                                                     SetPendingPotential(MinLimit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, MinLimit] { SetPendingPotential(MinLimit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 
 		float Current = GetCurrentPotential();
 		if (Current > Limit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, Limit]
-				                                                     {
-					                                                     SetCurrentPotential(Limit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, Limit] { SetCurrentPotential(Limit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 		else if (Current < MinLimit)
 		{
-			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(FSimpleDelegateGraphTask::FDelegate::CreateLambda(
-				                                                     [&, MinLimit]
-				                                                     {
-					                                                     SetCurrentPotential(MinLimit);
-				                                                     }), TStatId(), nullptr,
-			                                                     ENamedThreads::GameThread);
+			FSimpleDelegateGraphTask::CreateAndDispatchWhenReady(
+				FSimpleDelegateGraphTask::FDelegate::CreateLambda([&, MinLimit] { SetCurrentPotential(MinLimit); }),
+				TStatId(), nullptr, ENamedThreads::GameThread);
 		}
 
 		BeltPipeGrab(dt);
 		HandleUiTick(dt);
 
-		mProductionHandle.TickHandle(dt, IsProducing(), [&]()
-		{
-			EndProductionTime();
-			onProducingFinal();
-		});
+		mProductionHandle.TickHandle(dt, IsProducing(),
+									 [&]()
+									 {
+										 EndProductionTime();
+										 onProducingFinal();
+									 });
+		mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
+
 		mPowerOptions.mCurrentPotential = mProductionHandle.mCurrentPotential;
 
 		if (!mPowerOptions.bWasInit)
@@ -962,6 +965,7 @@ void AKPCLProducerBase::Factory_Tick(float dt)
 		{
 			HandlePower(dt);
 		}
+		mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 	}
 
 	if (mCustomProductionStateIndicator || mCustomIndicatorHandleIndexes.Num() > 0)
@@ -999,43 +1003,35 @@ bool AKPCLProducerBase::CanProduce_Implementation() const
 	return !IsProductionPaused();
 }
 
-void AKPCLProducerBase::EndProductionTime()
-{
-	SetCurrentPotential(GetPendingPotential());
-}
+void AKPCLProducerBase::EndProductionTime() { SetCurrentPotential(GetPendingPotential()); }
 
-void AKPCLProducerBase::BeltPipeGrab(float dt)
-{
-}
+void AKPCLProducerBase::BeltPipeGrab(float dt) {}
 
 void AKPCLProducerBase::HandlePower(float dt)
 {
 	mPowerOptions.bHasPower = HasPower();
 	mPowerOptions.StructureTick(dt, IsProducing());
-	GetPowerInfo()->SetTargetConsumption(mPowerOptions.mIsProducer
-		                                     ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
-		                                     : mPowerOptions.GetPowerConsume());
+	GetPowerInfo()->SetTargetConsumption(mPowerOptions.mIsProducer ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
+																   : mPowerOptions.GetPowerConsume());
 	GetPowerInfo()->SetMaximumTargetConsumption(mPowerOptions.mIsProducer
-		                                            ? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
-		                                            : mPowerOptions.GetMaxPowerConsume());
-	GetPowerInfo()->SetBaseProduction(
-		!mPowerOptions.mIsProducer || (!mPowerOptions.mIsProducer && mPowerOptions.mIsDynamicProducer)
-			? 0.0f
-			: mPowerOptions.GetMaxPowerConsume());
-	GetPowerInfo()->SetDynamicProductionCapacity(!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer
-		                                             ? 0.0f
-		                                             : mPowerOptions.GetMaxPowerConsume());
+													? FMath::Max(mPowerOptions.mForcePowerConsume, 0.1f)
+													: mPowerOptions.GetMaxPowerConsume());
+	GetPowerInfo()->SetBaseProduction(!mPowerOptions.mIsProducer ||
+											  (!mPowerOptions.mIsProducer && mPowerOptions.mIsDynamicProducer)
+										  ? 0.0f
+										  : mPowerOptions.GetMaxPowerConsume());
+	GetPowerInfo()->SetDynamicProductionCapacity(
+		!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer ? 0.0f : mPowerOptions.GetMaxPowerConsume());
 	GetPowerInfo()->SetFullBlast((!mPowerOptions.mIsProducer || !mPowerOptions.mIsDynamicProducer));
 }
 
 void AKPCLProducerBase::HandlePowerInit()
 {
 	mPowerOptions.Init();
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-void AKPCLProducerBase::HandleUiTick(float dt)
-{
-}
+void AKPCLProducerBase::HandleUiTick(float dt) {}
 
 void AKPCLProducerBase::InitComponents()
 {
@@ -1095,44 +1091,28 @@ void AKPCLProducerBase::InitComponents()
 	}
 }
 
-float AKPCLProducerBase::GetMaxPowerConsume() const
-{
-	return mPowerOptions.GetMaxPowerConsume();
-}
+float AKPCLProducerBase::GetMaxPowerConsume() const { return mPowerOptions.GetMaxPowerConsume(); }
 
-float AKPCLProducerBase::GetPowerConsume() const
-{
-	return mPowerOptions.GetPowerConsume();
-}
+float AKPCLProducerBase::GetPowerConsume() const { return mPowerOptions.GetPowerConsume(); }
 
-bool AKPCLProducerBase::GetHasPower() const
-{
-	return mPowerOptions.bHasPower;
-}
+bool AKPCLProducerBase::GetHasPower() const { return mPowerOptions.bHasPower; }
 
-UFGPowerConnectionComponent* AKPCLProducerBase::GetPowerConnection() const
-{
-	return mFGPowerConnection;
-}
+UFGPowerConnectionComponent* AKPCLProducerBase::GetPowerConnection() const { return mFGPowerConnection; }
 
-float AKPCLProducerBase::GetCurrentPowerMultiplier() const
-{
-	return mPowerOptions.mPowerMultiplier;
-}
+float AKPCLProducerBase::GetCurrentPowerMultiplier() const { return mPowerOptions.mPowerMultiplier; }
 
 void AKPCLProducerBase::SetPowerMultiplier(float NewMultiplier)
 {
 	mPowerOptions.mPowerMultiplier = NewMultiplier;
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-float AKPCLProducerBase::GetDefaultProductionCycleTime() const
-{
-	return mProductionHandle.mProductionTime;
-}
+float AKPCLProducerBase::GetDefaultProductionCycleTime() const { return mProductionHandle.mProductionTime; }
 
 float AKPCLProducerBase::GetProductionProgress() const
 {
-	return mProductionHandle.mCurrentTime / mProductionHandle.mProductionTime;
+	return mProductionHandle.mProductionTime > 0.f ? mProductionHandle.mCurrentTime / mProductionHandle.mProductionTime
+												   : 0.f;
 }
 
 void AKPCLProducerBase::SetPendingPotential(float NewPendingPotential)
@@ -1140,11 +1120,12 @@ void AKPCLProducerBase::SetPendingPotential(float NewPendingPotential)
 	NewPendingPotential = FMath::Clamp(NewPendingPotential, GetCurrentMinPotential(), GetCurrentMaxPotential());
 	Super::SetPendingPotential(NewPendingPotential);
 	mProductionHandle.mPendingPotential = NewPendingPotential;
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 float AKPCLProducerBase::CalcProductionCycleTimeForPotential(float potential) const
 {
-	return mProductionHandle.mProductionTime / potential;
+	return potential != 0.f ? mProductionHandle.mProductionTime / potential : 0.f;
 }
 
 float AKPCLProducerBase::GetCurrentMaxPotential() const
@@ -1161,8 +1142,8 @@ float AKPCLProducerBase::GetCurrentMaxPotential() const
 				continue;
 			}
 
-			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard = TSubclassOf<UFGPowerShardDescriptor>(
-				Stack.Item.GetItemClass()))
+			if (TSubclassOf<UFGPowerShardDescriptor> PowerShard =
+					TSubclassOf<UFGPowerShardDescriptor>(Stack.Item.GetItemClass()))
 			{
 				EPowerShardType Type = UFGPowerShardDescriptor::GetPowerShardType(PowerShard);
 				if (Type == EPowerShardType::PST_Overclock)
@@ -1175,19 +1156,21 @@ float AKPCLProducerBase::GetCurrentMaxPotential() const
 	return Result;
 }
 
-float AKPCLProducerBase::GetProducingPowerConsumptionBase() const
-{
-	return mPowerOptions.mNormalPowerConsume;
-}
-
-void AKPCLProducerBase::CollectBelts()
+void AKPCLProducerBase::OnBoosterItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
+										   UFGInventoryComponent* sourceInventory)
 {
 }
 
-void AKPCLProducerBase::CollectAndPushPipes(float dt, bool IsPush)
+void AKPCLProducerBase::OnBoosterItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
+											 UFGInventoryComponent* sourceInventory)
 {
 }
 
+float AKPCLProducerBase::GetProducingPowerConsumptionBase() const { return mPowerOptions.mNormalPowerConsume; }
+
+void AKPCLProducerBase::CollectBelts() {}
+
+void AKPCLProducerBase::CollectAndPushPipes(float dt, bool IsPush) {}
 
 void AKPCLProducerBase::Factory_CollectInput_Implementation()
 {
@@ -1250,54 +1233,59 @@ int32 AKPCLProducerBase::GetFullestStackIndex(UFGInventoryComponent* InventoryCo
 void AKPCLProducerBase::ResetProduction()
 {
 	mProductionHandle.Reset();
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 void AKPCLProducerBase::SetProductionTime(float NewTime, bool ShouldResetProduction)
 {
 	mProductionHandle.SetNewTime(NewTime, ShouldResetProduction);
+	mPropertyReplicator.MarkPropertyDirty(FName("mProductionHandle"));
 }
 
 void AKPCLProducerBase::SetPowerOption(FPowerOptions NewPowerOption)
 {
 	mPowerOptions.OverWritePowerOptions(NewPowerOption);
+	mPropertyReplicator.MarkPropertyDirty(FName("mPowerOptions"));
 }
 
-FPowerOptions AKPCLProducerBase::GetPowerOption() const
+FPowerOptions AKPCLProducerBase::GetPowerOption() const { return mPowerOptions; }
+
+FPowerOptions& AKPCLProducerBase::GetPowerOptionRef() { return mPowerOptions; }
+
+void AKPCLProducerBase::OnRep_CurrentState() { ApplyNewProductionState(mCurrentState); }
+
+void AKPCLProducerBase::SetCurrentProductionState(ENewProductionState NewState)
 {
-	return mPowerOptions;
+	if (mCurrentState == NewState)
+	{
+		return;
+	}
+	mCurrentState = NewState;
 }
 
-FPowerOptions& AKPCLProducerBase::GetPowerOptionRef()
-{
-	return mPowerOptions;
-}
+void AKPCLProducerBase::OnRep_MeshOverwriteInformations() { ReadyForVisuelUpdate(); }
 
 void AKPCLProducerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// Production
-	DOREPLIFETIME(AKPCLProducerBase, mProductionHandle);
-	DOREPLIFETIME(AKPCLProducerBase, mPowerOptions);
-	DOREPLIFETIME(AKPCLProducerBase, mCurrentState);
 	DOREPLIFETIME(AKPCLProducerBase, mMeshOverwriteInformations);
+	DOREPLIFETIME(AKPCLProducerBase, mCurrentState);
 }
 
-float AKPCLProducerBase::GetProductionTime() const
+void AKPCLProducerBase::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
 {
-	return mProductionHandle.GetProductionTime();
+	Super::GetConditionalReplicatedProps(outProps);
+
+	FG_DOREPCONDITIONAL(ThisClass, mProductionHandle);
+	FG_DOREPCONDITIONAL(ThisClass, mPowerOptions);
 }
 
-float AKPCLProducerBase::GetPendingProductionTime() const
-{
-	return mProductionHandle.GetPendingProductionTime();
-}
+float AKPCLProducerBase::GetProductionTime() const { return mProductionHandle.GetProductionTime(); }
 
+float AKPCLProducerBase::GetPendingProductionTime() const { return mProductionHandle.GetPendingProductionTime(); }
 
-FFullProductionHandle AKPCLProducerBase::GetProductionHandle() const
-{
-	return mProductionHandle;
-}
+FFullProductionHandle AKPCLProducerBase::GetProductionHandle() const { return mProductionHandle; }
 
 void AKPCLProducerBase::FlushFluids()
 {
@@ -1314,10 +1302,7 @@ void AKPCLProducerBase::FlushFluids()
 	}
 }
 
-float AKPCLProducerBase::GetProductionCycleTime() const
-{
-	return mProductionHandle.GetProductionTime();
-}
+float AKPCLProducerBase::GetProductionCycleTime() const { return mProductionHandle.GetProductionTime(); }
 
 UFGInventoryComponent* AKPCLProducerBase::GetInventory() const
 {
@@ -1398,7 +1383,7 @@ UFGInventoryComponent* AKPCLProducerBase::GetInventoryFromType(EKPCLInventoryTyp
 	case EKPCLInventoryType::Booster:
 		return GetBoosterInventory();
 	case EKPCLInventoryType::Output:
-		return GetBoosterInventory();
+		return GetOutputInventory();
 	default:
 		return GetInventory();
 	}

@@ -16,6 +16,12 @@ public:
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	UPROPERTY()
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	/** Applies the replicated scale on clients once it arrives (actor scale is not part of replicated movement). */
+	UFUNCTION()
+	void OnRep_Scale();
+
+	UPROPERTY(ReplicatedUsing = OnRep_Scale)
 	FVector Scale = FVector(1);
 };

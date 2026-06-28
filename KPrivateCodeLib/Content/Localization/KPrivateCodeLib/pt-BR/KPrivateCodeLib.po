@@ -1,0 +1,115 @@
+msgid ""
+msgstr ""
+"Language: pt-BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
+msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
+msgstr "<LightGrey12Reg>Obrigado por usar o </><Orange12Reg>KMods</>"
+
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>nós queremos que você decida </><Orange12Reg>qual anúncio você quer ver!</>\\r\\n<LightGrey12Reg>Você pode mudar isso a qualquer momento em </><Orange12Reg>Configurações do Dod KPrivateLib.</>\\r\\n\\r\\n<Orange12Reg>Este popup aparecerá apenas uma vez</>"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
+msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
+msgstr "Não é possível encaixar este módulo à construção. (muitos, inválido ou sem posicionamento)"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
+msgid "Edit"
+msgstr "Editar"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable Sink Option"
+msgstr "Habilitar Opção de Triturar"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable pull rules"
+msgstr "Habilitar regras de extração"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable push rule"
+msgstr "Habilitar regra de empurro"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable remote access"
+msgstr "Habilitar acesso remoto"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName"
+msgid "Inventory Pull"
+msgstr "Puxar do Inventário"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName"
+msgid "Inventory Push Module"
+msgstr "Módulo de Empurro do Inventário"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
+msgid "K.Mods Patreons"
+msgstr "Patronos do K.Mods"
+
+msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
+msgid "KMods"
+msgstr "KMods"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
+msgid "Missing master Building cannot attach module!"
+msgstr "Sem Construção mestre, não é possível encaixar o módulo!"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
+msgid "Module is not allowed here"
+msgstr "Módulo não permitido aqui"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
+msgid "Patreon Configuration"
+msgstr "Configuração do Patreon"
+
+msgctxt "KPrivateCodeLib,ConstructDisqualifier_MaxCountReached"
+msgid "Reached global max count for this building (5)"
+msgstr "Alcançou número global máximo de construções deste tipo (5)"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
+msgid "Remote Access"
+msgstr "Acesso Remoto"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
+msgid "Save And Close"
+msgstr "Salvar e Fechar"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
+msgid "Save Color"
+msgstr "Salvar Cor"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.TextBlock_2.Text"
+msgid "Show KMods Neewsfeed (SoonTM)"
+msgstr "Mostrar Notícias do KMods (Logo™)"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Show Patreon Button"
+msgstr "Mostrar Botão do Patreon"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Show Patreon List"
+msgstr "Mostrar Lista do Patreon"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
+msgid "Sink Utility"
+msgstr "Utilidade de Trituração"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.TextBlock.Text"
+msgid "Swatch Name"
+msgstr "Nome da Paleta"
+
+msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
+msgid "Text Block"
+msgstr "Bloco de Texto"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
+msgid "Thanks to all supporter!"
+msgstr "Obrigado a todos os apoiadores!"
+
+msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
+msgid "Unlock new network tier"
+msgstr "Desbloquear novo nível de rede"

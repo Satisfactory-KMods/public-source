@@ -1,12 +1,10 @@
-﻿#include "Buildable/Storage/KLDepotSinkStorage.h"
+#include "Buildable/Storage/KLDepotSinkStorage.h"
 
-#include "FGCentralStorageSubsystem.h"
-#include "FGPowerInfoComponent.h"
+#include "FGInventoryComponent.h"
+#include "FGResourceSinkSubsystem.h"
 
 
-AKLDepotSinkStorage::AKLDepotSinkStorage()
-	: mResourceSinkSubsystem(nullptr)
-	  , mPowerConnection(nullptr)
+AKLDepotSinkStorage::AKLDepotSinkStorage() : mResourceSinkSubsystem(nullptr)
 {
 	bReplicates = true;
 	PrimaryActorTick.bCanEverTick = true;
@@ -20,36 +18,25 @@ void AKLDepotSinkStorage::BeginPlay()
 	{
 		return;
 	}
+
 	CacheSubsystem();
+
+	if (UFGInventoryComponent* Inv = GetStorageInventory())
+	{
+		Inv->OnItemAddedDelegate_Native.BindUObject(this, &AKLDepotSinkStorage::OnInventoryItemAdded);
+	}
+
+	TrySinkOverflow();
 }
 
 void AKLDepotSinkStorage::CacheSubsystem()
 {
 	mResourceSinkSubsystem = AFGResourceSinkSubsystem::Get(this);
-	if (mResourceSinkSubsystem && mCentralStorageSubsystem)
-	{
-		mTimer.mTime = mCentralStorageSubsystem->GetCentralStorageTimeToUpload();
-	}
-	else
+	if (!IsValid(mResourceSinkSubsystem))
 	{
 		FTimerManager& TimerManager = this->GetWorldTimerManager();
 		FTimerHandle TimerHandle;
 		TimerManager.SetTimer(TimerHandle, this, &AKLDepotSinkStorage::CacheSubsystem, 0.1f, false);
-	}
-}
-
-// Called every frame
-void AKLDepotSinkStorage::Factory_Tick(float dt)
-{
-	Super::Factory_Tick(dt);
-
-	if (HasAuthority() && IsProducing() && GetStorageInventory())
-	{
-		if (mTimer.Tick(dt))
-		{
-			mTimer.mTime = mCentralStorageSubsystem->GetCentralStorageTimeToUpload();
-			HandleStack();
-		}
 	}
 }
 
@@ -63,24 +50,63 @@ bool AKLDepotSinkStorage::CanProduce_Implementation() const
 	return Super::CanProduce_Implementation();
 }
 
-void AKLDepotSinkStorage::HandleStack()
+void AKLDepotSinkStorage::OnInventoryItemAdded(TSubclassOf<UFGItemDescriptor> ItemClass, int32 NumAdded,
+											   UFGInventoryComponent* SourceInventory)
 {
-	int32 SlotIndex = 0;
-	FInventoryStack Stack;
-	GetStorageInventory()->GetStackFromIndex(SlotIndex, Stack);
+	TrySinkOverflow();
+}
 
-	if (Stack.HasItems())
+void AKLDepotSinkStorage::TrySinkOverflow()
+{
+	if (!HasAuthority() || !IsValid(mResourceSinkSubsystem) || IsPlayingBuildEffect())
 	{
-		int32 StackSize = UFGItemDescriptor::GetStackSize(Stack.Item.GetItemClass());
-		int32 Amount = Stack.NumItems;
-		int32 MaxStackAmount = FMath::Max(2, StackSize * 0.9f);
+		return;
+	}
 
-		if (Amount > MaxStackAmount)
+	UFGInventoryComponent* Inv = GetStorageInventory();
+	if (!IsValid(Inv))
+	{
+		return;
+	}
+
+	// Only the last slot acts as the sink slot; the rest is left for normal depot upload.
+	const int32 SlotIndex = Inv->GetSizeLinear() - 1;
+	if (SlotIndex < 0 || !Inv->IsValidIndex(SlotIndex) || Inv->IsIndexEmpty(SlotIndex))
+	{
+		return;
+	}
+
+	FInventoryStack Stack;
+	if (!Inv->GetStackFromIndex(SlotIndex, Stack) || !Stack.HasItems())
+	{
+		return;
+	}
+
+	// Keep the slot near-full so the depot keeps uploading; sink only the amount above the threshold.
+	const int32 StackSize = UFGItemDescriptor::GetStackSize(Stack.Item.GetItemClass());
+	const int32 KeepAmount = FMath::Clamp(static_cast<int32>(StackSize * mKeepStackFraction), 1, StackSize);
+	const int32 Amount = Stack.NumItems;
+
+	if (Amount <= KeepAmount)
+	{
+		return;
+	}
+
+	const int32 Overflow = Amount - KeepAmount;
+	const int32 MaxToSink = (mMaxItemsToSinkPerCycle <= 0) ? Overflow : FMath::Min(mMaxItemsToSinkPerCycle, Overflow);
+
+	int32 SunkCount = 0;
+	for (int32 i = 0; i < MaxToSink; ++i)
+	{
+		if (!mResourceSinkSubsystem->AddPoints_ThreadSafe(Stack.Item.GetItemClass()))
 		{
-			if (mResourceSinkSubsystem->AddPoints_ThreadSafe(Stack.Item.GetItemClass()))
-			{
-				GetStorageInventory()->RemoveFromIndex(SlotIndex, 1);
-			}
+			break; // Item is not sinkable; leave the rest.
 		}
+		++SunkCount;
+	}
+
+	if (SunkCount > 0)
+	{
+		Inv->RemoveFromIndex(SlotIndex, SunkCount);
 	}
 }

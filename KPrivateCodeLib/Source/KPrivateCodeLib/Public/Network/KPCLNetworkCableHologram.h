@@ -1,10 +1,13 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Buildings/KPCLNetworkCore.h"
+
 #include "Hologram/FGWireHologram.h"
+
+#include "Network/Buildings/KPCLNetworkCore.h"
+
 #include "KPCLNetworkCableHologram.generated.h"
 
 UCLASS()
@@ -16,7 +19,6 @@ public:
 	AKPCLNetworkCableHologram();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
 	virtual void SetHologramLocationAndRotation(const FHitResult& hitResult) override;
 	virtual void BeginPlay() override;
 	virtual bool TryUpgrade(const FHitResult& hitResult) override;
@@ -25,9 +27,9 @@ public:
 
 private:
 	UPROPERTY()
-	UStaticMeshComponent* mConnectionMesh;
+	TObjectPtr<UStaticMeshComponent> mConnectionMesh;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods|Attachment")
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|Attachment")
 	TSubclassOf<UFGRecipe> mAttachmentRecipe;
 
 	UPROPERTY(EditDefaultsOnly, Category = "KMods|Attachment")

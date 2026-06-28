@@ -1,27 +1,28 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGRecipe.h"
 #include "Unlocks/FGUnlock.h"
 #include "Unlocks/FGUnlockInfoOnly.h"
+
 #include "UKLUnlockCleanerItem.generated.h"
 
-/**
- * 
- */
-UCLASS(Blueprintable, EditInlineNew, abstract, DefaultToInstanced)
+UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class KLIB_API UUKLUnlockCleanerItem : public UFGUnlockInfoOnly
 {
 	GENERATED_BODY()
 
+public:
+	//~ Begin UFGUnlockInfoOnly Interface
 	virtual void Unlock(AFGUnlockSubsystem* unlockSubssytem) override;
 	virtual void Apply(AFGUnlockSubsystem* unlockSubssytem) override;
+	//~ End UFGUnlockInfoOnly Interface
+
 	void SendToSubsystem(AFGUnlockSubsystem* unlockSubssytem);
 
-public:
-	// for display in Codex (can be Null!)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<UFGItemDescriptor> mItemDescriptor;
 };

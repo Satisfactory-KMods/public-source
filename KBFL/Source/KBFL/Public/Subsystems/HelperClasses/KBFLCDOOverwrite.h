@@ -23,7 +23,7 @@ enum class EKBFLBehaivor : uint8
 	/**
 	 * Merge but only add unique entries (for sets and arrays)
 	 */
-	MergeUnique 
+	MergeUnique
 };
 
 UENUM(BlueprintType)
@@ -96,63 +96,63 @@ struct FKBFLCDOOverwriteProperty
 	}
 
 	/** Name of the property to override */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Property")
 	FName mPropertyName;
 
-	/** Skip applying this property override */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	bool bSkipThisField = false;
-
 	/** Automatically detected property type (set by validation) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CDO")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
 	EKBFLPropertyType mPropertyType = EKBFLPropertyType::Unknown;
 
 	/** For Object properties: the class of the object (used to determine if it should be skipped) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "CDO")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
 	TSoftClassPtr<UObject> mObjectPropertyClass;
 
-	// ===== Array/Set/Map Behavior =====
+	/** Skip applying this property override */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Property")
+	bool bSkipThisField = false;
+
+	// ===== Collection Behavior (Array/Set/Map) =====
 	/** Behavior for array/set/map properties (Replace is default) */
 	// clang-format off
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|Collection", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::Array || mPropertyType == EKBFLPropertyType::Set || mPropertyType == EKBFLPropertyType::Map", EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|Collection", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::Array || mPropertyType == EKBFLPropertyType::Set || mPropertyType == EKBFLPropertyType::Map", EditConditionHides))
 	// clang-format on
 	EKBFLBehaivor mCollectionBehavior = EKBFLBehaivor::Replace;
 
 	// ===== Numeric Behavior =====
 	/** Behavior for numeric properties (int, float, double) */
 	// clang-format off
-  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|Numeric", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double", EditConditionHides))
+  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|Numeric", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double", EditConditionHides))
 	// clang-format on
 	EKBFLNumericBehavior mNumericBehavior = EKBFLNumericBehavior::Replace;
 
 	/** Minimum value for Clamp behavior */
 	// clang-format off
-  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|Numeric", meta = (EditCondition = "mNumericBehavior == EKBFLNumericBehavior::Clamp && (mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double)", EditConditionHides))
+  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|Numeric", meta = (EditCondition = "mNumericBehavior == EKBFLNumericBehavior::Clamp && (mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double)", EditConditionHides))
 	// clang-format on
 	double mMinValue = 0.0;
 
 	/** Maximum value for Clamp behavior */
 	// clang-format off
-  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|Numeric", meta = (EditCondition = "mNumericBehavior == EKBFLNumericBehavior::Clamp && (mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double)", EditConditionHides))
+  	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|Numeric", meta = (EditCondition = "mNumericBehavior == EKBFLNumericBehavior::Clamp && (mPropertyType == EKBFLPropertyType::Int32 || mPropertyType == EKBFLPropertyType::Int64 || mPropertyType == EKBFLPropertyType::UInt32 || mPropertyType == EKBFLPropertyType::UInt64 || mPropertyType == EKBFLPropertyType::Float || mPropertyType == EKBFLPropertyType::Double)", EditConditionHides))
 	// clang-format on
 	double mMaxValue = 100.0;
 
 	// ===== Bool Behavior =====
 	/** Behavior for bool properties */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|Bool",
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|Bool",
 			  meta = (EditCondition = "mPropertyType == EKBFLPropertyType::Bool", EditConditionHides))
 	EKBFLBoolBehavior mBoolBehavior = EKBFLBoolBehavior::Replace;
 
 	// ===== String/Text/Name Behavior =====
 	/** Behavior for string/text/name properties */
 	// clang-format off
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|String", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::String || mPropertyType == EKBFLPropertyType::Name || mPropertyType == EKBFLPropertyType::Text", EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|String", meta = (EditCondition = "mPropertyType == EKBFLPropertyType::String || mPropertyType == EKBFLPropertyType::Name || mPropertyType == EKBFLPropertyType::Text", EditConditionHides))
 	// clang-format on
 	EKBFLStringBehavior mStringBehavior = EKBFLStringBehavior::Replace;
 
 	/** Separator for Append/Prepend string operations */
 	// clang-format off
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO|String", meta = (EditCondition = "(mStringBehavior == EKBFLStringBehavior::Append || mStringBehavior == EKBFLStringBehavior::Prepend) && (mPropertyType == EKBFLPropertyType::String || mPropertyType == EKBFLPropertyType::Name || mPropertyType == EKBFLPropertyType::Text)", EditConditionHides))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Behavior|String", meta = (EditCondition = "(mStringBehavior == EKBFLStringBehavior::Append || mStringBehavior == EKBFLStringBehavior::Prepend) && (mPropertyType == EKBFLPropertyType::String || mPropertyType == EKBFLPropertyType::Name || mPropertyType == EKBFLPropertyType::Text)", EditConditionHides))
 	// clang-format on
 	FString mStringSeparator = TEXT("");
 
@@ -164,7 +164,7 @@ struct FKBFLCDOOverwriteProperty
 	friend uint32 GetTypeHash(const FKBFLCDOOverwriteProperty& Prop) { return GetTypeHash(Prop.mPropertyName); }
 
 	/** Check if this property type should be skipped by default (Components,
-	 * Objects, etc.) 
+	 * Objects, etc.)
 	 * Asset types like UTexture, UStaticMesh, UMaterial, etc. are NOT skipped. */
 	bool ShouldSkipByDefault() const;
 };
@@ -198,88 +198,109 @@ public:
 
 	UClass* GetSuperClass() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	bool bApplyOnSubclasses = false;
-
-	/** If true, the overrides will ONLY be applied on subclasses, not on the
-	 * target class itself */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
-			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
-	bool bOnlyApplyOnSubclasses = false;
-
-	/** If true, the overrides will ONLY be applied on subclasses, not on the
-	 * target class itself */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
-			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
-	bool bUseNativeForSubclasses = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
-			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
-	bool bUseTargetAsSubclassFilter = false;
-
-	/** If true, the overrides will ONLY be applied on Blueprint subclasses (not
-	 * native C++ classes) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	bool bOnlyApplyOnBlueprints = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
-			  meta = (AllowAbstract = "true", EditCondition = "bApplyOnSubclasses"))
-	TArray<TSoftClassPtr<UObject>> mAddionalSubClasses;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "CDO")
+	// ===== Target Settings =====
+	/** The target class whose properties we want to override */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowAbstract = "true"), Category = "Target Settings")
 	TSubclassOf<UObject> mTargetClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
-	TArray<TSoftClassPtr<UObject>> mOtherTargetClasses;
 
 	/** If true, mTargetClass is only used as a container for properties, not for
 	 * subclass handling. Use mRealTargetClass for actual class targeting. This is
 	 * a workaround for abstract classes. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
 	bool bTargetOnlyAsContainer = false;
 
 	/** The real target class to apply overrides to when bTargetOnlyAsContainer is
 	 * true. This allows you to use an abstract class as property container while
 	 * targeting concrete classes. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings",
 			  meta = (AllowAbstract = "true", EditCondition = "bTargetOnlyAsContainer", EditConditionHides))
 	TSubclassOf<UObject> mRealTargetClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO")
+	/** Additional target classes to apply overrides to */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
+	TArray<TSoftClassPtr<UObject>> mOtherTargetClasses;
+
+	/** Paths to search for assets (e.g., "/Game/MyMod/") */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings")
 	TArray<FString> mFindAssetsInPaths;
 
-	/** Also apply these overrides to these specific subclasses of TargetClass
-	 * (native classes only) */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
+	// ===== Subclass Handling =====
+	/** If true, apply overrides to all subclasses of the target class */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling")
+	bool bApplyOnSubclasses = false;
+
+	/** If true, the overrides will ONLY be applied on subclasses, not on the
+	 * target class itself */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
+			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
+	bool bOnlyApplyOnSubclasses = false;
+	bool OnlyApplyOnSubclasses() const { return bApplyOnSubclasses && bOnlyApplyOnSubclasses; }
+
+	/** If true, use native class for subclass checks instead of generated class */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
+			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
+	bool bUseNativeForSubclasses = false;
+	bool UseNativeForSubclasses() const { return bApplyOnSubclasses && bUseNativeForSubclasses; }
+
+	/** If true, use mTargetClass as subclass filter instead of all subclasses */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
+			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
+	bool bUseTargetAsSubclassFilter = false;
+	bool UseTargetAsSubclassFilter() const { return bApplyOnSubclasses && bUseTargetAsSubclassFilter; }
+
+	/** Additional subclasses to include in the override process */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
+			  meta = (AllowAbstract = "true", EditCondition = "bApplyOnSubclasses"))
+	TArray<TSoftClassPtr<UObject>> mAddionalSubClasses;
+
+
+	/** If true, the overrides will ONLY be applied on Blueprint subclasses (not
+	 * native C++ classes) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
+			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
+	bool bOnlyApplyOnBlueprints = true;
+
+	// ===== Include/Exclude =====
+	/** Also apply these overrides to these specific classes (native classes only) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Include/Exclude",
 			  meta = (AllowAbstract = "false", BlueprintBaseOnly = "false"))
 	TArray<TSoftClassPtr<UObject>> mAlsoApplyOn;
 
-	/** Classes to ignore when applying overrides (excludes specific subclasses)
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CDO",
+	/** Classes to ignore when applying overrides (excludes specific subclasses) */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Include/Exclude",
 			  meta = (AllowAbstract = "false", BlueprintBaseOnly = "false"))
 	TArray<TSoftClassPtr<UObject>> mIgnoreClasses;
 
-	UPROPERTY(VisibleAnywhere, Category = "CDO")
-	UClass* mNativeClass = nullptr;
-
+	// ===== Property Container =====
 	/** Instanced object storing actual overridden property values */
-	UPROPERTY(EditAnywhere, Instanced, Category = "CDO")
-	UObject* mPropertyContainer = nullptr;
+	UPROPERTY(EditAnywhere, Instanced, Category = "Property Container")
+	TObjectPtr<UObject> mPropertyContainer = nullptr;
 
+	/** Native class cached from mTargetClass */
+	UPROPERTY(VisibleAnywhere, Category = "Property Container")
+	TObjectPtr<UClass> mNativeClass = nullptr;
+
+	// ===== Property Overrides =====
 	/** Properties that have been explicitly modified by the user */
-	UPROPERTY(EditAnywhere, Category = "CDO", meta = (TitleProperty = "mPropertyName"))
+	UPROPERTY(EditAnywhere, Category = "Property Overrides", meta = (TitleProperty = "mPropertyName"))
 	TSet<FKBFLCDOOverwriteProperty> mModifiedProperties;
 
 	/** Manual property overrides - allows you to manually add/edit properties to
 	 * override */
-	UPROPERTY(EditAnywhere, Category = "CDO", meta = (TitleProperty = "mPropertyName"))
+	UPROPERTY(EditAnywhere, Category = "Property Overrides", meta = (TitleProperty = "mPropertyName"))
 	TSet<FKBFLCDOOverwriteProperty> mManuelPropertiesOverwrite;
 
+	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+
+protected:
 	/** Apply changed properties (different from original CDO values) to a live
 	 * instance */
+	virtual void ApplyToInstance(UObject* TargetInstance) override;
+
 private:
-	void ApplyToInstance(UObject* TargetInstance);
+	/** Build the full set of classes this overwrite targets (direct + subclasses + paths).
+	 * Returns false if the target configuration is invalid. Shared by ApplyToInstances and ShouldCallForInstance. */
+	bool CollectClassesToProcess(TSet<TSubclassOf<UObject>>& OutClasses);
 
 	/** Apply property based on its type and behavior settings */
 	void ApplyPropertyWithBehavior(FProperty* Property, void* ContainerValuePtr, void* DestValuePtr,
@@ -308,11 +329,11 @@ public:
 	virtual void ApplyToInstances() override;
 
 	/** Refresh the property container when TargetClass changes */
-	UFUNCTION(CallInEditor, Category = "CDO")
+	UFUNCTION(CallInEditor, Category = "Actions")
 	void RefreshPropertyContainer();
 
 	/** Validate and auto-detect types for manual property overrides */
-	UFUNCTION(CallInEditor, Category = "CDO")
+	UFUNCTION(CallInEditor, Category = "Actions")
 	void ValidateAndDetectPropertyTypes();
 
 #if WITH_EDITOR

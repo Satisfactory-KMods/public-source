@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "KLGameInstance.h"
 
 #include "AbstractInstanceManager.h"

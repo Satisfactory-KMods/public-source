@@ -1,18 +1,19 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Buildables/FGBuildableFactory.h"
-#include "DataAssets/KAPIDataAssetBase.h"
-#include "KAPIModule.h"
 #include "Buildables/FGBuildableResourceExtractorBase.h"
+#include "CoreMinimal.h"
 #include "DataAssets/KAPIAirCollectorData.h"
 #include "DataAssets/KAPICleanerItemDescription.h"
+#include "DataAssets/KAPIDataAssetBase.h"
+#include "DataAssets/KAPIManufacturerModifications.h"
 #include "DataAssets/KAPIModularMinerDescription.h"
 #include "DataAssets/KAPISugHatchingData.h"
 #include "DataAssets/KAPTooltipWidgetInjector.h"
+#include "KAPIModule.h"
 #include "ModLoading/ModLoadingLibrary.h"
 #include "Resources/FGItemDescriptor.h"
 
@@ -26,64 +27,38 @@ class KAPI_API UKAPIDataAssetSubsystem : public UGameInstanceSubsystem
 public:
 	UKAPIDataAssetSubsystem();
 
-	static UKAPIDataAssetSubsystem* Get(UObject* Context);
-	static UKAPIDataAssetSubsystem* GetChecked(UObject* Context);
-
-	UFUNCTION(BlueprintPure, Category = "KAPI")
-	static UModLoadingLibrary* GetModLoadingLibraryWithContext(UObject* Context);
-
+	//~ Begin USubsystem Interface
 	/** Implement this for initialization of instances of the system */
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 	virtual void Deinitialize() override;
-
-	/**
-	 * Note: call this function only in the constructor of the subsystem OR if you change some mDisabled value in runtime to refresh cached data
-	 */
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	void StartScanForDataAssets();
-
-	void EmptyAssets();
-
-	void ScanForMinerAssets();
-	void ScanForCleanerAssets();
-	void ScanForAllowList();
-	void ScanForWidgetInjector();
-	void ScanForAirCollectorDataAssets();
-	void ScanForSlugs();
-
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	TArray<UKAPISugHatchingData*> Slug_GetAll() const;
-
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	bool Slug_GetForItem(TSubclassOf<UFGItemDescriptor> SlugOrEgg, UKAPISugHatchingData*& OutItem);
+	//~ End USubsystem Interface
 
 	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
 	TArray<UKAPIAirCollectorData*> AirCollector_GetAll() const;
 
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	bool Cleaner_GetForKey(TSubclassOf<UFGItemDescriptor> Item, UKAPICleanerItemDescription*& OutItem);
+	bool ApplyManufacturerAssign(AFGBuildableManufacturer* Manufacturer, TSubclassOf<class UFGRecipe> recipe);
+
+	void ApplyManufacturerModifications(AFGBuildableManufacturer* Manufacturer, TSubclassOf<class UFGRecipe> recipe);
 
 	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
 	TArray<UKAPICleanerItemDescription*> Cleaner_GetAllAssets();
 
 	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	bool Miner_GetForKey(TSubclassOf<UFGResourceDescriptor> Item, UKAPIModularMinerDescription*& OutItem);
+	bool Cleaner_GetForKey(TSubclassOf<UFGItemDescriptor> Item, UKAPICleanerItemDescription*& OutItem);
 
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
-	TArray<UKAPIModularMinerDescription*> Miner_GetAllAssets();
-
-	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset",
-		meta = (DisplayName = "FindAllDataAssetsOfClass", DeterminesOutputType = "InClass"))
-	TArray<UKAPTooltipWidgetInjector*> GetAllTooltipWidgetInjectors();
+	void EmptyAssets();
 
 	/**
-		 * Find all data assets of a specific class
-		 * @param OutDataAssets - Set of data assets
-		 * @return true if found any data assets
-		 */
+	 * Find all data assets of a specific class
+	 * @param OutDataAssets - Set of data assets
+	 * @return true if found any data assets
+	 */
 	template <class T>
 	bool FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets);
+
+	template <class T>
+	bool FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutDataAssets);
 
 	/**
 	 * Find all data assets of a specific class
@@ -93,27 +68,68 @@ public:
 	template <class T>
 	bool FindAllDataAssetsOfClassUnfiltered(TArray<T*>& OutDataAssets);
 
+	static UKAPIDataAssetSubsystem* Get(UObject* Context);
+
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset",
+			  meta = (DisplayName = "FindAllDataAssetsOfClass", DeterminesOutputType = "InClass"))
+	TArray<UKAPTooltipWidgetInjector*> GetAllTooltipWidgetInjectors();
+
+	static UKAPIDataAssetSubsystem* GetChecked(UObject* Context);
+
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	UKAPIManufacturerModifications* GetModification(AFGBuildableManufacturer* Manufacturer);
+
+	UFUNCTION(BlueprintPure, Category = "KAPI")
+	static UModLoadingLibrary* GetModLoadingLibraryWithContext(UObject* Context);
+
 	UFUNCTION(BlueprintCallable, Category = "KAPI",
-		meta = (DisplayName = "FindAllDataAssetsOfClass", DeterminesOutputType = "InClass"))
+			  meta = (DisplayName = "FindAllDataAssetsOfClass", DeterminesOutputType = "InClass"))
 	TArray<UKAPIDataAssetBase*> K2_FindAllDataAssetsOfClass(TSubclassOf<UKAPIDataAssetBase> InClass);
 
-	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TSet<UKAPIDataAssetBase*> mDisabledDataAssets;
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	TArray<UKAPIModularMinerDescription*> Miner_GetAllAssets();
+
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	bool Miner_GetForKey(TSubclassOf<UFGResourceDescriptor> Item, UKAPIModularMinerDescription*& OutItem);
+
+	void ScanForAirCollectorDataAssets();
+	void ScanForAllowList();
+	void ScanForCleanerAssets();
+	void ScanForManufacturerModifications();
+	void ScanForMinerAssets();
+	void ScanForSlugs();
+	void ScanForWidgetInjector();
+
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	TArray<UKAPISugHatchingData*> Slug_GetAll() const;
+
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	bool Slug_GetForItem(TSubclassOf<UFGItemDescriptor> SlugOrEgg, UKAPISugHatchingData*& OutItem);
+
+	/**
+	 * Note: call this function only in the constructor of the subsystem OR if you change some mDisabled value in
+	 * runtime to refresh cached data
+	 */
+	UFUNCTION(BlueprintCallable, Category = "KAPI|DataAsset")
+	void StartScanForDataAssets();
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TSet<UKAPIDataAssetBase*> mEnabledDataAssets;
+	TSet<TObjectPtr<UKAPIDataAssetBase>> mDisabledDataAssets;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TSet<UKAPTooltipWidgetInjector*> mTooltipWidgetsDataAssets;
+	TSet<TObjectPtr<UKAPIDataAssetBase>> mEnabledDataAssets;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TMap<TSubclassOf<UFGItemDescriptor>, UKAPICleanerItemDescription*> mCleanerItemMapping;
+	TSet<TObjectPtr<UKAPTooltipWidgetInjector>> mTooltipWidgetsDataAssets;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TMap<TSubclassOf<UFGItemDescriptor>, UKAPISugHatchingData*> mSlugDatas;
+	TMap<TSubclassOf<UFGItemDescriptor>, TObjectPtr<UKAPICleanerItemDescription>> mCleanerItemMapping;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TMap<TSubclassOf<UFGResourceDescriptor>, UKAPIModularMinerDescription*> mMinerMapping;
+	TMap<TSubclassOf<UFGItemDescriptor>, TObjectPtr<UKAPISugHatchingData>> mSlugDatas;
+
+	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
+	TMap<TSubclassOf<UFGResourceDescriptor>, TObjectPtr<UKAPIModularMinerDescription>> mMinerMapping;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
 	TSet<TSubclassOf<UFGResourceDescriptor>> mAllowedScannableResources;
@@ -122,14 +138,15 @@ public:
 	TSet<TSubclassOf<AFGBuildableResourceExtractorBase>> mAllowedResourceExtractors;
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
-	TArray<UKAPIAirCollectorData*> mAirCollectorDataAssets;
+	TArray<TObjectPtr<UKAPIAirCollectorData>> mAirCollectorDataAssets;
+
+	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
+	TSet<TObjectPtr<UKAPIManufacturerModifications>> mManufacturerModifications;
 };
 
 struct FSortiableAsset
 {
-	FSortiableAsset(
-		UKAPIDataAssetBase* Object
-	)
+	FSortiableAsset(UKAPIDataAssetBase* Object)
 	{
 		this->mPriority = Object->mPriority;
 		this->mObject = Object;
@@ -141,13 +158,24 @@ struct FSortiableAsset
 };
 
 template <class T>
+bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutDataAssets)
+{
+	TSet<T*> TempSet;
+	bool bResult = FindAllDataAssetsOfClass(TempSet);
+	for (T* Item : TempSet)
+	{
+		OutDataAssets.Add(TObjectPtr<T>(Item));
+	}
+	return bResult;
+}
+
+template <class T>
 bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
 {
 	OutDataAssets.Empty();
 
-	// Find list of all UStat, and USkill assets in Content Browser.
-	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(
-		FName("AssetRegistry"));
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
 	TArray<FAssetData> AssetList;
@@ -155,7 +183,6 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
 
 	TArray<FSortiableAsset> rawObjects;
 
-	// Split assets into separate arrays.
 	for (const FAssetData& Asset : AssetList)
 	{
 		UObject* Obj = Asset.GetAsset();
@@ -182,10 +209,7 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
 		}
 	}
 
-	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B)
-	{
-		return A.mPriority > B.mPriority;
-	});
+	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B) { return A.mPriority > B.mPriority; });
 
 	for (FSortiableAsset Str : rawObjects)
 	{
@@ -206,9 +230,8 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClassUnfiltered(TArray<T*>& Out
 {
 	OutDataAssets.Empty();
 
-	// Find list of all UStat, and USkill assets in Content Browser.
-	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(
-		FName("AssetRegistry"));
+	FAssetRegistryModule& AssetRegistryModule =
+		FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
 	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
 
 	TArray<FAssetData> AssetList;
@@ -216,7 +239,6 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClassUnfiltered(TArray<T*>& Out
 
 	TArray<FSortiableAsset> rawObjects;
 
-	// Split assets into separate arrays.
 	for (const FAssetData& Asset : AssetList)
 	{
 		UObject* Obj = Asset.GetAsset();
@@ -243,10 +265,7 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClassUnfiltered(TArray<T*>& Out
 		}
 	}
 
-	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B)
-	{
-		return A.mPriority > B.mPriority;
-	});
+	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B) { return A.mPriority > B.mPriority; });
 
 	for (FSortiableAsset Str : rawObjects)
 	{

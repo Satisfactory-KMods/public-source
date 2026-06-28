@@ -1,18 +1,20 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
-#include "Buildables/FGBuildableRadarTower.h"
 #include "CoreMinimal.h"
+
+#include "Buildables/FGBuildableRadarTower.h"
 #include "FGInventoryComponent.h"
 #include "ItemAmount.h"
-#include "KPCLModSubsystem.h"
 #include "Resources/FGItemDescriptor.h"
+
+#include "KPCLModSubsystem.h"
 
 #include "KPCLFaxitSubsystem.generated.h"
 
 UENUM(BlueprintType)
-enum EKPCLNetworkLevelType
+enum class EKPCLNetworkLevelType : uint8
 {
 	RemoveAccess UMETA(DisplayName = "RemoveAccess"),
 	Sink UMETA(DisplayName = "Sink"),
@@ -42,7 +44,6 @@ struct FKPCLFaxitNetworkStatData
 	UPROPERTY(SaveGame, BlueprintReadOnly)
 	int32 mDownload = 0;
 
-	// Compare item descriptors
 	bool operator==(const FKPCLFaxitNetworkStatData& Other) const { return mItem == Other.mItem; }
 
 	void Merge(FKPCLFaxitNetworkStatData& Other, bool ResetOther = false);
@@ -82,7 +83,6 @@ struct FKPCLFaxitNetworkStatDataBundle
 
 	void CleanUpNullItems();
 
-	// Compare item descriptors
 	bool operator==(const FKPCLFaxitNetworkStatDataBundle& Other) const
 	{
 		return mId == Other.mId || mTimestamp == Other.mTimestamp;
@@ -97,18 +97,15 @@ struct FKPCLFaxitNetworkStatDataBundle
 
 	bool operator<(const FKPCLFaxitNetworkStatDataBundle& Other) const { return mTimestamp < Other.mTimestamp; }
 
-
 	bool operator>=(const FKPCLFaxitNetworkStatDataBundle& Other) const { return mTimestamp >= Other.mTimestamp; }
 
-
 	bool operator<=(const FKPCLFaxitNetworkStatDataBundle& Other) const { return mTimestamp <= Other.mTimestamp; }
-
 
 	/**
 	 * Must be resolved after loading
 	 * by calling AKPCLFaxitSubsystem::ResolveBundleMap or AKPCLFaxitSubsystem::ResolveBundleMapArray
 	 */
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, NotReplicated)
 	TMap<TSubclassOf<UFGItemDescriptor>, FKPCLFaxitNetworkStatData> mStatsMapped;
 };
 
@@ -148,13 +145,13 @@ struct FKPCLFaxitNetwork
 	FString mNetworkName;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
-	class AKPCLNetworkCore* mCore;
+	TObjectPtr<class AKPCLNetworkCore> mCore;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
-	TArray<class AKPCLNetworkBuildingBase*> mNetworkBuildings;
+	TArray<TObjectPtr<class AKPCLNetworkBuildingBase>> mNetworkBuildings;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
-	TArray<class AKPCLNetworkTower*> mNetworkTowers;
+	TArray<TObjectPtr<class AKPCLNetworkTower>> mNetworkTowers;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
 	bool mIsValid = false;
@@ -192,11 +189,20 @@ struct FKPCLFaxitNetworkInfo
 
 /**
  * Maps item descriptors to amounts.
+ * Thread-safe: all public methods are protected by an FRWLock.
  */
 USTRUCT()
 struct KPRIVATECODELIB_API FKPCLMappedItemAmount
 {
 	GENERATED_BODY()
+
+	FKPCLMappedItemAmount() = default;
+
+	/** Copy/move constructors that don't copy the non-copyable FRWLock. */
+	FKPCLMappedItemAmount(const FKPCLMappedItemAmount& Other);
+	FKPCLMappedItemAmount& operator=(const FKPCLMappedItemAmount& Other);
+	FKPCLMappedItemAmount(FKPCLMappedItemAmount&& Other) noexcept;
+	FKPCLMappedItemAmount& operator=(FKPCLMappedItemAmount&& Other) noexcept;
 
 	int32 AddItemAmount(TSubclassOf<UFGItemDescriptor> InItem, int32 InAmount);
 	int32 AddItemAmount(const FItemAmount& ItemAmount);
@@ -212,36 +218,45 @@ struct KPRIVATECODELIB_API FKPCLMappedItemAmount
 	int32 GetSlotSize() const;
 	bool HasItem(TSubclassOf<UFGItemDescriptor> InItem) const;
 
-	void
-	CleanUpEmptySlots(TSet<TSubclassOf<UFGItemDescriptor>> BlacklistedItems);
+	void CleanUpEmptySlots(TSet<TSubclassOf<UFGItemDescriptor>> BlacklistedItems);
 	void RemoveItemFromStorage(TSubclassOf<UFGItemDescriptor> InItem);
 
 	void TickReplication();
 	void Client_BuildMap();
 
-	/**
-	 * @return The amount that can be stored
-	 */
+	/** @return The amount that can be stored. */
 	int32 GetSpaceFor(FItemAmount Amount) const;
 	int32 GetSpaceFor(TSubclassOf<UFGItemDescriptor> InItem, int32 Amount) const;
 
 	bool CanAddNewItemSlot(TSubclassOf<UFGItemDescriptor> InItem) const;
 
+	UPROPERTY(SaveGame)
+	int32 mMaxUniqueItems = -1;
+
+	UPROPERTY(SaveGame)
+	int32 mStackMultiplier = 0;
+
 private:
 	bool IsItemAllowed(TSubclassOf<UFGItemDescriptor> InItem) const;
 
+	/** No-lock versions for internal use — must only be called while holding mItemAmountsLock. */
+	bool HasItem_NoLock(TSubclassOf<UFGItemDescriptor> InItem) const;
+	int32 GetSpaceFor_NoLock(TSubclassOf<UFGItemDescriptor> InItem, int32 Amount) const;
+	bool CanAddNewItemSlot_NoLock(TSubclassOf<UFGItemDescriptor> InItem) const;
+	void RemoveItemFromStorage_NoLock(TSubclassOf<UFGItemDescriptor> InItem);
+
+	/** Replication vehicle: server populates this from mItemAmounts via TickReplication();
+	 *  clients rebuild mItemAmounts from it in OnRep_Storage (on the owning actor). */
 	UPROPERTY()
 	TArray<FItemAmount> mReplicatedItemAmounts;
 
-	UPROPERTY(SaveGame)
+	/** Authoritative storage map. Saved to disk. Excluded from net serialization because
+	 *  UE's RepLayout does not support TMap — replication goes through mReplicatedItemAmounts. */
+	UPROPERTY(SaveGame, NotReplicated)
 	TMap<TSubclassOf<UFGItemDescriptor>, int32> mItemAmounts;
 
-public:
-	UPROPERTY()
-	int32 mMaxUniqueItems = -1;
-
-	UPROPERTY()
-	int32 mStackMultiplier = 0;
+	/** Guards all accesses to mItemAmounts. mutable so const methods can acquire read locks. */
+	mutable FRWLock mItemAmountsLock;
 };
 
 UCLASS()
@@ -249,24 +264,11 @@ class KPRIVATECODELIB_API AKPCLFaxitSubsystem : public AKPCLModSubsystem
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
-	virtual void PostLoadGame_Implementation(int32 saveVersion, int32 gameVersion) override;
-
-	void CleanupNetworks();
-
 public:
-	/**
-	 * resolve map and create a copy of the bundle
-	 */
+	/** Resolve map and create a copy of the bundle. */
 	static void ResolveBundleMap(FKPCLFaxitNetworkStatDataBundle& InBundle);
 
-	/**
-	 * resolve map and create a copy of the bundles
-	 */
+	/** Resolve map and create a copy of the bundles. */
 	static void ResolveBundleMapArray(TArray<FKPCLFaxitNetworkStatDataBundle>& InBundle);
 
 	AKPCLFaxitSubsystem();
@@ -275,6 +277,12 @@ public:
 
 	void RegisterNetworkTower(class AKPCLNetworkTower* AkpclNetworkTower);
 	void UnRegisterNetworkTower(class AKPCLNetworkTower* AkpclNetworkTower);
+
+	UFUNCTION(BlueprintPure, Category = "KMods|Faxit")
+	bool HasToManyNetworks() const;
+
+	UFUNCTION(BlueprintPure, Category = "KMods|Faxit")
+	int32 NetworksLeft() const;
 
 	UFUNCTION(BlueprintPure, Category = "KMods|Faxit")
 	bool IsTowerRegistered(class AFGBuildableRadarTower* Tower) const;
@@ -296,7 +304,6 @@ public:
 	FKPCLFaxitNetwork GetByNetworkId(FString NetworkId, bool& bSuccess);
 
 	void RebuildMap();
-
 
 	void DestroyNetworkBuilding(AKPCLNetworkBuildingBase* Building);
 
@@ -337,18 +344,6 @@ public:
 	void UnlockNetworkFeature();
 	void GetNearstNetwork(AActor* Actor, FKPCLFaxitNetwork& Network);
 
-private:
-	void DestoryNetwork(AKPCLNetworkCore* Core);
-
-	UPROPERTY(SaveGame, Replicated)
-	TArray<FKPCLFaxitNetwork> mNetworks;
-
-	TMap<FString, int32> mNetworkMap;
-
-	UPROPERTY()
-	TMap<AFGBuildableRadarTower*, AKPCLNetworkTower*> mRegisteredTowers;
-
-public:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "Faxit")
 	bool mSinkUnlocked = false;
 
@@ -370,20 +365,37 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "Faxit")
 	int32 mDriveLevel = 1;
 
-	// Configurable values
-	// Base value for Max Building Count per Network (xNetworkMachineLevel)
+	/** Base value for max building count per network (x NetworkMachineLevel). */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Faxit")
-	UCurveFloat* mNetworkCountsPerTier = nullptr;
+	TObjectPtr<UCurveFloat> mNetworkCountsPerTier = nullptr;
 
-	// Base value for Max Building Count per Network (xNetworkSolidSpeedLevel)
+	/** Base value for max building count per network (x NetworkSolidSpeedLevel). */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Faxit")
-	UCurveFloat* mBeltSpeedPerTier = nullptr;
+	TObjectPtr<UCurveFloat> mBeltSpeedPerTier = nullptr;
 
-	// Base value for Max Building Count per Network (xNetworkFluidSpeedLevel)
+	/** Base value for max building count per network (x NetworkFluidSpeedLevel). */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Faxit")
-	UCurveFloat* mPipeSpeedPerTier = nullptr;
+	TObjectPtr<UCurveFloat> mPipeSpeedPerTier = nullptr;
 
-	// Base value for Max Building Count per Network (xNetworkFluidSpeedLevel)
+	/** Base value for drive limit per network (x NetworkFluidSpeedLevel). */
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Faxit")
-	UCurveFloat* mDriveLimitPerTier = nullptr;
+	TObjectPtr<UCurveFloat> mDriveLimitPerTier = nullptr;
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void BeginPlay() override;
+	virtual void PostLoadGame_Implementation(int32 saveVersion, int32 gameVersion) override;
+
+	void CleanupNetworks();
+
+private:
+	void DestoryNetwork(AKPCLNetworkCore* Core);
+
+	UPROPERTY(SaveGame, Replicated)
+	TArray<FKPCLFaxitNetwork> mNetworks;
+
+	TMap<FString, int32> mNetworkMap;
+
+	UPROPERTY()
+	TMap<TObjectPtr<AFGBuildableRadarTower>, TObjectPtr<AKPCLNetworkTower>> mRegisteredTowers;
 };

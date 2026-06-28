@@ -5,6 +5,32 @@
 #include "Subsystems/HelperClasses/KBFLWorldCDOCallRequirement.h"
 #include "Subsystems/KBFLContentCDOHelperSubsystem.h"
 
+void UKBFLCDOOverwriteBase::TryApplyToClass(UClass* NewClass)
+{
+	if (!bEnabled || !bWasApplied || !IsValid(NewClass) || !IsValid(mSubsystem))
+	{
+		return;
+	}
+	if (!NewClass->HasAnyClassFlags(CLASS_CompiledFromBlueprint))
+	{
+		return;
+	}
+	if (!ShouldCallForInstance(NewClass))
+	{
+		return;
+	}
+	UObject* CDO = NewClass->GetDefaultObject();
+	if (!IsValid(CDO))
+	{
+		return;
+	}
+
+	Requirements_NotifyOnModify(CDO);
+	ApplyToInstance(CDO);
+	Requirements_NotifyOnModified(CDO);
+	mSubsystem->StoreObject(CDO);
+}
+
 void UKBFLCDOOverwriteBase::Start()
 {
 	if (!bEnabled)

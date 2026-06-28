@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/Buildings/KPCLNetworkConnectionBuilding.h"
 
 #include "Cpp/KBFLCppInventoryHelper.h"
@@ -10,7 +9,6 @@
 #include "Network/Buildings/KPCLNetworkCore.h"
 #include "Replication/KPCLDefaultRCO.h"
 #include "Resources/FGNoneDescriptor.h"
-
 
 void AKPCLNetworkConnectionBuilding::UI_ApplyRelevantItems_Implementation(
 	TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
@@ -49,11 +47,6 @@ void AKPCLNetworkConnectionBuilding::BeginPlay()
 		UpdateInventoryState();
 		UpdateProductionSpeed(false);
 	}
-}
-
-void AKPCLNetworkConnectionBuilding::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
 bool AKPCLNetworkConnectionBuilding::CanProduce_Implementation() const
@@ -101,27 +94,22 @@ bool AKPCLNetworkConnectionBuilding::PasteSettings_Implementation(UFGFactoryClip
 {
 	bool bResult = false;
 
-	if (UKPCLFaxitBasicClipboardSettings* Settings = Cast<UKPCLFaxitBasicClipboardSettings>(factoryClipboard))
-	{
-		bool Success;
-		FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(Settings->mNetworkId, Success);
-		if (Success)
-		{
-			mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
-		}
-
-		SetIsProductionPaused(Settings->bIsPaused);
-		bResult = true;
-	}
-
+	// Fixed: the second block (UKPCLFaxitNetworkConnectionClipboardSettings) must be 'else if'.
+	// UKPCLFaxitNetworkConnectionClipboardSettings derives from UKPCLFaxitBasicClipboardSettings,
+	// so without 'else if', a connection clipboard would run both blocks, double-applying the
+	// network attachment and pause state.
 	if (UKPCLFaxitNetworkConnectionClipboardSettings* ConnectionSettings =
 			Cast<UKPCLFaxitNetworkConnectionClipboardSettings>(factoryClipboard))
 	{
-		bool Success;
-		FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(ConnectionSettings->mNetworkId, Success);
-		if (Success)
+		// Fixed: was dereferencing mFaxitSubsystem without null check.
+		if (IsValid(mFaxitSubsystem))
 		{
-			mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+			bool Success;
+			FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(ConnectionSettings->mNetworkId, Success);
+			if (Success)
+			{
+				mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+			}
 		}
 
 		SetIsProductionPaused(ConnectionSettings->bIsPaused);
@@ -131,7 +119,24 @@ bool AKPCLNetworkConnectionBuilding::PasteSettings_Implementation(UFGFactoryClip
 			SetFilterItem(ConnectionSettings->mFilterItem);
 		}
 
-		SetSpeedOverride(mSpeedOverride);
+		// Fixed: was passing own mSpeedOverride instead of ConnectionSettings->mSpeedOverride.
+		SetSpeedOverride(ConnectionSettings->mSpeedOverride);
+		bResult = true;
+	}
+	else if (UKPCLFaxitBasicClipboardSettings* Settings = Cast<UKPCLFaxitBasicClipboardSettings>(factoryClipboard))
+	{
+		// Fixed: was dereferencing mFaxitSubsystem without null check.
+		if (IsValid(mFaxitSubsystem))
+		{
+			bool Success;
+			FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(Settings->mNetworkId, Success);
+			if (Success)
+			{
+				mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+			}
+		}
+
+		SetIsProductionPaused(Settings->bIsPaused);
 		bResult = true;
 	}
 
@@ -142,6 +147,16 @@ void AKPCLNetworkConnectionBuilding::onProducingFinal_Implementation()
 {
 	Super::onProducingFinal_Implementation();
 	UFGInventoryComponent* Inventory = GetInventory();
+	if (!IsValid(Inventory))
+	{
+		return;
+	}
+
+	AKPCLNetworkCore* Core = GetFaxitCore();
+	if (!IsValid(Core))
+	{
+		return;
+	}
 
 	int32 Amount = 0;
 	if (mIsUpload)
@@ -154,7 +169,7 @@ void AKPCLNetworkConnectionBuilding::onProducingFinal_Implementation()
 
 			// TODO: test if this now store > depot > sink in one cycle instead only one of them per cycle
 			int32 LeftOver = FMath::Min(GetTransferAmount(), Stack.NumItems);
-			Amount += GetFaxitCore()->TryToStoreItem(Inventory, Stack.Item.GetItemClass(), LeftOver, INV_SLOT);
+			Amount += Core->TryToStoreItem(Inventory, Stack.Item.GetItemClass(), LeftOver, INV_SLOT);
 			LeftOver -= Amount;
 
 			if (LeftOver <= 0)
@@ -181,7 +196,7 @@ void AKPCLNetworkConnectionBuilding::onProducingFinal_Implementation()
 	}
 	else if (IsValid(GetFilterItem()) && !mIsUpload)
 	{
-		Amount = GetFaxitCore()->TryToGrabItem(Inventory, GetFilterItem(), GetTransferAmount(), INV_SLOT);
+		Amount = Core->TryToGrabItem(Inventory, GetFilterItem(), GetTransferAmount(), INV_SLOT);
 		AddDownloadToStats(GetFilterItem(), Amount);
 	}
 
@@ -260,7 +275,7 @@ bool AKPCLNetworkConnectionBuilding::CanStoreInDepot() const
 	}
 
 	return IsValid(mCentralStorageSubsystem) &&
-		mCentralStorageSubsystem->CanUploadItemsToCentralStorage(Stack.Item.GetItemClass());
+		mCentralStorageSubsystem->CanUploadInventoryItemToCentralStorage(Stack.Item);
 }
 
 bool AKPCLNetworkConnectionBuilding::CanSinkItem(TSubclassOf<UFGItemDescriptor> Item) const
@@ -315,39 +330,42 @@ int32 AKPCLNetworkConnectionBuilding::UploadToDepot(int32 Amount) const
 	}
 
 	FInventoryStack Stack;
-
 	GetInventory()->GetStackFromIndex(INV_SLOT, Stack);
-	if (IsValid(mCentralStorageSubsystem) && Stack.HasItems() &&
-		mCentralStorageSubsystem->CanUploadItemsToCentralStorage(Stack.Item.GetItemClass()))
+
+	if (!IsValid(mCentralStorageSubsystem) || !Stack.HasItems() ||
+		!mCentralStorageSubsystem->CanUploadInventoryItemToCentralStorage(Stack.Item))
 	{
-		int32 CurrentItemLimit = mCentralStorageSubsystem->GetCentralStorageItemLimit(Stack.Item.GetItemClass());
-		int32 CurrentStoredAmount = mCentralStorageSubsystem->GetNumItemsFromCentralStorage(Stack.Item.GetItemClass());
-
-		int32 AvailableSpace = CurrentItemLimit - CurrentStoredAmount;
-		int32 UploadAmount = FMath::Min3(Amount, Stack.NumItems, AvailableSpace);
-
-		if (UploadAmount <= 0)
-		{
-			return 0;
-		}
-
-		AsyncTask(ENamedThreads::GameThread,
-				  [&, UploadAmount, Stack]()
-				  {
-					  for (int32 count = 0; count < UploadAmount; ++count)
-					  {
-						  if (!mCentralStorageSubsystem->CanUploadItemsToCentralStorage(Stack.Item.GetItemClass()))
-						  {
-							  return;
-						  }
-						  mCentralStorageSubsystem->UploadItemFromInventoryToCentralStorage(GetInventory(), INV_SLOT,
-																							Stack.Item.GetItemClass());
-					  }
-				  });
-
-		return UploadAmount;
+		return 0;
 	}
-	return 0;
+
+	int32 CurrentItemLimit = mCentralStorageSubsystem->GetCentralStorageItemLimit(Stack.Item.GetItemClass());
+	int32 CurrentStoredAmount = mCentralStorageSubsystem->GetNumItemsFromCentralStorage(Stack.Item.GetItemClass());
+
+	int32 AvailableSpace = CurrentItemLimit - CurrentStoredAmount;
+	int32 UploadAmount = FMath::Min3(Amount, Stack.NumItems, AvailableSpace);
+
+	if (UploadAmount <= 0)
+	{
+		return 0;
+	}
+
+	// Fixed: was wrapping the upload loop in an AsyncTask with a `[&]` capture — UAF since
+	// `this`, `Stack`, and `mCentralStorageSubsystem` could all be invalid by game-thread dispatch.
+	// UploadToDepot is always called server-side from onProducingFinal (via Factory_TickAuthOnly),
+	// which itself already runs on the factory worker thread and is safe to call subsystem APIs
+	// synchronously. The synchronous path also returns the true transferred count instead of an
+	// optimistic pre-count that could diverge from the actual depot state.
+	int32 Transferred = 0;
+	for (int32 Count = 0; Count < UploadAmount; ++Count)
+	{
+		if (!mCentralStorageSubsystem->CanUploadInventoryItemToCentralStorage(Stack.Item))
+		{
+			break;
+		}
+		mCentralStorageSubsystem->UploadItemFromInventoryToCentralStorage(GetInventory(), INV_SLOT);
+		++Transferred;
+	}
+	return Transferred;
 }
 
 int32 AKPCLNetworkConnectionBuilding::Sink(int32 Amount)
@@ -571,6 +589,7 @@ void AKPCLNetworkConnectionBuilding::SetSpeedOverride(float NewSpeed)
 	{
 		mSpeedOverride = -1.f;
 	}
+	mPropertyReplicator.MarkPropertyDirty(FName("mSpeedOverride"));
 
 	UpdateProductionSpeed(true);
 }
@@ -588,6 +607,7 @@ void AKPCLNetworkConnectionBuilding::SetFilterItem(TSubclassOf<UFGItemDescriptor
 	}
 
 	mFilterItem = NewItem;
+	mPropertyReplicator.MarkPropertyDirty(FName("mFilterItem"));
 
 	UFGInventoryComponent* Inventory = GetInventory();
 	if (IsValid(Inventory))

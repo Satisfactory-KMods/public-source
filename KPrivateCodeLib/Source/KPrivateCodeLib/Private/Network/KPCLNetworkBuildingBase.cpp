@@ -1,36 +1,27 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
-
+// Copyright Coffee Stain Studios. All Rights Reserved.
 
 #include "Network/KPCLNetworkBuildingBase.h"
 
 #include "FGActorRepresentationManager.h"
 #include "FGResourceSinkSubsystem.h"
-#include "KPrivateCodeLibModule.h"
 #include "Interfaces/KPCLNetworkDataInterface.h"
+#include "KPrivateCodeLibModule.h"
 #include "Net/UnrealNetwork.h"
-#include "Network/KPCLNetwork.h"
-#include "Network/KPCLNetworkConnectionComponent.h"
-#include "Network/KPCLNetworkInfoComponent.h"
 #include "Network/Buildings/KPCLNetworkCore.h"
 #include "Network/Buildings/KPCLNetworkTower.h"
+#include "Network/KPCLNetwork.h"
+#include "Network/KPCLNetworkAsyncHelpers.h"
+#include "Network/KPCLNetworkConnectionComponent.h"
+#include "Network/KPCLNetworkInfoComponent.h"
 #include "Subsystem/KPCLFaxitSubsystem.h"
 #include "Subsystem/KPCLUnlockSubsystem.h"
 #include "Wwise/WwiseRetriggerableAsyncTask.h"
 
-bool AKPCLNetworkBuildingBase::HasCore_Implementation() const
-{
-	return HasFaxitCore();
-}
+bool AKPCLNetworkBuildingBase::HasCore_Implementation() const { return HasFaxitCore(); }
 
-AKPCLNetworkCore* AKPCLNetworkBuildingBase::GetCore_Implementation()
-{
-	return GetFaxitCore();
-}
+AKPCLNetworkCore* AKPCLNetworkBuildingBase::GetCore_Implementation() { return GetFaxitCore(); }
 
-UKPCLNetwork* AKPCLNetworkBuildingBase::GetNetwork_Implementation() const
-{
-	return GetFaxitCableNetwork();
-}
+UKPCLNetwork* AKPCLNetworkBuildingBase::GetNetwork_Implementation() const { return GetFaxitCableNetwork(); }
 
 FNetworkUIData AKPCLNetworkBuildingBase::GetUIDData_Implementation() const
 {
@@ -66,20 +57,48 @@ bool AKPCLNetworkBuildingBase::HasCoreInNetwork_Implementation() const
 	return false;
 }
 
+void AKPCLNetworkBuildingBase::SetHasCableBoost(bool NewValue)
+{
+	bHasCableBoost = NewValue;
+	mPropertyReplicator.MarkPropertyDirty(FName("bHasCableBoost"));
+}
+
+void AKPCLNetworkBuildingBase::SetNetworkIdDirect(const FString& NewId)
+{
+	mNetworkId = NewId;
+	mPropertyReplicator.MarkPropertyDirty(FName("mNetworkId"));
+}
+
+void AKPCLNetworkBuildingBase::SetConnectedNetworkIdDirect(const FString& NewId)
+{
+	mConnectedNetworkId = NewId;
+	mPropertyReplicator.MarkPropertyDirty(FName("mConnectedNetworkId"));
+}
+
+void AKPCLNetworkBuildingBase::SetDistanceToNetworkCore(float NewDist)
+{
+	mDistanceToNetworkCore = NewDist;
+	mPropertyReplicator.MarkPropertyDirty(FName("mDistanceToNetworkCore"));
+}
+
 void AKPCLNetworkBuildingBase::SetNetworkCore(AKPCLNetworkCore* Core, FKPCLFaxitNetwork* Network)
 {
 	if (IsValid(Core))
 	{
-		mNetworkId = Core->GetNetworkId();
-		mConnectedNetworkId = Core->GetNetworkId();
-		mDistanceToNetworkCore = Network->GetNearstDistanceToAccessPoint(
-			GetActorLocation(), IsValid(Cast<AKPCLNetworkTower>(this)));
+		const FString CoreNetworkId = Core->GetNetworkId();
+		SetNetworkIdDirect(CoreNetworkId);
+		SetConnectedNetworkIdDirect(CoreNetworkId);
+		if (Network)
+		{
+			SetDistanceToNetworkCore(
+				Network->GetNearstDistanceToAccessPoint(GetActorLocation(), IsValid(Cast<AKPCLNetworkTower>(this))));
+		}
 	}
 	else
 	{
-		mNetworkId = FString();
-		mConnectedNetworkId = FString();
-		mDistanceToNetworkCore = 0.f;
+		SetNetworkIdDirect(FString());
+		SetConnectedNetworkIdDirect(FString());
+		SetDistanceToNetworkCore(0.f);
 	}
 
 	UpdateRepresentation();
@@ -96,41 +115,43 @@ void AKPCLNetworkBuildingBase::HandlePower(float dt)
 	mPowerOptions.bHasPower = HasPower();
 	mPowerOptions.StructureTick(dt, IsProducing());
 
-	GetPowerInfoExplicit()->SetTargetConsumption(IsProducing() ? GetRealPowerConsume() : 0.1f);
-	GetPowerInfoExplicit()->SetMaximumTargetConsumption(GetRealPowerConsume());
+	// Fixed: GetPowerInfoExplicit() / GetNetworkInfoComponent() can return null on
+	// buildings whose components have not been created by a subclass BP.
+	UFGPowerInfoComponent* PowerInfo = GetPowerInfoExplicit();
+	if (IsValid(PowerInfo))
+	{
+		PowerInfo->SetTargetConsumption(IsProducing() ? GetRealPowerConsume() : 0.1f);
+		PowerInfo->SetMaximumTargetConsumption(GetRealPowerConsume());
+	}
 
-	GetNetworkInfoComponent()->SetTargetConsumption(IsProducing()
-		                                                ? mPowerOptions.mNormalPowerConsume +
-		                                                GetPowerConsumeOnDistance()
-		                                                : 0.1f);
-	GetNetworkInfoComponent()->SetMaximumTargetConsumption(GetRealPowerConsume());
-	GetNetworkInfoComponent()->SetBaseProduction(1000000000.f);
+	UKPCLNetworkInfoComponent* NetInfo = GetNetworkInfoComponent();
+	if (IsValid(NetInfo))
+	{
+		NetInfo->SetTargetConsumption(IsProducing() ? mPowerOptions.mNormalPowerConsume + GetPowerConsumeOnDistance()
+													: 0.1f);
+		NetInfo->SetMaximumTargetConsumption(GetRealPowerConsume());
+		NetInfo->SetBaseProduction(1000000000.f);
+	}
 }
 
 void AKPCLNetworkBuildingBase::UpdateDistanceToCore()
 {
 	if (bHasCableBoost)
 	{
-		mDistanceToNetworkCore = 0.f;
+		SetDistanceToNetworkCore(0.f);
 		return;
 	}
 
 	AKPCLNetworkCore* Core = GetFaxitCore();
 	if (IsValid(Core))
 	{
-		mDistanceToNetworkCore = Core->GetDistanceFrom(this);
+		SetDistanceToNetworkCore(Core->GetDistanceFrom(this));
 	}
 }
 
-bool AKPCLNetworkBuildingBase::HasCableBoost() const
-{
-	return bHasCableBoost;
-}
+bool AKPCLNetworkBuildingBase::HasCableBoost() const { return bHasCableBoost; }
 
-bool AKPCLNetworkBuildingBase::HasFaxitCore() const
-{
-	return IsValid(GetFaxitCoreConst());
-}
+bool AKPCLNetworkBuildingBase::HasFaxitCore() const { return IsValid(GetFaxitCoreConst()); }
 
 const AKPCLNetworkCore* AKPCLNetworkBuildingBase::GetFaxitCoreConst() const
 {
@@ -155,7 +176,10 @@ UKPCLNetwork* AKPCLNetworkBuildingBase::GetFaxitCableNetwork() const
 
 FKPCLFaxitNetwork AKPCLNetworkBuildingBase::GetFaxitNetwork() const
 {
-	if (!mFaxitSubsystem) { return FKPCLFaxitNetwork(); }
+	if (!mFaxitSubsystem)
+	{
+		return FKPCLFaxitNetwork();
+	}
 	bool Success;
 	return mFaxitSubsystem->GetByNetworkId(GetNetworkId(), Success);
 }
@@ -183,12 +207,22 @@ bool AKPCLNetworkBuildingBase::GetCableNetworkHasToManyCores() const
 TArray<EKPCLNetworkError> AKPCLNetworkBuildingBase::GetNetworkErrorCodes() const
 {
 	TArray<EKPCLNetworkError> ErrorCodes;
+	if (!IsValid(mFaxitSubsystem))
+	{
+		return ErrorCodes;
+	}
+
 	bool Success;
 	FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(GetNetworkId(), Success);
 
 	if (!Success)
 	{
 		ErrorCodes.Add(EKPCLNetworkError::NoNetwork);
+	}
+
+	if (mFaxitSubsystem->HasToManyNetworks())
+	{
+		ErrorCodes.Add(EKPCLNetworkError::GlobalNetworkToManyAddresses);
 	}
 
 	if (GetCableNetworkHasToManyCores())
@@ -198,6 +232,11 @@ TArray<EKPCLNetworkError> AKPCLNetworkBuildingBase::GetNetworkErrorCodes() const
 
 	if (IsValid(Network.mCore))
 	{
+		if (!Network.mCore->HasDrives())
+		{
+			ErrorCodes.Add(EKPCLNetworkError::NoDrivesAvailable);
+		}
+
 		if (Network.mCore->IsOverloaded())
 		{
 			ErrorCodes.Add(EKPCLNetworkError::NetworkOverloaded);
@@ -214,41 +253,43 @@ TArray<EKPCLNetworkError> AKPCLNetworkBuildingBase::GetNetworkErrorCodes() const
 
 void AKPCLNetworkBuildingBase::TryToConnectToNearstCore()
 {
-	if (HasAuthority())
+	if (!HasAuthority())
 	{
-		FKPCLFaxitNetwork* NetworkRef = mFaxitSubsystem->GetNetworkRef(GetNetworkId());
-		if (!NetworkRef)
+		return;
+	}
+
+	// Fixed: was dereferencing mFaxitSubsystem without null check.
+	if (!IsValid(mFaxitSubsystem))
+	{
+		UE_LOG(LogFaxit, Warning,
+			   TEXT("AKPCLNetworkBuildingBase::TryToConnectToNearstCore - mFaxitSubsystem is null for %s"), *GetName());
+		return;
+	}
+
+	FKPCLFaxitNetwork* NetworkRef = mFaxitSubsystem->GetNetworkRef(GetNetworkId());
+	if (!NetworkRef)
+	{
+		FKPCLFaxitNetwork Network;
+		mFaxitSubsystem->GetNearstNetwork(this, Network);
+		if (Network.mIsValid)
 		{
-			FKPCLFaxitNetwork Network;
-			mFaxitSubsystem->GetNearstNetwork(this, Network);
-			if (Network.mIsValid)
-			{
-				mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
-			}
-			else
-			{
-				UE_LOG(LogFaxit, Warning,
-				       TEXT(
-					       "AKPCLNetworkConnectionBuilding::BeginPlay - Failed to find nearest network core for building %s, Is there no Network or are all on limit?"
-				       ), *GetName());
-			}
+			mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+		}
+		else
+		{
+			UE_LOG(LogFaxit, Warning,
+				   TEXT("AKPCLNetworkBuildingBase::TryToConnectToNearstCore - Failed to find nearest network core for "
+						"building %s, Is there no Network or are all on limit?"),
+				   *GetName());
 		}
 	}
 }
 
-float AKPCLNetworkBuildingBase::GetRealPowerConsume() const
-{
-	return GetPowerConsume();
-}
+float AKPCLNetworkBuildingBase::GetRealPowerConsume() const { return GetPowerConsume(); }
 
-void AKPCLNetworkBuildingBase::OnNetworkDestoryed_Internal()
-{
-}
+void AKPCLNetworkBuildingBase::OnNetworkDestoryed_Internal() {}
 
-void AKPCLNetworkBuildingBase::OnNetworkAdded_Internal(AKPCLNetworkCore* Core)
-{
-}
-
+void AKPCLNetworkBuildingBase::OnNetworkAdded_Internal(AKPCLNetworkCore* Core) {}
 
 float FKPCLNetworkDistanceModifier::GetValue(float Distance) const
 {
@@ -287,10 +328,7 @@ AKPCLNetworkBuildingBase::AKPCLNetworkBuildingBase()
 	mMinimumStoppedTime = 1.f;
 }
 
-bool AKPCLNetworkBuildingBase::Overclocking_ShouldUse_Implementation()
-{
-	return false;
-}
+bool AKPCLNetworkBuildingBase::Overclocking_ShouldUse_Implementation() { return false; }
 
 UFGFactoryClipboardSettings* AKPCLNetworkBuildingBase::CopySettings_Implementation()
 {
@@ -302,15 +340,19 @@ UFGFactoryClipboardSettings* AKPCLNetworkBuildingBase::CopySettings_Implementati
 }
 
 bool AKPCLNetworkBuildingBase::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                            class AFGPlayerController* player)
+															class AFGPlayerController* player)
 {
 	if (UKPCLFaxitBasicClipboardSettings* Settings = Cast<UKPCLFaxitBasicClipboardSettings>(factoryClipboard))
 	{
-		bool Success;
-		FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(Settings->mNetworkId, Success);
-		if (Success)
+		// Fixed: was dereferencing mFaxitSubsystem without null check.
+		if (IsValid(mFaxitSubsystem))
 		{
-			mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+			bool Success;
+			FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(Settings->mNetworkId, Success);
+			if (Success)
+			{
+				mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
+			}
 		}
 
 		SetIsProductionPaused(Settings->bIsPaused);
@@ -320,18 +362,16 @@ bool AKPCLNetworkBuildingBase::PasteSettings_Implementation(UFGFactoryClipboardS
 	return false;
 }
 
-void AKPCLNetworkBuildingBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
-{
-}
+void AKPCLNetworkBuildingBase::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) {}
 
-bool AKPCLNetworkBuildingBase::CanUseFactoryClipboard_Implementation()
-{
-	return true;
-}
+bool AKPCLNetworkBuildingBase::CanUseFactoryClipboard_Implementation() { return true; }
 
 bool AKPCLNetworkBuildingBase::AddAsRepresentation()
 {
-	if (!bRepresentationEnabled) { return false; }
+	if (!bRepresentationEnabled)
+	{
+		return false;
+	}
 	if (AFGActorRepresentationManager* Manager = AFGActorRepresentationManager::Get(GetWorld()))
 	{
 		Manager->CreateAndAddNewRepresentation(this);
@@ -342,7 +382,10 @@ bool AKPCLNetworkBuildingBase::AddAsRepresentation()
 
 bool AKPCLNetworkBuildingBase::UpdateRepresentation()
 {
-	if (!bRepresentationEnabled) { return false; }
+	if (!bRepresentationEnabled)
+	{
+		return false;
+	}
 	if (AFGActorRepresentationManager* Manager = AFGActorRepresentationManager::Get(GetWorld()))
 	{
 		Manager->UpdateRepresentationOfActor(this);
@@ -353,7 +396,10 @@ bool AKPCLNetworkBuildingBase::UpdateRepresentation()
 
 bool AKPCLNetworkBuildingBase::RemoveAsRepresentation()
 {
-	if (!bRepresentationEnabled) { return false; }
+	if (!bRepresentationEnabled)
+	{
+		return false;
+	}
 	if (AFGActorRepresentationManager* Manager = AFGActorRepresentationManager::Get(GetWorld()))
 	{
 		Manager->RemoveRepresentationOfActor(this);
@@ -362,77 +408,48 @@ bool AKPCLNetworkBuildingBase::RemoveAsRepresentation()
 	return false;
 }
 
-bool AKPCLNetworkBuildingBase::IsActorStatic()
-{
-	return true;
-}
+bool AKPCLNetworkBuildingBase::IsActorStatic() { return true; }
 
-FVector AKPCLNetworkBuildingBase::GetRealActorLocation()
-{
-	return GetActorLocation();
-}
+FVector AKPCLNetworkBuildingBase::GetRealActorLocation() { return GetActorLocation(); }
 
-FRotator AKPCLNetworkBuildingBase::GetRealActorRotation()
-{
-	return GetActorRotation();
-}
+FRotator AKPCLNetworkBuildingBase::GetRealActorRotation() { return GetActorRotation(); }
 
-class UTexture2D* AKPCLNetworkBuildingBase::GetActorRepresentationTexture()
-{
-	return mRepresentationIcon;
-}
+class UTexture2D* AKPCLNetworkBuildingBase::GetActorRepresentationTexture() { return mRepresentationIcon; }
 
 FText AKPCLNetworkBuildingBase::GetActorRepresentationText()
 {
+	// Fixed: was calling mFaxitSubsystem without null check.
+	if (!IsValid(mFaxitSubsystem))
+	{
+		return FText::FromString(TEXT("No Network"));
+	}
+
 	bool bSuccess = false;
 	FKPCLFaxitNetworkInfo NetworkInfo = mFaxitSubsystem->GetNetworkByIdWithInfo(GetNetworkId(), bSuccess);
-	if (!bSuccess) { return FText::FromString(TEXT("No Network")); }
+	if (!bSuccess)
+	{
+		return FText::FromString(TEXT("No Network"));
+	}
 	return FText::FromString(NetworkInfo.mRelatedNetwork.mNetworkName);
 }
 
-void AKPCLNetworkBuildingBase::SetActorRepresentationText(const FText& newText)
-{
-}
+void AKPCLNetworkBuildingBase::SetActorRepresentationText(const FText& newText) {}
 
-FLinearColor AKPCLNetworkBuildingBase::GetActorRepresentationColor()
-{
-	return mRepresentationColor;
-}
+FLinearColor AKPCLNetworkBuildingBase::GetActorRepresentationColor() { return mRepresentationColor; }
 
-void AKPCLNetworkBuildingBase::SetActorRepresentationColor(FLinearColor newColor)
-{
-	mRepresentationColor = newColor;
-}
+void AKPCLNetworkBuildingBase::SetActorRepresentationColor(FLinearColor newColor) { mRepresentationColor = newColor; }
 
-ERepresentationType AKPCLNetworkBuildingBase::GetActorRepresentationType()
-{
-	return ERepresentationType::RT_Default;
-}
+ERepresentationType AKPCLNetworkBuildingBase::GetActorRepresentationType() { return ERepresentationType::RT_Default; }
 
-bool AKPCLNetworkBuildingBase::GetActorShouldShowInCompass()
-{
-	return bRepresentationEnabled && bShouldShowInCompass;
-}
+bool AKPCLNetworkBuildingBase::GetActorShouldShowInCompass() { return bRepresentationEnabled && bShouldShowInCompass; }
 
-bool AKPCLNetworkBuildingBase::GetActorShouldShowOnMap()
-{
-	return bRepresentationEnabled && bShouldShowOnMap;
-}
+bool AKPCLNetworkBuildingBase::GetActorShouldShowOnMap() { return bRepresentationEnabled && bShouldShowOnMap; }
 
-EFogOfWarRevealType AKPCLNetworkBuildingBase::GetActorFogOfWarRevealType()
-{
-	return EFogOfWarRevealType::FOWRT_Static;
-}
+EFogOfWarRevealType AKPCLNetworkBuildingBase::GetActorFogOfWarRevealType() { return EFogOfWarRevealType::FOWRT_Static; }
 
-float AKPCLNetworkBuildingBase::GetActorFogOfWarRevealRadius()
-{
-	return mFogOfWarRevealRadius;
-}
+float AKPCLNetworkBuildingBase::GetActorFogOfWarRevealRadius() { return mFogOfWarRevealRadius; }
 
-ECompassViewDistance AKPCLNetworkBuildingBase::GetActorCompassViewDistance()
-{
-	return mCompassViewDistance;
-}
+ECompassViewDistance AKPCLNetworkBuildingBase::GetActorCompassViewDistance() { return mCompassViewDistance; }
 
 void AKPCLNetworkBuildingBase::SetActorCompassViewDistance(ECompassViewDistance compassViewDistance)
 {
@@ -444,15 +461,13 @@ UMaterialInterface* AKPCLNetworkBuildingBase::GetActorRepresentationCompassMater
 	return mRepresentationMaterial;
 }
 
-TArray<FLocalUserNetIdBundle> AKPCLNetworkBuildingBase::GetLastEditedBy() const
+FPlayerInfoHandle AKPCLNetworkBuildingBase::GetLastEditedBy() const
 {
-	//No idea what do I need that for
-	return TArray<FLocalUserNetIdBundle>();
+	// No idea what do I need that for
+	return FPlayerInfoHandle();
 }
 
-void AKPCLNetworkBuildingBase::SetActorLastEditedBy(const TArray<FLocalUserNetIdBundle>& LastEditedBy)
-{
-}
+void AKPCLNetworkBuildingBase::SetActorLastEditedByHandle(const FPlayerInfoHandle& playerInfoHandle) {}
 
 void AKPCLNetworkBuildingBase::BeginPlay()
 {
@@ -489,10 +504,20 @@ void AKPCLNetworkBuildingBase::BeginPlay()
 			}
 		}
 
-		FKPCLFaxitNetwork* Network = mFaxitSubsystem->GetNetworkRef(GetNetworkId());
-		if (!Network)
+		if (IsValid(mFaxitSubsystem))
 		{
-			mNetworkId = FString();
+			FKPCLFaxitNetwork* Network = mFaxitSubsystem->GetNetworkRef(GetNetworkId());
+			if (!Network || !Network->mIsValid)
+			{
+				SetNetworkIdDirect(FString());
+			}
+			else if (!IsCore() && Network && IsValid(Network->mCore))
+			{
+				if (!mFaxitSubsystem->AddBuildingToCore(this, Network->mCore))
+				{
+					SetNetworkIdDirect(FString());
+				}
+			}
 		}
 
 		AKPCLUnlockSubsystem* UnlockSubsystem = AKPCLUnlockSubsystem::Get(GetWorld());
@@ -521,7 +546,11 @@ void AKPCLNetworkBuildingBase::Factory_Tick(float dt)
 
 	if (HasAuthority())
 	{
-		bHasCableBoost = Factory_HasFaxitCableConnection();
+		const bool NewCableBoost = Factory_HasFaxitCableConnection();
+		if (NewCableBoost != bHasCableBoost)
+		{
+			SetHasCableBoost(NewCableBoost);
+		}
 
 		FString NewNetworkId = GetNetworkId();
 		if (!IsCore() && mConnectedNetworkId != NewNetworkId)
@@ -530,10 +559,16 @@ void AKPCLNetworkBuildingBase::Factory_Tick(float dt)
 			FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(NewNetworkId, Success);
 			if (Success)
 			{
-				AsyncTask(ENamedThreads::Type::GameThread, [this, Network]
-				{
-					this->mFaxitSubsystem->AddBuildingToCore(this, Network.mCore);
-				});
+				// Fixed: was capturing raw `this` and `Network` by value inside an AsyncTask without
+				// guarding against UAF. Now uses RunOnGameThreadIfValid with a TWeakObjectPtr.
+				RunOnGameThreadIfValid(this,
+									   [Network](AKPCLNetworkBuildingBase* Self)
+									   {
+										   if (IsValid(Self->mFaxitSubsystem))
+										   {
+											   Self->mFaxitSubsystem->AddBuildingToCore(Self, Network.mCore);
+										   }
+									   });
 			}
 		}
 
@@ -568,6 +603,9 @@ void AKPCLNetworkBuildingBase::GetConditionalReplicatedProps(TArray<FFGCondRepli
 	FG_DOREPCONDITIONAL(ThisClass, bHasCableBoost);
 	FG_DOREPCONDITIONAL(ThisClass, mNetworkId);
 	FG_DOREPCONDITIONAL(ThisClass, mConnectedNetworkId);
+	// Fixed: mDistanceToNetworkCore is now FGReplicated and must be registered here
+	// so clients receive distance-based power consumption values.
+	FG_DOREPCONDITIONAL(ThisClass, mDistanceToNetworkCore);
 }
 
 float AKPCLNetworkBuildingBase::GetPowerConsume() const
@@ -642,32 +680,28 @@ void AKPCLNetworkBuildingBase::UnregisterInteractingPlayer_Implementation(AFGCha
 
 bool AKPCLNetworkBuildingBase::CanProduce_Implementation() const
 {
-	if (IsPlayingBuildEffect() || IsProductionPaused())
+	if (IsPlayingBuildEffect() || IsProductionPaused() || GetNetworkId().IsEmpty())
 	{
 		return false;
 	}
 
 	if (IsValid(GetFaxitCoreConst()) && !IsCore())
 	{
-		return GetFaxitCoreConst()->CanProduce() && !GetNetworkId().IsEmpty();
+		return GetFaxitCoreConst()->IsProducing();
 	}
 
-	return !GetNetworkId().IsEmpty();
+	return true;
 }
-
 
 void AKPCLNetworkBuildingBase::OnCircuitChanged(UFGCircuitConnectionComponent* Component)
 {
 	if (UKPCLNetworkConnectionComponent* NetworkConnection = Cast<UKPCLNetworkConnectionComponent>(Component))
 	{
-		bHasCableBoost = IsValid(NetworkConnection->GetCore());
+		SetHasCableBoost(IsValid(NetworkConnection->GetCore()));
 	}
 }
 
-bool AKPCLNetworkBuildingBase::IsCore() const
-{
-	return false;
-}
+bool AKPCLNetworkBuildingBase::IsCore() const { return false; }
 
 float AKPCLNetworkBuildingBase::GetCoreDistance() const
 {
@@ -745,6 +779,9 @@ void AKPCLNetworkBuildingBase::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 
 TArray<FKPCLFaxitNetworkStatData> AKPCLNetworkBuildingBase::GetAndResetStats()
 {
+	// Fixed: mCurrentStates is written from the factory worker thread (AddDownloadToStats /
+	// AddUploadToStats) and read+cleared here on the game thread. Guard with mStatsMutex.
+	FScopeLock Lock(&mStatsMutex);
 	TArray<FKPCLFaxitNetworkStatData> Stats;
 	Stats.Append(mCurrentStates);
 	mCurrentStates.Empty();
@@ -753,7 +790,11 @@ TArray<FKPCLFaxitNetworkStatData> AKPCLNetworkBuildingBase::GetAndResetStats()
 
 FKPCLFaxitNetworkStatData* AKPCLNetworkBuildingBase::GetState(TSubclassOf<UFGItemDescriptor> Item)
 {
-	if (!IsValid(Item)) { return nullptr; }
+	// Note: callers (AddDownloadToStats / AddUploadToStats) must hold mStatsMutex before calling.
+	if (!IsValid(Item))
+	{
+		return nullptr;
+	}
 
 	for (FKPCLFaxitNetworkStatData& Stat : mCurrentStates)
 	{
@@ -770,7 +811,12 @@ FKPCLFaxitNetworkStatData* AKPCLNetworkBuildingBase::GetState(TSubclassOf<UFGIte
 
 void AKPCLNetworkBuildingBase::AddDownloadToStats(TSubclassOf<UFGItemDescriptor> Item, int32 Amount)
 {
-	if (Amount <= 0) { return; }
+	if (Amount <= 0)
+	{
+		return;
+	}
+	// Fixed: concurrent access with GetAndResetStats (game thread) — guard with mStatsMutex.
+	FScopeLock Lock(&mStatsMutex);
 	if (FKPCLFaxitNetworkStatData* State = GetState(Item))
 	{
 		State->mDownload += Amount;
@@ -779,14 +825,16 @@ void AKPCLNetworkBuildingBase::AddDownloadToStats(TSubclassOf<UFGItemDescriptor>
 
 void AKPCLNetworkBuildingBase::AddUploadToStats(TSubclassOf<UFGItemDescriptor> Item, int32 Amount)
 {
-	if (Amount <= 0) { return; }
+	if (Amount <= 0)
+	{
+		return;
+	}
+	// Fixed: concurrent access with GetAndResetStats (game thread) — guard with mStatsMutex.
+	FScopeLock Lock(&mStatsMutex);
 	if (FKPCLFaxitNetworkStatData* State = GetState(Item))
 	{
 		State->mUpload += Amount;
 	}
 }
 
-AFGResourceSinkSubsystem* AKPCLNetworkBuildingBase::GetSinkSub()
-{
-	return AFGResourceSinkSubsystem::Get(GetWorld());
-}
+AFGResourceSinkSubsystem* AKPCLNetworkBuildingBase::GetSinkSub() { return AFGResourceSinkSubsystem::Get(GetWorld()); }

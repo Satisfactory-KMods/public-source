@@ -213,7 +213,7 @@ void UKBFLWorldCDOContentRemover::HandleSingleRecipeRemoval(TSubclassOf<UFGRecip
 					  Recipe->GetName());
 		}
 
-		RecipeManager->RebuildAvailableBuildings();
+		RecipeManager->RebuildDerivedAvailableRecipesData();
 		RecipeManager->PopulateAllRecipesList();
 
 		Requirements_NotifyOnModified(CDO);

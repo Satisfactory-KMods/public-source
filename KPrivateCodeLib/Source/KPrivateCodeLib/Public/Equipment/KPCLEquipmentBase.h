@@ -1,9 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Equipment/FGEquipment.h"
+
 #include "KPCLEquipmentBase.generated.h"
 
 UCLASS()
@@ -12,35 +14,8 @@ class KPRIVATECODELIB_API AKPCLEquipmentBase : public AFGEquipment
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AKPCLEquipmentBase();
 
-protected:
-	virtual void Tick(float DeltaSeconds) override;
-	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-
-	virtual void Equip(AFGCharacterPlayer* character) override;
-	virtual void UnEquip() override;
-	virtual void DisableEquipment() override;
-	virtual void WasEquipped_Implementation() override;
-	virtual void WasUnEquipped_Implementation() override;
-
-	virtual void Clear();
-	virtual void Cache();
-	virtual void Trace();
-
-	virtual void OnNewActorHit(AActor* Hit, AActor* Last);
-	virtual void OnLastActorChanged(AActor* NewLast, AActor* LastLast);
-
-	template <class T>
-	T* GetHit(bool LastHit = false);
-
-	// Bind Modded Inputs
-	virtual void AddEquipmentActionBindings() override;
-	//virtual void SetEquipmentBindings(UEnhancedInputComponent* EIC);
-
-public:
 	UFUNCTION(BlueprintPure)
 	UFGOutlineComponent* GetCachedOutlineComponent() const;
 
@@ -57,6 +32,28 @@ public:
 	T* GetLastHit() const;
 
 protected:
+	//~ Begin AFGEquipment Interface
+	virtual void Tick(float DeltaSeconds) override;
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void Equip(AFGCharacterPlayer* character) override;
+	virtual void UnEquip() override;
+	virtual void DisableEquipment() override;
+	virtual void WasEquipped_Implementation() override;
+	virtual void WasUnEquipped_Implementation() override;
+	virtual void AddEquipmentActionBindings() override;
+	//~ End AFGEquipment Interface
+
+	virtual void Clear();
+	virtual void Cache();
+	virtual void Trace();
+
+	virtual void OnNewActorHit(AActor* Hit, AActor* Last);
+	virtual void OnLastActorChanged(AActor* NewLast, AActor* LastLast);
+
+	template <class T>
+	T* GetHit(bool LastHit = false);
+
 	/** Input Actions */
 	void Input_PrimaryFire(const FInputActionValue& actionValue);
 	void Input_SecondaryFire(const FInputActionValue& actionValue);
@@ -66,48 +63,44 @@ protected:
 	virtual void MultiCast_OnLeftClick();
 	virtual void OnLeftClick();
 	virtual void OnLeftClickReleased();
-	bool bLeftIsClicked = false;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MultiCast_OnRightClick();
 	virtual void OnRightClick();
 	virtual void OnRightClickReleased();
-	bool bRightIsClicked = false;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MultiCast_OnMiddleMouseButton();
 	virtual void OnMiddleMouseButton();
 	virtual void OnMiddleMouseButtonReleased();
+
+	bool bLeftIsClicked = false;
+	bool bRightIsClicked = false;
 	bool bMiddleMouseButtonIsClicked = false;
 
-	// Cached actor Outline component to add outlines to the actors/signs
 	UPROPERTY()
-	UFGOutlineComponent* mCachedOutlineComponent;
+	TObjectPtr<UFGOutlineComponent> mCachedOutlineComponent;
 
-	// Trace BoxSize
-	UPROPERTY(EditDefaultsOnly, Category="KMods|LineTrace")
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|LineTrace")
 	bool mShouldUseLineTrace = false;
 
-	// Trace BoxSize
-	UPROPERTY(EditDefaultsOnly, Category="KMods|LineTrace",
-		meta=( EditCondition = mShouldUseLineTrace, EditConditionHides ))
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|LineTrace",
+			  meta = (EditCondition = mShouldUseLineTrace, EditConditionHides))
 	FVector mTraceBoxHalfSize = FVector(10.f);
 
-	// Channels for the line trace
-	UPROPERTY(EditDefaultsOnly, Category="KMods|LineTrace",
-		meta=( EditCondition = mShouldUseLineTrace, EditConditionHides ))
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|LineTrace",
+			  meta = (EditCondition = mShouldUseLineTrace, EditConditionHides))
 	TArray<TEnumAsByte<EObjectTypeQuery>> mTraceObjects;
 
-	// range for the Sign Gun
-	UPROPERTY(EditDefaultsOnly, Category="KMods|LineTrace",
-		meta=( EditCondition = mShouldUseLineTrace, EditConditionHides ))
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|LineTrace",
+			  meta = (EditCondition = mShouldUseLineTrace, EditConditionHides))
 	float mTraceRange = 15000.f;
 
 	UPROPERTY()
-	AActor* mCurrentActor;
+	TObjectPtr<AActor> mCurrentActor;
 
 	UPROPERTY()
-	AActor* mLastActor;
+	TObjectPtr<AActor> mLastActor;
 };
 
 template <class T>

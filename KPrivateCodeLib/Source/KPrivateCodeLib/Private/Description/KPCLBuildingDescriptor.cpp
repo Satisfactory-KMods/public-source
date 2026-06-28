@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Description/KPCLBuildingDescriptor.h"
 
 FText UKPCLBuildingDescriptor::GetItemDescriptionInternal() const
@@ -22,7 +21,7 @@ FText UKPCLBuildingDescriptor::GetItemNameInternal() const
 }
 
 FText UKPCLBuildingDescriptor::BP_GetItemNameInternal_Implementation(const FText& InText,
-                                                                     TSubclassOf<AFGBuildable> BuildableClass) const
+																	 TSubclassOf<AFGBuildable> BuildableClass) const
 {
 	return InText;
 }

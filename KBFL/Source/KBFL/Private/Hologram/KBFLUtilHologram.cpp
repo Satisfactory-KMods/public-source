@@ -1,10 +1,10 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-#pragma once
 
 #include "Hologram/KBFLUtilHologram.h"
 
 #include "BFL/KBFL_Player.h"
+#include "FGPlayerController.h"
 #include "Hologram/KBFLUtilBuildable.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(KBFLUtilHologramLog, Log, All)

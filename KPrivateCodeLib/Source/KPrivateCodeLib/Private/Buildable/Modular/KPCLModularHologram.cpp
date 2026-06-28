@@ -1,11 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Buildable/Modular/KPCLModularHologram.h"
 
-#include "FGConstructDisqualifier.h"
 #include "Buildable/Modular/KPCLModularBuildingHandler.h"
 #include "Buildable/Modular/KPCLModularBuildingInterface.h"
+#include "FGConstructDisqualifier.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Net/UnrealNetwork.h"
@@ -21,8 +20,8 @@ AKPCLModularHologram::AKPCLModularHologram()
 	mToMuchModules = LoadClass<UFGConstructDisqualifier>(
 		nullptr, TEXT("/KPrivateCodeLib/-Shared/Disqualifier/Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C"));
 	mModuleIsNotAllowed = LoadClass<UFGConstructDisqualifier>(
-		nullptr, TEXT(
-			"/KPrivateCodeLib/-Shared/Disqualifier/Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C"));
+		nullptr,
+		TEXT("/KPrivateCodeLib/-Shared/Disqualifier/Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C"));
 }
 
 void AKPCLModularHologram::BeginPlay()
@@ -30,14 +29,14 @@ void AKPCLModularHologram::BeginPlay()
 	Super::BeginPlay();
 
 	auto Comps = GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Top"));
-	if (Comps.Num() > 1)
+	if (Comps.Num() >= 1)
 	{
 		TopMesh = Cast<UStaticMeshComponent>(Comps[0]);
 		TopMesh->SetHiddenInGame(true);
 	}
 
 	Comps = GetComponentsByTag(USkeletalMeshComponent::StaticClass(), FName("Top"));
-	if (Comps.Num() > 1)
+	if (Comps.Num() >= 1)
 	{
 		TopSkel = Cast<USkeletalMeshComponent>(Comps[0]);
 		TopSkel->SetHiddenInGame(true);
@@ -57,7 +56,7 @@ bool AKPCLModularHologram::IsValidHitResult(const FHitResult& hitResult) const
 	if (hitResult.IsValidBlockingHit() && hitResult.GetActor())
 	{
 		if (UKismetSystemLibrary::DoesImplementInterface(hitResult.GetActor(),
-		                                                 UKPCLModularBuildingInterface::StaticClass()))
+														 UKPCLModularBuildingInterface::StaticClass()))
 		{
 			return true;
 		}
@@ -69,14 +68,14 @@ void AKPCLModularHologram::SetHologramLocationAndRotation(const FHitResult& hitR
 {
 	TSubclassOf<UFGConstructDisqualifier> Disqualifier = mMissingMasterModule;
 	if (UKismetSystemLibrary::DoesImplementInterface(hitResult.GetActor(),
-	                                                 UKPCLModularBuildingInterface::StaticClass()))
+													 UKPCLModularBuildingInterface::StaticClass()))
 	{
 		AFGBuildable* MasterTry = IKPCLModularBuildingInterface::Execute_GetMasterBuilding(hitResult.GetActor());
 		mModuleMasterHit = MasterTry != nullptr ? MasterTry : Cast<AFGBuildable>(hitResult.GetActor());
 		if (IKPCLModularBuildingInterface::Execute_GetCanHaveModules(mModuleMasterHit))
 		{
-			UKPCLModularBuildingHandlerBase* Handler = IKPCLModularBuildingInterface::Execute_GetModularHandler(
-				mModuleMasterHit);
+			UKPCLModularBuildingHandlerBase* Handler =
+				IKPCLModularBuildingInterface::Execute_GetModularHandler(mModuleMasterHit);
 			if (Handler)
 			{
 				if (IsModuleAllowed(Handler, mModuleMasterHit, hitResult))
@@ -88,7 +87,7 @@ void AKPCLModularHologram::SetHologramLocationAndRotation(const FHitResult& hitR
 					}
 
 					if (Handler->CanAttachToLocation(mAttachmentDescriptor, TestLocation, mNextSnapLocation,
-					                                 mSnapDistance))
+													 mSnapDistance))
 					{
 						FRotator NewRotator = mNextSnapLocation.Rotator();
 						NewRotator.Yaw += mRotation;
@@ -153,12 +152,17 @@ void AKPCLModularHologram::ConfigureComponents(AFGBuildable* inBuildable) const
 {
 	Super::ConfigureComponents(inBuildable);
 
+	if (!IsValid(mModuleMasterHit))
+	{
+		return;
+	}
+
 	if (mUpgradedActorRef)
 	{
 		IKPCLModularBuildingInterface::Execute_RemoveAttachedActor(mModuleMasterHit, mUpgradedActorRef);
 	}
 	IKPCLModularBuildingInterface::Execute_AttachedActor(mModuleMasterHit, inBuildable, mAttachmentDescriptor,
-	                                                     mSnapLocation, mSnapDistance);
+														 mSnapLocation, mSnapDistance);
 }
 
 void AKPCLModularHologram::CheckValidPlacement()
@@ -172,21 +176,18 @@ void AKPCLModularHologram::CheckValidPlacement()
 }
 
 bool AKPCLModularHologram::IsModuleAllowed(UKPCLModularBuildingHandlerBase* Handler, AFGBuildable* TargetBuildable,
-                                           const FHitResult& hitResult)
+										   const FHitResult& hitResult)
 {
 	if (TargetBuildable->Implements<UKPCLModularBuildingInterface>())
 	{
 		return IKPCLModularBuildingInterface::Execute_IsAllowedToSnap(TargetBuildable,
-		                                                              GetDefaultBuildable<AFGBuildable>());
+																	  GetDefaultBuildable<AFGBuildable>());
 	}
 
 	return true;
 }
 
-AActor* AKPCLModularHologram::GetUpgradedActor() const
-{
-	return mUpgradedActorRef;
-}
+AActor* AKPCLModularHologram::GetUpgradedActor() const { return mUpgradedActorRef; }
 
 bool AKPCLModularHologram::TryUpgrade(const FHitResult& hitResult)
 {
@@ -199,7 +200,7 @@ bool AKPCLModularHologram::TryUpgrade(const FHitResult& hitResult)
 	if (hitResult.IsValidBlockingHit())
 	{
 		if (UKismetSystemLibrary::DoesImplementInterface(hitResult.GetActor(),
-		                                                 UKPCLModularBuildingInterface::StaticClass()))
+														 UKPCLModularBuildingInterface::StaticClass()))
 		{
 			TSubclassOf<UKAPIModularAttachmentDescriptor> ATClass =
 				IKPCLModularBuildingInterface::Execute_GetModularAttachmentClass(hitResult.GetActor());
@@ -208,7 +209,7 @@ bool AKPCLModularHologram::TryUpgrade(const FHitResult& hitResult)
 				mModuleMasterHit = IKPCLModularBuildingInterface::Execute_GetMasterBuilding(hitResult.GetActor());
 				mUpgradedActorRef = Cast<AFGBuildable>(hitResult.GetActor());
 				SetActorLocationAndRotation(hitResult.GetActor()->GetActorLocation(),
-				                            hitResult.GetActor()->GetActorRotation());
+											hitResult.GetActor()->GetActorRotation());
 				return mUpgradedActorRef != nullptr;
 			}
 		}
@@ -223,9 +224,10 @@ void AKPCLModularHologram::Scroll(int32 Delta)
 	if (mCanRotate)
 	{
 		mRotation += 45.0f * Delta;
-		if (mRotation == 360.0f)
+		mRotation = FMath::Fmod(mRotation, 360.0f);
+		if (mRotation < 0.0f)
 		{
-			mRotation = 0;
+			mRotation += 360.0f;
 		}
 	}
 	Super::Scroll(Delta);

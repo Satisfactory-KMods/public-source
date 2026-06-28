@@ -1,10 +1,8 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/KPCLNetworkCable.h"
 
 #include "Network/KPCLNetwork.h"
-
 
 AKPCLNetworkCable::AKPCLNetworkCable()
 {

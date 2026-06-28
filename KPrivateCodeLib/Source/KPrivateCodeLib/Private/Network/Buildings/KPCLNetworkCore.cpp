@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/Buildings/KPCLNetworkCore.h"
 
 #include "KPrivateCodeLibModule.h"
@@ -11,6 +10,7 @@
 #include "Network/Buildings/KPCLNetworkConnectionBuilding.h"
 #include "Network/Buildings/KPCLNetworkTower.h"
 #include "Network/KPCLNetwork.h"
+#include "Network/KPCLNetworkAsyncHelpers.h"
 #include "Network/KPCLNetworkConnectionComponent.h"
 #include "Network/KPCLNetworkInfoComponent.h"
 #include "Registry/ModContentRegistry.h"
@@ -77,6 +77,16 @@ void AKPCLNetworkCore::BeginPlay()
 
 	if (HasAuthority())
 	{
+		// Fixed: mFaxitSubsystem could be null if the subsystem hasn't been registered yet.
+		if (!IsValid(mFaxitSubsystem))
+		{
+			UE_LOG(LogFaxit, Error,
+			       TEXT("AKPCLNetworkCore::BeginPlay - mFaxitSubsystem is null for %s. "
+				       "Network will not be initialised."),
+			       *GetName());
+			return;
+		}
+
 		FKPCLFaxitNetwork Network = mFaxitSubsystem->CreateOrAddNetworkCoreNative(this);
 
 		UpdateStorageState();
@@ -114,7 +124,7 @@ void AKPCLNetworkCore::GetDismantleInventoryReturns(TArray<FInventoryStack>& out
 
 	if (TSubclassOf<UFGRecipe> Recipe = GetBuiltWithRecipe())
 	{
-		for (FItemAmount ItemAmount : UFGRecipe::GetIngredients(Recipe))
+		for (FItemAmount ItemAmount : UFGRecipe::GetIngredients(this, Recipe))
 		{
 			if (ItemAmount.Amount > 0 && ItemAmount.ItemClass)
 			{
@@ -123,7 +133,7 @@ void AKPCLNetworkCore::GetDismantleInventoryReturns(TArray<FInventoryStack>& out
 				if (form == EResourceForm::RF_SOLID)
 				{
 					UFGInventoryLibrary::MergeInventoryItem(out_returns,
-															FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
+					                                        FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
 				}
 			}
 		}
@@ -155,7 +165,6 @@ FText AKPCLNetworkCore::GetActorRepresentationText()
 
 bool AKPCLNetworkCore::CanUseFactoryClipboard_Implementation() { return false; }
 
-
 void AKPCLNetworkCore::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -168,13 +177,17 @@ void AKPCLNetworkCore::GetConditionalReplicatedProps(TArray<FFGCondReplicatedPro
 	Super::GetConditionalReplicatedProps(outProps);
 
 	FG_DOREPCONDITIONAL(ThisClass, mStateBundels);
-	FG_DOREPCONDITIONAL(ThisClass, mStorage);
+	FG_DOREPCONDITIONAL_WITH_NOTIFY(ThisClass, mStorage, OnRep_Storage);
 	FG_DOREPCONDITIONAL(ThisClass, mNetworkPower);
 	FG_DOREPCONDITIONAL(ThisClass, mDrivePower);
+	FG_DOREPCONDITIONAL(ThisClass, mDiskUniqueBuildings);
+	FG_DOREPCONDITIONAL(ThisClass, mDiskBuildingLimit);
+	FG_DOREPCONDITIONAL(ThisClass, mDiskStacks);
+	FG_DOREPCONDITIONAL(ThisClass, mBuildingPower);
 }
 
 void AKPCLNetworkCore::GetDismantleRefund_Implementation(TArray<FInventoryStack>& out_refund,
-														 bool noBuildCostEnabled) const
+                                                         bool noBuildCostEnabled) const
 {
 	if (noBuildCostEnabled)
 	{
@@ -191,6 +204,13 @@ void AKPCLNetworkCore::Factory_TickAuthOnly(float dt)
 	mStorage.mMaxUniqueItems = GetUniqueItemLimit();
 	mStorage.mStackMultiplier = GetStackLimit();
 
+	// Keep the replicated array in sync with the authoritative map so clients
+	// receive a correct picture when the conditional replicator sends mStorage.
+	if (!GetInteractingPlayers().IsEmpty())
+	{
+		mStorage.TickReplication();
+	}
+
 	if (mItemFlushTimer.Tick(dt))
 	{
 		FlushOverflow();
@@ -199,12 +219,16 @@ void AKPCLNetworkCore::Factory_TickAuthOnly(float dt)
 	UKPCLNetwork* Network = GetFaxitCableNetwork();
 	if (IsValid(Network) && Network->IsFuseTriggered())
 	{
-		AsyncTask(ENamedThreads::GameThread, [Network]() { Network->ResetFuse(); });
+		// Fixed: was capturing raw `Network` UObject* by value into an AsyncTask without
+		// a validity guard — UAF if the circuit is destroyed before the task runs.
+		RunOnGameThreadIfValid(Network, [](UKPCLNetwork* SafeNetwork) { SafeNetwork->ResetFuse(); });
 	}
 
 	if (mNetworkStatsArchiver.Tick(dt))
 	{
-		AsyncTask(ENamedThreads::GameThread, [&]() { this->SaveStateBundle(); });
+		// Fixed: was capturing the local stack frame by reference ([&]) — SaveStateBundle
+		// would dereference a dangling stack pointer if the factory tick finished first.
+		RunOnGameThreadIfValid(this, [](AKPCLNetworkCore* Self) { Self->SaveStateBundle(); });
 	}
 }
 
@@ -259,14 +283,18 @@ void AKPCLNetworkCore::SaveStateBundle()
 	mStateBundels.Emplace(NewBundel);
 	while (mStateBundels.Num() > 60)
 	{
-		mStateBundels.Pop(false);
+		mStateBundels.Pop(EAllowShrinking::No);
 	}
 	mStateBundels.Sort([](const FKPCLFaxitNetworkStatDataBundle& a, const FKPCLFaxitNetworkStatDataBundle& b)
-					   { return a.mTimestamp > b.mTimestamp; });
+	{
+		return a.mTimestamp > b.mTimestamp;
+	});
+	bStatBundleChanged = true;
+	mPropertyReplicator.MarkPropertyDirty(FName("mStateBundels"));
 }
 
 bool AKPCLNetworkCore::CanItemBeStoredInNetwork(TSubclassOf<AKPCLNetworkCore> CoreClass,
-												TSubclassOf<UFGItemDescriptor> Item)
+                                                TSubclassOf<UFGItemDescriptor> Item)
 {
 	if (!IsValid(Item) || !IsValid(CoreClass))
 	{
@@ -289,8 +317,15 @@ FString AKPCLNetworkCore::GetNetworkId() const
 		return mNetworkId;
 	}
 
+	// Fixed: was calling AKPCLFaxitSubsystem::Get(GetWorld()) without caching or null-checking.
+	// Use the already-cached mFaxitSubsystem instead.
+	if (!IsValid(mFaxitSubsystem))
+	{
+		return mNetworkId;
+	}
+
 	FKPCLFaxitNetwork Network;
-	AKPCLFaxitSubsystem::Get(GetWorld())->GetNetworkByCore(GetFaxitCoreConst(), Network);
+	mFaxitSubsystem->GetNetworkByCore(GetFaxitCoreConst(), Network);
 	return Network.mIsValid ? Network.mNetworkId : mNetworkId;
 }
 
@@ -310,7 +345,7 @@ void AKPCLNetworkCore::DebugInventory() const
 	for (FItemAmount Storage : mStorage.ToItemAmountArray())
 	{
 		UE_LOG(LogFaxit, Log, TEXT("Item: %s | Amount: %d"),
-			   *UFGItemDescriptor::GetItemName(Storage.ItemClass).ToString(), Storage.Amount);
+		       *UFGItemDescriptor::GetItemName(Storage.ItemClass).ToString(), Storage.Amount);
 	}
 	UE_LOG(LogFaxit, Warning, TEXT("----- END ---> Faxit Network Core Inventory -----"));
 }
@@ -333,9 +368,8 @@ void AKPCLNetworkCore::UpdatePowerConsume()
 		}
 	}
 
-
-	mBuildingPower = TotalBuildingPowerConsume;
-	mNetworkPower = mDrivePower + TotalBuildingPowerConsume + mPowerOptions.mNormalPowerConsume;
+	SetBuildingPower(TotalBuildingPowerConsume);
+	SetNetworkPower(mDrivePower + TotalBuildingPowerConsume + mPowerOptions.mNormalPowerConsume);
 }
 
 void AKPCLNetworkCore::PostInitializeComponents()
@@ -361,7 +395,7 @@ void AKPCLNetworkCore::PostInitializeComponents()
 	for (UFGPowerConnectionComponent* PowerConnectionComponent : PowerConnectionComponents)
 	{
 		if (UKPCLNetworkConnectionComponent* NetworkConnectionComponent =
-				Cast<UKPCLNetworkConnectionComponent>(PowerConnectionComponent))
+			Cast<UKPCLNetworkConnectionComponent>(PowerConnectionComponent))
 		{
 			mNetworkConnection = NetworkConnectionComponent;
 		}
@@ -400,6 +434,11 @@ int32 AKPCLNetworkCore::GetStackLimit() const { return mDiskStacks; }
 
 int32 AKPCLNetworkCore::GetBuildingCount() const
 {
+	// Fixed: mFaxitSubsystem can be null on clients or during early BeginPlay.
+	if (!IsValid(mFaxitSubsystem))
+	{
+		return 0;
+	}
 	FKPCLFaxitNetwork Network;
 	bool Success = mFaxitSubsystem->GetNetworkByCore(this, Network);
 	if (!Success)
@@ -439,7 +478,7 @@ bool AKPCLNetworkCore::CanProduce_Implementation() const
 		return false;
 	}
 
-	if (GetStackLimit() < 1)
+	if (GetStackLimit() < 1 || mFaxitSubsystem->HasToManyNetworks())
 	{
 		return false;
 	}
@@ -461,7 +500,7 @@ FItemAmount AKPCLNetworkCore::GetAmountForItem(TSubclassOf<UFGItemDescriptor> It
 }
 
 void AKPCLNetworkCore::UpdateItemList(TArray<TSubclassOf<UFGItemDescriptor>>& Items,
-									  TArray<TSubclassOf<UFGItemDescriptor>>& OutNewItems) const
+                                      TArray<TSubclassOf<UFGItemDescriptor>>& OutNewItems) const
 {
 	for (FItemAmount AmountArray : mStorage.ToItemAmountArray())
 	{
@@ -475,6 +514,11 @@ void AKPCLNetworkCore::UpdateItemList(TArray<TSubclassOf<UFGItemDescriptor>>& It
 
 bool AKPCLNetworkCore::IsOverloaded() const
 {
+	// Fixed: mFaxitSubsystem can be null on clients before BeginPlay completes.
+	if (!IsValid(mFaxitSubsystem))
+	{
+		return false;
+	}
 	bool Success;
 	FKPCLFaxitNetwork Network = mFaxitSubsystem->GetByNetworkId(GetNetworkId(), Success);
 	if (!Success)
@@ -484,6 +528,8 @@ bool AKPCLNetworkCore::IsOverloaded() const
 
 	return Network.mNetworkBuildings.Num() > GetBuildingLimit();
 }
+
+bool AKPCLNetworkCore::HasDrives() const { return GetDrivePower() > 0.f; }
 
 void AKPCLNetworkCore::GetItemAmountsFiltered(bool Fluid, TArray<FItemAmount>& Out) const
 {
@@ -496,7 +542,6 @@ void AKPCLNetworkCore::GetItemAmountsFiltered(bool Fluid, TArray<FItemAmount>& O
 	else
 	{
 		Forms.Add(EResourceForm::RF_SOLID);
-		Forms.Add(EResourceForm::RF_HEAT);
 		Forms.Add(EResourceForm::RF_INVALID);
 		Forms.Add(EResourceForm::RF_LAST_ENUM);
 	}
@@ -529,6 +574,9 @@ void AKPCLNetworkCore::GrabFromNetwork(AFGCharacterPlayer* Player, FItemAmount A
 
 		int32 AddedAmount;
 		{
+			// mMutex is still needed here: this is a compound read-then-write operation.
+			// Without it, another thread (e.g. via TryToGrabItemAmount) could remove items from
+			// mStorage between GetAmountOrCreateAmount and RemoveItemAmount, causing item duplication.
 			FScopeLock ScopeLock(&mMutex);
 			FItemAmount ItemAmount = mStorage.GetAmountOrCreateAmount(Amount.ItemClass);
 			if (ItemAmount.Amount <= 0)
@@ -552,7 +600,10 @@ void AKPCLNetworkCore::StorageFromPlayerToNetwork(AFGCharacterPlayer* Player, FI
 {
 	if (!HasAuthority())
 	{
-		UE_LOG(LogFaxit, Warning, TEXT("StorageFromPlayerToNetwork called on client, THIS IS NOT SUPPORTED YET!!!!."));
+		if (UKPCLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKPCLDefaultRCO>(GetWorld()))
+		{
+			RCO->Server_Faxit_StorageFromPlayerToNetwork(this, Player, Amount);
+		}
 		return;
 	}
 
@@ -629,7 +680,7 @@ bool AKPCLNetworkCore::IsStorageEmpty(TSubclassOf<UFGItemDescriptor> Item) const
 }
 
 int32 AKPCLNetworkCore::TryToStoreItem(UFGInventoryComponent* Inventory, TSubclassOf<UFGItemDescriptor> Item,
-									   int32 Amount, int32 InventorySlot)
+                                       int32 Amount, int32 InventorySlot)
 {
 	if (IsItemBlacklisted(Item))
 	{
@@ -662,21 +713,24 @@ int32 AKPCLNetworkCore::TryToStoreItemAmount(TSubclassOf<UFGItemDescriptor> Item
 		return 0;
 	}
 
-	FScopeLock ScopeLock(&mMutex);
+	// No outer mutex needed: AddItemAmount is internally write-locked by FKPCLMappedItemAmount::mItemAmountsLock.
+	// There is no compound read-then-write here, so no item-duplication risk.
 	int32 StoredAmount = mStorage.AddItemAmount(Item, Amount);
-	ScopeLock.Unlock();
 
 	NotifyStorageChange();
 	return StoredAmount;
 }
 
 int32 AKPCLNetworkCore::TryToGrabItem(UFGInventoryComponent* Inventory, TSubclassOf<UFGItemDescriptor> Item,
-									  int32 Amount, int32 InventorySlot)
+                                      int32 Amount, int32 InventorySlot)
 {
 	InventorySlot = FMath::Max(InventorySlot, 0);
 
 	int32 AddedAmount;
 	{
+		// mMutex is still needed here: this is a compound read-then-write operation.
+		// Without it, another thread could remove items between GetAmountOrCreateAmount
+		// and RemoveItemAmount, causing items to be added to the inventory for free.
 		FScopeLock ScopeLock(&mMutex);
 		FItemAmount ItemAmount = mStorage.GetAmountOrCreateAmount(Item);
 		if (ItemAmount.Amount <= 0)
@@ -700,6 +754,9 @@ int32 AKPCLNetworkCore::TryToGrabItemAmount(TSubclassOf<UFGItemDescriptor> Item,
 {
 	int32 RemovedAmount;
 	{
+		// mMutex is still needed here: it serialises this call with the compound read-then-write
+		// operations in TryToGrabItem / GrabFromNetwork. Without it, this call could race between
+		// their GetAmountOrCreateAmount and RemoveItemAmount steps, causing item duplication.
 		FScopeLock ScopeLock(&mMutex);
 		RemovedAmount = mStorage.RemoveItemAmount(Item, Amount);
 	}
@@ -746,16 +803,15 @@ bool AKPCLNetworkCore::FilterInputInventory(TSubclassOf<UObject> object, int32 i
 }
 
 void AKPCLNetworkCore::OnInputItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-										  UFGInventoryComponent* sourceInventory)
+                                          UFGInventoryComponent* sourceInventory)
 {
 	Super::OnInputItemRemoved(itemClass, numRemoved, sourceInventory);
 	UpdateStorageState();
 	FlushOverflow();
 }
 
-
 void AKPCLNetworkCore::OnInputItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-										UFGInventoryComponent* sourceInventory)
+                                        UFGInventoryComponent* sourceInventory)
 {
 	Super::OnInputItemAdded(itemClass, numRemoved, sourceInventory);
 	UpdateStorageState();
@@ -795,25 +851,74 @@ void AKPCLNetworkCore::UpdateStorageState()
 		}
 	}
 
-	mDiskStacks = NewStackLimit;
-	mDrivePower = NewDrivePower;
-	mDiskBuildingLimit = NewBuildingLimit;
-	mDefaultUniqueItems = NewUniqueItemCount;
+	SetDiskStacks(NewStackLimit);
+	SetDrivePower(NewDrivePower);
+	SetDiskBuildingLimit(NewBuildingLimit);
+	// Fixed: was writing drive-derived count into the non-replicated mDefaultUniqueItems,
+	// so clients always saw the CDO default (10) instead of the actual drive-backed limit.
+	// Route through the replicated mDiskUniqueBuildings so clients stay in sync.
+	SetDiskUniqueBuildings(NewUniqueItemCount);
 }
 
 void AKPCLNetworkCore::FlushOverflow()
 {
 	mStorage.CleanUpEmptySlots(mBlacklistedItems);
+	NotifyStorageChange();
 	mItemFlushTimer.Reset();
 }
 
-void AKPCLNetworkCore::NotifyStorageChange(bool ItemsChanged) const
+void AKPCLNetworkCore::SetNetworkPower(float NewPower)
 {
+	mNetworkPower = NewPower;
+	mPropertyReplicator.MarkPropertyDirty(FName("mNetworkPower"));
+}
+
+void AKPCLNetworkCore::SetBuildingPower(float NewPower)
+{
+	mBuildingPower = NewPower;
+	mPropertyReplicator.MarkPropertyDirty(FName("mBuildingPower"));
+}
+
+void AKPCLNetworkCore::SetDiskStacks(int32 NewStacks)
+{
+	mDiskStacks = NewStacks;
+	mPropertyReplicator.MarkPropertyDirty(FName("mDiskStacks"));
+}
+
+void AKPCLNetworkCore::SetDrivePower(float NewPower)
+{
+	mDrivePower = NewPower;
+	mPropertyReplicator.MarkPropertyDirty(FName("mDrivePower"));
+}
+
+void AKPCLNetworkCore::SetDiskBuildingLimit(int32 NewLimit)
+{
+	mDiskBuildingLimit = NewLimit;
+	mPropertyReplicator.MarkPropertyDirty(FName("mDiskBuildingLimit"));
+}
+
+void AKPCLNetworkCore::SetDiskUniqueBuildings(int32 NewCount)
+{
+	mDiskUniqueBuildings = NewCount;
+	mPropertyReplicator.MarkPropertyDirty(FName("mDiskUniqueBuildings"));
+}
+
+void AKPCLNetworkCore::NotifyStorageChange(bool ItemsChanged)
+{
+	mStorage.TickReplication();
+	mPropertyReplicator.MarkPropertyDirty(FName("mStorage"));
 	OnStorageChanged.Broadcast();
 	if (ItemsChanged)
 	{
 		OnStorageItemsChanged.Broadcast();
 	}
+}
+
+void AKPCLNetworkCore::OnRep_Storage()
+{
+	// Rebuild the authoritative TMap from the replicated array so all
+	// client-side reads (GetAmountForItem, GetItemAmounts, etc.) are correct.
+	mStorage.Client_BuildMap();
 }
 
 void AKPCLNetworkCore::HandlePower(float dt)

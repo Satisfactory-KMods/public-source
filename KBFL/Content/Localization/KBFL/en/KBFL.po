@@ -1,203 +1,116 @@
-﻿# KBFL English translation.
-# 
 msgid ""
 msgstr ""
-"Project-Id-Version: KBFL\n"
-"POT-Creation-Date: 2026-01-20 10:42\n"
-"PO-Revision-Date: 2026-01-20 10:42\n"
-"Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
 
-#. Key:	D47A43F14389A8908A16E1B06E649C55
-#. SourceLocation:	/KBFL/Enum/EFoundSomething.EFoundSomething.DisplayNameMap(0 - Value).DisplayNameMap
-#: /KBFL/Enum/EFoundSomething.EFoundSomething.DisplayNameMap(0 - Value).DisplayNameMap
-msgctxt ",D47A43F14389A8908A16E1B06E649C55"
-msgid "Found"
-msgstr "Found"
-
-#. Key:	8DD7157243C8055C0F5C86B6CF2BBB2D
-#. SourceLocation:	/KBFL/Enum/EFoundSomething.EFoundSomething.DisplayNameMap(1 - Value).DisplayNameMap
-#: /KBFL/Enum/EFoundSomething.EFoundSomething.DisplayNameMap(1 - Value).DisplayNameMap
-msgctxt ",8DD7157243C8055C0F5C86B6CF2BBB2D"
-msgid "Not Found"
-msgstr "Not Found"
-
-#. Key:	BaseNode_FrackingCore.NewVariables[0].Category
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,BaseNode_FrackingCore.NewVariables[0].Category"
-msgid "Default"
-msgstr "Default"
-
-#. Key:	BC_Debug.BC_Debug_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,BC_Debug.BC_Debug_C.mDisplayName"
-msgid "KBFL UTIL"
-msgstr "KBFL UTIL"
-
-#. Key:	BP_Subsystem_KBFL_DefaultSubsystem.Sprite.SpriteInfo.DisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,BP_Subsystem_KBFL_DefaultSubsystem.Sprite.SpriteInfo.DisplayName"
-msgid "Info"
-msgstr "Info"
-
-#. Key:	KBFL_Config.BP_ConfigPropertyBool_C_0.DisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_Config.BP_ConfigPropertyBool_C_0.DisplayName"
-msgid "Enable Debug & Tools"
-msgstr "Enable Debug & Tools"
-
-#. Key:	KBFL_Config.KBFL_Config_C.DisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_Config.KBFL_Config_C.DisplayName"
-msgid "Kyris Blueprint Function library"
-msgstr "Kyris Blueprint Function library"
-
-#. Key:	KBFL_DEBUG_CLEAR.KBFL_DEBUG_CLEAR_C.Usage
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_DEBUG_CLEAR.KBFL_DEBUG_CLEAR_C.Usage"
-msgid "[UTIL/DEBUG] clear location from file"
-msgstr "[UTIL/DEBUG] clear location from file"
-
-#. Key:	KBFL_DEBUG_TraceNode.KBFL_DEBUG_TraceNode_C.Usage
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
 msgctxt "ST_KBFL,KBFL_DEBUG_TraceNode.KBFL_DEBUG_TraceNode_C.Usage"
 msgid "/node - show all important infos for nodes"
 msgstr "/node - show all important infos for nodes"
 
-#. Key:	KBFL_DEBUG_TraceNode.Node_Format_Text.Format
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_DEBUG_TraceNode.Node_Format_Text.Format"
-msgid "{NodeName} - X: {0} | Y: {1} | Z: {2}"
-msgstr "{NodeName} - X: {0} | Y: {1} | Z: {2}"
-
-#. Key:	KBFL_DEBUG_TraceNode.Node_Format_Text.Format_01
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_DEBUG_TraceNode.Node_Format_Text.Format_01"
-msgid "Resource: {Res} | Purity: {Pur}"
-msgstr "Resource: {Res} | Purity: {Pur}"
-
-#. Key:	KBFL_MainWindow.KBFL_MainWindow_C.PaletteCategory
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFL_MainWindow.KBFL_MainWindow_C.PaletteCategory"
-msgid "User Created"
-msgstr "User Created"
-
-#. Key:	KBFLUTIL_Widget_Controll.TextBlock_79.Text
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,KBFLUTIL_Widget_Controll.TextBlock_79.Text"
-msgid "Actor Placer Helper"
-msgstr "Actor Placer Helper"
-
-#. Key:	UtilsBuildMode_LocationX.UtilsBuildMode_LocationX_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_LocationX.UtilsBuildMode_LocationX_C.mDisplayName"
-msgid "Location: X"
-msgstr "Location: X"
-
-#. Key:	UtilsBuildMode_LocationY.UtilsBuildMode_LocationY_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_LocationY.UtilsBuildMode_LocationY_C.mDisplayName"
-msgid "Location: Y"
-msgstr "Location: Y"
-
-#. Key:	UtilsBuildMode_LocationZ.UtilsBuildMode_LocationZ_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_LocationZ.UtilsBuildMode_LocationZ_C.mDisplayName"
-msgid "Location: Z"
-msgstr "Location: Z"
-
-#. Key:	UtilsBuildMode_Pitch.UtilsBuildMode_Pitch_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_Pitch.UtilsBuildMode_Pitch_C.mDisplayName"
-msgid "Rotation: Pitch"
-msgstr "Rotation: Pitch"
-
-#. Key:	UtilsBuildMode_Roll.UtilsBuildMode_Roll_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_Roll.UtilsBuildMode_Roll_C.mDisplayName"
-msgid "Rotation: Roll"
-msgstr "Rotation: Roll"
-
-#. Key:	UtilsBuildMode_Scale.UtilsBuildMode_Scale_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_Scale.UtilsBuildMode_Scale_C.mDisplayName"
-msgid "Scale: Scale"
-msgstr "Scale: Scale"
-
-#. Key:	UtilsBuildMode_Yaw.UtilsBuildMode_Yaw_C.mDisplayName
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,UtilsBuildMode_Yaw.UtilsBuildMode_Yaw_C.mDisplayName"
-msgid "Rotation: Yaw"
-msgstr "Rotation: Yaw"
-
-#. Key:	Widget_CheatBuilding.KBFL_MainWindow.mTitle
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.mTitle"
-msgid "KBFL Cheat Building"
-msgstr "KBFL Cheat Building"
-
-#. Key:	Widget_CheatBuilding.KBFL_MainWindow.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
-msgid "Items"
-msgstr "Items"
-
-#. Key:	Widget_CheatBuilding.KBFL_MainWindow.Tabs[1].Text_5_FD671CE446AF05CA543E228C049AB0F9
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.Tabs[1].Text_5_FD671CE446AF05CA543E228C049AB0F9"
-msgid "Fluids"
-msgstr "Fluids"
-
-#. Key:	Widget_CheatBuilding.Node_Format_Text.Format
-#. SourceLocation:	/KBFL/ST_KBFL.ST_KBFL
-#: /KBFL/ST_KBFL.ST_KBFL
-msgctxt "ST_KBFL,Widget_CheatBuilding.Node_Format_Text.Format"
-msgid "Item Stack Size: {Name}"
-msgstr "Item Stack Size: {Name}"
-
-#. Key:	B0F3123246619679F2E11CAFE4E95EB6
-#. SourceLocation:	/KBFL/Utils/CheatBuilding/Widget_ToggleButton.Widget_ToggleButton_C:WidgetTree.mText.Text
-#: /KBFL/Utils/CheatBuilding/Widget_ToggleButton.Widget_ToggleButton_C:WidgetTree.mText.Text
 msgctxt ",B0F3123246619679F2E11CAFE4E95EB6"
 msgid "100"
 msgstr "100"
 
-#. Key:	SwatchNameFormat
-#. SourceLocation:	Mods/KBFL/Source/KBFL/Private/Subsystems/KBFLCustomizerSubsystem.cpp(656)
-#: Mods/KBFL/Source/KBFL/Private/Subsystems/KBFLCustomizerSubsystem.cpp(656)
-msgctxt "KBFLCustomizer,SwatchNameFormat"
-msgid "Swatch {0}"
-msgstr "Swatch {0}"
+msgctxt "ST_KBFL,KBFLUTIL_Widget_Controll.TextBlock_79.Text"
+msgid "Actor Placer Helper"
+msgstr "Actor Placer Helper"
 
-#. Key:	Key
-#. SourceLocation:	Mods/KBFL/Source/KBFL/Public/KBFLModule.h(68)
-#: Mods/KBFL/Source/KBFL/Public/KBFLModule.h(68)
+msgctxt "ST_KBFL,BaseNode_FrackingCore.NewVariables[0].Category"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "ST_KBFL,KBFL_Config.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Enable Debug & Tools"
+msgstr "Enable Debug & Tools"
+
+msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.Tabs[1].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Fluids"
+msgstr "Fluids"
+
+msgctxt ",D47A43F14389A8908A16E1B06E649C55"
+msgid "Found"
+msgstr "Found"
+
+msgctxt "ST_KBFL,BP_Subsystem_KBFL_DefaultSubsystem.Sprite.SpriteInfo.DisplayName"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "ST_KBFL,Widget_CheatBuilding.Node_Format_Text.Format"
+msgid "Item Stack Size: {Name}"
+msgstr "Item Stack Size: {Name}"
+
+msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Items"
+msgstr "Items"
+
+msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.mTitle"
+msgid "KBFL Cheat Building"
+msgstr "KBFL Cheat Building"
+
+msgctxt "ST_KBFL,BC_Debug.BC_Debug_C.mDisplayName"
+msgid "KBFL UTIL"
+msgstr "KBFL UTIL"
+
+msgctxt "ST_KBFL,KBFL_Config.KBFL_Config_C.DisplayName"
+msgid "Kyris Blueprint Function library"
+msgstr "Kyris Blueprint Function library"
+
+msgctxt "ST_KBFL,UtilsBuildMode_LocationX.UtilsBuildMode_LocationX_C.mDisplayName"
+msgid "Location: X"
+msgstr "Location: X"
+
+msgctxt "ST_KBFL,UtilsBuildMode_LocationY.UtilsBuildMode_LocationY_C.mDisplayName"
+msgid "Location: Y"
+msgstr "Location: Y"
+
+msgctxt "ST_KBFL,UtilsBuildMode_LocationZ.UtilsBuildMode_LocationZ_C.mDisplayName"
+msgid "Location: Z"
+msgstr "Location: Z"
+
+msgctxt ",8DD7157243C8055C0F5C86B6CF2BBB2D"
+msgid "Not Found"
+msgstr "Not Found"
+
+msgctxt "ST_KBFL,KBFL_DEBUG_TraceNode.Node_Format_Text.Format_01"
+msgid "Resource: {Res} | Purity: {Pur}"
+msgstr "Resource: {Res} | Purity: {Pur}"
+
+msgctxt "ST_KBFL,UtilsBuildMode_Pitch.UtilsBuildMode_Pitch_C.mDisplayName"
+msgid "Rotation: Pitch"
+msgstr "Rotation: Pitch"
+
+msgctxt "ST_KBFL,UtilsBuildMode_Roll.UtilsBuildMode_Roll_C.mDisplayName"
+msgid "Rotation: Roll"
+msgstr "Rotation: Roll"
+
+msgctxt "ST_KBFL,UtilsBuildMode_Yaw.UtilsBuildMode_Yaw_C.mDisplayName"
+msgid "Rotation: Yaw"
+msgstr "Rotation: Yaw"
+
+msgctxt "ST_KBFL,UtilsBuildMode_Scale.UtilsBuildMode_Scale_C.mDisplayName"
+msgid "Scale: Scale"
+msgstr "Scale: Scale"
+
 msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
 msgid "SourceString"
 msgstr "SourceString"
 
+msgctxt "KBFLCustomizer,SwatchNameFormat"
+msgid "Swatch {0}"
+msgstr "Swatch {0}"
+
+msgctxt "ST_KBFL,KBFL_MainWindow.KBFL_MainWindow_C.PaletteCategory"
+msgid "User Created"
+msgstr "User Created"
+
+msgctxt "ST_KBFL,KBFL_DEBUG_CLEAR.KBFL_DEBUG_CLEAR_C.Usage"
+msgid "[UTIL/DEBUG] clear location from file"
+msgstr "[UTIL/DEBUG] clear location from file"
+
+msgctxt "ST_KBFL,KBFL_DEBUG_TraceNode.Node_Format_Text.Format"
+msgid "{NodeName} - X: {0} | Y: {1} | Z: {2}"
+msgstr "{NodeName} - X: {0} | Y: {1} | Z: {2}"

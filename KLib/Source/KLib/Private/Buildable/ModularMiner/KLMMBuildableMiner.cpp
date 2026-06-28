@@ -3,14 +3,14 @@
 
 #include "Buildable/ModularMiner/KLMMBuildableMiner.h"
 
-#include "FGFactoryConnectionComponent.h"
-#include "FGPlayerController.h"
-#include "FGUnlockSubsystem.h"
-#include "Logging.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildable/ModularMiner/KLMMBuildableModule.h"
 #include "Cpp/KBFLCppInventoryHelper.h"
+#include "FGFactoryConnectionComponent.h"
+#include "FGPlayerController.h"
+#include "FGUnlockSubsystem.h"
 #include "KPrivateCodeLib/Public/Logging.h"
+#include "Logging.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -18,6 +18,18 @@
 #include "Resources/FGBuildDescriptor.h"
 #include "Resources/FGNoneDescriptor.h"
 #include "Subsystem/KLUnlockSubsystem.h"
+
+void AKLMMBuildableMiner::SetExtractionInfo(UKAPIModularMinerDescription* NewInfo)
+{
+	mExtractionInfo = NewInfo;
+	mPropertyReplicator.MarkPropertyDirty(FName("mExtractionInfo"));
+}
+
+void AKLMMBuildableMiner::SetCachedFluid(TSubclassOf<UFGItemDescriptor> NewFluid)
+{
+	mCachedFluid = NewFluid;
+	mPropertyReplicator.MarkPropertyDirty(FName("mCachedFluid"));
+}
 
 AKLMMBuildableMiner::AKLMMBuildableMiner()
 {
@@ -80,6 +92,9 @@ void AKLMMBuildableMiner::SetPendingPotential(float newPendingPotential)
 	mProductionHandle.mPendingPotential = newPendingPotential;
 	mMinerTask.mPendingPotential = newPendingPotential;
 	mModuleProductionTask.mPendingPotential = newPendingPotential;
+
+	CommitMinerTask();
+	CommitModuleProductionTask();
 }
 
 void AKLMMBuildableMiner::Overclocking_GetProductionResults_Implementation(
@@ -87,11 +102,8 @@ void AKLMMBuildableMiner::Overclocking_GetProductionResults_Implementation(
 {
 	Super::Overclocking_GetProductionResults_Implementation(OutIngredients, OutProducts);
 
-	FKPCLOverclockingProductionResults Output = FKPCLOverclockingProductionResults(
-		GetResourceToProduce(),
-		GetProductionAmount(),
-		mMinerTask.mProductionTime
-	);
+	FKPCLOverclockingProductionResults Output =
+		FKPCLOverclockingProductionResults(GetResourceToProduce(), GetProductionAmount(), mMinerTask.mProductionTime);
 
 	OutProducts.Add(Output);
 	OutProducts.Add(Output);
@@ -101,10 +113,7 @@ void AKLMMBuildableMiner::Overclocking_GetProductionResults_Implementation(
 		if (TSubclassOf<UFGItemDescriptor> TrashItem = GetTrashDescriptor())
 		{
 			FKPCLOverclockingProductionResults TrashOutput = FKPCLOverclockingProductionResults(
-				TrashItem,
-				GetProductionCrusherAmount(),
-				GetModuleProductionCycleTime()
-			);
+				TrashItem, GetProductionCrusherAmount(), GetModuleProductionCycleTime());
 			OutProducts.Add(TrashOutput);
 		}
 	}
@@ -127,6 +136,10 @@ void AKLMMBuildableMiner::OnBuildEffectFinished()
 			mMinerTask.mPendingPotential = GetPendingPotential();
 			mModuleProductionTask.mCurrentPotential = GetPendingPotential();
 			mModuleProductionTask.mPendingPotential = GetPendingPotential();
+
+			CommitMinerTask();
+			CommitModuleProductionTask();
+			CommitUIProductionBuff();
 		}
 	}
 }
@@ -140,24 +153,29 @@ void AKLMMBuildableMiner::GetConditionalReplicatedProps(TArray<FFGCondReplicated
 {
 	Super::GetConditionalReplicatedProps(outProps);
 
-	FG_DOREPCONDITIONAL(ThisClass, mExtractionInfo)
+	FG_DOREPCONDITIONAL(ThisClass, mExtractionInfo);
+	FG_DOREPCONDITIONAL(ThisClass, mCachedFluid);
 }
 
-void AKLMMBuildableMiner::Factory_Tick(float dt)
+void AKLMMBuildableMiner::Factory_TickAuthOnly(float dt)
 {
-	Super::Factory_Tick(dt);
-
-	if (HasAuthority())
+	Super::Factory_TickAuthOnly(dt);
+	mProductionHandle.mPendingPotential = GetPendingPotential();
+	mModuleProductionTask.mPendingPotential = GetPendingPotential();
+	mModuleProductionTask.mProductionTime = GetModuleProductionCycleTime();
+	mFluidConsumeTask.TickHandle(dt, HasModule(mFluidAttachmentClass) && IsProducing(),
+								 [&]() { OnFluidProductionFinial(); });
 	{
-		mProductionHandle.mPendingPotential = GetPendingPotential();
-		mModuleProductionTask.mPendingPotential = GetPendingPotential();
-		mModuleProductionTask.mProductionTime = GetModuleProductionCycleTime();
-		mFluidConsumeTask.TickHandle(dt, HasModule(mFluidAttachmentClass) && IsProducing(), [&]()
+		TSubclassOf<UFGItemDescriptor> CurrentFluid = GetCurrentFluid();
+		if (CurrentFluid != mCachedFluid)
 		{
-			OnFluidProductionFinial();
-		});
-		mCachedFluid = GetCurrentFluid();
+			SetCachedFluid(CurrentFluid);
+		}
 	}
+
+	CommitModuleProductionTask();
+	CommitFluidConsumeTask();
+	CommitUIProductionBuff();
 }
 
 void AKLMMBuildableMiner::CollectAndPushPipes(float dt, bool IsPush)
@@ -181,16 +199,24 @@ void AKLMMBuildableMiner::BeginPlay()
 			return;
 		}
 
-		GetAssetSubsystem()->Miner_GetForKey(GetResourceClass(), mExtractionInfo);
+		UKAPIModularMinerDescription* TempExtractionInfo = nullptr;
+		GetAssetSubsystem()->Miner_GetForKey(GetResourceClass(), TempExtractionInfo);
+		SetExtractionInfo(TempExtractionInfo);
 		fgcheckf(IsValid(mExtractionInfo),
-		         TEXT(
-			         "AKLMMBuildableMiner::BeginPlay: No MinerInfo (DataAsset) found for %s. If this Resource is not provided from SFP please use KAPI to implement this resource. (look on our mod page for more informations)"
-		         ), *GetResourceClass()->GetName());
+				 TEXT("AKLMMBuildableMiner::BeginPlay: No MinerInfo (DataAsset) found for %s. If this Resource is not "
+					  "provided from SFP please use KAPI to implement this resource. (look on our mod page for more "
+					  "informations)"),
+				 *GetResourceClass()->GetName());
 
-		mMinerTask.mCurrentPotential = GetCurrentPotential();
-		mMinerTask.mPendingPotential = GetPendingPotential();
-		mModuleProductionTask.mCurrentPotential = GetCurrentPotential();
-		mModuleProductionTask.mPendingPotential = GetPendingPotential();
+		// GetCurrentPotential() / GetPendingPotential() return the SaveGame float from AFGBuildableFactory,
+		// which is zero-initialised by UObject on first placement. Substitute 1.0 (100% speed) in that
+		// case so GetProductionTime() never divides by zero and the handle can always advance.
+		const float SafeCurrent = FMath::Max(GetCurrentPotential(), 1.f);
+		const float SafePending = FMath::Max(GetPendingPotential(), 1.f);
+		mMinerTask.mCurrentPotential = SafeCurrent;
+		mMinerTask.mPendingPotential = SafePending;
+		mModuleProductionTask.mCurrentPotential = SafeCurrent;
+		mModuleProductionTask.mPendingPotential = SafePending;
 
 		ApplyPotentialToModule();
 
@@ -206,16 +232,16 @@ void AKLMMBuildableMiner::BeginPlay()
 			mModuleProductionTask.mCurrentPotential = GetPendingPotential();
 			mModuleProductionTask.mPendingPotential = GetPendingPotential();
 		}
+
+		CommitMinerTask();
+		CommitModuleProductionTask();
+		CommitUIProductionBuff();
 	}
 }
 
-void AKLMMBuildableMiner::Factory_ProductionCycleCompleted(float overProductionRate)
-{
-}
+void AKLMMBuildableMiner::Factory_ProductionCycleCompleted(float overProductionRate) {}
 
-void AKLMMBuildableMiner::Factory_TickProducing(float dt)
-{
-}
+void AKLMMBuildableMiner::Factory_TickProducing(float dt) {}
 
 float AKLMMBuildableMiner::GetProductionCycleBuff() const
 {
@@ -241,10 +267,11 @@ float AKLMMBuildableMiner::GetProductionCycleBuff() const
 
 		if (Module->IsWasteProducer())
 		{
-			lBuffMulti = Module->GetMalus();
-			if (lBuffMulti == 0.0f)
+			// Compound malus from multiple waste producers deterministically.
+			const float Malus = Module->GetMalus();
+			if (Malus > 0.0f)
 			{
-				lBuffMulti = 1.0f;
+				lBuffMulti *= Malus;
 			}
 		}
 		else
@@ -260,10 +287,7 @@ float AKLMMBuildableMiner::GetProductionCycleBuff() const
 	return GetPurityMulti();
 }
 
-float AKLMMBuildableMiner::GetCurrentMaxPotential() const
-{
-	return 1.f;
-}
+float AKLMMBuildableMiner::GetCurrentMaxPotential() const { return 1.f; }
 
 float AKLMMBuildableMiner::GetNodeProductionTime() const
 {
@@ -280,8 +304,7 @@ TSubclassOf<UFGItemDescriptor> AKLMMBuildableMiner::GetTrashDescriptor() const
 		{
 			if (WasteModule->IsWasteProducer())
 			{
-				FKAPIModuleItems Item = GetMinerInfoInternal()->GetItemsForModule(
-					WasteModule->GetWasteClass());
+				FKAPIModuleItems Item = GetMinerInfoInternal()->GetItemsForModule(WasteModule->GetWasteClass());
 
 				return Item.mTrashItem;
 			}
@@ -315,9 +338,9 @@ bool AKLMMBuildableMiner::CheckStorage() const
 		if (lModule)
 		{
 			TSubclassOf<UFGItemDescriptor> lEmtpyFiller;
-			ModuleCheck = UKBFLCppInventoryHelper::HasItems(GetInventory(), GetCurrentFluid(),
-			                                                GetCurrentFluidInfo(lEmtpyFiller).mNormalFluidCountPerSecond
-			                                                * GetPurityMulti());
+			ModuleCheck = UKBFLCppInventoryHelper::HasItems(
+				GetInventory(), GetCurrentFluid(),
+				GetCurrentFluidInfo(lEmtpyFiller).mNormalFluidCountPerSecond * GetPurityMulti());
 		}
 
 		return ModuleCheck;
@@ -377,10 +400,7 @@ void AKLMMBuildableMiner::HandleState()
 	mCurrentState = ENewProductionState::NoPower;
 }
 
-void AKLMMBuildableMiner::HandlePower(float dt)
-{
-	Super::HandlePower(dt);
-}
+void AKLMMBuildableMiner::HandlePower(float dt) { Super::HandlePower(dt); }
 
 TSubclassOf<UFGItemDescriptor> AKLMMBuildableMiner::GetResourceToProduce() const
 {
@@ -390,8 +410,7 @@ TSubclassOf<UFGItemDescriptor> AKLMMBuildableMiner::GetResourceToProduce() const
 		{
 			if (WasteModule->IsWasteProducer())
 			{
-				FKAPIModuleItems Item = GetMinerInfoInternal()->GetItemsForModule(
-					WasteModule->GetWasteClass());
+				FKAPIModuleItems Item = GetMinerInfoInternal()->GetItemsForModule(WasteModule->GetWasteClass());
 				return Item.mProductionItem;
 			}
 		}
@@ -415,13 +434,14 @@ void AKLMMBuildableMiner::SetupInventory()
 		else
 		{
 			GetWorldTimerManager().SetTimerForNextTick(this, &AKLMMBuildableMiner::SetupInventory);
+			return; // inventory not ready yet — belt wiring happens on the retry
 		}
 
 		GetConv(0, KPCLOutput)->SetInventory(GetInventory());
 		GetConv(0, KPCLOutput)->SetInventoryAccessIndex(0);
 		GetConv(1, KPCLOutput)->SetInventory(GetInventory());
 		GetConv(1, KPCLOutput)->SetInventoryAccessIndex(1);
-		//GetPipe(0, KPCLInput)->SetInventory(GetInventory());
+		// GetPipe(0, KPCLInput)->SetInventory(GetInventory());
 		GetPipe(0, KPCLInput)->SetInventoryAccessIndex(0);
 	}
 	else
@@ -434,24 +454,46 @@ void AKLMMBuildableMiner::OnMainProductionFinial_Implementation()
 {
 	Super::OnMainProductionFinial_Implementation();
 
+	if (!GetInventory())
+	{
+		return;
+	}
+	if (!GetResourceToProduce())
+	{
+		return;
+	}
+	if (GetProductionAmount() <= 0)
+	{
+		return;
+	}
+
+	const bool bCanStoreSlot0 =
+		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 0, GetResourceToProduce(), GetProductionAmount());
+	const bool bCanStoreSlot1 =
+		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 1, GetResourceToProduce(), GetProductionAmount());
+
 	// Support for dynamic fill outputs
-	if (!UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 0, GetResourceToProduce(), GetProductionAmount()) || !
-		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 1, GetResourceToProduce(), GetProductionAmount()))
+	if (!bCanStoreSlot0 || !bCanStoreSlot1)
 	{
 		UKBFLCppInventoryHelper::AddItemsInInventory(GetInventory(), GetResourceToProduce(),
-		                                             GetClampedPossibleProduction());
+													 GetClampedPossibleProduction());
 	}
 	else
 	{
 		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, GetResourceToProduce(),
-		                                                    GetProductionAmount());
+															GetProductionAmount());
 		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 1, GetResourceToProduce(),
-		                                                    GetProductionAmount());
+															GetProductionAmount());
 	}
 }
 
 int32 AKLMMBuildableMiner::GetSizeFromOutputSlots() const
 {
+	if (!IsValid(GetInventory()))
+	{
+		return 0;
+	}
+
 	FInventoryStack Slot1;
 	FInventoryStack Slot2;
 
@@ -488,8 +530,8 @@ void AKLMMBuildableMiner::OnFluidProductionFinial_Implementation()
 	if (GetInventory())
 	{
 		TSubclassOf<UFGItemDescriptor> ItemClass;
-		GetInventory()->RemoveFromIndex(
-			2, (GetCurrentFluidInfo(ItemClass).mNormalFluidCountPerSecond * GetPurityMulti()));
+		GetInventory()->RemoveFromIndex(2,
+										(GetCurrentFluidInfo(ItemClass).mNormalFluidCountPerSecond * GetPurityMulti()));
 	}
 }
 
@@ -500,7 +542,7 @@ bool AKLMMBuildableMiner::HasAllNeededModules() const
 		return false;
 	}
 
-	for (const auto NeededModule : GetMinerInfoInternal()->mNeededModules)
+	for (const auto& NeededModule : GetMinerInfoInternal()->mNeededModules)
 	{
 		if (!HasModule(NeededModule))
 		{
@@ -574,28 +616,22 @@ UKAPIModularMinerDescription* AKLMMBuildableMiner::GetMinerInfo(bool& Valid) con
 	return mExtractionInfo;
 }
 
-UKAPIModularMinerDescription* AKLMMBuildableMiner::GetMinerInfoInternal() const
-{
-	return mExtractionInfo;
-}
+UKAPIModularMinerDescription* AKLMMBuildableMiner::GetMinerInfoInternal() const { return mExtractionInfo; }
 
-bool AKLMMBuildableMiner::IsValidResource() const
-{
-	return mExtractionInfo != nullptr;
-}
+bool AKLMMBuildableMiner::IsValidResource() const { return mExtractionInfo != nullptr; }
 
-int AKLMMBuildableMiner::GetProductionCrusherAmount() const
-{
-	return GetCrusherProductionAmount();
-}
+int AKLMMBuildableMiner::GetProductionCrusherAmount() const { return GetCrusherProductionAmount(); }
 
 int AKLMMBuildableMiner::GetProductionAmount() const
 {
 	if (HasModule(mDrillAttachmentClass))
 	{
 		auto DrillModule = GetFirstModule(mDrillAttachmentClass);
-		int lAmount = mItemsPerCycle * GetTierMulti(DrillModule->GetTier());
-		return FMath::Max(lAmount, 1);
+		if (IsValid(DrillModule))
+		{
+			int lAmount = mItemsPerCycle * GetTierMulti(DrillModule->GetTier());
+			return FMath::Max(lAmount, 1);
+		}
 	}
 	return 1;
 }
@@ -615,5 +651,9 @@ int AKLMMBuildableMiner::GetCrusherProductionAmount() const
 
 bool AKLMMBuildableMiner::IsModuleAllowed(TSubclassOf<AKLMMBuildableModule> Module) const
 {
+	if (!IsValid(mExtractionInfo))
+	{
+		return false;
+	}
 	return mExtractionInfo->IsModuleAllowed(Module);
 }

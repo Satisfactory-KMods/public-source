@@ -45,7 +45,6 @@ public class KLib : ModuleRules
 		PublicDependencyModuleNames.AddRange(new[]
 		{
 			"AbstractInstance",
-			"InstancedSplinesComponent",
 			"SignificanceISPC"
 		});
 

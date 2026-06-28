@@ -1,16 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Unlocks/UKLUnlockCleanerItem.h"
 
 #include "FGRecipeManager.h"
 #include "FGUnlockSubsystem.h"
 #include "Subsystem/KLUnlockSubsystem.h"
 
-void UUKLUnlockCleanerItem::Unlock(AFGUnlockSubsystem* unlockSubssytem)
-{
-	Super::Unlock(unlockSubssytem);
-}
+
+void UUKLUnlockCleanerItem::Unlock(AFGUnlockSubsystem* unlockSubssytem) { Super::Unlock(unlockSubssytem); }
 
 void UUKLUnlockCleanerItem::Apply(AFGUnlockSubsystem* unlockSubssytem)
 {

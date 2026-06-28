@@ -1,8 +1,8 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 #include "Subsystem/KPCLPatreonSubsystem.h"
 
-#include "HttpModule.h"
 #include "BFL/KBFL_ConfigTools.h"
+#include "HttpModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
 
@@ -17,12 +17,13 @@ void UKPCLPatreonSubsystem::Tick(float DeltaTime)
 	if (!bValid)
 	{
 		Query();
-		if (!mConfig) UE_LOG(LogTemp, Error, TEXT("mConfig is INVALID!"))
+		if (!mConfig)
+			UE_LOG(LogTemp, Error, TEXT("mConfig is INVALID!"))
 
 		if (mConfig && !bValid)
 		{
-			UConfigPropertyBool* PropertyBool = UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(
-				mConfig, "PatreonList", GetWorld());
+			UConfigPropertyBool* PropertyBool =
+				UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(mConfig, "PatreonList", GetWorld());
 			if (IsValid(PropertyBool))
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Bind: PatreonList"))
@@ -30,8 +31,8 @@ void UKPCLPatreonSubsystem::Tick(float DeltaTime)
 				bActivePatreonList = PropertyBool->Value;
 			}
 
-			PropertyBool = UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(
-				mConfig, "PatreonButton", GetWorld());
+			PropertyBool =
+				UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(mConfig, "PatreonButton", GetWorld());
 			if (IsValid(PropertyBool))
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Bind: PatreonButton"))
@@ -61,8 +62,8 @@ void UKPCLPatreonSubsystem::OnSettingChanged()
 {
 	if (mConfig)
 	{
-		UConfigPropertyBool* PropertyBool = UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(
-			mConfig, "PatreonList", GetWorld());
+		UConfigPropertyBool* PropertyBool =
+			UKBFL_ConfigTools::GetPropertyByKey<UConfigPropertyBool>(mConfig, "PatreonList", GetWorld());
 		if (IsValid(PropertyBool))
 		{
 			bActivePatreonList = PropertyBool->Value;
@@ -87,15 +88,9 @@ void UKPCLPatreonSubsystem::OnSettingChanged()
 	}
 }
 
-bool UKPCLPatreonSubsystem::IsTickable() const
-{
-	return !HasAnyFlags(RF_ClassDefaultObject) && IsValid(this);
-}
+bool UKPCLPatreonSubsystem::IsTickable() const { return !HasAnyFlags(RF_ClassDefaultObject) && IsValid(this); }
 
-UWorld* UKPCLPatreonSubsystem::GetTickableGameObjectWorld() const
-{
-	return nullptr;
-}
+UWorld* UKPCLPatreonSubsystem::GetTickableGameObjectWorld() const { return nullptr; }
 
 TStatId UKPCLPatreonSubsystem::GetStatId() const
 {
@@ -150,19 +145,25 @@ void UKPCLPatreonSubsystem::Query()
 		if (!mCode.IsEmpty() && !mDiscordID.IsEmpty())
 		{
 			FHttpRequestRef Request = FHttpModule::Get().CreateRequest();
+			TWeakObjectPtr<UKPCLPatreonSubsystem> WeakThis(this);
 			Request->OnProcessRequestComplete().BindLambda(
-				[&](FHttpRequestPtr InRequest, FHttpResponsePtr Response, bool bSuccess)
+				[WeakThis](FHttpRequestPtr InRequest, FHttpResponsePtr Response, bool bSuccess)
 				{
 					UE_LOG(LogTemp, Error, TEXT("OnProcessRequestComplete"));
+					UKPCLPatreonSubsystem* Self = WeakThis.Get();
+					if (!IsValid(Self))
+					{
+						return;
+					}
 					if (bSuccess)
 					{
-						if (ParseApiQuery(Response, mJsonObject))
+						if (Self->ParseApiQuery(Response, Self->mJsonObject))
 						{
-							if (!mJsonObject->TryGetBoolField("HasBenefit", bPatreonIsActive))
+							if (!Self->mJsonObject->TryGetBoolField(TEXT("HasBenefit"), Self->bPatreonIsActive))
 							{
-								bPatreonIsActive = false;
+								Self->bPatreonIsActive = false;
 							}
-							UE_LOG(LogTemp, Error, TEXT("%d"), bPatreonIsActive);
+							UE_LOG(LogTemp, Error, TEXT("%d"), Self->bPatreonIsActive);
 						}
 					}
 				});
@@ -174,7 +175,7 @@ void UKPCLPatreonSubsystem::Query()
 }
 
 void UKPCLPatreonSubsystem::QueryApi(FHttpRequestRef& Request, FString QueryName, TArray<FString> Parameter,
-                                     bool Execute, bool IsPost)
+									 bool Execute, bool IsPost)
 {
 	FString Url = TEXT("https://kmods.de/");
 
@@ -213,7 +214,7 @@ bool UKPCLPatreonSubsystem::ParseApiQuery(FHttpResponsePtr Response, TSharedPtr<
 	bool Success = false;
 	if (FJsonSerializer::Deserialize(TJsonReaderFactory<>::Create(Response->GetContentAsString()), Json))
 	{
-		Json->TryGetBoolField("state", Success);
+		Json->TryGetBoolField(TEXT("state"), Success);
 	}
 	return Success;
 }

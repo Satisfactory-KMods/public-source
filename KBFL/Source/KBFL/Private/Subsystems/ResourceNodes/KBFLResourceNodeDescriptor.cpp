@@ -1,6 +1,11 @@
-﻿﻿#pragma once
 #include "Subsystems/ResourceNodes/KBFLResourceNodeDescriptor.h"
 #include "KBFLLogging.h"
+
+UKBFLResourceNodeDescriptor::UKBFLResourceNodeDescriptor() : mLastPur()
+{
+	mActorFreeClass = AFGResourceNodeBase::StaticClass();
+	mNeedAuth = true;
+}
 
 bool UKBFLResourceNodeDescriptor::IsAllowedToRemoveActor(AActor* InActor)
 {
@@ -9,13 +14,12 @@ bool UKBFLResourceNodeDescriptor::IsAllowedToRemoveActor(AActor* InActor)
 	{
 		if (ResourceNode->IsOccupied())
 		{
-			UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsAllowedToRemoveActor: '{0}' is occupied, preventing removal", 
-				InActor->GetName());
+			UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsAllowedToRemoveActor: '{0}' is occupied, preventing removal",
+					  InActor->GetName());
 			return false;
 		}
 	}
-	
-	UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsAllowedToRemoveActor: '{0}' allowed to be removed", 
-		InActor->GetName());
+
+	UE_LOGFMT(KBFLActorSpawnerLog, Log, "IsAllowedToRemoveActor: '{0}' allowed to be removed", InActor->GetName());
 	return true;
 }

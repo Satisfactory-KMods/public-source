@@ -13,7 +13,7 @@ struct FKBFLTransformArrayMap
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<UClass*, FKBFLTransformArray> mMap;
+	TMap<TObjectPtr<UClass>, FKBFLTransformArray> mMap;
 };
 
 UCLASS()
@@ -50,7 +50,7 @@ public:
 	TArray<FString> mCheckParameter = {"Struc", "mTransforms"};
 
 	UPROPERTY()
-	TMap<UClass*, FKBFLTransformArray> Mapping;
+	TMap<TObjectPtr<UClass>, FKBFLTransformArray> Mapping;
 
 	UPROPERTY()
 	FRotator AddRotation = FRotator(0);
@@ -62,5 +62,5 @@ public:
 	FVector Scale = FVector(1);
 
 	UPROPERTY()
-	UClass* LastClass;
+	TObjectPtr<UClass> LastClass;
 };

@@ -1,13 +1,11 @@
-﻿// 
+﻿//
 
 #include "Network/KPCLNetworkTowerHologram.h"
 
 #include "Network/Buildings/KPCLNetworkTower.h"
 
 // Sets default values
-AKPCLNetworkTowerHologram::AKPCLNetworkTowerHologram(): mLinkedRadarTower(nullptr)
-{
-}
+AKPCLNetworkTowerHologram::AKPCLNetworkTowerHologram() : mLinkedRadarTower(nullptr) {}
 
 void AKPCLNetworkTowerHologram::CheckValidPlacement()
 {
@@ -36,7 +34,11 @@ void AKPCLNetworkTowerHologram::SetHologramLocationAndRotation(const FHitResult&
 	if (AFGBuildableRadarTower* Tower = Cast<AFGBuildableRadarTower>(hitResult.GetActor()))
 	{
 		AKPCLFaxitSubsystem* FaxitSubsystem = AKPCLFaxitSubsystem::Get(GetWorld());
-		if (Tower != mLinkedRadarTower && !FaxitSubsystem->IsTowerRegistered(Tower))
+		if (!IsValid(FaxitSubsystem))
+		{
+			mLinkedRadarTower = nullptr;
+		}
+		else if (Tower != mLinkedRadarTower && !FaxitSubsystem->IsTowerRegistered(Tower))
 		{
 			OnSnap();
 			mLinkedRadarTower = Tower;

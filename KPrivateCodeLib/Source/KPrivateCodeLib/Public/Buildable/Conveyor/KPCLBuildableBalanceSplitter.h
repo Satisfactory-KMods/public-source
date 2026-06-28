@@ -1,10 +1,12 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+﻿// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Buildables/FGBuildableAttachmentSplitter.h"
 #include "Structures/KPCLFunctionalStructure.h"
+
 #include "KPCLBuildableBalanceSplitter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -12,9 +14,7 @@ struct KPRIVATECODELIB_API FKPCLSplitterTimer
 {
 	GENERATED_BODY()
 
-	FKPCLSplitterTimer()
-	{
-	};
+	FKPCLSplitterTimer() {};
 
 	UPROPERTY(SaveGame, NotReplicated, BlueprintReadOnly)
 	float mCurrentTimeLeft = 0.0f;
@@ -23,18 +23,19 @@ struct KPRIVATECODELIB_API FKPCLSplitterTimer
 	float mTargetPerMin = -1.0f;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
-	UFGFactoryConnectionComponent* mConnection = nullptr;
+	TObjectPtr<UFGFactoryConnectionComponent> mConnection = nullptr;
 
 	UPROPERTY(SaveGame, BlueprintReadOnly)
 	TArray<TSubclassOf<UFGItemDescriptor>> mFilteredItems;
 
 	bool CanPushItem(TSubclassOf<UFGItemDescriptor> ItemClass, bool bOnlyOverflowing,
-	                 bool bIsItemDefinedElsewhere) const;
+					 bool bIsItemDefinedElsewhere) const;
 
 	void Tick(float dt);
 
 	bool CanPush() const;
 	void HasPushed();
+	void Reset();
 
 	bool HasOverrule() const;
 	bool HasWildcard() const;
@@ -65,7 +66,7 @@ enum class EKPCLBalanceSplitterType : uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FKPCLSplitterRulesChanged, bool, bFilterChanged, FKPCLSplitterTimer,
-                                               NewValue, int32, Idx);
+											   NewValue, int32, Idx);
 
 UCLASS()
 class KPRIVATECODELIB_API AKPCLBuildableBalanceSplitter : public AFGBuildableConveyorAttachment
@@ -75,16 +76,6 @@ class KPRIVATECODELIB_API AKPCLBuildableBalanceSplitter : public AFGBuildableCon
 public:
 	AKPCLBuildableBalanceSplitter();
 
-protected:
-	virtual bool CanUseFactoryClipboard_Implementation() override;
-	virtual UFGFactoryClipboardSettings* CopySettings_Implementation() override;
-	virtual bool PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-	                                          class AFGPlayerController* player) override;
-
-	virtual void
-	GetDismantleRefund_Implementation(TArray<FInventoryStack>& out_refund, bool noBuildCostEnabled) const override;
-
-public:
 	UFUNCTION(BlueprintPure)
 	static float GetProgressForTimer(const FKPCLSplitterTimer& Timer);
 
@@ -112,61 +103,62 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FKPCLSplitterRulesChanged mOnSplitterRulesChanged;
 
-protected:
+	//~ Begin AFGBuildableFactory Interface
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void Factory_Tick(float dt) override;
-	virtual void Factory_HandleBelts(float dt);
 	virtual void BeginPlay() override;
-
+	virtual bool CanUseFactoryClipboard_Implementation() override;
+	virtual UFGFactoryClipboardSettings* CopySettings_Implementation() override;
+	virtual bool PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
+											  class AFGPlayerController* player) override;
+	virtual void GetDismantleRefund_Implementation(TArray<FInventoryStack>& out_refund,
+												   bool noBuildCostEnabled) const override;
 	virtual bool Factory_GrabOutput_Implementation(class UFGFactoryConnectionComponent* connection,
-	                                               FInventoryItem& out_item, float& out_OffsetBeyond,
-	                                               TSubclassOf<UFGItemDescriptor> type) override;
+												   FInventoryItem& out_item, float& out_OffsetBeyond,
+												   TSubclassOf<UFGItemDescriptor> type) override;
 	virtual bool Factory_PeekOutput_Implementation(const class UFGFactoryConnectionComponent* connection,
-	                                               TArray<FInventoryItem>& out_items,
-	                                               TSubclassOf<UFGItemDescriptor> type) const override;
+												   TArray<FInventoryItem>& out_items,
+												   TSubclassOf<UFGItemDescriptor> type) const override;
+	//~ End AFGBuildableFactory Interface
 
-	// Verteilt Items von Slot 0 (Input-Buffer) zu den Output-Slots (1+)
+protected:
+	virtual void Factory_HandleBelts(float dt);
+
+	/** Distributes items from slot 0 (input buffer) to output slots (1+). */
 	virtual void DistributeItemsToOutputSlots(float dt);
 
-	// Verteilungsfunktionen für verschiedene Modi
-	void DistributeNormalMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex,
-	                          float dt);
-	void DistributeSmartOrProgrammableMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex,
-	                                       float dt);
+	bool DistributeNormalMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex, float dt);
+	void DistributeSmartOrProgrammableMode(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex, float dt);
 
-	// Prüft ob ein Output ein Item akzeptieren kann (Filter + Timer)
 	bool CanOutputAcceptItem(int32 OutputIndex, TSubclassOf<UFGItemDescriptor> ItemClass, bool bIsItemDefinedElsewhere,
-	                         bool bOverflowMode) const;
+							 bool bOverflowMode) const;
 
-	// Versucht ein Item zum Output-Slot zu verschieben
 	bool TryMoveItemToOutput(UFGInventoryComponent* BufferInventory, int32 InputSlotIndex,
-	                         const FInventoryStack& InputStack, int32 OutputIndex);
+							 const FInventoryStack& InputStack, int32 OutputIndex);
 
-	// Hilfsfunktion um den Timer für eine Connection zu finden
 	UFGFactoryConnectionComponent* GetOutputByName(FName ConnectionName) const;
 	FKPCLSplitterTimer* GetTimerForConnection(UFGFactoryConnectionComponent* Connection);
 	const FKPCLSplitterTimer* GetTimerForConnection(UFGFactoryConnectionComponent* Connection) const;
 
-	// Findet den nächsten verbundenen Output-Index ab StartIndex (Round-Robin mit Skip für nicht verbundene)
-	int32 GetNextConnectedOutputIndex(int32 StartIndex) const;
 
-	// Prüft ob der Output mit dem gegebenen Index ein passendes Item aus dem Buffer nehmen kann
-	bool CanOutputGrabAnyItem(int32 OutputIndex, TSubclassOf<UFGItemDescriptor> type) const;
-
-	// Prüft ob ein Item an irgendeinem Output akzeptiert wird (für AnyUndefined Logik)
 	bool IsItemDefinedOnAnyOutput(TSubclassOf<UFGItemDescriptor> ItemClass) const;
 
+	// AFGBuildableConveyorAttachment derives from AFGBuildable (not AFGBuildableFactory), so it has
+	// no mPropertyReplicator / IFGConditionalReplicationInterface. Use native UE replication instead.
 	UPROPERTY(SaveGame, Replicated)
 	TArray<FKPCLSplitterTimer> mOutputTimers;
 
 	UPROPERTY(Transient)
-	TArray<UFGFactoryConnectionComponent*> mOutputConnections;
+	TMap<TObjectPtr<UFGFactoryConnectionComponent>, int32> mOutputConnectionToIndexMap;
 
-	UPROPERTY(Transient)
-	TMap<UFGFactoryConnectionComponent*, int32> mOutputConnectionToIndexMap;
-
-	UPROPERTY(EditDefaultsOnly, Category="KMods|BalanceSplitter")
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|BalanceSplitter")
 	EKPCLBalanceSplitterType mSplitterType = EKPCLBalanceSplitterType::NORMAL;
+
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|BalanceSplitter")
+	int32 mInputBufferSize = 3;
+
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|BalanceSplitter")
+	int32 mOutputBufferSize = 3;
 
 	/** Cycles through the outputs, stores the output we want to put mItem on. Index is for the mOutputs array. */
 	UPROPERTY(SaveGame, Meta = (NoAutoJson))

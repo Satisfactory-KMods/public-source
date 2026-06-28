@@ -10,13 +10,9 @@
 
 #include "KLBuildableSlugBuildingBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHumidityChanged, float, NewValue);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTempChanged, float, NewValue);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHumidityChanged, float, NewValue);
-
-/**
- * Main Class for Slug Buildings (mainly use to add a second inventory)
- */
 UCLASS()
 class KLIB_API AKLBuildableSlugBuildingBase : public AKPCLModularBuildingBase
 {
@@ -25,39 +21,32 @@ class KLIB_API AKLBuildableSlugBuildingBase : public AKPCLModularBuildingBase
 public:
 	AKLBuildableSlugBuildingBase();
 
+	//~ Begin AActor Interface
 	virtual void BeginPlay() override;
+	//~ End AActor Interface
 
-	// Overwrite to bind the output belts to Output Inventory
-	virtual void SetBelts() override;
-
-	// Will called if item added or removed
-	FORCEINLINE virtual void OnSlotChecking(TSubclassOf<UFGItemDescriptor> Item, bool WasRemoved)
-	{
-	}
-
-	FORCEINLINE virtual void OnSlotOutputChecking(TSubclassOf<UFGItemDescriptor> Item, bool WasRemoved)
-	{
-	}
-
+	//~ Begin AKPCLModularBuildingBase Interface
 	virtual void OnInputItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-	                              UFGInventoryComponent* sourceInventory) override;
+								  UFGInventoryComponent* sourceInventory) override;
 	virtual void OnInputItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-	                                UFGInventoryComponent* sourceInventory) override;
-
+									UFGInventoryComponent* sourceInventory) override;
 	virtual void OnOutputItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-	                               UFGInventoryComponent* sourceInventory) override;
+								   UFGInventoryComponent* sourceInventory) override;
 	virtual void OnOutputItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-	                                 UFGInventoryComponent* sourceInventory) override;
+									 UFGInventoryComponent* sourceInventory) override;
+	virtual void SetBelts() override;
+	//~ End AKPCLModularBuildingBase Interface
 
-	// Native Helper
 	FInventoryStack GetStackFromIndex(int32 Index, bool OutPutInventory = false) const;
+	FORCEINLINE virtual void OnSlotChecking(TSubclassOf<UFGItemDescriptor> Item, bool WasRemoved) {}
+	FORCEINLINE virtual void OnSlotOutputChecking(TSubclassOf<UFGItemDescriptor> Item, bool WasRemoved) {}
+
+	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
+	TObjectPtr<UFGInventoryComponent> mInputInventory;
+
+	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
+	TObjectPtr<UFGInventoryComponent> mOutputInventory;
 
 	UPROPERTY(Transient)
-	AKLSlugSubsystem* mSlugSubsystem;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
-	UFGInventoryComponent* mInputInventory;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, Category = "KMods|Inventory")
-	UFGInventoryComponent* mOutputInventory;
+	TObjectPtr<AKLSlugSubsystem> mSlugSubsystem;
 };

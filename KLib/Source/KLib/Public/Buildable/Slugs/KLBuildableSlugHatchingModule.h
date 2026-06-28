@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "KLBuildableSlugBuildingBase.h"
+
 #include "KLBuildableSlugHatchingModule.generated.h"
 
 UENUM()
@@ -44,7 +46,7 @@ struct FKLHatchingModeleStats
 	float mOldValue = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, NotReplicated)
-	UCurveFloat* mCurve = nullptr;
+	TObjectPtr<UCurveFloat> mCurve = nullptr;
 
 	bool Tick(float dt)
 	{
@@ -68,76 +70,79 @@ struct FKLHatchingModeleStats
 	}
 };
 
-/**
- * 
- */
 UCLASS()
 class KLIB_API AKLBuildableSlugHatchingModule : public AKLBuildableSlugBuildingBase
 {
 	GENERATED_BODY()
 
 public:
-	AKLBuildableSlugHatchingModule()
-		: mTier(0)
-		  , mModuleType()
-	{
-	}
+	AKLBuildableSlugHatchingModule() : mModuleType(), mTier(0) {}
 
-	// Repl
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
-	virtual bool CanUseFactoryClipboard_Implementation() override;
-
-	virtual void BeginPlay() override;
-
+	//~ Begin AFGBuildableFactory Interface
 	virtual bool CanProduce_Implementation() const override;
-	virtual bool IsModuleTypeOf_Implementation(uint8 Type) override;
-	virtual void Stacker_AddBuildingHeight_Implementation(float& Height) override;
-	virtual void GetChildDismantleActors_Implementation(TArray<AActor*>& out_ChildDismantleActors) const override;
-	virtual void HandlePower(float dt) override;
+	virtual bool CanUseFactoryClipboard_Implementation() override;
 	virtual bool Factory_HasPower() const override;
-	virtual bool GetHasPower() const override;
-
 	virtual void Factory_Tick(float dt) override;
+	virtual void GetChildDismantleActors_Implementation(TArray<AActor*>& out_ChildDismantleActors) const override;
+	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	//~ End AFGBuildableFactory Interface
 
-	virtual void HandleTemperatureModule(float dt);
-	void UpdateTemperatureVisuals();
-	virtual void HandleTankModule(float dt);
-	virtual void HandleIncubatorModule(float dt);
-	void UpdateIncubatorVisuals();
-	virtual void HandleHumidityModule(float dt);
-	virtual void HandleTimeModule(float dt);
+	//~ Begin AActor Interface
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
 
-	/** Set Target - can called from both sides Server and Client */
-	UFUNCTION(BlueprintCallable, Category="KMods|Hatching")
+	//~ Begin AKLBuildableSlugBuildingBase Interface
+	virtual void HandlePower(float dt) override;
+	//~ End AKLBuildableSlugBuildingBase Interface
+
+	//~ Begin IFGStackingActorInterface Interface
+	virtual void Stacker_AddBuildingHeight_Implementation(float& Height) override;
+	//~ End IFGStackingActorInterface Interface
+
+	virtual bool GetHasPower() const override;
+	virtual bool IsModuleTypeOf_Implementation(uint8 Type) override;
+
+	UFUNCTION(BlueprintCallable, Category = "KMods|Hatching")
 	void ApplyNewHumidity(float Humidity);
 
-	/** Set Target - can called from both sides Server and Client */
-	UFUNCTION(BlueprintCallable, Category="KMods|Hatching")
-	void ApplyNewTemperature(float Temperature);
-
-	/** Set Target - can called from both sides Server and Client */
-	UFUNCTION(BlueprintCallable, Category="KMods|Hatching")
+	UFUNCTION(BlueprintCallable, Category = "KMods|Hatching")
 	void ApplyNewOverwriteTime(EKAPISlugTime OverwriteTime);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Hatching")
-	uint8 mTier;
+	UFUNCTION(BlueprintCallable, Category = "KMods|Hatching")
+	void ApplyNewTemperature(float Temperature);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Hatching")
-	EHatchingModuleType mModuleType;
+	void HandleHumidityModule(float dt);
+	void HandleIncubatorModule(float dt);
+	void HandleTankModule(float dt);
+	void HandleTemperatureModule(float dt);
+	void HandleTimeModule(float dt);
+	void UpdateIncubatorVisuals();
+	void UpdateTemperatureVisuals();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Hatching")
-	float mBuildingHeight = 150.f;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, Replicated, Category="KMods|Hatching")
-	FKLHatchingModeleStats mTemperature;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = ( FGReplicated ), Category="KMods|Hatching")
-	FKLHatchingModeleStats mHumidity;
-
-	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = ( FGReplicated ), Category="KMods|Hatching")
-	EKAPISlugTime mOverwriteTime = EKAPISlugTime::NONE;
+	/** Centralised dirty-marking for the replicated stat properties. */
+	void CommitTemperature();
+	void CommitHumidity();
+	void CommitOverwriteTime();
 
 	FSmartTimer mIncubatorTimer = FSmartTimer(0.5f, true);
 	TSubclassOf<UFGItemDescriptor> mLastEgg;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Hatching")
+	float mBuildingHeight = 150.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Hatching")
+	EHatchingModuleType mModuleType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Hatching")
+	uint8 mTier;
+
+	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|Hatching")
+	EKAPISlugTime mOverwriteTime = EKAPISlugTime::NONE;
+
+	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|Hatching")
+	FKLHatchingModeleStats mHumidity;
+
+	UPROPERTY(EditDefaultsOnly, SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|Hatching")
+	FKLHatchingModeleStats mTemperature;
 };

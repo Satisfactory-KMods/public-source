@@ -1,15 +1,14 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "KAPIDataAssetBase.h"
-#include "Buildables/FGBuildableResourceExtractorBase.h"
+
 #include "Components/PanelWidget.h"
-#include "Components/Widget.h"
+
+#include "DataAssets/KAPIDataAssetBase.h"
 
 #include "KAPTooltipWidgetInjector.generated.h"
-
 
 UCLASS(BlueprintType)
 class KAPI_API UKAPTooltipWidgetInjector : public UKAPIDataAssetBase
@@ -17,11 +16,12 @@ class KAPI_API UKAPTooltipWidgetInjector : public UKAPIDataAssetBase
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
-	bool ShouldInjectForItem(TSubclassOf<UFGItemDescriptor> ItemClass) const;
+	static FMargin GetPadding(UPanelSlot* Slot);
 
 	static void SetPadding(UPanelSlot* Slot, FMargin Padding);
-	static FMargin GetPadding(UPanelSlot* Slot);
+
+	UFUNCTION(BlueprintCallable)
+	bool ShouldInjectForItem(TSubclassOf<UFGItemDescriptor> ItemClass) const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widget")
 	TSubclassOf<UUserWidget> mWidgetClass;

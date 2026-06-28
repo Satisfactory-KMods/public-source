@@ -1,0 +1,1273 @@
+msgid ""
+msgstr ""
+"Language: de-DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mAbbreviatedDisplayName"
+msgid "(H₂O)"
+msgstr "(H₂O)"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDescription"
+msgid "93.6% pure Titanium Dioxide. Processing it into TiCl might require a few attempts."
+msgstr "93,6% reines Titandioxid. Um es zu TiCl zu verarbeiten werden vielleicht mehrere Versuche nötig sein."
+
+msgctxt "ST_Klib,Node_Select.Option_1_03"
+msgid "<Blue10Reg>Connected</>"
+msgstr "<Blue10Reg>Verbunden</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_03"
+msgid "<Grey10Reg>Collectors in Range: </><Orange10Reg>{Value}</>"
+msgstr "<Grey10Reg>Extraktoren in Reichweite: </><Orange10Reg>{Value}</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format"
+msgid "<Grey10Reg>Height bonus: </><Orange10Reg>{Value} %</>"
+msgstr "<Grey10Reg>Höhenbonus: </><Orange10Reg>{Value} %</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_02"
+msgid "<Grey10Reg>Malus: </><Orange10Reg>{Value} m³ ({PerMin}m³/min)</>"
+msgstr "<Grey10Reg>Bonus / Malus: </><Orange10Reg>{Value} m³ ({PerMin}m³/min)</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_01"
+msgid "<Grey10Reg>Objects in range: </><Orange10Reg>{Value}</>"
+msgstr "<Grey10Reg>Quellen in Reichweite: </><Orange10Reg>{Value}</>"
+
+msgctxt "ST_Klib,Node_Select.Option_1_01"
+msgid "<Orange12Reg> Yes</>"
+msgstr "<Orange12Reg> Ja</>"
+
+msgctxt "ST_Klib,WidgetTooltipProvider_Addon_SlugBase.mMaxRateText.Text"
+msgid "<Orange12Reg>You need first to breed a egg for this type of slug to show more informations</>"
+msgstr "<Orange12Reg> Es muss erst ein Ei dieser Schneckenart gezeugt werden um mehr zu erfahren.</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_35"
+msgid "<White10Reg>Can be stored in FaxIT-Network: </><Orange10Reg>NO</>"
+msgstr "<White10Reg>Kann im FaxIT-Netzwerk gelagert werden: </><Orange10Reg>NEIN</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_36"
+msgid "<White10Reg>Can be stored in FaxIT-Network: </><Orange10Reg>YES</>"
+msgstr "<White10Reg>Kann im FaxIT-Netzwerk gelagert werden: </><Orange10Reg>JA</>"
+
+msgctxt "ST_Klib,WidgetTooltipProvider_Addon_SlugBase.mMaxRateText_1.Text"
+msgid "<White10Reg>Slug & Egg settings</>"
+msgstr "<White10Reg>Einstellungen (Schnecken & Eier)</>"
+
+msgctxt "ST_Klib,WidgetTooltipProvider_Addon_Slug.mMaxRateText.Text"
+msgid "<White10Reg>Slug Information</>"
+msgstr "<White10Reg>Schneckeninfos</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_07"
+msgid "<White10Reg>{Amount}</>"
+msgstr "<White10Reg>{Amount}</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_06"
+msgid "<White10Reg>{Amount}m³</>"
+msgstr "<White10Reg>{Amount}m³</>"
+
+msgid "<White12Reg> Cabel boost (100%)</>\\r\\n {IS}"
+msgstr "<White12Reg> Kabelsignal-Verstärkung (100% )</>\\r\\n {IS}"
+
+msgid "<White12Reg> Current transfer Rate </>\\r\\n<Orange10Reg> {Amount} / min </>"
+msgstr "<White12Reg> Aktuelle Übertragungsrate: </>\\r\\n<Orange10Reg> {Amount} / min </>"
+
+msgid "<White12Reg> Max transfer rate </>\\r\\n<Orange10Reg> {Amount} / min </>"
+msgstr "<White12Reg> Maximale Übertragunsgrate </>\\r\\n<Orange10Reg> {Amount} / min </>"
+
+msgid "<White12Reg> Network Power: </><Orange10Reg>{NetworkPower} MW </> \\r\\n<White12Reg> Building Power: </><Orange10Reg>{BuildingPower} MW </>"
+msgstr "<White12Reg> Netzwerk-Stromverbrauch: </><Orange10Reg>{NetworkPower} MW </> \\r\\n<White12Reg> Gebäude-Stromverbrauch: </><Orange10Reg>{BuildingPower} MW </>"
+
+msgctxt "ST_Klib,Node_Select.Option_0"
+msgid "<White12Reg> No</>"
+msgstr "<White12Reg> Nein</>"
+
+msgctxt "ST_Klib,Widget_NetworkFax.RichTextBlock_2.Text"
+msgid "<White12Reg> Set a new Network transfer Rate </>"
+msgstr "<White12Reg> Neue Übertragungsrate festlegen </>"
+
+msgid "<White12Reg>Buildings in Network </>\\r\\n<Orange10Reg>{Count}/{Limit} Buildings </>"
+msgstr "<White12Reg>Gebäude im Netzwerk </>\\r\\n<Orange10Reg>{Count}/{Limit} Gebäude </>"
+
+msgid "<White12Reg>Buildings in Network </>\\r\\n<Orange10Reg>{Value} Buildings </>"
+msgstr "<White12Reg>Gebäude im Netzwerk </>\\r\\n<Orange10Reg>{Value} Gebäude </>"
+
+msgid "<White12Reg>Buildings</>\\r\\n<Orange10Reg>+ {Limit} Buildings </>"
+msgstr "<White12Reg>Gebäude</>\\r\\n<Orange10Reg>+ {Limit} Gebäude </>"
+
+msgctxt "ST_Klib,Widget_Cleaner_Recipe.mCurText.Text"
+msgid "<White12Reg>ByPass Products</>"
+msgstr "Nebenprodukte"
+
+msgid "<White12Reg>Max Unique items</>\\r\\n<Orange10Reg>{Value} Items </>"
+msgstr "<White12Reg>Maximalen Gegenstände</>\\r\\n<Orange10Reg>{Value} Gegenstände </>"
+
+msgid "<White12Reg>Network Power </>\\r\\n<Orange10Reg>+ {Amount} MW </>"
+msgstr "<White12Reg>Netzwerk Stromverbrauch </>\\r\\n<Orange10Reg>+ {Amount} MW </>"
+
+msgid "<White12Reg>Network Power </>\\r\\n<Orange10Reg>{Amount} MW </>"
+msgstr "<White12Reg>Netzwerk Stromverbrauch </>\\r\\n<Orange10Reg>{Amount} MW </>"
+
+msgid "<White12Reg>Network Power </>\\r\\n<Orange10Reg>{Value} MW </>"
+msgstr "<White12Reg>Netzwerk Stromverbrauch </>\\r\\n<Orange10Reg>{Value} MW </>"
+
+msgctxt "ST_Klib,Widget_NetworCore.RichTextBlock_2.Text"
+msgid "<White12Reg>Set Network name</>"
+msgstr "<White12Reg>Netzwerkname festlegen</>"
+
+msgid "<White12Reg>Storage size per Item </>\\r\\n<Orange10Reg>{SolidStacks} Stacks / {Fluid}m³ </>"
+msgstr "<White12Reg>Speicherplatz pro Gegenstand </>\\r\\n<Orange10Reg>{SolidStacks} Stapel / {Fluid}m³ </>"
+
+msgid "<White12Reg>Storage size per Item </>\\r\\n<Orange10Reg>{Value} Stacks / {ValueM3} m³ </>"
+msgstr "<White12Reg>Speicherplatz pro Gegenstand </>\\r\\n<Orange10Reg>{Value} Stapel / {ValueM3} m³ </>"
+
+msgid "<White12Reg>Storage size</>\\r\\n<Orange10Reg>+ {Amount} Stacks</>"
+msgstr "<White12Reg>Speicherplatz</>\\r\\n<Orange10Reg>+ {Amount} Stapel</>"
+
+msgid "<White12Reg>Unique items </>\\r\\n<Orange10Reg>+ {Count} Items </>"
+msgstr "<White12Reg>Gegenstandsarten </>\\r\\n<Orange10Reg>+ {Count} Gegenstände </>"
+
+msgid "<White12Reg>Unique items </>\\r\\n<Orange10Reg>0/300 Items </>"
+msgstr "<White12Reg>Gegenstandsarten </>\\r\\n<Orange10Reg>0/300 Gegenstände</>"
+
+msgid "<White12Reg>Unique items </>\\r\\n<Orange10Reg>{Count}/{Limit} Items </>"
+msgstr "<White12Reg>Gegensandsarten</>\\r\\n<Orange10Reg>{Count}/{Limit} Gegenstände </>"
+
+msgid "<White12Reg>{Name}</>\\r\\n<White10Reg>Distance: </><Orange10Reg>{Meter} Meter</>{Connected}"
+msgstr "<White12Reg>{Name}</>\\r\\n<White10Reg>Distanz: </><Orange10Reg>{Meter} Meter</>{Connected}"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_20"
+msgid "<White16Reg>{Titel}</>"
+msgstr "<White16Reg>{Titel}</>"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_05"
+msgid "<White16Reg>{name}</>"
+msgstr "<White16Reg>{name}</>"
+
+msgctxt "ST_Klib,BPW_SplitterBalanceSmartRule.Widget_InputBox.mPreviewText"
+msgid "?? / Min"
+msgstr "?? / Min"
+
+msgctxt "ST_Klib,Node_Select.NONE"
+msgid "???"
+msgstr "???"
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDescription"
+msgid "A Container for easy transport"
+msgstr "Ein Behälter für einfachen Transport."
+
+msgid "A Kerr Crystal with an electrically poled frame, allowing for manipulation of the crystal's optical properties.\\r\\nFundamental for optical computing."
+msgstr "Ein Kerrkristall mit einem elektrisch gepolten Rahmen, wodurch die optischen Eigenschaften beeinflusst werden können.\\r\\nGrundlegend für optische Computer."
+
+msgctxt "ST_Klib,Desc_TimeC_Adapter.Desc_TimeC_Adapter_C.mDescription"
+msgid "A adapter for different connections in a network system"
+msgstr "Ein Adapter um verschiedene Anschlüsse in einem Netzwerk zu verbinden."
+
+msgid "A bar stock cast from Magnitar™.\\r\\n\\r\\nHighly energetic magnetic fields can turn it into permanent magnets.\\r\\nCrafted into basic Magnitar™ parts."
+msgstr "Ein aus Magnitar™ gegossener Rohling.\\r\\n\\r\\nKann durch hochenergetische magnetische Felder in einen Permanentmagneten umgewandelt werden.\\r\\nWird für die Fertigung von Magnitar™ Teilen verwendet."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mDescription"
+msgid "A basic conveyor drum drive, used to power Mk.2 Conveyor Belts."
+msgstr "Ein einfacher Trommelmotor, der Mk.2 Förderbänder antreibt."
+
+msgctxt "KLib_Item,PuriItems"
+msgid "A box full of metal that has no dirt. perfect for melting and further processing."
+msgstr "Eine box voll Metall, frei von Verunreinigungen. Geeignet zum Schmelzen und für weitere Prozesse."
+
+msgid "A gas with a high proportion of sulfur. It is used in various processes such as the production of Sulfuric Acid.\\r\\n\\r\\nProduced by combusting Sulfur Powder in a Solid Fuel Heater or extracted from Flue Gas via filtration."
+msgstr "Ein Gas mit einem hohen Schwefelanteil. Wird in einer Vielzahl von Prozessen genutzt, wie in der Schwefelsäureherstellung.\\r\\n\\r\\nWird durch Verbrennung von Schwefelpulver in einem Feststoffbrenner oder durch Filtrieren von Rauchgas hergestellt."
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mDescription"
+msgid "A generic coolant formulated for use in cryogenic parts and in Nuclear Power Plants."
+msgstr "Ein allgemeines Kühlmittel das für den Einsatz in kryogenen Bauteilen und Atomkraftwerken entwickelt wurde."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mDescription"
+msgid "A high-tech conveyor drum drive, used to power Mk.5 Conveyor Belts."
+msgstr "Ein Hightech-Trommelmotor, der Mk. 5 Förderbänder antreibt."
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDescription"
+msgid "A magnesium-rich aluminum alloy, one of the most basic parts from Aluminum."
+msgstr "Ein Bandblech bestehend aus einer magnesiumreichen Aluminiumlegierung. Eines der grundlegendsten Aluminiumteile."
+
+msgid "A mix of Titanium Chlorides, also known 'Tickle'.\\r\\nThe purple hue stems from TiCl3.\\r\\nMainly used to produce purified Titanium."
+msgstr "Eine Mischung aus Titanchloriden, auch bekannt als 'Tickle'\\r\\nDer violette Farbstich stammt von TiCl3.\\r\\nWird hauptsächlich für die Produktion von reinem Titan verwendet."
+
+msgctxt "ST_Klib,Desc_CryoliteResidue.Desc_CryoliteResidue_C.mDescription"
+msgid "A mixture of byproducts left over after refining Bauxite."
+msgstr "Eine Mischung aus Nebenprodukten die nach der Bauxitraffination über bleiben."
+
+msgid "A network pole for transmitting and dividing information over longer distances.\\r\\n\\r\\nCan connect up to 6 cables. and attached walls."
+msgstr "Ein Netzwerkmast der für die Übertragung und Verteilung von Daten über große Distanzen dient.\\r\\n\\r\\nKann mit bis zu 6 Datenleitungen verbunden werden."
+
+msgid "A non-flammable, pungent-smelling gas used to refine Uranium and Titanium.\\r\\n\\r\\nOn MASSAGE-2 (AB)b, it is rarely found in underground gas wells. It can also be synthesized from Muriatic Acid."
+msgstr "Ein nicht entflammbares, stechend riechendes Gas das für die Verarbeitung von Uran und Titan genutzt wird.\\r\\n\\r\\nAuf MASSAGE-2 (AB)b kann es selten in unterirdischen Gasquellen gefunden werden. Kann alternativ auch aus Salzsäure hergestellt werden."
+
+msgid "A plate coated with titanium metal, produced through sintering of titanium hydride made from TiCl Gas.\\r\\n\\r\\nCommonly used to coat surfaces with titanium in a process known as 'sputtering'."
+msgstr "Eine mit Titan beschichtete Metallplatte, Hergestellt durch Sintern von Titanhydrid welches aus TiCl Gas gewonnen wird.\\r\\n\\r\\nWird oft zur Beschichtung von Oberflächen mit Titan im sogenannten 'Sputterverfahren' verwendet."
+
+msgid "A pre-soldered Wire, ready to be used in electronics.\\r\\nOne of the most basic parts made with Solder."
+msgstr "Ein vorgelöteter Draht, bereit zur Verarbeitung in Elektronikkomponenten\\r\\nEines der grundlegendsten aus Lötzinn gefertigten Teile."
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDescription"
+msgid "A sack full of finely crushed powdered coal. Perfect for making gunpowder."
+msgstr "Ein Beutel gefüllt mit fein gemahlenem Kohlestaub. Perfekt geeignet für die Produktion von Schwarzpulver."
+
+msgid "A semiconductor photodiode array. Converts light into electricity.\\r\\nOften used to construct Solar Panels or in advanced electronics."
+msgstr "Ein Halbleiter-Solarmodul. Wandet Licht in Elektrizität um\\r\\nWird häufig in Solarpaneelen oder fortgeschrittenen elektronischen Bauteilen verwendet."
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDescription"
+msgid "A small heatsink with high conductivity. Great for high power electronics."
+msgstr "Ein kleiner Kühlkörper mit hoher Wärmeleitung. Ideal für Hochleistungselektronik."
+
+msgid "A special KMods bonus program voucher, available through various deliveries and tasks.\\r\\nBetter hold onto this coupon - might be exchanged for rewards later on."
+msgstr "Ein spezieller KMods Bonusprogram Coupon der bei Abschluss verschiedener Lieferungen und Aufgaben ausgehändigt wird.\\r\\nHeb ihn gut auf - kann gegen Belohnungen eingetauscht werden."
+
+msgid "A very special phase of Kyalite crystal with birefractive properties. It requires refinement before it can be used.\\r\\n\\r\\nNamed after D. Kerr, a visionary in the field of quantum optics."
+msgstr "Eine spezielle Phase von Kyalitkristallen die Doppelbrechung aufweist. Erfordert weitere Aufbereitung bevor es verwendet werden kann.\\r\\n\\r\\nBenannt nach D. Kerr, einem Visionär der Quantenoptik."
+
+msgctxt "ST_Klib,Desc_LiquidRawSludge.Desc_LiquidRawSludge_C.mDescription"
+msgid "A waste product that contains trace amounts of iron, magnesium and tin."
+msgstr "Ein Nebenprodukt das Spuren von Caterium, Kobalt, Nickel und Zink aufweist."
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk1_N"
+msgid "AWESOME Storage Mk.1"
+msgstr "AWESOME Lagercontainer Mk.1"
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk2_N"
+msgid "AWESOME Storage Mk.2"
+msgstr "AWESOME Lagercontainer Mk.2"
+
+msgid "Able to re-form parts into other products through heating, refrigeration and pressurization processes.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports.\\r\\n\\r\\nSolid Output: The first solid output port is on the right (viewed from the output side.)"
+msgstr "Kann Teile zu anderen Teilen durch Erhitzung, Abkühlung oder Verdichtung umformen.\\r\\n\\r\\nFörderhöhe: 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nEnthält sowohl Förderband- als auch Pipeline-Ein- und -Ausgänge.\\r\\n\\r\\nAusgänge: Der erste Förderbandausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgctxt "StringTable_Categorys,Acid"
+msgid "Acid"
+msgstr "Säure"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_13"
+msgid "Active: {Active}"
+msgstr "Aktiv: {Active}"
+
+msgctxt "StringTable_Categorys,AdvancedSorting"
+msgid "Advanced Sorting"
+msgstr "Erweitertes Sortieren"
+
+msgctxt "StringTable_Categorys,AdvancedStandardParts"
+msgid "Advanced Standard Parts"
+msgstr "Erweitere Standardteile"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDisplayName"
+msgid "Air"
+msgstr "Luft"
+
+msgctxt "StringTable_KLib_Buildings,Build_AirCollector_Name"
+msgid "Air Collector"
+msgstr "Luftsammler"
+
+msgctxt "ST_Klib,Desc_PackagedAir.Desc_PackagedAir_C.mDescription"
+msgid "Air, packaged for alternative transport."
+msgstr "Luft, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mDisplayName"
+msgid "AlClad Belt Drive"
+msgstr "Alclad Bandantrieb"
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mAbbreviatedDisplayName"
+msgid "Algae"
+msgstr "Algen"
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mDisplayName"
+msgid "Algal Mass"
+msgstr "Algenmasse"
+
+msgctxt "StringTable_KLib_Buildings,Build_BioWaterExtractor_SF+_Name"
+msgid "Algal Mass Extractor"
+msgstr "Algenmassenextraktor"
+
+msgid "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Kann mit bis zu 6 Datenleitungen verbunden werden.\\r\\nVerbinde Faxit Scanner, Kopierer und einen Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen.\\r\\n\\r\\nHINWEIS: Ein Lagernetz-Nexus kann nicht an das Faxit-Netwerk eines anderen Lagernetz-Nexus angeschlossen werden."
+
+msgctxt "StringTable_Categorys,Alloys"
+msgid "Alloys"
+msgstr "Legierungen"
+
+msgid "Also known as Methane Gas. It is the lightest crude oil distillate and is often used as fuel for oil refineries.\\r\\nMay also be reformed to produce 'Syngas', a mixture of Hydrogen and Carbon Monoxide.\\r\\nCan be burned in Solution Heaters."
+msgstr "Auch bekannt als Methangas. Es bildet die leichteste Erdölfraktion und wird oft als Treibstoff in Erdölraffinerien eingesetzt.\\r\\nDurch Reformierung kann es zu 'Synthesegas', einer Mischung aus Wasserstoff und Kohlenmonoxid, umgewandelt werden.\\r\\nKann im Flüssigkeitsbrenner verbrannt werden."
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDisplayName"
+msgid "Aluminum Coil"
+msgstr "Aluminiumblechrolle"
+
+msgid "An accumulation of phytoplankton (planktonic algae), commonly found in underground reservoirs.\\r\\nThey are in a state of hibernation and no longer perform photosynthesis.\\r\\n\\r\\nProcessing into biomass fuels is possible, but perhaps there is a way to reactivate them."
+msgstr "Eine Ansammlung an Phytoplankton (Planktonalgen) die meist in unterirdischen Reservoirs zu finden ist.\\r\\nSie befinden sich in einem Ruhezustand und betreiben keine Photosynthese.\\r\\n\\r\\nKann zu Biotreibstoff verarbeitet werden, aber vielleicht gibt es einen weg sie wieder zu erwecken."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDescription"
+msgid "An advanced conveyor drum drive, used to power Mk.3 Conveyor Belts."
+msgstr "Ein fortgeschrittener Trommelmotor, der Mk. 3 Förderbänder antreibt."
+
+msgid "An advanced part made from Magnitar™.\\r\\n\\r\\nIt is easily magnetized and has low thermal expansion, allowing it to channel electromagnetic fields or to be used in precision instruments.\\r\\nUsed for crafting."
+msgstr "Ein fortgeschrittenes Bauteil aus Magnitar™ gefertigt.\\r\\n\\r\\nEs ist leicht zu magnetisieren und hat einen kleinen Ausdehnungskoeffizienten, wodurch es magnetische Felder bündeln kann oder in Präzisionsinstrumenten verbaut wird.\\r\\nWird für die Fertigung verwendet."
+
+msgctxt "ST_Klib,Desc_TimeC_Case.Desc_TimeC_Case_C.mDescription"
+msgid "An electrically poled frame, used to control the optical properties of crystals."
+msgstr "Ein elektrisch gepolter Rahmen der genutzt wird um die optischen Eigenschaften von Kristallen zu manipulieren."
+
+msgctxt "ST_Klib,Desc_LeadFrame.Desc_LeadFrame_C.mDescription"
+msgid "An extremely heavy lead-plated modular frame, resistant to most acids."
+msgstr "Ein extrem schwerer bleibeschichteter modularer Rahmen, der gegen die meisten Säuren resistent ist."
+
+msgid "An extremely wear resistant modular frame, coated with TITAN ( ti-al-n: titanium-aluminum-nitride).\\r\\nPower Usage: 0-4000 MW (2000 MW average).\\r\\n\\r\\nProduced in the Particle Accelerator by bombarding Fused Modular Frames with Titanium ions torn from a target material."
+msgstr "Ein extrem verschleißfester modularer Rahmen der mit TITAN ( Ti-Al-N: Titanaluminiumnitrid) beschichtet wurde.\\r\\nEnergieverbrauch: 0-4000 MW (durchschnittlich 2000 MW).\\r\\n\\r\\nWird im Teilchenbeschleuniger durch Bombardierung von verschmolzenen modularen Rahmen mit Titanionen, die aus einem Targetmaterial gerissen wurden, hergestellt."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mDescription"
+msgid "An industrial conveyor drum drive, used to power Mk.4 Conveyor Belts."
+msgstr "Ein industrieller Trommelmotor, der Mk. 4 Förderbänder antrieibt."
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_1.EnumEntryFriendlyNames[1]"
+msgid "Any Time"
+msgstr "Jede Tageszeit"
+
+msgctxt "ST_Klib,Desc_Asphalt.Desc_Asphalt_C.mDisplayName"
+msgid "Asphalt"
+msgstr "Asphalt"
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\nManche Erze brauchen höherwertige Bohrköpfe um abgebaut zu werden.\\r\\nStandard-Extraktionsrate: 30 / min pro Ausgang.\\r\\n\\r\\nAlle Abbau-Boni ('Abbaueffizienz') werden direkt mit der Extraktionsrate des Miners multipliziert.\\r\\nBeispiel: 50% x 30 / min = 15 / min pro Ausgang.\\r\\n\\r\\nHINWEIS: Reinheit der Vorkommen zählt zur Abbaueffizienz und NICHT zur Standard-Extraktionsrate."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\nManche Erze brauchen höherwertige Bohrköpfe um abgebaut zu werden.\\r\\nStandard-Extraktionsrate: 60 / min pro Ausgang.\\r\\n\\r\\nAlle Abbau-Boni ('Abbaueffizienz') werden direkt mit der Extraktionsrate des Miners multipliziert.\\r\\nBeispiel: 50% x 60 / min = 30 / min pro Ausgang.\\r\\n\\r\\nHINWEIS: Reinheit der Vorkommen zählt zur Abbaueffizienz und NICHT zur Standard-Extraktionsrate."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\nHart genug um jedes Erz abzubauen.\\r\\nStandard-Extraktionsrate: 120 / min pro Ausgang.\\r\\n\\r\\nAlle Abbau-Boni ('Abbaueffizienz') werden direkt mit der Extraktionsrate des Miners multipliziert.\\r\\nBeispiel: 50% x 120 / min = 60 / min pro Ausgang.\\r\\n\\r\\nHINWEIS: Reinheit der Vorkommen zählt zur Abbaueffizienz und NICHT zur Standard-Extraktionsrate."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\nErhöht die Abbaueffizienz abhängig von der zugeführten Flüssigkeit. Miner wird nicht aktiv solange keine Flüssigkeit vorhanden ist.\\r\\n\\r\\nAbbaueffizienz-Bonus kann im Menü des Miners unter \"Fluid Info\" abgerufen werden."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly crushes extracted ores and dirts.\\r\\n\\r\\nReduces the Mining Efficiency Bonus from Booster Modules to half their original value.\\r\\n\\r\\nNOTE: Module is not compatible with Smelter Module."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\n\\r\\nZerkleinert alle extrahierten Erze und Erden unmittelbar.\\r\\n\\r\\nReduziert die Abbaueffizienz von Boostermodulen auf die Hälfte ihres ursprünglichen Wertes.\\r\\n\\r\\nHINWEIS: Modul ist nicht mit dem Schmelzmodul kompatibel."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly smelts the extracted ores down to their primary metal ingots and ejects Tailings Slurry via the fluid output.\\r\\nDirt combusts and becomes Crushed Gangue.\\r\\nHead Lift: 10 m.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nNOTE: Module is not compatible with Crusher Module."
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Stromverbrauch des Miners.\\r\\n\\r\\n\\r\\nSchmilzt alle extrahierten Erze unmittelbar zu Barren und wirft Rückstandsschlamm als Nebenprodukt am Flüssigkeitsausgang aus.\\r\\n Erde verbrennt und wird zu zerkleinerten Gestein.\\r\\nFörderhöhe: 10 m.\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nHINWEIS: Modul ist nicht mit dem Brechermodul kompatibel."
+
+msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
+msgstr "Wird an den Modularen Miner angebracht.\\r\\nErhöht den Variablen Stromverbrauch des Miners um:\\r\\n({PowerMin}-{PowerMax} MW pro Modul)\\r\\nÜbertaktet den Stromkreis des Miners.\\r\\n\\r\\nAbbaueffizienz-Bonus: {BonusOnProduction}%"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
+msgid "BD1"
+msgstr "FA1"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mAbbreviatedDisplayName"
+msgid "BD2"
+msgstr "FA2"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mAbbreviatedDisplayName"
+msgid "BD3"
+msgstr "FA3"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mAbbreviatedDisplayName"
+msgid "BD4"
+msgstr "FA4"
+
+msgctxt "ST_Klib,Desc_InvarPlates.Desc_InvarPlates_C.mAbbreviatedDisplayName"
+msgid "Bar"
+msgstr "Stab"
+
+msgctxt "ST_Klib,Desc_InvarPlates.Desc_InvarPlates_C.mDisplayName"
+msgid "Bar Magnet"
+msgstr "Stabmagnet"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_1.Desc_SnailFood_Tier_1_C.mDisplayName"
+msgid "Basic Grain Meal"
+msgstr "Einfaches Getreidefutter"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidBioWater.Desc_PackagedLiquidBioWater_C.mDescription"
+msgid "Biological Water, packaged for alternative transport."
+msgstr "Algenmasse, abgefüllt für alternativen Transport."
+
+msgid "Bitumen, also known as Asphalt, is one of the heaviest distillates of Crude Oil.\\r\\nIt is a by-product and mostly used in Asphalt roads and roofs.\\r\\nCan also be used to seal joints in plumbing."
+msgstr "Bitumen, auch bekannt als Asphalt, ist eine der schwersten Erdölfraktionen.\\r\\nEs ist ein Nebenprodukt und wird hauptsächlich für Asphaltstraßen- und -Dächer genutzt.\\r\\nWird ab und zu auch als Dichtmasse genutzt."
+
+msgctxt "ST_Klib,SlugDesc_BlueSlug.SlugDesc_BlueSlug_C.mDisplayName"
+msgid "Blue Slug"
+msgstr "Blaue Schnecke"
+
+msgctxt "ST_Klib,EggDesc_EggBlue.EggDesc_EggBlue_C.mDisplayName"
+msgid "Blue Slug Egg"
+msgstr "Blaues Schneckenei"
+
+msgctxt "ST_Klib,Desc_SteelBolt.Desc_SteelBolt_C.mAbbreviatedDisplayName"
+msgid "Bolt"
+msgstr "Bolzen"
+
+msgctxt "ST_Klib,Widget_FluidInfo.PerMDesc.Text"
+msgid "Bonus on production:"
+msgstr "Produktions-Bonus:"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDisplayName"
+msgid "Brass Belt Drive"
+msgstr "Messing Bandantrieb"
+
+msgctxt "ST_Klib,Desc_BrassIngot.Desc_BrassIngot_C.mDisplayName"
+msgid "Brass Ingot"
+msgstr "Messingbarren"
+
+msgctxt "ST_Klib,Desc_BrassPipe.Desc_BrassPipe_C.mDisplayName"
+msgid "Brass Pipes"
+msgstr "Messingrohr"
+
+msgctxt "ST_Klib,Desc_BrassPlates.Desc_BrassPlates_C.mDisplayName"
+msgid "Brass Plates"
+msgstr "Messingplatte"
+
+msgctxt "ST_Klib,Desc_BronzeBeam.Desc_BronzeBeam_C.mDisplayName"
+msgid "Bronze Beam"
+msgstr "Bronzeträger"
+
+msgctxt "ST_Klib,Desc_BronzeFrame.Desc_BronzeFrame_C.mDisplayName"
+msgid "Bronze Frame"
+msgstr "Bronzerahmen"
+
+msgctxt "ST_Klib,Desc_BronzeIngot.Desc_BronzeIngot_C.mDisplayName"
+msgid "Bronze Ingot"
+msgstr "Bronzebarren"
+
+msgctxt "ST_Klib,Desc_BronzePipe.Desc_BronzePipe_C.mDisplayName"
+msgid "Bronze Pipes"
+msgstr "Bronzerohr"
+
+msgctxt "ST_Klib,Desc_BronzePlates.Desc_BronzePlates_C.mDisplayName"
+msgid "Bronze Plates"
+msgstr "Bronzeplatte"
+
+msgctxt "ST_Klib,Widget_NetworkTerminal.KUI_MainWindow.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Building"
+msgstr "Gebäude"
+
+msgctxt "StringTable_Categorys,BuildingPats"
+msgid "Building Parts"
+msgstr "Bauteile"
+
+msgctxt "ST_Klib,Widget_NetworkElement.Node_Create_KUI_Widget_Tooltip_Widget.mTooltipBody"
+msgid "Building limit in this network is reached. You can't add new buildings. If you connect more with wires the network will stop working!"
+msgstr "Das Gebäudelimit dieses Netzwerkes wurde erreicht. Weitere Gebäude können nicht hinzugefügt werden. Werden weitere Gebäude mittels Kabel angeschlossen kommt es zu einem Netzwerkstillstand!"
+
+msgctxt "ST_Klib,Desc_Neutronium.Desc_Neutronium_C.mAbbreviatedDisplayName"
+msgid "CNG"
+msgstr "NK"
+
+msgctxt "ST_Klib,Node_Select.Option_0_02"
+msgid "Cable connected!"
+msgstr "Kabel angeschlossen!"
+
+msgctxt "StringTable_KLib_Buildings,Build_PipeHole2_D"
+msgid "Can be attached to walls, allowing Pipelines to pass through them."
+msgstr "Kann an Wänden angebracht werden, um Pipelines durch sie durchzuführen."
+
+msgctxt "StringTable_KLib_Buildings,Build_Conv_WallHole_D"
+msgid "Can be used as a connection for conveyor belts. "
+msgstr "Kann als Verbindungspunkt für Förderbänder genutzt werden."
+
+msgid "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%,\\r\\nNormal: 100%,\\r\\nPure: 200%"
+msgstr "Kann mit verschiedenen Modulen ausgerüstet werden.\\r\\nBenötigt einen Bohrkopf um Erze abzubauen, einige Erze benötigen zusätzliche Module. Benötigte Module werden mit einem blauen Licht angezeigt.\\r\\n\\r\\nHINWEIS: die Reinheit von Erzvorkommen und Module beeinflussen die 'Abbaueffizienz' des Miners. Dieser Wert wird mit der normalen Extraktionsrate des Bohrkopfes multipliziert.\\r\\n\\r\\nStandard-Abbaueffizienz pro Reinheit:\\r\\nUnrein: 50%,\\r\\nNormal: 100%,\\r\\nRein: 200%"
+
+msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipe inputs and outputs.\\r\\n\\r\\nFluid Output: The first fluid output is at the bottom\\r\\nSolid Output: The first solid output is on the right."
+msgstr "Kann komplexe Destillations- und Raffinationsprozesse ausführen.\\r\\nFörderhöhe: 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nEnthält sowohl Förderband- als auch Pipeline-Ein- und -Ausgänge.\\r\\n\\r\\nFlüssigkeitsausgänge: der erste Pipelineausgang befindet sich unten.\\r\\nFeststoffausgänge: Der erste Förderbandausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline inputs and output ports.\\r\\n\\r\\nFluid Output: The first fluid output port is at the top.\\r\\nSolid Output: The first solid output port is on the right."
+msgstr "Kann komplexe Destillations- und Raffinationsprozesse ausführen.\\r\\nFörderhöhe: 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nEnthält sowohl Förderband- als auch Pipeline-Ein- und -Ausgänge.\\r\\n\\r\\nFlüssigkeitsausgänge: der erste Pipelineausgang befindet sich oben.\\r\\nFeststoffausgänge: Der erste Förderbandausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing the outputs):\\r\\nThe right Pipe is the first output."
+msgstr "Kann Metallschmelzen durch Legieren oder durch Schmelzen von festen Eingangsstoffen herstellen.\\r\\nMaximale Temperatur: 1500°C\\r\\nFörderhöhe: 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nEnthält 1 Förderband- und 2 Pipeline-Eingänge.\\r\\n\\r\\nFlüssigkeitsausgänge: der erste Pipelineausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing thhe outputs):\\r\\nThe right Pipe is the first output."
+msgstr "Kann Metallschmelzen durch Legieren oder durch Schmelzen von festen Eingangsstoffen herstellen.\\r\\nMaximale Temperatur: 1500°C\\r\\nFörderhöhe: 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)\\r\\n\\r\\nEnthält 1 Förderband- und 2 Pipeline-Eingänge.\\r\\n\\r\\nFlüssigkeitsausgänge: der erste Pipelineausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgctxt "ST_Klib,Desc_CarbonMesh.Desc_CarbonMesh_C.mDisplayName"
+msgid "Carbon Mesh"
+msgstr "Karbongewebe"
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDisplayName"
+msgid "Carbon Powder"
+msgstr "Kohlepulver"
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mAbbreviatedDisplayName"
+msgid "Cat"
+msgstr "Cat"
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDisplayName"
+msgid "Caterium Heatsink"
+msgstr "Cateriumkühlkörper"
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mDisplayName"
+msgid "Caterium Plate"
+msgstr "Cateriumplatte"
+
+msgctxt "ST_Klib,Desc_CateriumRod.Desc_CateriumRod_C.mDisplayName"
+msgid "Caterium Rod"
+msgstr "Cateriumstange"
+
+msgctxt "ST_Klib,Desc_CausticSoda.Desc_CausticSoda_C.mDisplayName"
+msgid "Caustic Soda"
+msgstr "Natronlauge"
+
+msgctxt "ST_Klib,Desc_PackagedCausticSoda.Desc_PackagedCausticSoda_C.mDescription"
+msgid "Caustic Soda , packaged for alternative transport."
+msgstr "Natronlauge, abgefüllt für alternativen Transport."
+
+msgid "Caustic Soda, more commonly known as Sodium Hydroxide or Lye, is the basic counterpart of Muriatic Acid.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in Quartz and Nickel refinement processes."
+msgstr "Natronlauge, auch bekannt als Ätznatron oder kaustisches Soda, ist das basische Gegenstück von Salzsäure.\\r\\nBeide werden aus Salz hergestellt.\\r\\n\\r\\nWird häufig in Quarz und Nickel Aufbereitungsprozessen genutzt."
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackableConvPole_N"
+msgid "Ceiling Stackable Conveyor Pole"
+msgstr "Decken-Förderbandhalterung (Stapelbar)"
+
+msgctxt "StringTable_KLib_Buildings,Build_ChemReactor_n"
+msgid "Chemical Reactor"
+msgstr "Chemischer Reaktor"
+
+msgctxt "ST_Klib,Widget_LootChests.KUI_MainWindow.mTitle"
+msgid "Chest"
+msgstr "Kiste"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mAbbreviatedDisplayName"
+msgid "Chlor"
+msgstr "Chlor"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mDisplayName"
+msgid "Chlorine Gas"
+msgstr "Chlorgas"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Chlor.Desc_PackagedGas_Chlor_C.mDescription"
+msgid "Chlorine, packaged for alternative transport."
+msgstr "Chlorgas, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,BP_CleanerUnlock.BP_CleanerUnlock_C.mUnlockName"
+msgid "Cleaner Recipe:"
+msgstr "Filterrezept:"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock_1.Text"
+msgid "Clocking speed"
+msgstr "Taktrate"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.TextBlock.Text"
+msgid "Close"
+msgstr "Schließen"
+
+msgctxt "ST_Klib,Desc_CobaltIngot.Desc_CobaltIngot_C.mDisplayName"
+msgid "Cobalt Ingot"
+msgstr "Kobaltbarren"
+
+msgctxt "ST_Klib,Desc_CobaltPlates.Desc_CobaltPlates_C.mDisplayName"
+msgid "Cobalt Plates"
+msgstr "Kobaltplatten"
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mAbbreviatedDisplayName"
+msgid "Coil"
+msgstr "Rolle"
+
+msgctxt "ST_Klib,Desc_ColdSlag.Desc_ColdSlag_C.mDisplayName"
+msgid "Cold Slag"
+msgstr "Kalte Schlacke"
+
+msgctxt "ST_Klib,MovieSceneColorTrack_0.DisplayName"
+msgid "Color and Opacity"
+msgstr "Farbe und Transparenz"
+
+msgctxt "ST_Klib,Desc_CompactBiomass.Desc_CompactBiomass_C.mDisplayName"
+msgid "Compact Biomass"
+msgstr "Kompakte Biomasse"
+
+msgctxt "ST_Klib,Desc_Neutronium.Desc_Neutronium_C.mDisplayName"
+msgid "Condensed Neutrium Gas"
+msgstr "Neutroniumgas"
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mDescription"
+msgid "Converts laser light into correlated photon pair beams. Used in quantum optics and quantum computing."
+msgstr "Konvertiert Laserlicht zu korrelierten Photonenströmen. Wird häufig in Quantenoptik und Quantencomputern eingesetzt."
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mAbbreviatedDisplayName"
+msgid "Cool"
+msgstr "Kühl"
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mDisplayName"
+msgid "Coolant"
+msgstr "Kühlmittel"
+
+msgctxt "StringTable_Categorys,Cooling"
+msgid "Cooling"
+msgstr "Kühlen"
+
+msgctxt "ST_Klib,Desc_PackagedCoolingWater.Desc_PackagedCoolingWater_C.mDescription"
+msgid "Cooling Water, packaged for alternative transport."
+msgstr "Kühlmittel, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Desc_CopperBusbar.Desc_CopperBusbar_C.mDisplayName"
+msgid "Copper Busbars"
+msgstr "Kupferschiene"
+
+msgctxt "ST_Klib,Desc_CopperRod.Desc_CopperRod_C.mDisplayName"
+msgid "Copper Rod"
+msgstr "Kupferstange"
+
+msgctxt "ST_Klib,Desc_TinSheet.Desc_TinSheet_C.mDescription"
+msgid "Copper Sheets that have been covered in a tin layer, increasing corrosion resistance."
+msgstr "Kupferbleche die mit Zinn beschichtet wurden, um die Korrosionsbeständigkeit zu erhöhen."
+
+msgctxt "ST_Klib,SlugDesc_Copper.SlugDesc_Copper_C.mDisplayName"
+msgid "Copper Slug"
+msgstr "Kupferschnecke"
+
+msgctxt "ST_Klib,EggDesc_Copper.EggDesc_Copper_C.mDisplayName"
+msgid "Copper Slug Egg"
+msgstr "Kupferschneckenei"
+
+msgctxt "ST_Klib,Widget_NetworkStats.K2Node_Select_2.EnumEntryFriendlyNames[3]"
+msgid "Core"
+msgstr "Kern"
+
+msgctxt "ST_Klib,Desc_CrushedAurovite.Desc_CrushedAurovite_C.mDisplayName"
+msgid "Crushed Aurovite"
+msgstr "Zerkleinertes Aurovit"
+
+msgctxt "ST_Klib,Desc_CrushedBauxite.Desc_CrushedBauxite_C.mDisplayName"
+msgid "Crushed Bauxite"
+msgstr "Zerkleinertes Bauxit"
+
+msgctxt "ST_Klib,Desc_CrushedCallanite.Desc_CrushedCallanite_C.mDisplayName"
+msgid "Crushed Callanite"
+msgstr "Zerkleinertes Callanit"
+
+msgctxt "ST_Klib,Desc_CrushedCaterium.Desc_CrushedCaterium_C.mDisplayName"
+msgid "Crushed Caterium"
+msgstr "Zerkleinertes Caterium"
+
+msgctxt "ST_Klib,Desc_CrushedChrom.Desc_CrushedChrom_C.mDisplayName"
+msgid "Crushed Chrom"
+msgstr "Zerkleinertes Chrom"
+
+msgctxt "ST_Klib,Desc_CrushedCobalt.Desc_CrushedCobalt_C.mDisplayName"
+msgid "Crushed Cobalt"
+msgstr "Zerkleinertes Kobalt"
+
+msgctxt "ST_Klib,Desc_CrushedCopper.Desc_CrushedCopper_C.mDisplayName"
+msgid "Crushed Copper"
+msgstr "Zerkleinertes Kupfer"
+
+msgctxt "ST_Klib,Desc_Gangue.Desc_Gangue_C.mDisplayName"
+msgid "Crushed Gangue"
+msgstr "Gangart"
+
+msgctxt "ST_Klib,Desc_CrushedIridium.Desc_CrushedIridium_C.mDisplayName"
+msgid "Crushed Iridium"
+msgstr "Zerkleinertes Iridium"
+
+msgctxt "ST_Klib,Desc_CrushedIron.Desc_CrushedIron_C.mDisplayName"
+msgid "Crushed Iron"
+msgstr "Zerkleinertes Eisen"
+
+msgctxt "ST_Klib,Desc_CrushedLarrussite.Desc_CrushedLarrussite_C.mDisplayName"
+msgid "Crushed Larrussite"
+msgstr "Zerkleinertes Larrusit"
+
+msgctxt "ST_Klib,Desc_CrushedLead.Desc_CrushedLead_C.mDisplayName"
+msgid "Crushed Lead"
+msgstr "Zerkleinertes Blei"
+
+msgctxt "ST_Klib,Desc_CrushedMagnesium.Desc_CrushedMagnesium_C.mDisplayName"
+msgid "Crushed Magnesium"
+msgstr ""
+"Zerkleinertes Magnesium\n"
+""
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDisplayName"
+msgid "Crushed Montanion"
+msgstr "Zerkleinertes Montanion"
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDescription"
+msgid "Crushed Montanion, used in further processing and purification steps to extract different metals"
+msgstr "Zerkleinertes Montanion wird für weitere Verarbeitungs- und Aufbereitungsschritte verwendet um unterschiedliche Metalle zu extrahieren."
+
+msgctxt "ST_Klib,Desc_CrushedNickle.Desc_CrushedNickle_C.mDisplayName"
+msgid "Crushed Nickel"
+msgstr "Zerkleinertes Nickel"
+
+msgctxt "ST_Klib,Desc_CrushedPlatinum.Desc_CrushedPlatinum_C.mDisplayName"
+msgid "Crushed Platinum"
+msgstr "Zerkleinertes Platin"
+
+msgctxt "ST_Klib,Desc_CrushedTitan.Desc_CrushedTitan_C.mDisplayName"
+msgid "Crushed Rutile"
+msgstr "Zerkleinertes Rutil"
+
+msgctxt "ST_Klib,Desc_CrushedSilver.Desc_CrushedSilver_C.mDisplayName"
+msgid "Crushed Silver"
+msgstr "Zerkleinertes Silber"
+
+msgctxt "ST_Klib,Desc_CrushedSiterite.Desc_CrushedSiterite_C.mDisplayName"
+msgid "Crushed Siterite"
+msgstr "Zerkleinertes Siterit"
+
+msgctxt "ST_Klib,Desc_CrushedTin.Desc_CrushedTin_C.mDisplayName"
+msgid "Crushed Tin"
+msgstr "Zerkleinertes Zinn"
+
+msgctxt "ST_Klib,Desc_CrushedTungsten.Desc_CrushedTungsten_C.mDisplayName"
+msgid "Crushed Tungsten"
+msgstr "Zerkleinertes Wolfram"
+
+msgctxt "ST_Klib,Desc_CrushedZinc.Desc_CrushedZinc_C.mDisplayName"
+msgid "Crushed Zinc"
+msgstr "Zerkleinertes Zink"
+
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Zerkleinertes Metall das von verschiedenen Erzvorkommen abgebaut werden kann. Wird zur Herstellung von Barren oder Metallschmelzen verwendet.\\r\\n\\r\\nEs kann auch weiter aufbereitet werden um mehr Metalle daraus zu extrahieren."
+
+msgid "Crushed raw ores and seperates the wanted from the unwanted materials.\\r\\nThe first step of processing for many ores.\\r\\n\\r\\nSolid Output: The first solid output port is on the right."
+msgstr "Zerkleinert Roherze und trennt die wertvollen von den wertlosen Materialen.\\r\\nDer erste Verarbeitungsschritt einer Vielzahl von Erzen.\\r\\n\\r\\nFeststoffausgang: der erste Förderbandausgang befindet sich rechts (von der Ausgangsseite aus gesehen.)"
+
+msgctxt "StringTable_KLib_Buildings,Build_Crusher_N"
+msgid "Crusher"
+msgstr "Brecher"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Crusher_N"
+msgid "Crusher Module"
+msgstr "Brechermodul"
+
+msgctxt "StringTable_Categorys,CrushingOres"
+msgid "Crushing Ores"
+msgstr "Erzzerkleinerung"
+
+msgctxt "StringTable_Categorys,CrushingPowders"
+msgid "Crushing Powders"
+msgstr "Pulverisierung"
+
+msgctxt "StringTable_Categorys,Cat_BSC_Cultivation"
+msgid "Cultivation"
+msgstr "Kultivierung"
+
+msgctxt "ST_Klib,Desc_Faxit_DimensionalDrive_Mk1.Desc_Faxit_DimensionalDrive_Mk1_C.mAbbreviatedDisplayName"
+msgid "DMk1"
+msgstr "DMk1"
+
+msgctxt "ST_Klib,Desc_TimeC_Cable.Desc_TimeC_Cable_C.mAbbreviatedDisplayName"
+msgid "Data"
+msgstr "Daten"
+
+msgctxt "ST_Klib,Desc_TimeC_Cable.Desc_TimeC_Cable_C.mDisplayName"
+msgid "Data Cable"
+msgstr "Datenkabel"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.ItemName_6.Text"
+msgid "Daytime:"
+msgstr "Tageszeit:"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk3_N"
+msgid "Diamond Mining Head"
+msgstr "Diamantbohrkopf"
+
+msgctxt "ST_Klib,Build_SinkCentralStorage.Build_SinkCentralStorage_C.mDisplayName"
+msgid "Dimensional Depot Uploader (Sink)"
+msgstr "Hochlader für Dimensionales Depot (Schredder)"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidDirtyWater.Desc_PackagedLiquidDirtyWater_C.mDescription"
+msgid "Dirty Water, packaged for alternative transport."
+msgstr "Abwasser, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mDrillModule.mFunction"
+msgid "Drill"
+msgstr "Bohrkopf"
+
+msgctxt "ST_Klib,Node_Add.NewItem"
+msgid "Drill Tier is to low"
+msgstr "Bohrkopfstufe zu niedrig"
+
+msgctxt "ST_Klib,BP_NetworkDriveItem.BP_NetworkDriveItem_C.mDisplayName"
+msgid "Drive Mk.{Tier}"
+msgstr "Lagernetz-Festplatte Mk.{Tier}"
+
+msgctxt "ST_Klib,Desc_SlugSlime_High.Desc_SlugSlime_High_C.mAbbreviatedDisplayName"
+msgid "ESlime"
+msgstr "GSchl"
+
+msgctxt "ST_Klib,Desc_NC_Barrel.Desc_NC_Barrel_C.mDisplayName"
+msgid "Empty Barrel"
+msgstr "Leeres Fass"
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDisplayName"
+msgid "Empty Cryo Tank"
+msgstr "Leerer Cryotank"
+
+msgctxt "ST_Klib,Cat_SlugEnergy.Cat_SlugEnergy_C.mDisplayName"
+msgid "Energized Slug Slime"
+msgstr "Geladener Schneckenschleim"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule1.mFunction"
+msgid "Energy 1"
+msgstr "Energie 1"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule2.mFunction"
+msgid "Energy 2"
+msgstr "Energie 2"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule3.mFunction"
+msgid "Energy 3"
+msgstr "Energie 3"
+
+msgctxt "ST_Klib,Desc_EnrichedUranium.Desc_EnrichedUranium_C.mDisplayName"
+msgid "Enriched Uranium"
+msgstr "Angereichertes Uran"
+
+msgctxt "ST_Klib,Desc_Ethylene.Desc_Ethylene_C.mAbbreviatedDisplayName"
+msgid "Eth"
+msgstr "Eth"
+
+msgctxt "ST_Klib,Desc_Ethylene.Desc_Ethylene_C.mDisplayName"
+msgid "Ethylene Gas"
+msgstr "Ethylengas"
+
+msgid "Ethylene is made by cracking Naptha. It is a monomer used to make polymers like Polyethylene, a plastic.\\r\\nCan be burned in Solution Heaters."
+msgstr "Ethylen wird durch Cracken von Naphtha hergestellt. Es ist ein Monomer und wird zur Herstellung von Polymeren wie Kunststoff verwendet.\\r\\nKann im Flüssigkeitsbrenner verbrannt werden."
+
+msgid "Extracts Algal Mass from underground reservoirs.\\r\\nDefault extraction rate: 60 m^3 Alglas Mass per minute.\\r\\n\\r\\nNote: Must be placed on an Algal Mass node.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "Extrahiert Algenmasse aus unterirdischen Reservoirs.\\r\\nNormale Extraktionsrate: 60 m³ Algenmasse pro Minute.\\r\\n\\r\\nHinweis: Muss auf einem Algenmassevorkommen platziert werden.\\r\\n\\r\\nFörderhöhe: 10 m.\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)"
+
+msgid "FICSIT's answer to Theseus's Paradox.\\r\\nProduced by infusing the slime from mineral slugs with Dark Matter.\\r\\n\\r\\n'Everything is just one paint coat away from becoming something new.'"
+msgstr "FICSITs Antwort auf das Paradox von Theseus.\\r\\nWird Hergestellt in dem der Schleim von Erzschnecken mit Dunkler Materie angereichert wird.\\r\\n\\r\\n'Alles ist nur einen Anstrich weit davon entfernt, etwas völlig Neues zu sein'"
+
+msgctxt "ST_Klib,Desc_FanBlade.Desc_FanBlade_C.mDisplayName"
+msgid "Fan Blades"
+msgstr "Lüfterflügel"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPoleWallDouple"
+msgid "FaxIT Double Wall Pole"
+msgstr "FaxIt Zweiseitiger Wandverteiler"
+
+msgctxt "StringTable_KLib_Buildings,Ram_In_N"
+msgid "FaxIT Input Processor"
+msgstr "FaxIt Eingabeprozessor"
+
+msgctxt "StringTable_KLib_Buildings,Ram_Out_N"
+msgid "FaxIT Output Processor"
+msgstr "FaxIt Ausgabeprozessor"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPole_N"
+msgid "FaxIT Pole"
+msgstr "FaxIt-Mast"
+
+msgctxt "StringTable_KLib_Buildings,NetworkTerminal_N"
+msgid "FaxIT Terminal"
+msgstr "FaxIT Terminal"
+
+msgctxt "StringTable_KLib_Buildings,NetworkPoleWall"
+msgid "FaxIT Wall Pole"
+msgstr "FaxIT Wandverteiler"
+
+msgctxt "ST_Klib,Build_CS_PoleWallDouble.Build_CS_PoleWallDouble_C.mDisplayName"
+msgid "FaxIt Double Wall Socket"
+msgstr "Zweiseitiger FaxIT Wandverteiler"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_I_Solid"
+msgid "FaxIt Fluid Copier"
+msgstr "FaxIT Flüssigkeits-Kopierer"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_I_Fluid"
+msgid "FaxIt Fluid Scanner"
+msgstr "FaxIT Flüssigkeits-Scanner"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_O_Solid"
+msgid "FaxIt Solid Copier"
+msgstr "FaxIT Feststoff-Kopierer"
+
+msgctxt "ST_Klib,Build_CS_InputSolid.Build_CS_InputSolid_C.mDisplayName"
+msgid "FaxIt Solid Scanner"
+msgstr "FaxIT Feststoff-Scanner"
+
+msgctxt "ST_Klib,Build_CS_Core.Build_CS_Core_C.mDisplayName"
+msgid "FaxIt Storage Nexus"
+msgstr "FaxIT Lagernetz-Nexus"
+
+msgctxt "ST_Klib,Build_CS_PoleStand.Build_CS_PoleStand_C.mDisplayName"
+msgid "FaxIt Telecom Pole"
+msgstr "FaxIT Telekom-Mast"
+
+msgctxt "ST_Klib,Build_CS_PoleWall.Build_CS_PoleWall_C.mDisplayName"
+msgid "FaxIt Wall Socket"
+msgstr "FaxIT Wandverteiler"
+
+msgctxt "ST_Klib,SSC_Faxit.SSC_Faxit_C.mDisplayName"
+msgid "Faxit"
+msgstr "FaxIT"
+
+msgctxt "ST_Klib,Build_CS_Cable_4.Build_CS_Cable_4_C.mDisplayName"
+msgid "Faxit Cable"
+msgstr "FaxIT Kabel"
+
+msgctxt "ST_Klib,Build_CS_Cable.Build_CS_Cable_C.mDisplayName"
+msgid "Faxit Cable - Blue"
+msgstr "FaxIT Kabel - Blau"
+
+msgctxt "ST_Klib,Build_CS_Cable_3.Build_CS_Cable_3_C.mDisplayName"
+msgid "Faxit Cable - Red"
+msgstr "FaxIT Kabel - Rot"
+
+msgctxt "ST_Klib,Build_CS_Cable_5.Build_CS_Cable_5_C.mDisplayName"
+msgid "Faxit Cable - Yellow"
+msgstr "FaxIT Kabel - Gelb"
+
+msgctxt "ST_Klib,Build_CS_Cable_2.Build_CS_Cable_2_C.mDisplayName"
+msgid "Faxit Cable- Green"
+msgstr "FaxIT Kabel - Grün"
+
+msgctxt "StringTable_KLib_Buildings,Faxit_O_Fluid"
+msgid "Faxit Fluid Sender"
+msgstr "FaxIT Flüssigkeits-Kopierer"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock_134.Text"
+msgid "Filtration medium not required for current operation"
+msgstr "Fitrationsmedium für derzeitiges Rezept nicht benötigt"
+
+msgctxt "StringTable_KLib_Buildings,FluidConditioner_N"
+msgid "Filtrator"
+msgstr "Filteranlage"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock_59.Text"
+msgid "Filtrator waste by-products"
+msgstr "Filteranlage Nebenprodukte"
+
+msgctxt "StringTable_KLib_Buildings,Build_FlexibleBlastFurnaceSmelter_N"
+msgid "Flexible Blast Furnace"
+msgstr "Flexibler Hochofen"
+
+msgctxt "ST_Klib,Desc_FlueGas.Desc_FlueGas_C.mAbbreviatedDisplayName"
+msgid "Flue"
+msgstr "Rauch"
+
+msgctxt "ST_Klib,Desc_FlueGas.Desc_FlueGas_C.mDisplayName"
+msgid "Flue Gas"
+msgstr "Rauchgas"
+
+msgctxt "ST_Klib,Desc_PackagedGas_CarbonDioxide.Desc_PackagedGas_CarbonDioxide_C.mDescription"
+msgid "Flue Gas, packaged for alternative transport."
+msgstr "Rauchgas, abgefüllt für alternativen Transport"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mFluidModule.mFunction"
+msgid "Fluid"
+msgstr "Flüssigkeit"
+
+msgctxt "ST_Klib,Widget_Cleaner.TextBlock.Text"
+msgid "Fluid Conditioner filtration medium monitoring"
+msgstr "Filteranlage Filtrationsmedium"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.SF+_WidgetComp_SubWindow.Title"
+msgid "Fluid Info"
+msgstr "Flüssigkeitsinfo"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Fluid_N"
+msgid "Fluid Module"
+msgstr "Flüssigkeitsmodul"
+
+msgctxt "ST_Klib,Node_Select.Tank"
+msgid "Fluid Tank"
+msgstr "Flüssigkeitstank"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Tank_Module_Name"
+msgid "Fluid Tank Module"
+msgstr "Flüssigkeitstankmodul"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock.Text"
+msgid "Flush Fluid Tank"
+msgstr "Flüssogkeitstank spülen"
+
+msgctxt "StringTable_Categorys,Food"
+msgid "Food"
+msgstr "Futter"
+
+msgid "Food for Slugs.\\r\\n\\r\\nFood Tier: {Tier}"
+msgstr "Futter für Schnecken\\r\\n\\r\\nFutter-Stufe: {Tier}"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDescription"
+msgid "Fresh Air. Low Nitrogen content but rich in CO2 and Oxygen."
+msgstr "Frische Luft. Arm an Stickstoff aber reich an CO2 und Sauerstoff."
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_4.Desc_SnailFood_Tier_4_C.mDisplayName"
+msgid "Fruity Meal"
+msgstr "Fruchtfutter"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier2_N"
+msgid "Full Booster Module"
+msgstr "Voll-Booster-Modul"
+
+msgid "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Funktioniert wie ein Telekom-Mast, wird aber an Wänden angebracht.\\r\\n\\r\\nKann mit bis zu 6 Datenleitungen pro Seite verbunden werden.\\r\\n\\r\\nVerbinde Faxit Scanner, Kopierer und einen Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen.\\r\\n\\r\\nHINWEIS: Ein Lagernetz-Nexus kann nicht an das Faxit-Netwerk eines anderen Lagernetz-Nexus angeschlossen werden."
+
+msgid "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Funktioniert wie ein Telekom-Mast, wird aber an Wänden angebracht.\\r\\n\\r\\nKann mit bis zu 6 Datenleitungen verbunden werden.\\r\\n\\r\\nVerbinde Faxit Scanner, Kopierer und einen Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen.\\r\\n\\r\\nHINWEIS: Ein Lagernetz-Nexus kann nicht an das Faxit-Netwerk eines anderen Lagernetz-Nexus angeschlossen werden."
+
+msgctxt "ST_Klib,Desc_Gangue.Desc_Gangue_C.mDescription"
+msgid "Gangue is a mixture of different types of stone. Mainly used to produce building materials."
+msgstr "Die Gangart ist eine Mischung aus verschiedenen Steinarten. Wird hauptsächlich als Ausgangsmaterial für Baustoffe verwendet."
+
+msgctxt "ST_Klib,Build_ChemReactor.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Gas"
+
+msgid "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Generiert eine exakte holografische Kopie einer Flüssigkeit bevor diese in Photonen zerlegt wird.\\r\\nDie Hologrammdaten und der Photonenstrom werden an den Lagernetz-Nexus gesendet.\\r\\n\\r\\nDatenübertragungsrate ist im kabellosen Modus limitiert. Verbinde es mit einem Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen."
+
+msgid "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Generiert eine exakte holografische Kopie eines Objekts bevor dieses in Photonen zerlegt wird.\\r\\nDie Hologrammdaten und der Photonenstrom werden an den Lagernetz-Nexus gesendet.\\r\\n\\r\\nDatenübertragungsrate ist im kabellosen Modus limitiert. Verbinde es mit einem Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen."
+
+msgctxt "ST_Klib,Desc_Glass.Desc_Glass_C.mDisplayName"
+msgid "Glass"
+msgstr "Glas"
+
+msgctxt "ST_Klib,SlugDesc_Golden.SlugDesc_Golden_C.mDisplayName"
+msgid "Golden Slug"
+msgstr "Goldschnecke"
+
+msgctxt "ST_Klib,EggDesc_Golden.EggDesc_Golden_C.mDisplayName"
+msgid "Golden Slug Egg"
+msgstr "Goldschneckenei"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier1_N"
+msgid "Half Booster Module"
+msgstr "Halb-Booster-Modul"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk2_N"
+msgid "Hardened Mining Head"
+msgstr "Gehärteter Bohrkopf"
+
+msgctxt "StringTable_Categorys,Heating"
+msgid "Heating"
+msgstr "Heizen"
+
+msgid "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Wird benutzt um Datenleitungen über große Distanzen zu verlegen.\\r\\nAn der Unterseite des Telekom-Turms befindet sich ein weiterer Datenanschluss, um ihn mit anderen Gebäuden zu verbinden, wie z.B. Telekom-Masten.\\r\\n\\r\\nVerbinde Faxit Scanner, Kopierer und einen Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen.\\r\\n\\r\\nHINWEIS: Ein Lagernetz-Nexus kann nicht an das Faxit-Netwerk eines anderen Lagernetz-Nexus angeschlossen werden."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam_Hot.Desc_PackagedGas_Steam_Hot_C.mDescription"
+msgid "Hot Steam, packaged for alternative transport."
+msgstr "Dampf, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Humidity"
+msgstr "Feuchtigkeit"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Humidity_Module_Name"
+msgid "Humidity Module"
+msgstr "Feuchtigkeitsmodul"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName_1.Text"
+msgid "Humidity:"
+msgstr "Feuchtigkeit:"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_34"
+msgid "Humidity: {TEMP}%"
+msgstr "Feuchtigkeit: {TEMP}%"
+
+msgid "Humidity\\r\\n{value}%"
+msgstr "Feuchtigkeit\\r\\n{value}%"
+
+msgctxt "ST_Klib,Node_Select.Option_0_04"
+msgid "Humidty"
+msgstr "Feuchtigkeit"
+
+msgctxt "ST_Klib,Desc_Gas_Hydrogen.Desc_Gas_Hydrogen_C.mAbbreviatedDisplayName"
+msgid "Hydro"
+msgstr "H₂"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidHydrochloricAcid.Desc_PackagedLiquidHydrochloricAcid_C.mDescription"
+msgid "Hydrochloric Acid, packaged for alternative transport."
+msgstr "Salzsäure, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Hydrogen.Desc_PackagedGas_Hydrogen_C.mDescription"
+msgid "Hydrogen , packaged for alternative transport."
+msgstr "Wasserstoff, abgefüllt für alternativen Transport."
+
+msgctxt "ST_Klib,Widget_Cleaner.KUI_ProductionInfoWidget.mFuelText"
+msgid "INSERT FILTER"
+msgstr "FILTERMEDIUM EINFÜHREN"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Incubator"
+msgstr "Inkubator"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Small_Module_Name"
+msgid "Incubator Module"
+msgstr "Inkubatormodul"
+
+msgctxt "StringTable_Categorys,IndustrialWashing"
+msgid "Industrial Washing"
+msgstr "Industrielles Waschen"
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackableHyperPole_N"
+msgid "Invert Stackable Hypertube Support"
+msgstr "Modulare Hypertubestütze (invertiert)"
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackablePipePole_N"
+msgid "Invert Stackable Pipeline Support"
+msgstr "Modulare Pipelinestütze (invertier)"
+
+msgid "Iron Plates, covered with a protective tin layer.\\r\\nThe basis for more advanced, robust parts."
+msgstr "Eisenplatten mit einer Zinn-Schutzschicht.\\r\\nDient als Grundmaterial für fortgeschrittene, robustere Teile."
+
+msgctxt "ST_Klib,Desc_IronSheet.Desc_IronSheet_C.mDisplayName"
+msgid "Iron Sheet"
+msgstr "Eisenblech"
+
+msgctxt "ST_Klib,SlugDesc_Iron.SlugDesc_Iron_C.mDisplayName"
+msgid "Iron Slug"
+msgstr "Eisenschnecke"
+
+msgctxt "ST_Klib,EggDesc_Iron.EggDesc_Iron_C.mDisplayName"
+msgid "Iron Slug Egg"
+msgstr "Eisenschneckenei"
+
+msgctxt "ST_Klib,Desc_IronWire.Desc_IronWire_C.mDisplayName"
+msgid "Iron Wire"
+msgstr "Eisendraht"
+
+msgctxt "ST_Klib,Desc_TimeC_StabilizedTimeCrystal.Desc_TimeC_StabilizedTimeCrystal_C.mAbbreviatedDisplayName"
+msgid "Kerr"
+msgstr "Kerr"
+
+msgctxt "ST_Klib,Res_KerrCrystal.Res_KerrCrystal_C.mDisplayName"
+msgid "Kerr Crystal"
+msgstr "Kerrkristall"
+
+msgctxt "ST_Klib,Desc_MagnesiumGranules.Desc_MagnesiumGranules_C.mDisplayName"
+msgid "Magnesium Granules"
+msgstr "Magnesiumgranulat"
+
+msgid "Muriatic Acid, more commonly known as Hydrochloric Acid, is the acidic counterpart of Caustic Soda.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in ore washing processes and in Chlorine production."
+msgstr "Salzsäure, auch bekannt als Hydrochlorische Säure, ist das saure Gegenstück zu Ätznatron.\\r\\nBeide werden aus Salz hergestellt.\\r\\n\\r\\nWird häufig in der Erzwäsche und in der Chlorgasproduktion verwendet."
+
+msgctxt "ST_Klib,Desc_KLIB_NaturalGas.Desc_KLIB_NaturalGas_C.mAbbreviatedDisplayName"
+msgid "Nat"
+msgstr "Erd"
+
+msgctxt "ST_Klib,Desc_KLIB_NaturalGas.Desc_KLIB_NaturalGas_C.mDisplayName"
+msgid "Natural Gas"
+msgstr "Erdgas"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkBuildings.SubBuildCat_NetworkBuildings_C.mDisplayName"
+msgid "Network Buildings"
+msgstr "Netzwerkgebäude"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkCore.SubBuildCat_NetworkCore_C.mDisplayName"
+msgid "Network Core"
+msgstr "Netzwerk Nexus"
+
+msgctxt "ST_Klib,Widget_NetworkTerminal.KUI_MainWindow.mTitle"
+msgid "Network Terminal"
+msgstr "Netzwerk Terminal"
+
+msgctxt "ST_Klib,SubBuildCat_NetworkWire.SubBuildCat_NetworkWire_C.mDisplayName"
+msgid "Network Wireing"
+msgstr "Netzwerkverkabelung"
+
+msgid "Neutrium is composed entirely of neutrons and decays back down to protons and electrons in a short time. Since it is electrically neutral, it cannot be directly affected by magnetic fields.\\r\\n\\r\\nUsed in the production of other exotic forms of matter."
+msgstr "Neutronium besteht gänzlich aus Neutronen und zerfällt zu Protonen und Elektronen in kurzer Zeit. Da es elektrisch neutral ist kann es nicht direkt durch Magnetfelder beeinflusst werden.\\r\\n\\r\\nWird zur Herstellung anderer exotischer Materien genutzt."
+
+msgctxt "ST_Klib,Desc_PowerRelay.Desc_PowerRelay_C.mAbbreviatedDisplayName"
+msgid "PMR"
+msgstr "LSR"
+
+msgctxt "ST_Klib,Desc_PowerShardCrystal.Desc_PowerShardCrystal_C.mAbbreviatedDisplayName"
+msgid "PSF"
+msgstr "EFS"
+
+msgctxt "ST_Klib,Desc_PackagedNaturalGas.Desc_PackagedNaturalGas_C.mDisplayName"
+msgid "Packaged Natural Gas"
+msgstr "Abgefülltes Erdgas"
+
+msgctxt "ST_Klib,Desc_PackagedPurifiedCrudeOil.Desc_PackagedPurifiedCrudeOil_C.mDisplayName"
+msgid "Packaged Purified Crude Oil"
+msgstr "Abgefülltes Raffiniertes Erdöl"
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mDisplayName"
+msgid "Photon Pair Converter"
+msgstr "Photonenpaar-Konverter"
+
+msgctxt "ST_Klib,Desc_TimeC_StabilizedTimeCrystal.Desc_TimeC_StabilizedTimeCrystal_C.mDisplayName"
+msgid "Poled Kerr Crystal"
+msgstr "Gepolter Kerrkristall"
+
+msgctxt "ST_Klib,Desc_PowerRelay.Desc_PowerRelay_C.mDisplayName"
+msgid "Power Management Relay"
+msgstr "Leistungssteuerrelais"
+
+msgctxt "ST_Klib,Desc_PowerShardCrystal.Desc_PowerShardCrystal_C.mDisplayName"
+msgid "Power Shard Fragment"
+msgstr "Energiefragmentsplitter"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_5.Desc_SnailFood_Tier_5_C.mDisplayName"
+msgid "Protein Meal"
+msgstr "Proteinfutter"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDisplayName"
+msgid "Pure Rutile"
+msgstr "Reines Rutil"
+
+msgctxt "ST_Klib,Desc_PurifiedCrudeOil.Desc_PurifiedCrudeOil_C.mDisplayName"
+msgid "Purified Crude Oil"
+msgstr "Raffiniertes Erdöl"
+
+msgid "Purifies loose materials through industrial washing with a fluid. Outputs unwanted byproducts (like gangue) as a liquid slurry.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports."
+msgstr "Reinigt lose Materialien durch industrielles Waschen mit einer Flüssigkeit. Ungewollte Nebenprodukte (wie Gangart) werden als Flüssigkeit ausgeworfen. \\r\\n\\r\\nFörderhöhe: 10 m.\\r\\n(Flüssigkeiten werden bis zu 10 Meter hoch transportiert.)\\r\\n\\r\\nEnthält sowohl Förderband- als auch Pipeline-Ein- und -Ausgänge."
+
+msgid "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "Rekonstruiert eine exakte Kopie einer Flüssigkeit aus Photonen mit Hilfe einer Hologramvorlage.\\r\\nDie Hologrammdaten und der Photonenstrom stammen vom Lagernetz-Nexus.\\r\\n\\r\\nDatenübertragungsrate ist im kabellosen Modus limitiert. Verbinde es mit einem Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen.\\r\\n\\r\\nFörderhöhe 10 m\\r\\n(Flüssigkeiten werden bis zu 10 m hoch transportiert.)"
+
+msgid "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Rekonstruiert eine exakte Kopie eines Gegenstands aus Photonen mit Hilfe einer Hologramvorlage.\\r\\nDie Hologrammdaten und der Photonenstrom stammen vom Lagernetz-Nexus.\\r\\n\\r\\nDatenübertragungsrate ist im kabellosen Modus limitiert. Verbinde es mit einem Nexus mit Datenkabeln um die Datenübertragungsrate um 100% zu erhöhen."
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mAbbreviatedDisplayName"
+msgid "Rutil"
+msgstr "Rutil"
+
+msgid "Ship with the Space Elevator to complete Phases of Project Assembly.\\r\\n\\r\\nPower Management Relays are responsible for powering Project Assembly and managing its vast demand of energy. They are a core part of its power network."
+msgstr "Schicke es mit dem Weltraumlift, um Phasen des Montageprojekts abzuschließen.\\r\\n\\r\\nLeistungssteuerrelais sind dafür verantwortlich das Montageprojekt mit Strom zu versorgen und dessen enormen Energiebedarf zu verwalten. Sie bilden die Basis seines Stromnetzes."
+
+msgctxt "ST_Klib,BuildCat_CS_Network.BuildCat_CS_Network_C.mDisplayName"
+msgid "Storage Network"
+msgstr "Lagernetz"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_3.Desc_SnailFood_Tier_3_C.mDisplayName"
+msgid "Sweet Meal"
+msgstr "Süßfutter"
+
+msgctxt "ST_Klib,Desc_LiquidSlag.Desc_LiquidSlag_C.mDisplayName"
+msgid "Tailings Slurry"
+msgstr "Rückstandsschlamm"
+
+msgctxt "ST_Klib,Anim_OreWasher_01.K2Node_AnimGetter_1.CachedTitle_01"
+msgid "Time Remaining (End)"
+msgstr "Time Remaining (End)"
+
+msgctxt "ST_Klib,Anim_OreWasher_01.K2Node_AnimGetter_1.CachedTitle"
+msgid "Time Remaining (Run_Anim)"
+msgstr "Time Remaining (Run_Anim)"
+
+msgctxt "ST_Klib,Recipe_UnPackaged_NaturalGas.Recipe_UnPackaged_NaturalGas_C.mDisplayName"
+msgid "Unpackage Natural Gas"
+msgstr "Erdgas entleeren"
+
+msgctxt "ST_Klib,Recipe_UnPackaged_PurifiedCrudeOil.Recipe_UnPackaged_PurifiedCrudeOil_C.mDisplayName"
+msgid "Unpackage Purified Crude Oil"
+msgstr "Raffiniertes Erdöl entleeren"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_2.Desc_SnailFood_Tier_2_C.mDisplayName"
+msgid "Vegetable Meal"
+msgstr "Gemüsefutter"
+
+msgctxt "StringTable_Categorys,Washing"
+msgid "Washing"
+msgstr "Reinigung"
+
+msgid "Wastewater (or Leachate) is a watery solution which remains after wet washing of impure ores.\\r\\n\\r\\nCan be processed in the Filtrator to extract remaining ores."
+msgstr "Abwasser (auch Eluat genannt) ist eine wässrige Lösung die bei der Nasswäsche von Erzen entsteht.\\r\\n\\r\\nKann in der Filteranlage verarbeitet werden um die gelösten Erze zu extrahieren."
+
+msgctxt "StringTable_KLib_Buildings,Build_OreWascher_N"
+msgid "Wet Washer"
+msgstr "Nasswäscher"

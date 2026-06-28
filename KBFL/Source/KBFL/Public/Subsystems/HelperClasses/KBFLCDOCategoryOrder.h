@@ -23,21 +23,30 @@ public:
 	UKBFLCDOCategoryOrder();
 	virtual void ApplyToInstances() override;
 
-	/** must be set for CDO */
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	// Lazy-load path: re-apply to a single class loaded after the initial CDO pass.
+	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+	virtual void ApplyToInstance(UObject* Instance) override;
+
+	// ===== Category Settings =====
+	/** Target build category to reorder */
+	UPROPERTY(EditAnywhere, Category = "Category Settings")
 	TSoftClassPtr<UFGBuildCategory> mTargetCategory;
 
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	/** Priority for the target category (lower values = higher priority) */
+	UPROPERTY(EditAnywhere, Category = "Category Settings")
 	float mTargetCategoryPrio = -1000.f;
 
-	/** must be set for CDO */
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	// ===== SubCategory Settings =====
+	/** Target sub-category to reorder */
+	UPROPERTY(EditAnywhere, Category = "SubCategory Settings")
 	TSoftClassPtr<UFGBuildSubCategory> mSubTargetCategory;
 
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	/** Priority for the target sub-category (lower values = higher priority) */
+	UPROPERTY(EditAnywhere, Category = "SubCategory Settings")
 	float mSubTargetCategoryPrio = -1000.f;
 
-	/** must be set for CDO */
-	UPROPERTY(EditAnywhere, Category = "CDO")
+	// ===== Descriptor Order =====
+	/** Desired order of build descriptors within the category */
+	UPROPERTY(EditAnywhere, Category = "Descriptor Order")
 	TArray<TSoftClassPtr<UFGBuildDescriptor>> mTargetOrder;
 };

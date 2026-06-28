@@ -60,3 +60,57 @@ void UKBFLCDORecipeMover::ApplyToInstances()
 		}
 	}
 }
+
+bool UKBFLCDORecipeMover::ShouldCallForInstance(UClass* NewClass)
+{
+	if (!IsValid(NewClass) || !NewClass->IsChildOf(UFGRecipe::StaticClass()))
+	{
+		return false;
+	}
+
+	TSubclassOf<UObject> Target = LoadSoftClass(mSourceTarget);
+	if (!IsValid(Target) || mProducedIn.IsEmpty())
+	{
+		return false;
+	}
+
+	TSubclassOf<UFGRecipe> Recipe = NewClass;
+	if (!UFGRecipe::GetProducedIn(Recipe).Contains(Target))
+	{
+		return false;
+	}
+
+	for (const TSoftClassPtr<UFGRecipe>& Ignore : mRecipesToIgnore)
+	{
+		if (Ignore.Get() == NewClass)
+		{
+			return false;
+		}
+	}
+
+	// Matches the bulk path, which guards on the source target's requirements.
+	return Requirements_IsMet(Target);
+}
+
+void UKBFLCDORecipeMover::ApplyToInstance(UObject* Instance)
+{
+	UFGRecipe* RecipeCDO = Cast<UFGRecipe>(Instance);
+	if (!IsValid(RecipeCDO))
+	{
+		return;
+	}
+
+	TArray<TSubclassOf<UObject>> ProduceIn = LoadSoftClassesArray(mProducedIn);
+
+	RecipeCDO->mProducedIn.Remove(mSourceTarget);
+	if (bReplace)
+	{
+		RecipeCDO->mProducedIn.Empty();
+	}
+
+	for (TSubclassOf<UObject> In : ProduceIn)
+	{
+		TSoftClassPtr<UObject> TargetSoft{In};
+		RecipeCDO->mProducedIn.Add(TargetSoft);
+	}
+}

@@ -1,0 +1,103 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_MoreSwatchSlots,ResourceSink_MSS_SwatchSlots.ResourceSink_MSS_SwatchSlots_C.mDescription"
+msgid "Add more swatch slots to the customizer"
+msgstr "Add more swatch slots to the customizer"
+
+msgid "Give your factory a new paint job!\\r\\n\\r\\nWarning: Changing this Swatch will apply the change to all buildings currently using it.\\r\\n\\r\\nAdded by More Swatch Slots\\r\\n\\r\\nNote: after removing this mod the color slots will not disappear! So the colors will stay."
+msgstr "Give your factory a new paint job!\\r\\n\\r\\nWarning: Changing this Swatch will apply the change to all buildings currently using it.\\r\\n\\r\\nAdded by More Swatch Slots\\r\\n\\r\\nNote: after removing this mod the color slots will not disappear! So the colors will stay."
+
+msgctxt "ST_MoreSwatchSlots,ResourceSink_MSS_SwatchSlots.ResourceSink_MSS_SwatchSlots_C.mDisplayName"
+msgid "More Swatch Slots"
+msgstr "More Swatch Slots"
+
+msgctxt "ST_MoreSwatchSlots,SC_RSS_SwatchSlots.SC_RSS_SwatchSlots_C.mDisplayName"
+msgid "Swatch"
+msgstr "Swatch"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_20.SwatchDesc_SwatchSlot_20_C.mDisplayName"
+msgid "Swatch 20"
+msgstr "Swatch 20"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_21.SwatchDesc_SwatchSlot_21_C.mDisplayName"
+msgid "Swatch 21"
+msgstr "Swatch 21"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_22.SwatchDesc_SwatchSlot_22_C.mDisplayName"
+msgid "Swatch 22"
+msgstr "Swatch 22"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_23.SwatchDesc_SwatchSlot_23_C.mDisplayName"
+msgid "Swatch 23"
+msgstr "Swatch 23"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_24.SwatchDesc_SwatchSlot_24_C.mDisplayName"
+msgid "Swatch 24"
+msgstr "Swatch 24"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_25.SwatchDesc_SwatchSlot_25_C.mDisplayName"
+msgid "Swatch 25"
+msgstr "Swatch 25"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_26.SwatchDesc_SwatchSlot_26_C.mDisplayName"
+msgid "Swatch 26"
+msgstr "Swatch 26"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_27.SwatchDesc_SwatchSlot_27_C.mDisplayName"
+msgid "Swatch 27"
+msgstr "Swatch 27"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_28.SwatchDesc_SwatchSlot_28_C.mDisplayName"
+msgid "Swatch 28"
+msgstr "Swatch 28"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_29.SwatchDesc_SwatchSlot_29_C.mDisplayName"
+msgid "Swatch 29"
+msgstr "Swatch 29"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_30.SwatchDesc_SwatchSlot_30_C.mDisplayName"
+msgid "Swatch 30"
+msgstr "Swatch 30"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_31.SwatchDesc_SwatchSlot_31_C.mDisplayName"
+msgid "Swatch 31"
+msgstr "Swatch 31"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_32.SwatchDesc_SwatchSlot_32_C.mDisplayName"
+msgid "Swatch 32"
+msgstr "Swatch 32"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_33.SwatchDesc_SwatchSlot_33_C.mDisplayName"
+msgid "Swatch 33"
+msgstr "Swatch 33"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_34.SwatchDesc_SwatchSlot_34_C.mDisplayName"
+msgid "Swatch 34"
+msgstr "Swatch 34"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_35.SwatchDesc_SwatchSlot_35_C.mDisplayName"
+msgid "Swatch 35"
+msgstr "Swatch 35"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_36.SwatchDesc_SwatchSlot_36_C.mDisplayName"
+msgid "Swatch 36"
+msgstr "Swatch 36"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_37.SwatchDesc_SwatchSlot_37_C.mDisplayName"
+msgid "Swatch 37"
+msgstr "Swatch 37"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_38.SwatchDesc_SwatchSlot_38_C.mDisplayName"
+msgid "Swatch 38"
+msgstr "Swatch 38"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_39.SwatchDesc_SwatchSlot_39_C.mDisplayName"
+msgid "Swatch 39"
+msgstr "Swatch 39"

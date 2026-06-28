@@ -1,0 +1,1316 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "05x05"
+msgstr "05x05"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[0].mTemplateData.mTemplateName"
+msgid "1 Textline Chavron"
+msgstr "1 Textline Chavron"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[15]"
+msgid "16x8"
+msgstr "16x8"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[2]"
+msgid "1x1"
+msgstr "1x1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "1x2"
+msgstr "1x2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "1x7"
+msgstr "1x7"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[1].mTemplateData.mTemplateName"
+msgid "2 Textline Chavron"
+msgstr "2 Textline Chavron"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[2].mTemplateData.mTemplateName"
+msgid "2 Textline Main Sub Chavron"
+msgstr "2 Textline Main Sub Chavron"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[16]"
+msgid "25x2"
+msgstr "25x2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[5]"
+msgid "2x05"
+msgstr "2x05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[6]"
+msgid "2x1"
+msgstr "2x1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[7]"
+msgid "2x2"
+msgstr "2x2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[8]"
+msgid "2x3"
+msgstr "2x3"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[9]"
+msgid "3x05"
+msgstr "3x05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[10]"
+msgid "3x1"
+msgstr "3x1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[11]"
+msgid "4x05"
+msgstr "4x05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[12]"
+msgid "4x1"
+msgstr "4x1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[13]"
+msgid "7x1"
+msgstr "7x1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[14]"
+msgid "8x4"
+msgstr "8x4"
+
+msgctxt "ST_RSS,K2Node_SwitchEnum_0.EnumFriendlyNames[1]"
+msgid "<MISSING STRING TABLE ENTRY>"
+msgstr "<MISSING STRING TABLE ENTRY>"
+
+msgctxt "RSS_Table,SignPole"
+msgid "A Simple Pole to attach RSS Signs on it."
+msgstr "A Simple Pole to attach RSS Signs on it."
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[3].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "A compact font"
+msgstr "A compact font"
+
+msgid "A vehicle with mounted RSS signs!\\r\\n\\r\\nNeed Sign Gun for interaction and change the sign!"
+msgstr "A vehicle with mounted RSS signs!\\r\\n\\r\\nNeed Sign Gun for interaction and change the sign!"
+
+msgctxt "ST_RSS,TextBlock_71.Text"
+msgid "Add Element"
+msgstr "Add Element"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[1].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Allan"
+msgstr "Allan"
+
+msgctxt "ST_RSS,TextBlock.Text"
+msgid "Alpha Value (Opacity)"
+msgstr "Alpha Value (Opacity)"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[2].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Amatic"
+msgstr "Amatic"
+
+msgctxt "ST_RSS,Dummy_C.mDisplayName"
+msgid "And more..."
+msgstr "And more..."
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[3].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Antonio"
+msgstr "Antonio"
+
+msgctxt "ST_RSS,MaterialDesc_RssCeilingMaterials_Flat.MaterialDesc_RssCeilingMaterials_Flat_C.mDescription"
+msgid "Applied to Signs to convert them to the Flat style."
+msgstr "Applied to Signs to convert them to the Flat style."
+
+msgctxt "ST_RSS,MaterialDesc_RssCeilingMaterials_Holo.MaterialDesc_RssCeilingMaterials_Holo_C.mDescription"
+msgid "Applied to Signs to convert them to the Holo style."
+msgstr "Applied to Signs to convert them to the Holo style."
+
+msgctxt "ST_RSS,BP_WC_SignWidget_Text.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Background"
+msgstr "Background"
+
+msgid "Background\\r\\nEdit"
+msgstr "Background\\r\\nEdit"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[7].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "Best for many languages"
+msgstr "Best for many languages"
+
+msgctxt "ST_RSS,Sink_RSS_Bill_C.mDisplayName"
+msgid "Billboard Set"
+msgstr "Billboard Set"
+
+msgctxt "RSS_Table,BorderMask"
+msgid "Border Mask"
+msgstr "Border Mask"
+
+msgctxt "ST_RSS,BP_RssNormal_Flat.NewVariables[1].Category"
+msgid "Buildable|Clearance"
+msgstr "Buildable|Clearance"
+
+msgctxt "ST_RSS,mSelectBuildings.mButtonText"
+msgid "Buildings"
+msgstr "Buildings"
+
+msgctxt "ST_RSS,Rss_WC_ImageSelector.NewVariables[4].Category"
+msgid "Cache"
+msgstr "Cache"
+
+msgid "Can FLY!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Can FLY!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Can Stack on top of Stackable Pipeline Support and something like that!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Can Stack on top of Stackable Pipeline Support and something like that!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Can attach on Ceilings or SignPoles.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user! AND SPIN!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Can attach on Ceilings or SignPoles.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user! AND SPIN!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Can attach on Conveyor Belts.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Can attach on Conveyor Belts.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Can attach on Pipelines.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Can attach on Pipelines.\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Can use to fast copy and paste signs and to interact with them from long range.\\r\\n\\r\\nNow: Works also with vanilla signs!"
+msgstr "Can use to fast copy and paste signs and to interact with them from long range.\\r\\n\\r\\nNow: Works also with vanilla signs!"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Holo Sign 1x1"
+msgstr "Ceiling Holo Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Ceiling_C.mDisplayName"
+msgid "Ceiling Holo Sign 1x2"
+msgstr "Ceiling Holo Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Holo Sign 2x1"
+msgstr "Ceiling Holo Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Holo Sign 7x1"
+msgstr "Ceiling Holo Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Sign 1x1"
+msgstr "Ceiling Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Ceiling_C.mDisplayName"
+msgid "Ceiling Sign 1x2"
+msgstr "Ceiling Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Sign 2x1"
+msgstr "Ceiling Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Sign 7x1"
+msgstr "Ceiling Sign 7x1"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Ceiling_C.mDisplayName"
+msgid "Ceiling Signs"
+msgstr "Ceiling Signs"
+
+msgctxt "ST_RSS,TextBlock_8.Text"
+msgid "Change font"
+msgstr "Change font"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2.K2Node_Select_2.EnumEntryFriendlyNames[1]"
+msgid "Collapsed"
+msgstr "Collapsed"
+
+msgctxt "ST_RSS,mColourPickerWindow.mTitle"
+msgid "Colour Picker"
+msgstr "Colour Picker"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Holo Sign  1x1 1 Side"
+msgstr "Conveyor Holo Sign  1x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Conv_C.mDisplayName"
+msgid "Conveyor Holo Sign 1x1"
+msgstr "Conveyor Holo Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Conv_C.mDisplayName"
+msgid "Conveyor Holo Sign 1x2"
+msgstr "Conveyor Holo Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Conv_1side_C.mDisplayName"
+msgid "Conveyor Holo Sign 1x2  1 Side"
+msgstr "Conveyor Holo Sign 1x2  1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Conv_C.mDisplayName"
+msgid "Conveyor Holo Sign 2x1"
+msgstr "Conveyor Holo Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Holo Sign 2x1 1 Side"
+msgstr "Conveyor Holo Sign 2x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Conv_C.mDisplayName"
+msgid "Conveyor Holo Sign 7x1"
+msgstr "Conveyor Holo Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Holo Sign 7x1 1 Side"
+msgstr "Conveyor Holo Sign 7x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Sign  7x1 1 Side"
+msgstr "Conveyor Sign  7x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Conv_C.mDisplayName"
+msgid "Conveyor Sign 1x1"
+msgstr "Conveyor Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Sign 1x1 1 Side"
+msgstr "Conveyor Sign 1x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Conv_C.mDisplayName"
+msgid "Conveyor Sign 1x2"
+msgstr "Conveyor Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Conv_1side_C.mDisplayName"
+msgid "Conveyor Sign 1x2 1 Side"
+msgstr "Conveyor Sign 1x2 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Conv_C.mDisplayName"
+msgid "Conveyor Sign 2x1"
+msgstr "Conveyor Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Conv_1side_C.mDisplayName"
+msgid "Conveyor Sign 2x1 1 Side"
+msgstr "Conveyor Sign 2x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Conv_C.mDisplayName"
+msgid "Conveyor Sign 7x1"
+msgstr "Conveyor Sign 7x1"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Belt_C.mDisplayName"
+msgid "Conveyor Signs"
+msgstr "Conveyor Signs"
+
+msgctxt "ST_RSS,Node_Return_Node.Notify"
+msgid "Copy data are not the same type"
+msgstr "Copy data are not the same type"
+
+msgctxt "ST_RSS,Node_Return_Node.Notify_01"
+msgid "Copy invalid or nothing copied"
+msgstr "Copy invalid or nothing copied"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[4].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Courier Prime"
+msgstr "Courier Prime"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[17]"
+msgid "Custom"
+msgstr "Custom"
+
+msgctxt "ST_RSS,mCustom.mButtonText"
+msgid "Custom (Url)"
+msgstr "Custom (Url)"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_06"
+msgid "Custom Image removed"
+msgstr "Custom Image removed"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_02"
+msgid "Custom image successfully added."
+msgstr "Custom image successfully added."
+
+msgctxt "ST_RSS,RSSConfiguration.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Debug"
+msgstr "Debug"
+
+msgctxt "ST_RSS,Rss_WC_SignSettings.K2Node_Select_8.EnumEntryFriendlyNames[4]"
+msgid "Decal"
+msgstr "Decal"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon.NewVariables[0].Category"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[6].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "Default sign font"
+msgstr "Default sign font"
+
+msgctxt "ST_RSS,TextBlock_14.Text"
+msgid "Direction"
+msgstr "Direction"
+
+msgctxt "ST_RSS,Sink_RSS_Display_C.mDisplayName"
+msgid "Display Sign Bundle"
+msgstr "Display Sign Bundle"
+
+msgctxt "RSS_Table,Distortion"
+msgid "Distortion"
+msgstr "Distortion"
+
+msgctxt "ST_RSS,Build_RssDrohne_Flat_2x1_C.mDisplayName"
+msgid "Drone Sign 2x1"
+msgstr "Drone Sign 2x1"
+
+msgctxt "ST_RSS,Build_RssDrohne_Flat_7x1_C.mDisplayName"
+msgid "Drone Sign 7x1"
+msgstr "Drone Sign 7x1"
+
+msgctxt "ST_RSS,Sink_RSS_Flat_Drohnes_C.mDisplayName"
+msgid "Drone Signs"
+msgstr "Drone Signs"
+
+msgctxt "ST_RSS,Build_RssDrohne_Flat_1x1_C.mDisplayName"
+msgid "Drone sign 1x1"
+msgstr "Drone sign 1x1"
+
+msgctxt "ST_RSS,Build_RssDrohne_Flat_1x2_C.mDisplayName"
+msgid "Drone sign 1x2"
+msgstr "Drone sign 1x2"
+
+msgctxt "ST_RSS,Rss_WC_ElementBuilder.K2Node_Select_3.EnumEntryFriendlyNames[1]"
+msgid "Effect"
+msgstr "Effect"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[0].mElements[0].mSharedData.mElementName"
+msgid "Element"
+msgstr "Element"
+
+msgctxt "RSS_Table,Emissive"
+msgid "Emissive"
+msgstr "Emissive"
+
+msgctxt "ST_RSS,TextBlock_1.Text_01"
+msgid "Fill Sign"
+msgstr "Fill Sign"
+
+msgctxt "ST_RSS,BuildMode_Rss_FineRotation_C.mDisplayName"
+msgid "Fine Rotation"
+msgstr "Fine Rotation"
+
+msgctxt "RSS_Table,Type_Normal"
+msgid "Flat"
+msgstr "Flat"
+
+msgctxt "ST_RSS,SinkCatSub_Rss_FlatSigns_C.mDisplayName"
+msgid "Flat Signs"
+msgstr "Flat Signs"
+
+msgctxt "ST_RSS,TextBlock_28.Text"
+msgid "Flip Image"
+msgstr "Flip Image"
+
+msgctxt "ST_RSS,Node_Format_Text.Format_03"
+msgid "Font: {FontName}"
+msgstr "Font: {FontName}"
+
+msgctxt "ST_RSS,BP_RssFoundation_Flat_C.mDisplayName"
+msgid "Foundation Sign"
+msgstr "Foundation Sign"
+
+msgctxt "ST_RSS,Build_FoundationSign_8x8x1_C.mDisplayName"
+msgid "Foundation Sign 8x8x1"
+msgstr "Foundation Sign 8x8x1"
+
+msgctxt "ST_RSS,Sink_Material_Material_RSS_Flat_C.mDisplayName"
+msgid "Foundation Signs"
+msgstr "Foundation Signs"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[4].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "Good for small text"
+msgstr "Good for small text"
+
+msgctxt "ST_RSS,TextBlock_101.Text"
+msgid "HEX Colour      #"
+msgstr "HEX Colour      ''''''#''''''"
+
+msgid "HUDasfasf\\r\\nasfas"
+msgstr "HUDasfasf\\r\\nasfas"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2.K2Node_Select_2.EnumEntryFriendlyNames[2]"
+msgid "Hidden"
+msgstr "Hidden"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Stand_C.mDisplayName"
+msgid "Holo Sign Materials"
+msgstr "Holo Sign Materials"
+
+msgctxt "ST_RSS,Sink_RSS_Material_Hologram_C.mDisplayName"
+msgid "Holo Signs"
+msgstr "Holo Signs"
+
+msgctxt "ST_RSS,Rss_WC_SignSettings.K2Node_Select_8.EnumEntryFriendlyNames[2]"
+msgid "Hologram"
+msgstr "Hologram"
+
+msgctxt "ST_RSS,Rss_WC_ElementBuilder.K2Node_Select_3.EnumEntryFriendlyNames[2]"
+msgid "Image"
+msgstr "Image"
+
+msgctxt "ST_RSS,mFontSelectorWindow.mTitle"
+msgid "Image Selector"
+msgstr "Image Selector"
+
+msgctxt "ST_RSS,RichTextBlock_65.Text"
+msgid "Image will always be centred - If your image is not the correct size, use the zoom control to make it fit."
+msgstr "Image will always be centred - If your image is not the correct size, use the zoom control to make it fit."
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "InValid"
+msgstr "InValid"
+
+msgctxt "ST_RSS,Sprite.SpriteInfo.DisplayName"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "ST_RSS,Widget_Rss2.NewVariables[4].Category"
+msgid "Interface Data"
+msgstr "Interface Data"
+
+msgctxt "ST_RSS,Widget_Rss2.NewVariables[2].Category"
+msgid "InterfaceData"
+msgstr "InterfaceData"
+
+msgctxt "ST_RSS,Node_Return_Node.ReturnValue"
+msgid "Invalid Target"
+msgstr "Invalid Target"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_07"
+msgid "Invalid text for Preset!"
+msgstr "Invalid text for Preset!"
+
+msgctxt "ST_RSS,mBuildingAndDesc.mButtonText"
+msgid "Item & Buildings"
+msgstr "Item & Buildings"
+
+msgctxt "ST_RSS,mSelectItems.mButtonText"
+msgid "Items"
+msgstr "Items"
+
+msgctxt "ST_RSS,Sink_RSS_Lable1_C.mDisplayName"
+msgid "Label Sign Bundle"
+msgstr "Label Sign Bundle"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Left"
+msgstr "Left"
+
+msgctxt "ST_RSS,TextBlock_23.Text"
+msgid "Letter Spacing"
+msgstr "Letter Spacing"
+
+msgctxt "ST_RSS,TextBlock_7.Text"
+msgid "Line Height"
+msgstr "Line Height"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.K2Node_Select_1.EnumEntryFriendlyNames[0]"
+msgid "Linear"
+msgstr "Linear"
+
+msgctxt "ST_RSS,BP_DataManagerSubsystem.NewVariables[0].Category"
+msgid "MaterialManager|HoloSign"
+msgstr "MaterialManager|HoloSign"
+
+msgctxt "ST_RSS,BP_ConfigPropertyInteger_C_0.DisplayName"
+msgid "Max (de-)loading signs Per Frame"
+msgstr "Max (de-)loading signs Per Frame"
+
+msgctxt "ST_RSS,BP_ConfigPropertyInteger_C_1.DisplayName"
+msgid "Max Loaded Signs"
+msgstr "Max Loaded Signs"
+
+msgctxt "ST_RSS,RSSConfiguration.BP_ConfigPropertyInteger_C_1.DisplayName"
+msgid "Maximum number of signals per pool"
+msgstr "Maximum number of signals per pool"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Middle"
+msgstr "Middle"
+
+msgctxt "ST_RSS,RSSConfiguration.BP_ConfigPropertyInteger_C_0.DisplayName"
+msgid "Minimum number of signals per pool"
+msgstr "Minimum number of signals per pool"
+
+msgid "NONE\\r\\nEdit"
+msgstr "NONE\\r\\nEdit"
+
+msgctxt "ST_RSS,TextBlock_24.Text"
+msgid "Name"
+msgstr "Name"
+
+msgctxt "ST_RSS,Node_Return_Node.ReturnValue_02"
+msgid "No Target"
+msgstr "No Target"
+
+msgctxt "ST_RSS,BP_WC_SignWidget_Text.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Normal"
+msgstr "Normal"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2.K2Node_Select_2.EnumEntryFriendlyNames[3]"
+msgid "Not Hit-Testable (Self & All Children)"
+msgstr "Not Hit-Testable (Self & All Children)"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2.K2Node_Select_2.EnumEntryFriendlyNames[4]"
+msgid "Not Hit-Testable (Self Only)"
+msgstr "Not Hit-Testable (Self Only)"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[2].Map_48_F343857D489A1BB2D20590BC06C89A53[0].mTemplateData.mTemplateName"
+msgid "Only Auth"
+msgstr "Only Auth"
+
+msgctxt "ST_RSS,TextBlock_3.Text"
+msgid "Opacity"
+msgstr "Opacity"
+
+msgctxt ",C4AFECA34EB6A99F45EB6A98A8B05F90"
+msgid "Opensans"
+msgstr "Opensans"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[5].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Orbitron"
+msgstr "Orbitron"
+
+msgctxt "ST_RSS,TextBlock_22.Text"
+msgid "Padding"
+msgstr "Padding"
+
+msgctxt "RSS_Table,PalaxArrow"
+msgid "Palax / Arrow scale "
+msgstr "Palax / Arrow scale "
+
+msgctxt "ST_RSS,TextBlock_18.Text"
+msgid "Panner"
+msgstr "Panner"
+
+msgctxt "RSS_Table,PannerSpeed"
+msgid "Panner Speed"
+msgstr "Panner Speed"
+
+msgctxt "ST_RSS,TextBlock_16.Text"
+msgid "Panner Type"
+msgstr "Panner Type"
+
+msgctxt "ST_RSS,mSelectPattern.mButtonText"
+msgid "Pattern"
+msgstr "Pattern"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Pipe_C.mDisplayName"
+msgid "Pipe Holo Sign 1x1"
+msgstr "Pipe Holo Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Holo Sign 1x1 1 Side"
+msgstr "Pipe Holo Sign 1x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Pipe_C.mDisplayName"
+msgid "Pipe Holo Sign 1x2"
+msgstr "Pipe Holo Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Pipe_1side_C.mDisplayName"
+msgid "Pipe Holo Sign 1x2 1 Side"
+msgstr "Pipe Holo Sign 1x2 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Pipe_C.mDisplayName"
+msgid "Pipe Holo Sign 2x1"
+msgstr "Pipe Holo Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Holo Sign 2x1 1 Side"
+msgstr "Pipe Holo Sign 2x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Pipe_C.mDisplayName"
+msgid "Pipe Holo Sign 7x1"
+msgstr "Pipe Holo Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Holo Sign 7x1 1 Side"
+msgstr "Pipe Holo Sign 7x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Pipe_C.mDisplayName"
+msgid "Pipe Sign 1x1"
+msgstr "Pipe Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Sign 1x1 1 Side"
+msgstr "Pipe Sign 1x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Pipe_C.mDisplayName"
+msgid "Pipe Sign 1x2"
+msgstr "Pipe Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Pipe_1side_C.mDisplayName"
+msgid "Pipe Sign 1x2 1 Side"
+msgstr "Pipe Sign 1x2 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Pipe_C.mDisplayName"
+msgid "Pipe Sign 2x1"
+msgstr "Pipe Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Sign 2x1 1 Side"
+msgstr "Pipe Sign 2x1 1 Side"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Pipe_C.mDisplayName"
+msgid "Pipe Sign 7x1"
+msgstr "Pipe Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Pipe_1side_C.mDisplayName"
+msgid "Pipe Sign 7x1 1 Side"
+msgstr "Pipe Sign 7x1 1 Side"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Pipe_C.mDisplayName"
+msgid "Pipeline Signs"
+msgstr "Pipeline Signs"
+
+msgctxt "RSS_Table,Preset"
+msgid "Preset"
+msgstr "Preset"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_08"
+msgid "Preset Saved!"
+msgstr "Preset Saved!"
+
+msgid "Primary\\r\\nEdit"
+msgstr "Primary\\r\\nEdit"
+
+msgctxt "ST_RSS,ElementBuilderWindow.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Production"
+msgstr "Production"
+
+msgctxt "ST_RSS,TextBlock_1.Text"
+msgid "RGB Colour"
+msgstr "RGB Colour"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Vanilla_C.mDisplayName"
+msgid "RSS Display Sign"
+msgstr "RSS Display Sign"
+
+msgctxt "ST_RSS,Build_RSS_Train_1x2_C.mDisplayName"
+msgid "RSS Electric Locomotive 2x1"
+msgstr "RSS Electric Locomotive 2x1"
+
+msgctxt "ST_RSS,ElementBuilderWindow.mTitle"
+msgid "RSS Element Builder"
+msgstr "RSS Element Builder"
+
+msgctxt "ST_RSS,BP_RSS_FreightWagon_2x1_C.mDisplayName"
+msgid "RSS Freight Car 2x1"
+msgstr "RSS Freight Car 2x1"
+
+msgctxt "ST_RSS,BP_RSS_FreightWagon_2x2_C.mDisplayName"
+msgid "RSS Freight Car 2x2"
+msgstr "RSS Freight Car 2x2"
+
+msgctxt "ST_RSS,Build_RSS_2x05_Vanilla_C.mDisplayName"
+msgid "RSS Label Sign 2m"
+msgstr "RSS Label Sign 2m"
+
+msgctxt "ST_RSS,Build_RSS_3x05_Vanilla_C.mDisplayName"
+msgid "RSS Label Sign 3m"
+msgstr "RSS Label Sign 3m"
+
+msgctxt "ST_RSS,Build_RSS_4x05_Vanilla_C.mDisplayName"
+msgid "RSS Label Sign 4m"
+msgstr "RSS Label Sign 4m"
+
+msgctxt "ST_RSS,Build_RSS_16x8_Vanilla_C.mDisplayName"
+msgid "RSS Large Billboard"
+msgstr "RSS Large Billboard"
+
+msgctxt "ST_RSS,Sink_RSS_Train_C.mDisplayName"
+msgid "RSS Locomotive"
+msgstr "RSS Locomotive"
+
+msgctxt "ST_RSS,Build_RSS_2x3_Vanilla_C.mDisplayName"
+msgid "RSS Portrait Sign"
+msgstr "RSS Portrait Sign"
+
+msgctxt "ST_RSS,mSignBuilder.mTitle"
+msgid "RSS Sign Builder"
+msgstr "RSS Sign Builder"
+
+msgctxt "ST_RSS,Build_RSS_8x4_Vanilla_C.mDisplayName"
+msgid "RSS Small Billboard"
+msgstr "RSS Small Billboard"
+
+msgctxt "ST_RSS,Build_RSS_05x05_Vanilla_C.mDisplayName"
+msgid "RSS Square Sign 0.5m"
+msgstr "RSS Square Sign 0.5m"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Vanilla_C.mDisplayName"
+msgid "RSS Square Sign 1m"
+msgstr "RSS Square Sign 1m"
+
+msgctxt "ST_RSS,Build_RSS_2x2_Vanilla_C.mDisplayName"
+msgid "RSS Square Sign 2m"
+msgstr "RSS Square Sign 2m"
+
+msgctxt "ST_RSS,SinkCatSub_Rss_Tools_C.mDisplayName"
+msgid "RSS Tools"
+msgstr "RSS Tools"
+
+msgctxt "ST_RSS,Build_RSS_Tractor_2x05_C.mDisplayName"
+msgid "RSS Tractor 2x05"
+msgstr "RSS Tractor 2x05"
+
+msgctxt "ST_RSS,Sink_RSS_Trac_C.mDisplayName"
+msgid "RSS Truck"
+msgstr "RSS Truck"
+
+msgctxt "ST_RSS,Build_RSS_Truck_2x1_C.mDisplayName"
+msgid "RSS Truck 2x1"
+msgstr "RSS Truck 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Truck_3x05_C.mDisplayName"
+msgid "RSS Truck 4x05"
+msgstr "RSS Truck 4x05"
+
+msgctxt "ST_RSS,Build_RSS_Truck_3x05.NewVariables[1].Category"
+msgid "RSS|Data"
+msgstr "RSS|Data"
+
+msgctxt "ST_RSS,Build_RSS_Truck_3x05.NewVariables[2].Category"
+msgid "RSS|Interact"
+msgstr "RSS|Interact"
+
+msgctxt "ST_RSS,Build_RSS_Truck_3x05.NewVariables[0].Category"
+msgid "RSS|UI"
+msgstr "RSS|UI"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[6].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Rajdhani"
+msgstr "Rajdhani"
+
+msgctxt "ST_RSS,RSSConfiguration.BP_ConfigPropertyInteger_C_2.DisplayName"
+msgid "Range for Signs to be Rendered"
+msgstr "Range for Signs to be Rendered"
+
+msgctxt "ST_RSS,BP_ConfigPropertyFloat_C_2.DisplayName"
+msgid "Range multiplier ConvStack Signs"
+msgstr "Range multiplier ConvStack Signs"
+
+msgctxt "ST_RSS,BP_ConfigPropertyFloat_C_1.DisplayName"
+msgid "Range multiplier Foundation Signs"
+msgstr "Range multiplier Foundation Signs"
+
+msgctxt "ST_RSS,BP_ConfigPropertyFloat_C_0.DisplayName"
+msgid "Range multiplier Rss Signs"
+msgstr "Range multiplier Rss Signs"
+
+msgctxt "ST_RSS,BP_ConfigPropertyFloat_C_3.DisplayName"
+msgid "Range multiplier Vanilla Signs"
+msgstr "Range multiplier Vanilla Signs"
+
+msgctxt "ST_RSS,BP_ConfigPropertyFloat_C_4.DisplayName"
+msgid "Range multiplier Walkway Signs"
+msgstr "Range multiplier Walkway Signs"
+
+msgctxt "ST_RSS,RSSConfiguration_C.DisplayName"
+msgid "Really Simple Signs"
+msgstr "Really Simple Signs"
+
+msgctxt "ST_RSS,SwatchDesc_Rss_C.mDisplayName"
+msgid "Really Simple Signs Swatch"
+msgstr "Really Simple Signs Swatch"
+
+msgctxt "ST_RSS,BuildCat_Rss_Ceiling_C.mDisplayName"
+msgid "Really Simple Signs: Ceiling"
+msgstr "Really Simple Signs: Ceiling"
+
+msgctxt "ST_RSS,BuildCat_Rss_Conveyor_C.mDisplayName"
+msgid "Really Simple Signs: Conveyor"
+msgstr "Really Simple Signs: Conveyor"
+
+msgctxt "ST_RSS,BuildCat_Rss_Drohnes_C.mDisplayName"
+msgid "Really Simple Signs: Drohnen"
+msgstr "Really Simple Signs: Drohnen"
+
+msgctxt "ST_RSS,BuildCat_Rss_Stand_C.mDisplayName"
+msgid "Really Simple Signs: Floor"
+msgstr "Really Simple Signs: Floor"
+
+msgctxt "ST_RSS,BuildCat_Rss_Foundation_C.mDisplayName"
+msgid "Really Simple Signs: Foundation"
+msgstr "Really Simple Signs: Foundation"
+
+msgctxt "ST_RSS,BuildCat_Rss_Pipeline_C.mDisplayName"
+msgid "Really Simple Signs: Pipeline"
+msgstr "Really Simple Signs: Pipeline"
+
+msgctxt "ST_RSS,BuildCat_Rss_Poles_C.mDisplayName"
+msgid "Really Simple Signs: Poles"
+msgstr "Really Simple Signs: Poles"
+
+msgctxt "ST_RSS,BuildCat_Rss_Rounded_C.mDisplayName"
+msgid "Really Simple Signs: Rounded"
+msgstr "Really Simple Signs: Rounded"
+
+msgctxt "ST_RSS,BuildCat_Rss_Stackable_C.mDisplayName"
+msgid "Really Simple Signs: Stackable"
+msgstr "Really Simple Signs: Stackable"
+
+msgctxt "ST_RSS,BuildCat_Rss_Vanilla_C.mDisplayName"
+msgid "Really Simple Signs: Vanilla"
+msgstr "Really Simple Signs: Vanilla"
+
+msgctxt "ST_RSS,BuildCat_Rss_Vehicles_C.mDisplayName"
+msgid "Really Simple Signs: Vehicles"
+msgstr "Really Simple Signs: Vehicles"
+
+msgctxt "ST_RSS,BuildCat_Rss_WallSigns_C.mDisplayName"
+msgid "Really Simple Signs: Wall"
+msgstr "Really Simple Signs: Wall"
+
+msgctxt "ST_RSS,BuildCat_Rss_WallSignsOutside_C.mDisplayName"
+msgid "Really Simple Signs: Wall Outside"
+msgstr "Really Simple Signs: Wall Outside"
+
+msgctxt "ST_RSS,BuildCat_Rss_Secret_C.mDisplayName"
+msgid "Really Simple Signs: you found something!"
+msgstr "Really Simple Signs: you found something!"
+
+msgctxt "ST_RSS,BP_Signs_Rounded_C.mDescription"
+msgid "Really simple sign"
+msgstr "Really simple sign"
+
+msgctxt "ST_RSS,TextBlock_1.Text_02"
+msgid "Refresh"
+msgstr "Refresh"
+
+msgctxt "ST_RSS,MovieSceneFloatTrack_0.DisplayName"
+msgid "Render Opacity"
+msgstr "Render Opacity"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_03"
+msgid "Request Failed"
+msgstr "Request Failed"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_05"
+msgid "Request was sent successfully to subsystem."
+msgstr "Request was sent successfully to subsystem."
+
+msgctxt "ST_RSS,Rss_WC_ImageSelector.NewVariables[1].Category"
+msgid "Return"
+msgstr "Return"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.K2Node_Select_0.EnumEntryFriendlyNames[2]"
+msgid "Right"
+msgstr "Right"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[7].mFontName_66_F343857D489A1BB2D20590BC06C89A53"
+msgid "Roboto"
+msgstr "Roboto"
+
+msgctxt "ST_RSS,TextBlock_6.Text"
+msgid "Rotation"
+msgstr "Rotation"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_Round_C.mDisplayName"
+msgid "Rounded Holo Sign"
+msgstr "Rounded Holo Sign"
+
+msgctxt "ST_RSS,Build_RSS_Round_C.mDisplayName"
+msgid "Rounded Sign"
+msgstr "Rounded Sign"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Round_C.mDisplayName"
+msgid "Rounded Signs"
+msgstr "Rounded Signs"
+
+msgctxt "ST_RSS,MainCat_Rss_C.mDisplayName"
+msgid "Rss"
+msgstr "Rss"
+
+msgctxt "ST_RSS,MaterialDesc_RssCeilingMaterials_Flat.MaterialDesc_RssCeilingMaterials_Flat_C.mDisplayName"
+msgid "Rss Flat Sign"
+msgstr "Rss Flat Sign"
+
+msgctxt "ST_RSS,MaterialDesc_RssCeilingMaterials_Holo.MaterialDesc_RssCeilingMaterials_Holo_C.mDisplayName"
+msgid "Rss Holo Sign"
+msgstr "Rss Holo Sign"
+
+msgctxt "ST_RSS,Recipe_SignGun_C.mDisplayName"
+msgid "Rss Sign Gun"
+msgstr "Rss Sign Gun"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[0].mElements[1].mTextData.mText"
+msgid "Rss Sign Text"
+msgstr "Rss Sign Text"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.NewVariables[0].Category"
+msgid "RssWidgetBase"
+msgstr "RssWidgetBase"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[5].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "Satisfactory font"
+msgstr "Satisfactory font"
+
+msgctxt "RSS_Table,Scanline"
+msgid "Scanline"
+msgstr "Scanline"
+
+msgctxt "ST_RSS,Node_Format_Text.Format_01"
+msgid "Screen Size : {X} x {Y}"
+msgstr "Screen Size : {X} x {Y}"
+
+msgid "Secondary\\r\\nEdit"
+msgstr "Secondary\\r\\nEdit"
+
+msgctxt "ST_RSS,Build_RSS_Hidden_C.mSignData.mElements[0].mSharedData.mElementName"
+msgid "Secreeet!"
+msgstr "Secreeet!"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[18]"
+msgid "Secret"
+msgstr "Secret"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2_C.mSelectedText"
+msgid "Select Sign Sites {count}"
+msgstr "Select Sign Sites {count}"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox.mSelectedText"
+msgid "Select Sizes ({count})"
+msgstr "Select Sizes ({count})"
+
+msgctxt "ST_RSS,TextBlock_11.Text"
+msgid "Select a custom colour"
+msgstr "Select a custom colour"
+
+msgctxt "RSS_Table,SelectCPreset"
+msgid "Select a preset colour"
+msgstr "Select a preset colour"
+
+msgctxt "ST_RSS,TextBlock_2.Text"
+msgid "Select image (Opens image selector)"
+msgstr "Select image (Opens image selector)"
+
+msgctxt "ST_RSS,mSignBuilder.Tabs[1].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Settings"
+msgstr "Settings"
+
+msgctxt "ST_RSS,mNotifycationText.Text"
+msgid "Sign Copied"
+msgstr "Sign Copied"
+
+msgctxt "ST_RSS,SC_RSS_SignMaterials_C.mDisplayName"
+msgid "Sign Materials"
+msgstr "Sign Materials"
+
+msgctxt "ST_RSS,Build_SignPole_C.mDisplayName"
+msgid "Sign Pole #1"
+msgstr "Sign Pole ''''''#''''''1"
+
+msgctxt "ST_RSS,Sink_RSS_Support_Poles_1_C.mDisplayName"
+msgid "Sign Poles #1"
+msgstr "Sign Poles ''''''#''''''1"
+
+msgctxt "ST_RSS,SinkCatSub_Rss_SignSupport_C.mDisplayName"
+msgid "Sign Support"
+msgstr "Sign Support"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text"
+msgid "Sign options and elements copied"
+msgstr "Sign options and elements copied"
+
+msgid "Sign options and elements\\r\\nreset to last saved"
+msgstr "Sign options and elements\\r\\nreset to last saved"
+
+msgctxt "ST_RSS,Node_Return_Node.Notify_02"
+msgid "Sign pasted"
+msgstr "Sign pasted"
+
+msgid "Sign saved as Template\\r\\n{Templatename}"
+msgstr "Sign saved as Template\\r\\n{Templatename}"
+
+msgctxt "ST_RSS,BP_Signs_Rounded_C.mDisplayName"
+msgid "Simple sign 7x1"
+msgstr "Simple sign 7x1"
+
+msgctxt "ST_RSS,TextBlock_19.Text"
+msgid "Size"
+msgstr "Size"
+
+msgctxt "ST_RSS,TextBlock_5.Text"
+msgid "Size Overwrite"
+msgstr "Size Overwrite"
+
+msgctxt "ST_RSS,RSSConfiguration_C.Description"
+msgid "Sometext"
+msgstr "Sometext"
+
+msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
+msgid "SourceString"
+msgstr "SourceString"
+
+msgctxt "ST_RSS,TextBlock_13.Text"
+msgid "Speed"
+msgstr "Speed"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Stackable_C.mDisplayName"
+msgid "Stackable Signs"
+msgstr "Stackable Signs"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Stand_C.mDisplayName"
+msgid "Stand Holo Sign 1x1"
+msgstr "Stand Holo Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Stand_C.mDisplayName"
+msgid "Stand Holo Sign 1x2"
+msgstr "Stand Holo Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Stand_C.mDisplayName"
+msgid "Stand Holo Sign 2x1"
+msgstr "Stand Holo Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Stand_C.mDisplayName"
+msgid "Stand Holo Sign 7x1"
+msgstr "Stand Holo Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Stand_C.mDisplayName"
+msgid "Stand Sign 1x1"
+msgstr "Stand Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Stand_C.mDisplayName"
+msgid "Stand Sign 1x2"
+msgstr "Stand Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Stand_C.mDisplayName"
+msgid "Stand Sign 2x1"
+msgstr "Stand Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Stand_C.mDisplayName"
+msgid "Stand Sign 7x1"
+msgstr "Stand Sign 7x1"
+
+msgctxt "ST_RSS,Sink_RSS_Flat_Stand_C.mDisplayName"
+msgid "Stand Signs"
+msgstr "Stand Signs"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[0].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "Standart UI font"
+msgstr "Standart UI font"
+
+msgctxt "ST_RSS,BP_SignComponentWidget_Base.K2Node_Select_1.EnumEntryFriendlyNames[1]"
+msgid "Step"
+msgstr "Step"
+
+msgctxt "ST_RSS,TextBlock_17.Text"
+msgid "Step Frequenz"
+msgstr "Step Frequenz"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler.NewVariables[1].Category"
+msgid "Temp"
+msgstr "Temp"
+
+msgctxt "ST_RSS,Node_Format_Text.Format_04"
+msgid "Template renamed to: {TemplateName}"
+msgstr "Template renamed to: {TemplateName}"
+
+msgctxt "ST_RSS,mSignBuilder.Tabs[2].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Templates&Layouts"
+msgstr "Templates&Layouts"
+
+msgctxt "ST_RSS,Rss_WC_ElementBuilder.K2Node_Select_3.EnumEntryFriendlyNames[0]"
+msgid "Text"
+msgstr "Text"
+
+msgctxt "ST_RSS,TextBlock_162.Text"
+msgid "Text Block"
+msgstr "Text Block"
+
+msgctxt "ST_RSS,TextBlock_20.Text"
+msgid "Text Type"
+msgstr "Text Type"
+
+msgid "The Freight Car can be built on Railways and attached to an Electric Locomotive or other Freight Car to transport resources. \\r\\nResources are loaded and unloaded at Freight Platforms.\\r\\nHas a 1600m³ or 32 slot capacity, depending on the resources.\\r\\n\\r\\nNeed Sign Gun for interaction and change the sign!"
+msgstr "The Freight Car can be built on Railways and attached to an Electric Locomotive or other Freight Car to transport resources. \\r\\nResources are loaded and unloaded at Freight Platforms.\\r\\nHas a 1600m³ or 32 slot capacity, depending on the resources.\\r\\n\\r\\nNeed Sign Gun for interaction and change the sign!"
+
+msgctxt "ST_RSS,SinkCatSub_Rss_TheRealSign_C.mDisplayName"
+msgid "The Real RSS Sign"
+msgstr "The Real RSS Sign"
+
+msgid "This Color Swatch is applied to all Rss Signs by default.\\r\\n\\r\\nWarning: Changing this Swatch will apply the change to all buildings currently using it."
+msgstr "This Color Swatch is applied to all Rss Signs by default.\\r\\n\\r\\nWarning: Changing this Swatch will apply the change to all buildings currently using it."
+
+msgctxt "ST_RSS,TextBlock_10.Text"
+msgid "Tile Scale"
+msgstr "Tile Scale"
+
+msgid "Tint\\r\\nEdit"
+msgstr "Tint\\r\\nEdit"
+
+msgctxt "ST_RSS,MovieScene2DTransformTrack_0.DisplayName"
+msgid "Transform"
+msgstr "Transform"
+
+msgctxt ",8012FC4741B27D70955B0298C0E1347B"
+msgid "UI font"
+msgstr "UI font"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[1].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "UI font - Addon"
+msgstr "UI font - Addon"
+
+msgctxt "ST_RSS,Node_Play_Notify_Target_is_Widget_Rss_2.Text_04"
+msgid "URL Invalid or not connection"
+msgstr "URL Invalid or not connection"
+
+msgctxt "ST_RSS,BuildMode_Rss_UpDown_C.mDisplayName"
+msgid "Up and Down"
+msgstr "Up and Down"
+
+msgctxt "ST_RSS,TextBlock_27.Text"
+msgid "Use 9 Slice Mode"
+msgstr "Use 9 Slice Mode"
+
+msgctxt "RSS_Table,UseArrow"
+msgid "Use Arrows"
+msgstr "Use Arrows"
+
+msgctxt "ST_RSS,BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Use Experimetal Loading"
+msgstr "Use Experimetal Loading"
+
+msgctxt "RSS_Table,UseParalax"
+msgid "Use Paralax"
+msgstr "Use Paralax"
+
+msgctxt "RSS_Table,UseScanlines"
+msgid "Use Scanlines"
+msgstr "Use Scanlines"
+
+msgctxt "ST_RSS,RSSConfiguration.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Use of the pooling system"
+msgstr "Use of the pooling system"
+
+msgid "Use the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Use the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgctxt "ST_RSS,Preview_2.Text"
+msgid "Use this font"
+msgstr "Use this font"
+
+msgctxt "ST_RSS,mSignBuilder.PaletteCategory"
+msgid "User Created"
+msgstr "User Created"
+
+msgctxt "ST_RSS,Node_Return_Node.ReturnValue_01"
+msgid "Vanilla"
+msgstr "Vanilla"
+
+msgctxt "ST_RSS,SinkCatSub_Rss_VanillaSigns_C.mDisplayName"
+msgid "Vanilla Signs"
+msgstr "Vanilla Signs"
+
+msgctxt "ST_RSS,SC_RSS_Vehicel_C.mDisplayName"
+msgid "Vehicel"
+msgstr "Vehicel"
+
+msgctxt "ST_RSS,MovieSceneByteTrack_0.DisplayName"
+msgid "Visibility"
+msgstr "Visibility"
+
+msgctxt "ST_RSS,Rss_WC_SizeCombobox_2.K2Node_Select_2.EnumEntryFriendlyNames[0]"
+msgid "Visible"
+msgstr "Visible"
+
+msgctxt "ST_RSS,ConfigWarning"
+msgid "WARNING: Changes to this setting can significantly impact performance."
+msgstr "WARNING: Changes to this setting can significantly impact performance."
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_WallOutside_C.mDisplayName"
+msgid "Wall #2 Signs"
+msgstr "Wall ''''''#''''''2 Signs"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Wall_C.mDisplayName"
+msgid "Wall Holo Sign 1x1"
+msgstr "Wall Holo Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x2_Wall_C.mDisplayName"
+msgid "Wall Holo Sign 1x2"
+msgstr "Wall Holo Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_1x7_Wal_C.mDisplayName"
+msgid "Wall Holo Sign 1x7"
+msgstr "Wall Holo Sign 1x7"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_2x1_Wall_C.mDisplayName"
+msgid "Wall Holo Sign 2x1"
+msgstr "Wall Holo Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_Holoscreen_7x1_Wall_C.mDisplayName"
+msgid "Wall Holo Sign 7x1"
+msgstr "Wall Holo Sign 7x1"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Wall_C.mDisplayName"
+msgid "Wall Sign 1x1"
+msgstr "Wall Sign 1x1"
+
+msgctxt "ST_RSS,Build_RSS_1x2_Wall_C.mDisplayName"
+msgid "Wall Sign 1x2"
+msgstr "Wall Sign 1x2"
+
+msgctxt "ST_RSS,Build_RSS_1x7_Wall_C.mDisplayName"
+msgid "Wall Sign 1x7"
+msgstr "Wall Sign 1x7"
+
+msgctxt "ST_RSS,Build_RSS_2x1_Wall_C.mDisplayName"
+msgid "Wall Sign 2x1"
+msgstr "Wall Sign 2x1"
+
+msgctxt "ST_RSS,Build_RSS_7x1_Wall_C.mDisplayName"
+msgid "Wall Sign 7x1"
+msgstr "Wall Sign 7x1"
+
+msgctxt "ST_RSS,Sink_Material_RSS_Holo_Wall_C.mDisplayName"
+msgid "Wall Signs"
+msgstr "Wall Signs"
+
+msgctxt "ST_RSS,BP_Signs_Walls.BP_Signs_Walls_C.mSignData.mElements[0].mTextData.mText"
+msgid "Welcome back to RSS2!"
+msgstr "Welcome back to RSS2!"
+
+msgctxt "ST_RSS,Rss_WC_ImageSelector.NewVariables[0].Category"
+msgid "Widget"
+msgstr "Widget"
+
+msgctxt "ST_RSS,BP_RssNormal_Flat.NewVariables[0].Category"
+msgid "WidgetControll"
+msgstr "WidgetControll"
+
+msgctxt "ST_RSS,Build_RSS_Hidden_C.mDisplayName"
+msgid "Wodden Sign"
+msgstr "Wodden Sign"
+
+msgctxt "RSS_Table,Type_Sec"
+msgid "Wooden"
+msgstr "Wooden"
+
+msgid "Works like a simple Foundation!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Works like a simple Foundation!\\r\\n\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgid "Works like the Vanilla signs but:\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+msgstr "Works like the Vanilla signs but:\\r\\nUse the signs from RSS. With advanced features and better customizations for the user!\\r\\n\\r\\nNote: Can also modified by the Sign Gun!"
+
+msgctxt "ST_RSS,Node_Make_Literal_Text.Value"
+msgid "Yes"
+msgstr "Yes"
+
+msgctxt "ST_RSS,TextBlock_4.Text"
+msgid "Z-Order (layer position)"
+msgstr "Z-Order (layer position)"
+
+msgctxt "ST_RSS,TextBlock_121.Text"
+msgid "Zoom"
+msgstr "Zoom"
+
+msgctxt "ST_RSS,Failed2.ObjectsToDisplayNames_Value[0]"
+msgid "mFailed"
+msgstr "mFailed"
+
+msgctxt "ST_RSS,Node_Format_Text.Format_02"
+msgid "{Element} Controls"
+msgstr "{Element} Controls"

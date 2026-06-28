@@ -6,10 +6,7 @@
 #include "Network/Buildings/KPCLNetworkCore.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
-AKPCLNetworkTerminal::AKPCLNetworkTerminal()
-{
-	PrimaryActorTick.bCanEverTick = false;
-}
+AKPCLNetworkTerminal::AKPCLNetworkTerminal() { PrimaryActorTick.bCanEverTick = false; }
 
 void AKPCLNetworkTerminal::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
 {
@@ -30,26 +27,24 @@ void AKPCLNetworkTerminal::UI_ApplyRelevantItems_Implementation(TArray<TSubclass
 	}
 }
 
-bool AKPCLNetworkTerminal::CanUseFactoryClipboard_Implementation()
-{
-	return false;
-}
+bool AKPCLNetworkTerminal::CanUseFactoryClipboard_Implementation() { return false; }
 
-bool AKPCLNetworkTerminal::IsUseable_Implementation() const
-{
-	return true;
-}
+bool AKPCLNetworkTerminal::IsUseable_Implementation() const { return true; }
 
 void AKPCLNetworkTerminal::OnUse_Implementation(AFGCharacterPlayer* byCharacter, const FUseState& state)
 {
 	if (IsProducing())
 	{
-		Execute_OnUse(Execute_GetCore(this), byCharacter, state);
+		AKPCLNetworkCore* Core = Execute_GetCore(this);
+		if (IsValid(Core))
+		{
+			Execute_OnUse(Core, byCharacter, state);
+		}
 	}
 }
 
 FText AKPCLNetworkTerminal::GetLookAtDecription_Implementation(AFGCharacterPlayer* byCharacter,
-                                                               const FUseState& state) const
+															   const FUseState& state) const
 {
 	if (IsProducing())
 	{

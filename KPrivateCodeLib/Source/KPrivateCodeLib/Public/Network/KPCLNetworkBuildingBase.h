@@ -1,14 +1,16 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGActorRepresentationInterface.h"
+
 #include "Buildable/KPCLProducerBase.h"
 #include "Buildable/Modular/KPCLModularBuildingBase.h"
 #include "Interfaces/KPCLNetworkDataInterface.h"
-#include "KPCLNetworkBuildingBase.generated.h"
 
+#include "KPCLNetworkBuildingBase.generated.h"
 
 USTRUCT(BlueprintType)
 struct FKPCLItemTransferQueue
@@ -24,10 +26,7 @@ struct FKPCLItemTransferQueue
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 mInventoryIndex = 0;
 
-	bool IsValid() const
-	{
-		return mAmount.Amount > 0 && mInventoryIndex > INDEX_NONE && mAmount.ItemClass != nullptr;
-	}
+	bool IsValid() const { return mAmount.Amount > 0 && mInventoryIndex > INDEX_NONE && mAmount.ItemClass != nullptr; }
 };
 
 USTRUCT(BlueprintType)
@@ -87,8 +86,8 @@ public:
 
 UCLASS()
 class KPRIVATECODELIB_API AKPCLNetworkBuildingBase : public AKPCLModularBuildingBase,
-                                                     public IFGActorRepresentationInterface,
-                                                     public IKPCLNetworkDataInterface
+													 public IFGActorRepresentationInterface,
+													 public IKPCLNetworkDataInterface
 {
 	GENERATED_BODY()
 
@@ -98,11 +97,11 @@ public:
 	virtual bool Overclocking_ShouldUse_Implementation() override;
 	virtual UFGFactoryClipboardSettings* CopySettings_Implementation() override;
 	virtual bool PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-	                                          class AFGPlayerController* player) override;
+											  class AFGPlayerController* player) override;
 	virtual void UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots) override;
 	virtual bool CanUseFactoryClipboard_Implementation() override;
 
-	// Begin IFGActorRepresentationInterface
+	//~ Begin IFGActorRepresentationInterface
 	UFUNCTION()
 	virtual bool AddAsRepresentation() override;
 	UFUNCTION()
@@ -142,36 +141,12 @@ public:
 	UFUNCTION()
 	virtual UMaterialInterface* GetActorRepresentationCompassMaterial() override;
 	UFUNCTION()
-	virtual TArray<FLocalUserNetIdBundle> GetLastEditedBy() const override;
+	virtual FPlayerInfoHandle GetLastEditedBy() const override;
 	UFUNCTION()
-	virtual void SetActorLastEditedBy(const TArray<FLocalUserNetIdBundle>& LastEditedBy) override;
+	virtual void SetActorLastEditedByHandle(const FPlayerInfoHandle& playerInfoHandle) override;
+	//~ End IFGActorRepresentationInterface
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	bool bRepresentationEnabled = false;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	UTexture2D* mRepresentationIcon = nullptr;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	UMaterialInterface* mRepresentationMaterial = nullptr;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	FLinearColor mRepresentationColor = FLinearColor();
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	ECompassViewDistance mCompassViewDistance = ECompassViewDistance::CVD_Mid;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	float mFogOfWarRevealRadius = 2000.f;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	bool bShouldShowInCompass = true;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="KMods|Represenation")
-	bool bShouldShowOnMap = true;
-	// End IFGActorRepresentationInterface
-
-	//Begin IKPCLNetworkDataInterface
+	//~ Begin IKPCLNetworkDataInterface
 	virtual bool HasCore_Implementation() const override;
 	virtual AKPCLNetworkCore* GetCore_Implementation() override;
 	virtual UKPCLNetwork* GetNetwork_Implementation() const override;
@@ -182,37 +157,37 @@ public:
 	void SetNetworkCore(AKPCLNetworkCore* Core, FKPCLFaxitNetwork* Network);
 	virtual bool Factory_HasFaxitCableConnection() const;
 
-	virtual void HandlePower(float dt) override;;
+	virtual void HandlePower(float dt) override;
 	virtual void UpdateDistanceToCore();
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual bool HasCableBoost() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual bool HasFaxitCore() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual const AKPCLNetworkCore* GetFaxitCoreConst() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual AKPCLNetworkCore* GetFaxitCore();
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual UKPCLNetwork* GetFaxitCableNetwork() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual FKPCLFaxitNetwork GetFaxitNetwork() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual FString GetNetworkId() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	bool GetCableNetworkHasToManyCores() const;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual TArray<EKPCLNetworkError> GetNetworkErrorCodes() const;
 
-	UFUNCTION(BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintCallable, Category = "KMods|Network")
 	void TryToConnectToNearstCore();
 
 	UFUNCTION(BlueprintPure, Category = "KMods|Network")
@@ -220,10 +195,7 @@ public:
 
 	virtual void OnNetworkDestoryed_Internal();
 	virtual void OnNetworkAdded_Internal(AKPCLNetworkCore* Core);
-
-	UPROPERTY(EditDefaultsOnly, Category="KMods|UI")
-	FNetworkUIData mNetworkUIData;
-	// End IKPCLNetworkDataInterface
+	//~ End IKPCLNetworkDataInterface
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -233,7 +205,7 @@ public:
 	virtual void GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const override;
 	virtual float GetPowerConsume() const override;
 
-	UFUNCTION(BlueprintPure, BlueprintCallable, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, BlueprintCallable, Category = "KMods|Network")
 	virtual float GetPowerConsumeOnDistance() const;
 
 	int32 SinkItems(FItemAmount Items, int32 MaxToSink = INT32_MAX);
@@ -243,78 +215,133 @@ public:
 
 	virtual bool CanProduce_Implementation() const override;
 
-
 	UFUNCTION()
 	virtual void OnCircuitChanged(UFGCircuitConnectionComponent* Component);
 
-	// Called every frame
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	virtual bool IsCore() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	float GetCoreDistance() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	virtual class UKPCLNetworkInfoComponent* GetNetworkInfoComponent() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	virtual class UKPCLNetworkConnectionComponent* GetNetworkConnectionComponent() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	virtual UFGPowerInfoComponent* GetPowerInfoExplicit() const;
 
-	UFUNCTION(BlueprintPure, Category="KMods|Network")
+	UFUNCTION(BlueprintPure, Category = "KMods|Network")
 	virtual UFGPowerConnectionComponent* GetPowerConnectionExplicit() const;
 
-	// START: AActor
+	//~ Begin AActor
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	// END: AActor
-
-	UPROPERTY(SaveGame, BlueprintReadOnly, meta = ( FGReplicated ))
-	bool bHasCableBoost = false;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|NetworkPower")
-	int32 mDistanceToNetworkCore;
+	//~ End AActor
 
 	void AddDownloadToStats(TSubclassOf<UFGItemDescriptor> Item, int32 Amount);
 	void AddUploadToStats(TSubclassOf<UFGItemDescriptor> Item, int32 Amount);
 
-private:
-	FKPCLFaxitNetworkStatData* GetState(TSubclassOf<UFGItemDescriptor> Item);
-	TArray<FKPCLFaxitNetworkStatData> GetAndResetStats();
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|UI")
+	FNetworkUIData mNetworkUIData;
 
-	UPROPERTY(EditDefaultsOnly, Category="KMods|Faxit")
-	FSmartTimer mDistanceChecker = FSmartTimer(5.0f, true);
+	/**
+	 * Runtime distance (in cm) from this building to the nearest Faxit core access point.
+	 * Updated every 5 s by mDistanceChecker. Replicated so clients can display accurate
+	 * distance-based power consumption.
+	 */
+	UPROPERTY(SaveGame, BlueprintReadOnly, meta = (FGReplicated), Category = "KMods|NetworkPower")
+	float mDistanceToNetworkCore = 0.f;
+
+	UPROPERTY(SaveGame, BlueprintReadOnly, meta = (FGReplicated))
+	bool bHasCableBoost = false;
 
 protected:
 	friend struct FKPCLFaxitNetwork;
 	friend class AKPCLFaxitSubsystem;
 	friend class AKPCLNetworkCore;
 
-private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="KMods|Faxit",
-		meta = ( AllowPrivateAccess = "true" ))
-	FKPCLNetworkDistanceModifier mDistancePowerModifier;
-
-protected:
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	FString mNetworkId = FString();
-
-	UPROPERTY(SaveGame, meta = ( FGReplicated ))
-	FString mConnectedNetworkId = FString();
+	/** Setters for FGReplicated properties — each centralises the MarkPropertyDirty call. */
+	void SetHasCableBoost(bool NewValue);
+	void SetNetworkIdDirect(const FString& NewId);
+	void SetConnectedNetworkIdDirect(const FString& NewId);
+	/** Setter for mDistanceToNetworkCore — marks the FGReplicated property dirty. */
+	void SetDistanceToNetworkCore(float NewDist);
 
 	virtual class AFGResourceSinkSubsystem* GetSinkSub();
 	bool bBindNetworkComponent = false;
 
 	UPROPERTY()
-	class UKPCLNetworkConnectionComponent* mNetworkConnection;
+	TObjectPtr<class UKPCLNetworkConnectionComponent> mNetworkConnection;
 
 	UPROPERTY()
-	class UKPCLNetworkInfoComponent* mNetworkInfoComponent;
+	TObjectPtr<class UKPCLNetworkInfoComponent> mNetworkInfoComponent;
 
 	UPROPERTY(Transient)
-	class AKPCLFaxitSubsystem* mFaxitSubsystem = nullptr;
+	TObjectPtr<class AKPCLFaxitSubsystem> mFaxitSubsystem = nullptr;
 
+	/**
+	 * Per-cycle upload/download statistics for this building.
+	 * Accessed from the factory worker thread (AddDownloadToStats / AddUploadToStats)
+	 * and from the game thread (GetAndResetStats via SaveStateBundle).
+	 * Protected by mStatsMutex on all access paths.
+	 */
 	UPROPERTY(SaveGame)
 	TArray<FKPCLFaxitNetworkStatData> mCurrentStates;
+
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	FString mNetworkId = FString();
+
+	UPROPERTY(SaveGame, meta = (FGReplicated))
+	FString mConnectedNetworkId = FString();
+
+private:
+	FKPCLFaxitNetworkStatData* GetState(TSubclassOf<UFGItemDescriptor> Item);
+	TArray<FKPCLFaxitNetworkStatData> GetAndResetStats();
+
+	UPROPERTY(EditDefaultsOnly, Category = "KMods|Faxit")
+	FSmartTimer mDistanceChecker = FSmartTimer(5.0f, true);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "KMods|Faxit", meta = (AllowPrivateAccess = "true"))
+	FKPCLNetworkDistanceModifier mDistancePowerModifier;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	bool bRepresentationEnabled = false;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTexture2D> mRepresentationIcon = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UMaterialInterface> mRepresentationMaterial = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	FLinearColor mRepresentationColor = FLinearColor();
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	ECompassViewDistance mCompassViewDistance = ECompassViewDistance::CVD_Mid;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	float mFogOfWarRevealRadius = 2000.f;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	bool bShouldShowInCompass = true;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "KMods|Represenation",
+			  meta = (AllowPrivateAccess = "true"))
+	bool bShouldShowOnMap = true;
+
+	/**
+	 * Guards mCurrentStates against concurrent access.
+	 * AddDownloadToStats / AddUploadToStats / GetState run on the factory worker thread;
+	 * GetAndResetStats runs on the game thread (called from SaveStateBundle).
+	 */
+	mutable FCriticalSection mStatsMutex;
 };

@@ -1,10 +1,9 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/KPCLNetworkCableHologram.h"
 #include "Network/KPCLNetworkCable.h"
 
-AKPCLNetworkCableHologram::AKPCLNetworkCableHologram(): mConnectionMesh(nullptr)
+AKPCLNetworkCableHologram::AKPCLNetworkCableHologram() : mConnectionMesh(nullptr)
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
@@ -16,28 +15,37 @@ void AKPCLNetworkCableHologram::GetLifetimeReplicatedProps(TArray<FLifetimePrope
 
 void AKPCLNetworkCableHologram::SetHologramLocationAndRotation(const FHitResult& hitResult)
 {
-	Super::SetHologramLocationAndRotation(hitResult);
-
+	// Fixed: previously called Super twice on the common path (once unconditionally at the
+	// top, then again via the return-Super branch), causing double-applied snap logic.
+	// Now Super is called exactly once regardless of connection state.
 	if (IsConnectedToChild())
 	{
+		Super::SetHologramLocationAndRotation(hitResult);
 		return;
 	}
-	return Super::SetHologramLocationAndRotation(hitResult);
+	Super::SetHologramLocationAndRotation(hitResult);
 }
 
 void AKPCLNetworkCableHologram::BeginPlay()
 {
 	Super::BeginPlay();
 
-	mConnectionMesh = Cast<UStaticMeshComponent>(
-		GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("ConInd"))[0]);
+	// Fixed: raw [0] index access would crash if no component carries the "ConInd" tag
+	// (e.g. a Blueprint subclass omits it). Guard with a bounds check.
+	TArray<UActorComponent*> TaggedComponents =
+		GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("ConInd"));
+	if (TaggedComponents.Num() > 0)
+	{
+		mConnectionMesh = Cast<UStaticMeshComponent>(TaggedComponents[0]);
+	}
 }
 
 bool AKPCLNetworkCableHologram::TryUpgrade(const FHitResult& hitResult)
 {
-	bool Super = Super::TryUpgrade(hitResult);
+	// Fixed: local variable named "Super" shadowed the keyword (legal but confusing). Renamed to bSuperResult.
+	const bool bSuperResult = Super::TryUpgrade(hitResult);
 
-	if (hitResult.IsValidBlockingHit() && Super)
+	if (hitResult.IsValidBlockingHit() && bSuperResult)
 	{
 		AKPCLNetworkCable* OtherCable = Cast<AKPCLNetworkCable>(hitResult.GetActor());
 		if (IsValid(OtherCable))
@@ -47,13 +55,13 @@ bool AKPCLNetworkCableHologram::TryUpgrade(const FHitResult& hitResult)
 		}
 	}
 
-	return Super;
+	return bSuperResult;
 }
 
 int32 AKPCLNetworkCableHologram::GetConnectionToSet() const
 {
 	return mCurrentConnection;
-	//return IsValid(GetConnection(0)) ? 0 : 1;
+	// return IsValid(GetConnection(0)) ? 0 : 1;
 }
 
 bool AKPCLNetworkCableHologram::IsConnectedToChild() const

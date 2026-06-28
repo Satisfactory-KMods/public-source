@@ -12,11 +12,38 @@
 #include "Resources/FGNoneDescriptor.h"
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
+void AKLBuildableSlugBreeder::SetActiveHatchingData(int32 SlotIdx, UKAPISugHatchingData* NewData)
+{
+	mActiveHatchingDatas[SlotIdx] = NewData;
+	mPropertyReplicator.MarkPropertyDirty(FName("mActiveHatchingDatas"));
+}
+
+void AKLBuildableSlugBreeder::SetCurrentHatchingData(UKAPISugHatchingData* NewData)
+{
+	mCurrentHatchingData = NewData;
+	mPropertyReplicator.MarkPropertyDirty(FName("mCurrentHatchingData"));
+}
+
+void AKLBuildableSlugBreeder::CommitFoodProductionHandle()
+{
+	mPropertyReplicator.MarkPropertyDirty(FName("mFoodProductionHandle"));
+}
+
+void AKLBuildableSlugBreeder::CommitDeadTimers() { mPropertyReplicator.MarkPropertyDirty(FName("mDeadTimer")); }
+
+void AKLBuildableSlugBreeder::CommitTemperature() { mPropertyReplicator.MarkPropertyDirty(FName("mTemperature")); }
+
+void AKLBuildableSlugBreeder::CommitHumidity() { mPropertyReplicator.MarkPropertyDirty(FName("mHumidity")); }
+
 AKLBuildableSlugBreeder::AKLBuildableSlugBreeder()
 {
 	mInputInventory->SetDefaultSize(3);
 	mOutputInventory->SetDefaultSize(2);
 	bEnableCustomOverclocking = true;
+
+	const int32 SlotCount = static_cast<int32>(ESlugSlot::Slot2) + 1;
+	mActiveHatchingDatas.Init(nullptr, SlotCount);
+	mDeadTimer.Init(FFullProductionHandle(60.f), SlotCount);
 }
 
 void AKLBuildableSlugBreeder::UI_ApplyRelevantItems_Implementation(TArray<TSubclassOf<UFGItemDescriptor>>& OutSlots)
@@ -27,8 +54,14 @@ void AKLBuildableSlugBreeder::UI_ApplyRelevantItems_Implementation(TArray<TSubcl
 	OutSlots.Add(GetCurrentFood());
 	UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 	UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
-	OutSlots.Add(Slot1->mEgg);
-	OutSlots.Add(Slot2->mEgg);
+	if (IsValid(Slot1))
+	{
+		OutSlots.Add(Slot1->mEgg);
+	}
+	if (IsValid(Slot2))
+	{
+		OutSlots.Add(Slot2->mEgg);
+	}
 }
 
 void AKLBuildableSlugBreeder::Overclocking_GetInfo_Implementation(FKPCLOverclockingProductionInfo& OutProductionInfo)
@@ -36,6 +69,10 @@ void AKLBuildableSlugBreeder::Overclocking_GetInfo_Implementation(FKPCLOverclock
 	Super::Overclocking_GetInfo_Implementation(OutProductionInfo);
 
 	UKAPISugHatchingData* Active = GetActiveData();
+	if (!IsValid(Active))
+	{
+		return;
+	}
 
 	OutProductionInfo.mItemClass = Active->mEgg;
 	OutProductionInfo.mAmount = Active->mProductionCountEggs;
@@ -50,34 +87,24 @@ void AKLBuildableSlugBreeder::Overclocking_GetProductionResults_Implementation(
 	UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 	UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
 	UKAPISugHatchingData* Active = GetActiveData();
+	if (!IsValid(Slot1) || !IsValid(Slot2) || !IsValid(Active))
+	{
+		return;
+	}
 
-	OutIngredients.Add(FKPCLOverclockingProductionResults(
-		Slot1->mSlug,
-		1,
-		Slot1->mDieTime
-	));
-	OutIngredients.Add(FKPCLOverclockingProductionResults(
-		Slot2->mSlug,
-		1,
-		Slot2->mDieTime
-	));
+	if (!IsValid(Slot1) || !IsValid(Slot2) || !IsValid(Active))
+	{
+		return;
+	}
 
-	OutIngredients.Add(FKPCLOverclockingProductionResults(
-		Active->mRequiredFood,
-		GetNumOfFoodConsume(),
-		mFoodProductionHandle.mProductionTime
-	));
+	OutIngredients.Add(FKPCLOverclockingProductionResults(Slot1->mSlug, 1, Slot1->mDieTime));
+	OutIngredients.Add(FKPCLOverclockingProductionResults(Slot2->mSlug, 1, Slot2->mDieTime));
 
-	OutProducts.Add(FKPCLOverclockingProductionResults(
-		Slot1->mEgg,
-		Slot1->mProductionCountEggs,
-		Slot1->mBreedingTime
-	));
-	OutProducts.Add(FKPCLOverclockingProductionResults(
-		Slot2->mEgg,
-		Slot2->mProductionCountEggs,
-		Slot2->mBreedingTime
-	));
+	OutIngredients.Add(FKPCLOverclockingProductionResults(Active->mRequiredFood, GetNumOfFoodConsume(),
+														  mFoodProductionHandle.mProductionTime));
+
+	OutProducts.Add(FKPCLOverclockingProductionResults(Slot1->mEgg, Slot1->mProductionCountEggs, Slot1->mBreedingTime));
+	OutProducts.Add(FKPCLOverclockingProductionResults(Slot2->mEgg, Slot2->mProductionCountEggs, Slot2->mBreedingTime));
 }
 
 void AKLBuildableSlugBreeder::ApplySlugData()
@@ -105,6 +132,7 @@ void AKLBuildableSlugBreeder::GetConditionalReplicatedProps(TArray<FFGCondReplic
 
 	FG_DOREPCONDITIONAL(ThisClass, mFoodProductionHandle);
 	FG_DOREPCONDITIONAL(ThisClass, mCurrentHatchingData);
+	FG_DOREPCONDITIONAL(ThisClass, mActiveHatchingDatas);
 	FG_DOREPCONDITIONAL(ThisClass, mDeadTimer);
 	FG_DOREPCONDITIONAL(ThisClass, mTemperature);
 	FG_DOREPCONDITIONAL(ThisClass, mHumidity);
@@ -115,10 +143,7 @@ void AKLBuildableSlugBreeder::GetLifetimeReplicatedProps(TArray<FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 }
 
-bool AKLBuildableSlugBreeder::CanUseFactoryClipboard_Implementation()
-{
-	return true;
-}
+bool AKLBuildableSlugBreeder::CanUseFactoryClipboard_Implementation() { return true; }
 
 UFGFactoryClipboardSettings* AKLBuildableSlugBreeder::CopySettings_Implementation()
 {
@@ -130,7 +155,7 @@ UFGFactoryClipboardSettings* AKLBuildableSlugBreeder::CopySettings_Implementatio
 }
 
 bool AKLBuildableSlugBreeder::PasteSettings_Implementation(UFGFactoryClipboardSettings* factoryClipboard,
-                                                           class AFGPlayerController* player)
+														   class AFGPlayerController* player)
 {
 	bool Result = Super::PasteSettings_Implementation(factoryClipboard, player);
 	if (UKLSlugBreederClipboardSettings* Settings = Cast<UKLSlugBreederClipboardSettings>(factoryClipboard))
@@ -155,6 +180,8 @@ void AKLBuildableSlugBreeder::SetPendingPotential(float NewPendingPotential)
 	mDeadTimer[0].mPendingPotential = NewPendingPotential;
 	mDeadTimer[1].mPendingPotential = NewPendingPotential;
 	mFoodProductionHandle.mPendingPotential = NewPendingPotential;
+	CommitDeadTimers();
+	CommitFoodProductionHandle();
 }
 
 
@@ -177,35 +204,28 @@ void AKLBuildableSlugBreeder::BeginPlay()
 	}
 }
 
-void AKLBuildableSlugBreeder::Factory_Tick(float dt)
+void AKLBuildableSlugBreeder::Factory_TickAuthOnly(float dt)
 {
-	Super::Factory_Tick(dt);
+	Super::Factory_TickAuthOnly(dt);
 
-	if (HasAuthority())
+	CheckSlugs();
+
+	mFoodProductionHandle.TickHandle(dt, IsProducing(), [&]() { OnFoodFinial(); });
+
+	mDeadTimer[0].TickHandle(dt, IsProducing(), [&]() { OnSlugDied(0); });
+
+	mDeadTimer[1].TickHandle(dt, IsProducing(), [&]() { OnSlugDied(1); });
+
+	if (HasPower())
 	{
-		CheckSlugs();
-
-		mFoodProductionHandle.TickHandle(dt, IsProducing(), [&]()
-		{
-			OnFoodFinial();
-		});
-
-		mDeadTimer[0].TickHandle(dt, IsProducing(), [&]()
-		{
-			OnSlugDied(0);
-		});
-
-		mDeadTimer[1].TickHandle(dt, IsProducing(), [&]()
-		{
-			OnSlugDied(1);
-		});
-
-		if (HasPower())
-		{
-			mTemperature.Tick(dt);
-			mHumidity.Tick(dt);
-		}
+		mTemperature.Tick(dt);
+		mHumidity.Tick(dt);
 	}
+
+	CommitFoodProductionHandle();
+	CommitDeadTimers();
+	CommitTemperature();
+	CommitHumidity();
 }
 
 void AKLBuildableSlugBreeder::CollectBelts()
@@ -213,11 +233,11 @@ void AKLBuildableSlugBreeder::CollectBelts()
 	Super::CollectBelts();
 
 	UKBFLCppInventoryHelper::PullBeltChildClass(GetInventory(), FIRST_SLUG_IDX, 0.f, UFGItemDescriptor::StaticClass(),
-	                                            GetConv(0));
+												GetConv(0));
 	UKBFLCppInventoryHelper::PullBeltChildClass(GetInventory(), SECOND_SLUG_IDX, 0.f, UFGItemDescriptor::StaticClass(),
-	                                            GetConv(1));
+												GetConv(1));
 	UKBFLCppInventoryHelper::PullBeltChildClass(GetInventory(), FOOD_IDX, 0.f, UFGItemDescriptor::StaticClass(),
-	                                            GetConv(2));
+												GetConv(2));
 }
 
 bool AKLBuildableSlugBreeder::CanProduce_Implementation() const
@@ -232,6 +252,11 @@ bool AKLBuildableSlugBreeder::CanProduce_Implementation() const
 		return false;
 	}
 
+	if (!AreSlugsComfortable())
+	{
+		return false;
+	}
+
 	return SlugFeeling() && CanConsume() && CanStorage() && IsFoodCorrect();
 }
 
@@ -242,6 +267,11 @@ void AKLBuildableSlugBreeder::OnSlugInformationHasChanged_Implementation()
 		UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 		UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
 		UKAPISugHatchingData* ActiveSlot = GetActiveData();
+
+		if (!IsValid(Slot1) || !IsValid(Slot2) || !IsValid(ActiveSlot))
+		{
+			return;
+		}
 
 		FFullProductionHandle& DeadTimer1 = mDeadTimer[static_cast<uint8>(ESlugSlot::Slot1)];
 		FFullProductionHandle& DeadTimer2 = mDeadTimer[static_cast<uint8>(ESlugSlot::Slot2)];
@@ -260,16 +290,13 @@ void AKLBuildableSlugBreeder::OnSlugInformationHasChanged_Implementation()
 
 		SetProductionTime(ActiveSlot->mBreedingTime);
 
-		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), FOOD_IDX,
-		                                                      GetCurrentFood());
-		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), FIRST_SLUG_IDX,
-		                                                      Slot1
-		                                                      ->mEgg);
-		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), SECOND_SLUG_IDX,
-		                                                      Slot2
-		                                                      ->mEgg);
+		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), FOOD_IDX, GetCurrentFood());
+		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), FIRST_SLUG_IDX, Slot1->mEgg);
+		UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetOutputInventory(), SECOND_SLUG_IDX, Slot2->mEgg);
 
 		ApplySlugData();
+		CommitFoodProductionHandle();
+		CommitDeadTimers();
 		OnBreedingInformationHasChanged.Broadcast();
 	}
 }
@@ -277,6 +304,10 @@ void AKLBuildableSlugBreeder::OnSlugInformationHasChanged_Implementation()
 bool AKLBuildableSlugBreeder::SlugFeeling() const
 {
 	UKAPISugHatchingData* Active = GetActiveData();
+	if (!IsValid(Active))
+	{
+		return false;
+	}
 	FKAPISlugFeeling Feeling = Active->GetFeeling();
 	return Feeling.IsHumidityInRange(mHumidity.mValue) && Feeling.IsTempInRange(mTemperature.mValue);
 }
@@ -292,13 +323,16 @@ bool AKLBuildableSlugBreeder::CanStorage() const
 	UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 	UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
 
-	bool Slot1CanStore = UKBFLCppInventoryHelper::CanStoreItem(GetOutputInventory(), FIRST_SLUG_IDX,
-	                                                           Slot1->mEgg,
-	                                                           Slot1->mProductionCountEggs);
+	if (!IsValid(Slot1) || !IsValid(Slot2))
+	{
+		return false;
+	}
 
-	bool Slot2CanStore = UKBFLCppInventoryHelper::CanStoreItem(GetOutputInventory(), SECOND_SLUG_IDX,
-	                                                           Slot2->mEgg,
-	                                                           Slot2->mProductionCountEggs);
+	bool Slot1CanStore = UKBFLCppInventoryHelper::CanStoreItem(GetOutputInventory(), FIRST_SLUG_IDX, Slot1->mEgg,
+															   Slot1->mProductionCountEggs);
+
+	bool Slot2CanStore = UKBFLCppInventoryHelper::CanStoreItem(GetOutputInventory(), SECOND_SLUG_IDX, Slot2->mEgg,
+															   Slot2->mProductionCountEggs);
 
 
 	return Slot1CanStore && Slot2CanStore;
@@ -321,19 +355,17 @@ void AKLBuildableSlugBreeder::CheckSlugs()
 		UKAPISugHatchingData* Slot2NewData;
 
 		bool bDirty = false;
-		if (Slot1.HasItems() && mDataSubsystem->Slug_GetForItem(Slot1.Item.GetItemClass(), Slot1NewData) && Slot1NewData
-			!=
-			Slot1CurrentData)
+		if (Slot1.HasItems() && mDataSubsystem->Slug_GetForItem(Slot1.Item.GetItemClass(), Slot1NewData) &&
+			Slot1NewData != Slot1CurrentData)
 		{
-			mActiveHatchingDatas[static_cast<uint8>(ESlugSlot::Slot1)] = Slot1NewData;
+			SetActiveHatchingData(static_cast<int32>(ESlugSlot::Slot1), Slot1NewData);
 			bDirty = true;
 		}
 
-		if (Slot2.HasItems() && mDataSubsystem->Slug_GetForItem(Slot2.Item.GetItemClass(), Slot2NewData) && Slot2NewData
-			!=
-			Slot2CurrentData)
+		if (Slot2.HasItems() && mDataSubsystem->Slug_GetForItem(Slot2.Item.GetItemClass(), Slot2NewData) &&
+			Slot2NewData != Slot2CurrentData)
 		{
-			mActiveHatchingDatas[static_cast<uint8>(ESlugSlot::Slot2)] = Slot2NewData;
+			SetActiveHatchingData(static_cast<int32>(ESlugSlot::Slot2), Slot2NewData);
 			bDirty = true;
 		}
 
@@ -367,12 +399,15 @@ void AKLBuildableSlugBreeder::onProducingFinal_Implementation()
 		UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 		UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
 
-		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetOutputInventory(), FIRST_SLUG_IDX,
-		                                                    Slot1->mEgg,
-		                                                    Slot1->mProductionCountEggs);
-		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetOutputInventory(), SECOND_SLUG_IDX,
-		                                                    Slot2->mEgg,
-		                                                    Slot2->mProductionCountEggs);
+		if (!IsValid(Slot1) || !IsValid(Slot2))
+		{
+			return;
+		}
+
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetOutputInventory(), FIRST_SLUG_IDX, Slot1->mEgg,
+															Slot1->mProductionCountEggs);
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetOutputInventory(), SECOND_SLUG_IDX, Slot2->mEgg,
+															Slot2->mProductionCountEggs);
 	}
 }
 
@@ -383,22 +418,9 @@ void AKLBuildableSlugBreeder::EndProductionTime()
 	ApplySlugData();
 }
 
-FInventoryStack AKLBuildableSlugBreeder::GetFoodStack() const
-{
-	FInventoryStack Stack = GetStackFromIndex(FOOD_IDX);
+FInventoryStack AKLBuildableSlugBreeder::GetFoodStack() const { return GetStackFromIndex(FOOD_IDX); }
 
-	if (Stack.HasItems())
-	{
-		return Stack;
-	}
-
-	return Stack;
-}
-
-bool AKLBuildableSlugBreeder::IsFoodCorrect() const
-{
-	return GetStoredFoodClass() == GetCurrentFood();
-}
+bool AKLBuildableSlugBreeder::IsFoodCorrect() const { return GetStoredFoodClass() == GetCurrentFood(); }
 
 int32 AKLBuildableSlugBreeder::GetNumOfFood() const
 {
@@ -416,8 +438,9 @@ void AKLBuildableSlugBreeder::ApplyNewHumidity(float Humidity)
 	if (HasAuthority())
 	{
 		mHumidity.SetNewTarget(Humidity);
+		CommitHumidity();
 	}
-	else if (UKLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKLDefaultRCO>(GetWorld()))
+	else if (UKLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKLDefaultRCO>(this))
 	{
 		RCO->Server_SetTargetHumidity(this, Humidity);
 	}
@@ -428,12 +451,15 @@ void AKLBuildableSlugBreeder::ApplyNewTemperature(float Temperature)
 	if (HasAuthority())
 	{
 		mTemperature.SetNewTarget(Temperature);
+		CommitTemperature();
 	}
-	else if (UKLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKLDefaultRCO>(GetWorld()))
+	else if (UKLDefaultRCO* RCO = UKPCLDefaultRCO::GetRCO<UKLDefaultRCO>(this))
 	{
 		RCO->Server_SetTargetTemperature(this, Temperature);
 	}
 }
+
+FFullProductionHandle AKLBuildableSlugBreeder::GetFoodProductionHandle() const { return mFoodProductionHandle; }
 
 int32 AKLBuildableSlugBreeder::GetNumOfFoodConsume() const
 {
@@ -442,30 +468,42 @@ int32 AKLBuildableSlugBreeder::GetNumOfFoodConsume() const
 	UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
 	UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
 
-	TotalCount += Slot1->mFoodConsumePerCycle;
-	TotalCount += Slot2->mFoodConsumePerCycle;
+	if (IsValid(Slot1))
+	{
+		TotalCount += Slot1->mFoodConsumePerCycle;
+	}
+	if (IsValid(Slot2))
+	{
+		TotalCount += Slot2->mFoodConsumePerCycle;
+	}
 
 	return TotalCount;
 }
 
 UKAPISugHatchingData* AKLBuildableSlugBreeder::GetDataForSlot(ESlugSlot Slot) const
 {
-	if (!IsValid(mActiveHatchingDatas[static_cast<uint8>(Slot)]))
+	const int32 Idx = static_cast<int32>(Slot);
+	if (!mActiveHatchingDatas.IsValidIndex(Idx) || !IsValid(mActiveHatchingDatas[Idx]))
 	{
 		return mDefaultHatchingData;
 	}
-	return mActiveHatchingDatas[static_cast<uint8>(Slot)];
+	return mActiveHatchingDatas[Idx];
 }
 
 UKAPISugHatchingData* AKLBuildableSlugBreeder::GetActiveData() const
 {
 	return UKAPISugHatchingData::GetHighterSlugStatic(GetDataForSlot(ESlugSlot::Slot1),
-	                                                  GetDataForSlot(ESlugSlot::Slot2));
+													  GetDataForSlot(ESlugSlot::Slot2));
 }
 
 TSubclassOf<UFGItemDescriptor> AKLBuildableSlugBreeder::GetCurrentFood() const
 {
-	return GetActiveData()->mRequiredFood;
+	UKAPISugHatchingData* Active = GetActiveData();
+	if (!IsValid(Active))
+	{
+		return nullptr;
+	}
+	return Active->mRequiredFood;
 }
 
 TSubclassOf<UFGItemDescriptor> AKLBuildableSlugBreeder::GetStoredFoodClass() const
@@ -481,7 +519,22 @@ TSubclassOf<UFGItemDescriptor> AKLBuildableSlugBreeder::GetStoredFoodClass() con
 
 bool AKLBuildableSlugBreeder::AreSlugsComfortable() const
 {
-	return GetDataForSlot(ESlugSlot::Slot1)->IsComfortableWith(GetDataForSlot(ESlugSlot::Slot2));
+	FInventoryStack StackSlot1 = GetStackFromIndex(FIRST_SLUG_IDX);
+	FInventoryStack StackSlot2 = GetStackFromIndex(SECOND_SLUG_IDX);
+
+	if (!StackSlot1.HasItems() || !StackSlot2.HasItems())
+	{
+		return false;
+	}
+
+	UKAPISugHatchingData* Slot1 = GetDataForSlot(ESlugSlot::Slot1);
+	UKAPISugHatchingData* Slot2 = GetDataForSlot(ESlugSlot::Slot2);
+	if (!IsValid(Slot1) || !IsValid(Slot2))
+	{
+		return false;
+	}
+
+	return Slot1->IsComfortableWith(Slot2);
 }
 
 FFullProductionHandle AKLBuildableSlugBreeder::GetDeadTimer(ESlugSlot Slot) const

@@ -1,12 +1,11 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "HttpLib/KPCLJsonObject.h"
 
 #include "HttpModule.h"
-#include "KPrivateCodeLibModule.h"
 #include "Interfaces/IHttpRequest.h"
 #include "Interfaces/IHttpResponse.h"
+#include "KPrivateCodeLibModule.h"
 #include "Logging/StructuredLog.h"
 #include "Misc/ConfigCacheIni.h"
 
@@ -27,7 +26,7 @@ UKPCLJsonObject* UKPCLJsonObject::CreateFromJson(TSharedPtr<FJsonObject> JsonObj
 }
 
 void UKPCLJsonObject::CreateJsonFromUrl(FString Url, TMap<FString, FString> Headers, EHttpRequest Method,
-                                        FString PostContent)
+										FString PostContent)
 {
 	// Fall back to standard HTTP module for non-HTTPS requests
 	FHttpModule& HttpModule = FHttpModule::Get();

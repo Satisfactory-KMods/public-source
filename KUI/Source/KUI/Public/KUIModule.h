@@ -1,8 +1,12 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
+
+#include "CoreMinimal.h"
 
 #include "Modules/ModuleManager.h"
 
-#define LOCTEXT_NAMESPACE "KUI"
+#undef LOCTEXT_CPP_STRING_TABLE
 #define LOCTEXT_CPP_STRING_TABLE "KUI/ST_KUI_CPP"
 
 /**

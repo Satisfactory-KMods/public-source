@@ -1,15 +1,14 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Resources/FGBuildingDescriptor.h"
 #include "UObject/Object.h"
+
 #include "KPCLBuildingDescriptor.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class KPRIVATECODELIB_API UKPCLBuildingDescriptor : public UFGBuildingDescriptor
 {

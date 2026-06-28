@@ -1,15 +1,17 @@
-﻿// Copyright Coffee Stain Studios. All Rights Reserved.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Unlocks/FGUnlockScannableResource.h"
+
 #include "KLUnlockExtractorScanner.generated.h"
 
 /**
  * @deprecated use normal UFGUnlockScannableResource
  */
-UCLASS(Blueprintable, EditInlineNew, abstract, DefaultToInstanced)
+UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class KLIB_API UKLUnlockExtractorScanner : public UFGUnlockScannableResource
 {
 	GENERATED_BODY()

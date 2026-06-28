@@ -1,24 +1,23 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Descriptors/KAPIModularAttachmentDescriptor.h"
 #include "Structures/KPCLFunctionalStructure.h"
 #include "UObject/Interface.h"
+
 #include "KPCLModularBuildingInterface.generated.h"
 
 class AFGBuildable;
-// This class does not need to be modified.
+
 UINTERFACE()
 class UKPCLModularBuildingInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class KPRIVATECODELIB_API IKPCLModularBuildingInterface
 {
 	GENERATED_BODY()
@@ -35,7 +34,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Modular Building Interface")
 	bool AttachedActor(AFGBuildable* Actor, TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment,
-	                   FTransform Location, float Distance = 500.0f);
+					   FTransform Location, float Distance = 500.0f);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Modular Building Interface")
 	bool GetCanHaveModules();

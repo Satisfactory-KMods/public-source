@@ -3,16 +3,12 @@
 #include "Configuration/Properties/ConfigPropertyBool.h"
 #include "Configuration/Properties/ConfigPropertyFloat.h"
 
-
 bool FPowerOptions::IsValid() const
 {
 	return !IsPowerVariable() && (mNormalPowerConsume <= 0.0f || mOtherPowerConsume <= 0.0f);
 }
 
-void FPowerOptions::Init()
-{
-	bWasInit = true;
-}
+void FPowerOptions::Init() { bWasInit = true; }
 
 void FPowerOptions::MergePowerOptions(FPowerOptions OtherOption)
 {
@@ -98,10 +94,7 @@ float FPowerOptions::GetCurrentVariablePower() const
 	return 0.0f;
 }
 
-bool FPowerOptions::IsPowerVariable() const
-{
-	return mPowerCurve != nullptr && mMaxVariablePowerValue > 0.0f;
-}
+bool FPowerOptions::IsPowerVariable() const { return mPowerCurve != nullptr && mMaxVariablePowerValue > 0.0f; }
 
 void FFullProductionHandle::TickHandle(float dt, bool IsProducing, TFunction<void()> Callback)
 {
@@ -149,19 +142,18 @@ void FFullProductionHandle::SetNewTime(float NewTime, bool ShouldReset)
 	}
 }
 
-bool FFullProductionHandle::ShouldDo() const
-{
-	return mProductionTime > 0;
-}
+bool FFullProductionHandle::ShouldDo() const { return mProductionTime > 0; }
 
 float FFullProductionHandle::GetProductionTime() const
 {
-	return mProductionTime / mCurrentPotential;
+	// Guard against division by zero: mCurrentPotential can be 0 on a freshly placed building
+	// before the SaveGame float is initialised. Fall back to 1x speed so the handle always advances.
+	return mCurrentPotential > 0.f ? mProductionTime / mCurrentPotential : mProductionTime;
 }
 
 float FFullProductionHandle::GetPendingProductionTime() const
 {
-	return mProductionTime / (mPendingPotential);
+	return mPendingPotential > 0.f ? mProductionTime / mPendingPotential : mProductionTime;
 }
 
 void FFullProductionHandle::Reset()
@@ -171,9 +163,7 @@ void FFullProductionHandle::Reset()
 	mCurrentProductionTime = GetProductionTime();
 }
 
-FSmartTimer::FSmartTimer()
-{
-}
+FSmartTimer::FSmartTimer() {}
 
 FSmartTimer::FSmartTimer(float Time)
 {
@@ -201,15 +191,9 @@ bool FSmartTimer::Tick(float dt)
 	return false;
 }
 
-void FSmartTimer::Reset()
-{
-	mTimer = 0.0f;
-}
+void FSmartTimer::Reset() { mTimer = 0.0f; }
 
-bool FKPCLModConfigHelper::IsValid() const
-{
-	return mModConfig != nullptr && !mModConfigSection.IsEmpty();
-}
+bool FKPCLModConfigHelper::IsValid() const { return mModConfig != nullptr && !mModConfigSection.IsEmpty(); }
 
 UConfigProperty* FKPCLModConfigHelper::GetProperty(UObject* Context)
 {
@@ -253,10 +237,7 @@ UConfigPropertyBool* FKPCLModConfigHelper_Bool::GetPropertyAsType(UObject* Conte
 	return GetConfigProperty<UConfigPropertyBool>(Context);
 }
 
-bool FKPCLAudioComponent::IsValid() const
-{
-	return mComponent != nullptr;
-}
+bool FKPCLAudioComponent::IsValid() const { return mComponent != nullptr; }
 
 void FKPCLAudioComponent::SetVolumePercent(float Percent) const
 {

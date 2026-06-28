@@ -14,7 +14,7 @@ struct FKBFLActorArray
 	GENERATED_BODY()
 
 	UPROPERTY(Transient)
-	TArray<AActor*> mActors;
+	TArray<TObjectPtr<AActor>> mActors;
 };
 
 /**
@@ -35,15 +35,15 @@ public:
 	void SpawnSubLevel();
 	void SpawnDescriptors();
 
-	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void Server_FinishedSpawningNodes();
 
 private:
 	bool Initialized = false;
 
 	UPROPERTY()
-	TArray<class UKBFLSubLevelSpawning*> mCalledSubLevelSpawning;
+	TArray<TObjectPtr<class UKBFLSubLevelSpawning>> mCalledSubLevelSpawning;
 
 	UPROPERTY()
-	TArray<class UKBFLActorSpawnDescriptorBase*> mCalledDescriptors;
+	TArray<TObjectPtr<class UKBFLActorSpawnDescriptorBase>> mCalledDescriptors;
 };

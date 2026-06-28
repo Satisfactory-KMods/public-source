@@ -1,6 +1,5 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-#pragma once
 
 #include "Hologram/KBFLUtilWidget.h"
 #include "Subsystems/KBFLLocationSubsystem.h"

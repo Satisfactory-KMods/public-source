@@ -1,12 +1,11 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Buildable/Modular/KPCLModularBuildingHandlerBase.h"
 
-#include "FGPowerConnectionComponent.h"
 #include "Buildable/Modular/KPCLModularBuildingBase.h"
 #include "Buildable/Modular/KPCLModularBuildingInterface.h"
 #include "Buildable/Modular/KPCLModularSnapPoint.h"
+#include "FGPowerConnectionComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Network/KPCLNetwork.h"
 #include "Subsystems/ResourceNodes/KBFLResourceNodeDescriptor_ResourceNode.h"
@@ -37,14 +36,11 @@ void UKPCLModularBuildingHandlerBase::GetLifetimeReplicatedProps(TArray<FLifetim
 void UKPCLModularBuildingHandlerBase::GetAttachedActorsOfType(TArray<AFGBuildable*>& Out, uint8 Type)
 {
 	GetAttachedActors(Out);
-	if (Out.Num() > 0)
+	for (int32 i = Out.Num() - 1; i >= 0; --i)
 	{
-		for (AFGBuildable* Element : Out)
+		if (!IsValid(Out[i]) || !IKPCLModularBuildingInterface::Execute_IsModuleTypeOf(Out[i], Type))
 		{
-			if (!IKPCLModularBuildingInterface::Execute_IsModuleTypeOf(Element, Type))
-			{
-				Out.Remove(Element);
-			}
+			Out.RemoveAt(i);
 		}
 	}
 }
@@ -93,8 +89,8 @@ void UKPCLModularBuildingHandlerBase::TryToConnectPower(AFGBuildable* Actor)
 	{
 		UFGPowerConnectionComponent* ConnectionA = Cast<UFGPowerConnectionComponent>(
 			GetOwner()->GetComponentByClass(UFGPowerConnectionComponent::StaticClass()));
-		UFGPowerConnectionComponent* ConnectionB = Cast<UFGPowerConnectionComponent>(
-			Actor->GetComponentByClass(UFGPowerConnectionComponent::StaticClass()));
+		UFGPowerConnectionComponent* ConnectionB =
+			Cast<UFGPowerConnectionComponent>(Actor->GetComponentByClass(UFGPowerConnectionComponent::StaticClass()));
 		if (ConnectionB && ConnectionA)
 		{
 			if (!ConnectionA->HasHiddenConnection(ConnectionB) && (ConnectionB->IsHidden() || ConnectionA->IsHidden()))
@@ -110,20 +106,24 @@ bool UKPCLModularBuildingHandlerBase::GetLocationMap(
 {
 	OutMap.Empty();
 	AFGBuildable* Building = Cast<AFGBuildable>(GetOwner());
+	if (!IsValid(Building))
+	{
+		return false;
+	}
 
 	TSubclassOf<AFGDecorationTemplate> Template = Building->GetDecorationTemplate();
 	if (IsValid(Template))
 	{
-		TArray<UKPCLModularSnapPoint*> SnapPoints = AFGDecorationTemplate::GetComponentsFromSubclass<
-			UKPCLModularSnapPoint>(Template);
+		TArray<UKPCLModularSnapPoint*> SnapPoints =
+			AFGDecorationTemplate::GetComponentsFromSubclass<UKPCLModularSnapPoint>(Template);
 		if (SnapPoints.Num() > 0)
 		{
 			for (UKPCLModularSnapPoint* SnapPoint : SnapPoints)
 			{
 				if (IsValid((SnapPoint->mAttachmentClass)))
 				{
-					UKPCLModularSnapPoint* SnapComponent = NewObject<UKPCLModularSnapPoint>(
-						Building, NAME_None, RF_NoFlags, SnapPoint);
+					UKPCLModularSnapPoint* SnapComponent =
+						NewObject<UKPCLModularSnapPoint>(Building, NAME_None, RF_NoFlags, SnapPoint);
 					if (SnapComponent)
 					{
 						SnapComponent->SetRelativeTransform(SnapPoint->GetRelativeTransform());
@@ -161,24 +161,20 @@ bool UKPCLModularBuildingHandlerBase::CanAttach(TSubclassOf<UKAPIModularAttachme
 	return FindAttachmentIndex(Attachment) != INDEX_NONE;
 }
 
-AFGBuildable* UKPCLModularBuildingHandlerBase::GetAttachedActorByClass(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+AFGBuildable*
+UKPCLModularBuildingHandlerBase::GetAttachedActorByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
 {
 	return nullptr;
 }
 
-TArray<AFGBuildable*> UKPCLModularBuildingHandlerBase::GetAttachedActorsByClass(
-	TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
+TArray<AFGBuildable*>
+UKPCLModularBuildingHandlerBase::GetAttachedActorsByClass(TSubclassOf<UKAPIModularAttachmentDescriptor> Attachment)
 {
 	return {};
 }
 
-void UKPCLModularBuildingHandlerBase::GetAttachedActorsByIndex(TArray<AFGBuildable*>& Out, uint8 index)
-{
-}
+void UKPCLModularBuildingHandlerBase::GetAttachedActorsByIndex(TArray<AFGBuildable*>& Out, uint8 index) {}
 
-void UKPCLModularBuildingHandlerBase::GetAttachedActors(TArray<AFGBuildable*>& Out)
-{
-}
+void UKPCLModularBuildingHandlerBase::GetAttachedActors(TArray<AFGBuildable*>& Out) {}
 
-// End UKPCLModularBuildingHandlerBase
+//~ End UKPCLModularBuildingHandlerBase

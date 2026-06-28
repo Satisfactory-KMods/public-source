@@ -2,14 +2,12 @@
 
 #include "Unlocks/KLGiveItemToAllPlayerUnlock.h"
 
-#include "FGItemPickup_Spawnable.h"
 #include "Buildables/FGBuildableHubTerminal.h"
 #include "Buildables/FGBuildableTradingPost.h"
+#include "FGItemPickup_Spawnable.h"
 
-bool UKLGiveItemToAllPlayerUnlock::IsRepeatPurchasesAllowed_Implementation() const
-{
-	return mCanRepeat;
-}
+
+bool UKLGiveItemToAllPlayerUnlock::IsRepeatPurchasesAllowed_Implementation() const { return mCanRepeat; }
 
 void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 {
@@ -20,7 +18,8 @@ void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 		AFGTutorialIntroManager* TutorialIntro = AFGTutorialIntroManager::Get(unlockSubssytem);
 		FVector TerminalLocation = FVector::ZeroVector;
 
-		if (IsValid(TutorialIntro->mTradingPost) && IsValid(TutorialIntro->mTradingPost->mHubTerminal))
+		if (IsValid(TutorialIntro) && IsValid(TutorialIntro->mTradingPost) &&
+			IsValid(TutorialIntro->mTradingPost->mHubTerminal))
 		{
 			TerminalLocation = TutorialIntro->mTradingPost->mHubTerminal->GetActorLocation();
 		}
@@ -34,6 +33,11 @@ void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 			}
 			AFGPlayerController* PC = *It;
 			AFGCharacterPlayer* Player = Cast<AFGCharacterPlayer>(PC->GetCharacter());
+
+			if (!IsValid(Player))
+			{
+				continue;
+			}
 
 			if (mToAllPlayer)
 			{
@@ -58,14 +62,18 @@ void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 
 		if (!mToAllPlayer)
 		{
-			fgcheck(IsValid(NearstPlayerToHub))
-			GiveToPlayer(NearstPlayerToHub);
+			fgcheck(IsValid(NearstPlayerToHub)) GiveToPlayer(NearstPlayerToHub);
 		}
 	}
 }
 
 void UKLGiveItemToAllPlayerUnlock::GiveToPlayer(AFGCharacterPlayer* Player)
 {
+	if (!IsValid(Player))
+	{
+		return;
+	}
+
 	TArray<FInventoryStack> Stacks;
 	for (const FItemAmount& Amount : mAmounts)
 	{
@@ -75,6 +83,10 @@ void UKLGiveItemToAllPlayerUnlock::GiveToPlayer(AFGCharacterPlayer* Player)
 	TArray<FInventoryStack> StacksThatCantFitIntoInventory;
 
 	UFGInventoryComponent* PlayerInventory = Player->GetInventory();
+	if (!IsValid(PlayerInventory))
+	{
+		return;
+	}
 
 	for (FInventoryStack Stack : Stacks)
 	{
@@ -90,7 +102,7 @@ void UKLGiveItemToAllPlayerUnlock::GiveToPlayer(AFGCharacterPlayer* Player)
 	{
 		FVector DropLocation = Player->GetInventoryDropLocation();
 		AFGCrate* SpawnedCrate = nullptr;
-		AFGItemPickup_Spawnable::SpawnInventoryCrate(Player->GetWorld(), StacksThatCantFitIntoInventory,
-		                                             DropLocation, {}, SpawnedCrate, EFGCrateType::CT_None);
+		AFGItemPickup_Spawnable::SpawnInventoryCrate(Player->GetWorld(), StacksThatCantFitIntoInventory, DropLocation,
+													 {}, SpawnedCrate, EFGCrateType::CT_None);
 	}
 }

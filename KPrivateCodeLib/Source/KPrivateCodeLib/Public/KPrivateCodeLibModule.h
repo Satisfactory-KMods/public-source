@@ -1,13 +1,16 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
 
 #include "CoreMinimal.h"
+
 #include "Modules/ModuleInterface.h"
 
-#define LOCTEXT_NAMESPACE "KPrivateCodeLib"
+#undef LOCTEXT_CPP_STRING_TABLE
 #define LOCTEXT_CPP_STRING_TABLE "KPrivateCodeLib/ST_KPrivateCodeLib_CPP"
 
 /**
- * Macro to get a localized FText from string table using LOCTABLE
+ * Macro to get a localized FText from string table using LOCTABLE.
  * @param Key - The key in the string table
  *
  * Usage:
@@ -16,8 +19,7 @@
 #define FI18N_TEXT(Key) LOCTABLE(LOCTEXT_CPP_STRING_TABLE, Key)
 
 /**
- * Macro to get a localized FString from string table with format arguments support
- * Uses LOCTABLE internally
+ * Macro to get a localized FString from string table with format arguments support.
  * @param Key - The key in the string table (uses LOCTEXT_CPP_STRING_TABLE as table ID)
  * @param ... - Optional format arguments for FString::Format
  *
@@ -42,7 +44,7 @@
 		}())
 
 /**
- * Macro to get localized FText using NSLOCTEXT (for code-defined strings, not string tables)
+ * Macro to get localized FText using NSLOCTEXT (for code-defined strings, not string tables).
  * @param Key - The key for this text
  * @param SourceString - The source/default string
  *
@@ -52,7 +54,7 @@
 #define FI18N_NS(Key, SourceString) NSLOCTEXT(LOCTEXT_CPP_STRING_TABLE, Key, SourceString)
 
 /**
- * Macro to get formatted FString using NSLOCTEXT with format arguments
+ * Macro to get formatted FString using NSLOCTEXT with format arguments.
  * @param Key - The key for this text
  * @param SourceString - The source/default string with {0}, {1}, etc. placeholders
  * @param ... - Format arguments
@@ -85,7 +87,6 @@ public:
 	virtual void StartupModule() override;
 
 	virtual bool IsGameModule() const override { return true; };
-
 
 	FVector LastLocation = FVector::ZeroVector;
 };

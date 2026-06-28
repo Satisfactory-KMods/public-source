@@ -1,13 +1,14 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Replication/KLDefaultRCO.h"
 
+#include <Net/UnrealNetwork.h>
+
+#include "Buildable/KlBuildableCleaner.h"
 #include "Buildable/ModularMiner/KLMMBuildableBase.h"
 #include "Buildable/Slugs/KLBuildableSlugBreeder.h"
 #include "Buildable/Slugs/KLBuildableSlugHatchingModule.h"
 
-#include "Net/UnrealNetwork.h"
 
 void UKLDefaultRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -16,12 +17,22 @@ void UKLDefaultRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 	DOREPLIFETIME(UKLDefaultRCO, mDummy2);
 }
 
+void UKLDefaultRCO::Server_SetCleanerRecipe_Implementation(AFGBuildable* Building,
+														   UKAPICleanerItemDescription* NewRecipe)
+{
+	if (AKLBuildableCleaner* Cleaner = Cast<AKLBuildableCleaner>(Building))
+	{
+		Cleaner->SetCleanerRecipe(NewRecipe);
+	}
+}
+
 void UKLDefaultRCO::Server_SetTargetHumidity_Implementation(AFGBuildable* Building, float NewTargetHumidity)
 {
 	if (AKLBuildableSlugHatchingModule* Module = Cast<AKLBuildableSlugHatchingModule>(Building))
 	{
 		Module->ApplyNewHumidity(NewTargetHumidity);
 		Module->ForceNetUpdate();
+		return;
 	}
 
 	if (AKLBuildableSlugBreeder* Terrarium = Cast<AKLBuildableSlugBreeder>(Building))

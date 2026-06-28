@@ -1,9 +1,8 @@
 ﻿// Copyright Coffee Stain Studios. All Rights Reserved.
 
-
 #include "Network/Buildings/KPCLNetworkPole.h"
-#include "Network/KPCLNetwork.h"
 #include "Network/Buildings/KPCLNetworkCore.h"
+#include "Network/KPCLNetwork.h"
 
 bool AKPCLNetworkPole::HasCore_Implementation() const
 {
@@ -15,10 +14,7 @@ bool AKPCLNetworkPole::HasCore_Implementation() const
 	return false;
 }
 
-bool AKPCLNetworkPole::CanUseFactoryClipboard_Implementation()
-{
-	return false;
-}
+bool AKPCLNetworkPole::CanUseFactoryClipboard_Implementation() { return false; }
 
 AKPCLNetworkCore* AKPCLNetworkPole::GetCore_Implementation()
 {
@@ -98,7 +94,7 @@ void AKPCLNetworkPole::RegisterInteractingPlayer_Implementation(AFGCharacterPlay
 	{
 		Network->RegisterInteractingPlayer(player);
 
-		if (Network->NetworkHasCore())
+		if (Network->NetworkHasCore() && IsValid(Network->GetCore()))
 		{
 			Execute_RegisterInteractingPlayer(Network->GetCore(), player);
 		}
@@ -112,9 +108,11 @@ void AKPCLNetworkPole::UnregisterInteractingPlayer_Implementation(AFGCharacterPl
 	UKPCLNetwork* Network = Execute_GetNetwork(this);
 	if (HasAuthority() && IsValid(Network))
 	{
-		Network->RegisterInteractingPlayer(player);
+		// Fixed: was incorrectly calling RegisterInteractingPlayer here,
+		// which prevented players from being released from the network on interaction end.
+		Network->UnregisterInteractingPlayer(player);
 
-		if (Network->NetworkHasCore())
+		if (Network->NetworkHasCore() && IsValid(Network->GetCore()))
 		{
 			Execute_UnregisterInteractingPlayer(Network->GetCore(), player);
 		}

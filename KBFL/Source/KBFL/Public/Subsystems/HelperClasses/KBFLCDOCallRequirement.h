@@ -35,7 +35,7 @@ public:
 	void OnFinishedAll(class UKBFLContentCDOHelperSubsystem* Subsystem, class UKBFLCDOOverwriteBase* From);
 
 	UPROPERTY(Transient)
-	class UKBFLContentCDOHelperSubsystem* mSubsystem;
+	TObjectPtr<class UKBFLContentCDOHelperSubsystem> mSubsystem;
 
 	virtual class UWorld* GetWorld() const override;
 };

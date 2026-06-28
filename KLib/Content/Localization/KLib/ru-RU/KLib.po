@@ -1,0 +1,1113 @@
+msgid ""
+msgstr ""
+"Language: ru-RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 3; plural = (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mAbbreviatedDisplayName"
+msgid "(H₂O)"
+msgstr "(H₂O)"
+
+msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDescription"
+msgid "93.6% pure Titanium Dioxide. Processing it into TiCl might require a few attempts."
+msgstr "Диоксид титана чистотой 93,6%. Для получения из него TiCl может потребоваться несколько попыток."
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDescription"
+msgid "A Container for easy transport"
+msgstr "Контейнер для удобной транспортировки"
+
+msgctxt "ST_Klib,Desc_TimeC_Adapter.Desc_TimeC_Adapter_C.mDescription"
+msgid "A adapter for different connections in a network system"
+msgstr "Адаптер для различных подключений в сетевой системе"
+
+msgid "A bar stock cast from Magnitar™.\\r\\n\\r\\nHighly energetic magnetic fields can turn it into permanent magnets.\\r\\nCrafted into basic Magnitar™ parts."
+msgstr "Прутковая заготовка, отлитая из Magnitar™. Магнитные поля высокой энергии могут превращать ее в постоянные магниты.\\r\\nИзготавливается из основных деталей Magnitar™."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mDescription"
+msgid "A basic conveyor drum drive, used to power Mk.2 Conveyor Belts."
+msgstr "Базовый привод вала конвейера, используемый для приведения в действие конвейерных лент ур.2."
+
+msgctxt "KLib_Item,PuriItems"
+msgid "A box full of metal that has no dirt. perfect for melting and further processing."
+msgstr "Металлическая коробка, в которой нет грязи. идеально подходит для переплавки и дальнейшей обработки."
+
+msgid "A gas with a high proportion of sulfur. It is used in various processes such as the production of Sulfuric Acid.\\r\\n\\r\\nProduced by combusting Sulfur Powder in a Solid Fuel Heater or extracted from Flue Gas via filtration."
+msgstr "Газ с высоким содержанием серы. Он используется в различных процессах, таких как производство серной кислоты.\\r\\n\\r\\n Создается путем сжигания порошка серы в твердотопливном нагревателе или извлекается из дымовых газов с помощью фильтрации."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mDescription"
+msgid "A high-tech conveyor drum drive, used to power Mk.5 Conveyor Belts."
+msgstr "Высокотехнологичный привод вала конвейера, используемый для приведения в действие конвейерных лент ур.5."
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDescription"
+msgid "A magnesium-rich aluminum alloy, one of the most basic parts from Aluminum."
+msgstr "Алюминиевый сплав с высоким содержанием магния, одна из самых основных деталей из алюминия."
+
+msgid "A metal mixture for advaned smelting. This Mixtures are used in the Foundary or in the Blast Furnace!\\r\\n\\r\\nNote: can weigh a lot. "
+msgstr "Металлическая смесь для ускоренной плавки. Эти смеси используются в литейном цехе или в доменной печи!\\r\\n\\r\\nПримечание: могут иметь большой вес."
+
+msgid "A mix of Titanium Chlorides, also known 'Tickle'.\\r\\nThe purple hue stems from TiCl3.\\r\\nMainly used to produce purified Titanium."
+msgstr "Смесь хлоридов титана, также известная как \"Щекотка\".\\r\\nФиолетовый оттенок происходит от TiCl3.\\r\\nИспользуется в основном для производства очищенного титана."
+
+msgctxt "ST_Klib,Desc_CryoliteResidue.Desc_CryoliteResidue_C.mDescription"
+msgid "A mixture of byproducts left over after refining Bauxite."
+msgstr "Смесь побочных продуктов, оставшихся после переработки боксита."
+
+msgid "A network pole for transmitting and dividing information over longer distances.\\r\\n\\r\\nCan connect up to 6 cables. and attached walls."
+msgstr "Сетевой столб для передачи и разделения информации на большие расстояния.\\r\\n\\r\\nМожно подключить до 6 кабелей. и крепить к  стене."
+
+msgid "A non-flammable, pungent-smelling gas used to refine Uranium and Titanium.\\r\\n\\r\\nOn MASSAGE-2 (AB)b, it is rarely found in underground gas wells. It can also be synthesized from Muriatic Acid."
+msgstr "Негорючий газ с резким запахом, используемый для обогащения урана и титана.\\r\\n\\r\\n На MASSAGE-2 (AB)b, его редко можно найти в подземных газовых скважинах. Его также можно синтезировать из соляной кислоты."
+
+msgid "A plate coated with titanium metal, produced through sintering of titanium hydride made from TiCl Gas.\\r\\n\\r\\nCommonly used to coat surfaces with titanium in a process known as 'sputtering'."
+msgstr "Пластина, покрытая металлическим титаном, полученным путем спекания гидрида титана, полученного из газа TiCl.\\r\\n\\r\\nОбычно используется для покрытия поверхностей титаном в процессе, известном как \"напыление\"."
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDescription"
+msgid "A sack full of finely crushed powdered coal. Perfect for making gunpowder."
+msgstr "Мешок, полный мелко измельченного угля. Идеально подходит для изготовления пороха."
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDescription"
+msgid "A small heatsink with high conductivity. Great for high power electronics."
+msgstr "Небольшой теплообменник с высокой электропроводностью. Отлично подходит для электроники высокой мощности."
+
+msgctxt "ST_Klib,Desc_LiquidRawSludge.Desc_LiquidRawSludge_C.mDescription"
+msgid "A waste product that contains trace amounts of iron, magnesium and tin."
+msgstr "Продукт переработки отходов, содержащий незначительные количества железа, магния и олова."
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk1_N"
+msgid "AWESOME Storage Mk.1"
+msgstr "ЧУДО хранилище ур.1"
+
+msgctxt "StringTable_KLib_Buildings,Build_StorageContainerMk2_N"
+msgid "AWESOME Storage Mk.2"
+msgstr "ЧУДО хранилище ур.2"
+
+msgid "Able to re-form parts into other products through heating, refrigeration and pressurization processes.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports.\\r\\n\\r\\nSolid Output: The first solid output port is on the right (viewed from the output side.)"
+msgstr "Может превращать детали в другие изделия с помощью процессов нагрева, охлаждения и повышения давления.\\r\\nВысота подъема: 10 метров.\\r\\n(Позволяет транспортировать жидкости на высоту до 10 метров.)\\r\\n\\r\\nСодержит как ленту конвейера, так и входные и выходные отверстия трубопровода.\\r\\n\\r\\nТвердый выход: Первый порт находится справа (если смотреть со стороны вывода)."
+
+msgctxt "StringTable_Categorys,Acid"
+msgid "Acid"
+msgstr "Кислота"
+
+msgctxt "StringTable_Categorys,AdvancedSorting"
+msgid "Advanced Sorting"
+msgstr "Продвинутая сортировка"
+
+msgctxt "StringTable_Categorys,AdvancedStandardParts"
+msgid "Advanced Standard Parts"
+msgstr "Продвинутые стандартные детали"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDisplayName"
+msgid "Air"
+msgstr "Воздух"
+
+msgctxt "StringTable_KLib_Buildings,Build_AirCollector_Name"
+msgid "Air Collector"
+msgstr "Воздухосборник"
+
+msgctxt "ST_Klib,Desc_PackagedAir.Desc_PackagedAir_C.mDescription"
+msgid "Air, packaged for alternative transport."
+msgstr "Воздух, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mAbbreviatedDisplayName"
+msgid "Algae"
+msgstr "Водоросли"
+
+msgctxt "ST_Klib,Res_LiquidBioWater.Res_LiquidBioWater_C.mDisplayName"
+msgid "Algal Mass"
+msgstr "Водоросли"
+
+msgctxt "StringTable_KLib_Buildings,Build_BioWaterExtractor_SF+_Name"
+msgid "Algal Mass Extractor"
+msgstr "Экстрактор водорослей"
+
+msgctxt "StringTable_Categorys,Alloys"
+msgid "Alloys"
+msgstr "Сплавы"
+
+msgid "Also known as Methane Gas. It is the lightest crude oil distillate and is often used as fuel for oil refineries.\\r\\nMay also be reformed to produce 'Syngas', a mixture of Hydrogen and Carbon Monoxide.\\r\\nCan be burned in Solution Heaters."
+msgstr "Также известен как газообразный метан. Это самый легкий дистиллят сырой нефти, который часто используется в качестве топлива на нефтеперерабатывающих заводах.\\r\\n Он также может быть переработан для получения \"синтез-газа\", смеси водорода и монооксида углерода.\\r\\n Может сжигаться в жидкостных нагревателях "
+
+msgctxt "ST_Klib,Desc_AlumniumSheet.Desc_AlumniumSheet_C.mDisplayName"
+msgid "Aluminum Coil"
+msgstr "Алюминиевая катушка"
+
+msgid "An accumulation of phytoplankton (planktonic algae), commonly found in underground reservoirs.\\r\\nThey are in a state of hibernation and no longer perform photosynthesis.\\r\\n\\r\\nProcessing into biomass fuels is possible, but perhaps there is a way to reactivate them."
+msgstr "Скопление фитопланктона (планктонных водорослей), обычно встречающегося в подземных водоемах.\\r\\nОни находятся в состоянии зимней спячки и больше не осуществляют фотосинтез.\\r\\n\\r\\nПереработка в топливо из биомассы возможна, но, возможно, есть способ ее реактивации."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDescription"
+msgid "An advanced conveyor drum drive, used to power Mk.3 Conveyor Belts."
+msgstr "Усовершенствованный привод вала конвейера, используемый для приведения в действие конвейерных лент ур.3."
+
+msgctxt "ST_Klib,Desc_TimeC_Case.Desc_TimeC_Case_C.mDescription"
+msgid "An electrically poled frame, used to control the optical properties of crystals."
+msgstr "Рамка с электрическим полюсом, используемая для контроля оптических свойств кристаллов."
+
+msgctxt "ST_Klib,Desc_LeadFrame.Desc_LeadFrame_C.mDescription"
+msgid "An extremely heavy lead-plated modular frame, resistant to most acids."
+msgstr "Чрезвычайно тяжелая модульная рама со свинцовым покрытием, устойчивая к воздействию большинства кислот."
+
+msgid "An extremely wear resistant modular frame, coated with TITAN ( ti-al-n: titanium-aluminum-nitride).\\r\\nPower Usage: 0-4000 MW (2000 MW average).\\r\\n\\r\\nProduced in the Particle Accelerator by bombarding Fused Modular Frames with Titanium ions torn from a target material."
+msgstr "Чрезвычайно износостойкая модульная рама, покрытая TITAN (ti-al-n: нитрид титана-алюминия).\\r\\nПотребляемая мощность: 0-4000 МВт (в среднем 2000 МВт).\\r\\n\\r\\nПроизводится в ускорителе частиц путем бомбардировки сплавленных модульных каркасов ионами титана, вырванными из материала мишени."
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mDescription"
+msgid "An industrial conveyor drum drive, used to power Mk.4 Conveyor Belts."
+msgstr "Промышленный привод вала конвейера, используемый для приведения в действие конвейерных лент ур.4."
+
+msgctxt "ST_Klib,Desc_Asphalt.Desc_Asphalt_C.mDisplayName"
+msgid "Asphalt"
+msgstr "Асфальт"
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 30/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 30 /мин = 15 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 60/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 60 /мин = 30 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nЕго достаточно для добычи любой руды.\\r\\nСтандартная скорость извлечения: 120/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 120 /мин = 60 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\n\\r\\nПовышает эффективность работы комбайна в зависимости от подаваемой жидкости. Бур не будет активирован, если не будет подана жидкость.\\r\\n\\r\\nБонусы за эффективность майнинга можно посмотреть на панели \"Информация о жидкости\" в меню бура."
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly crushes extracted ores and dirts.\\r\\n\\r\\nReduces the Mining Efficiency Bonus from Booster Modules to half their original value.\\r\\n\\r\\nNOTE: Module is not compatible with Smelter Module."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергию необходимую для работы модульного бура\\r\\n\\r\\nПостоянно измельчает добытые руды и грязь.\\r\\n\\r\\nСнижает бонус к эффективности добычи полезных ископаемых для модулей бустера до половины их первоначальной силы.\\r\\n\\r\\nПримечание: Модуль несовместим с модулем плавильни"
+
+msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly smelts the extracted ores down to their primary metal ingots and ejects Tailings Slurry via the fluid output.\\r\\nDirt combusts and becomes Crushed Gangue.\\r\\nHead Lift: 10 m.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nNOTE: Module is not compatible with Crusher Module."
+msgstr "Присоединяется к модульному буру.\\r\\nУвеличивает мощность, необходимую для работы модульного бура\\r\\n\\r\\nПостоянно плавит добытую руду до первичных металлических слитков и выбрасывает шлак через жидкостный выход. \\r\\nГрязь сгорает и превращается в измельченную пустую породу.\\r\\nВысота подъема: 10 м. (Позволяет перемещать жидкости на 10 метров вверх.) Примечание: Модуль не совместим с модулем дробилки."
+
+msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
+msgstr "Подключается к модульному буру.\\r\\n\\r\\nПотребление энергии теперь зависит от:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nРазгоняет цепь питания бура.\\r\\n\\r\\nБонус за эффективность добычи: {BonusOnProduction}%"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
+msgid "BD1"
+msgstr "BD1"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mAbbreviatedDisplayName"
+msgid "BD2"
+msgstr "BD2"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk3.Desc_BeltDriveMk3_C.mAbbreviatedDisplayName"
+msgid "BD3"
+msgstr "BD3"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk4.Desc_BeltDriveMk4_C.mAbbreviatedDisplayName"
+msgid "BD4"
+msgstr "BD4"
+
+msgctxt "ST_Klib,Desc_InvarPlates.Desc_InvarPlates_C.mDisplayName"
+msgid "Bar Magnet"
+msgstr "Стержневой магнит"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_1.Desc_SnailFood_Tier_1_C.mDisplayName"
+msgid "Basic Grain Meal"
+msgstr "Простой зерновой корм"
+
+msgctxt "ST_Klib,Desc_Naphtha.Desc_Naphtha_C.mDescription"
+msgid "Benzine is a very light distillate of crude oil. Its main use is in the production of Ethylene Gas."
+msgstr "Бензин - это очень легкий дистиллят сырой нефти. Его основное применение - в производстве газообразного этилена."
+
+msgctxt "ST_Klib,Desc_PackagedLiquidBioWater.Desc_PackagedLiquidBioWater_C.mDescription"
+msgid "Biological Water, packaged for alternative transport."
+msgstr "Биологическая вода, упакованная для альтернативной транспортировки."
+
+msgid "Bitumen, also known as Asphalt, is one of the heaviest distillates of Crude Oil.\\r\\nIt is a by-product and mostly used in Asphalt roads and roofs.\\r\\nCan also be used to seal joints in plumbing."
+msgstr "Битум, также известный как асфальт, является одним из самых тяжелых дистиллятов сырой нефти.\\r\\n Он является побочным продуктом и в основном используется для асфальтирования дорог и крыш.\\r\\nТакже может использоваться для герметизации швов в водопроводе."
+
+msgctxt "ST_Klib,SlugDesc_BlueSlug.SlugDesc_BlueSlug_C.mDisplayName"
+msgid "Blue Slug"
+msgstr "Синий слизень"
+
+msgctxt "ST_Klib,EggDesc_EggBlue.EggDesc_EggBlue_C.mDisplayName"
+msgid "Blue Slug Egg"
+msgstr "Яйцо синего слизня"
+
+msgctxt "ST_Klib,Desc_SteelBolt.Desc_SteelBolt_C.mAbbreviatedDisplayName"
+msgid "Bolt"
+msgstr "Винты"
+
+msgctxt "ST_Klib,Desc_BeltDriveMk2.Desc_BeltDriveMk2_C.mDisplayName"
+msgid "Brass Belt Drive"
+msgstr "Латунный ленточный привод"
+
+msgctxt "ST_Klib,Desc_BrassIngot.Desc_BrassIngot_C.mDisplayName"
+msgid "Brass Ingot"
+msgstr "Латунный слиток"
+
+msgctxt "ST_Klib,Desc_BrassPipe.Desc_BrassPipe_C.mDisplayName"
+msgid "Brass Pipes"
+msgstr "Латунные трубы"
+
+msgctxt "ST_Klib,Desc_BrassPlates.Desc_BrassPlates_C.mDisplayName"
+msgid "Brass Plates"
+msgstr "Латунные пластины"
+
+msgctxt "ST_Klib,Desc_BronzeBeam.Desc_BronzeBeam_C.mDisplayName"
+msgid "Bronze Beam"
+msgstr "Бронзовая балка"
+
+msgctxt "ST_Klib,Desc_BronzeFrame.Desc_BronzeFrame_C.mDisplayName"
+msgid "Bronze Frame"
+msgstr "Бронзовая рама"
+
+msgctxt "ST_Klib,Desc_BronzeIngot.Desc_BronzeIngot_C.mDisplayName"
+msgid "Bronze Ingot"
+msgstr "Бронзовый слиток"
+
+msgctxt "ST_Klib,Desc_BronzePipe.Desc_BronzePipe_C.mDisplayName"
+msgid "Bronze Pipes"
+msgstr "Бронзовые трубы"
+
+msgctxt "ST_Klib,Desc_BronzePlates.Desc_BronzePlates_C.mDisplayName"
+msgid "Bronze Plates"
+msgstr "Бронзовые пластины"
+
+msgctxt "StringTable_Categorys,BuildingPats"
+msgid "Building Parts"
+msgstr "Строительные части"
+
+msgctxt "StringTable_KLib_Buildings,Build_PipeHole2_D"
+msgid "Can be attached to walls, allowing Pipelines to pass through them."
+msgstr "Может крепиться к стенам, позволяя трубопроводам проходить через них."
+
+msgctxt "StringTable_KLib_Buildings,Build_Conv_WallHole_D"
+msgid "Can be used as a connection for conveyor belts. "
+msgstr "Может использоваться в качестве соединения для конвейерных лент."
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing the outputs):\\r\\nThe right Pipe is the first output."
+msgstr "Способен производить расплавленные металлы либо путем их легирования, либо путем плавления твердых ингредиентов.\\r\\nмаксимальная температура: 1500°C\\r\\nВысота подъема: 10 м (позволяет транспортировать жидкости на 10 метров вверх.)\\r\\n\\r\\nСодержит 1 ленточный конвейер и 2 трубных входа.\\r\\nпорядок вывода (лицом к выходам):\\r\\nПравая труба является первым выходом."
+
+msgid "Capable of producing molten metals by either alloying them or melting solid ingredients.\\r\\nMaximum Temperature: 1500°C\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains 1 Conveyor Belt and 2 Pipe Inputs.\\r\\nOutput Order (facing thhe outputs):\\r\\nThe right Pipe is the first output."
+msgstr "Способен производить расплавленные металлы либо путем их легирования, либо путем плавления твердых ингредиентов.\\r\\nмаксимальная температура: 1500°C\\r\\nВысота подъема: 10 м (позволяет транспортировать жидкости на 10 метров вверх.)\\r\\n\\r\\nСодержит 1 ленточный конвейер и 2 трубных входа.\\r\\nпорядок вывода (лицом к выходам):\\r\\nПравая труба является первым выходом."
+
+msgctxt "ST_Klib,Desc_CarbonDust.Desc_CarbonDust_C.mDisplayName"
+msgid "Carbon Powder"
+msgstr "Углеродный порошок"
+
+msgctxt "ST_Klib,Desc_CateriumHeatsink.Desc_CateriumHeatsink_C.mDisplayName"
+msgid "Caterium Heatsink"
+msgstr "Катериевый теплообменник"
+
+msgctxt "ST_Klib,Desc_CateriumPlates.Desc_CateriumPlates_C.mDisplayName"
+msgid "Caterium Plate"
+msgstr "Катериевая пластина"
+
+msgctxt "ST_Klib,Desc_CateriumRod.Desc_CateriumRod_C.mDisplayName"
+msgid "Caterium Rod"
+msgstr "Катериевый прут"
+
+msgctxt "ST_Klib,Desc_CausticSoda.Desc_CausticSoda_C.mDisplayName"
+msgid "Caustic Soda"
+msgstr "Каустическая сода"
+
+msgctxt "ST_Klib,Desc_PackagedCausticSoda.Desc_PackagedCausticSoda_C.mDescription"
+msgid "Caustic Soda , packaged for alternative transport."
+msgstr "Каустическая сода, упакованная для альтернативной транспортировки."
+
+msgid "Caustic Soda, more commonly known as Sodium Hydroxide or Lye, is the basic counterpart of Muriatic Acid.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in Quartz and Nickel refinement processes."
+msgstr "Каустическая сода, более известный как гидроксид натрия или щелочь, является основным аналогом соляной кислоты.\\r\\п Оба они производятся из соли.\\r\\n\\r\\n Обычно используются в процессах очистки кварца и никеля."
+
+msgctxt "StringTable_KLib_Buildings,Build_CeilingStackableConvPole_N"
+msgid "Ceiling Stackable Conveyor Pole"
+msgstr "Потолочная наращиваемая опора конвейера"
+
+msgctxt "StringTable_Categorys,Centrifugation"
+msgid "Centrifugation"
+msgstr "Центрифугирование"
+
+msgctxt "StringTable_Categorys,Chemical"
+msgid "Chemical"
+msgstr "Химический"
+
+msgctxt "StringTable_KLib_Buildings,Build_ChemReactor_n"
+msgid "Chemical Reactor"
+msgstr "Химический реактор"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mAbbreviatedDisplayName"
+msgid "Chlor"
+msgstr "Хлор"
+
+msgctxt "ST_Klib,Desc_Gas_Chlor.Desc_Gas_Chlor_C.mDisplayName"
+msgid "Chlorine Gas"
+msgstr "Газообразный хлор"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Chlor.Desc_PackagedGas_Chlor_C.mDescription"
+msgid "Chlorine, packaged for alternative transport."
+msgstr "Хлор, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_ChromPlates.Desc_ChromPlates_C.mDisplayName"
+msgid "Chrom Plates"
+msgstr "Хромовые пластины"
+
+msgctxt "StringTable_Categorys,Cleaning"
+msgid "Cleaning"
+msgstr "Очистка"
+
+msgctxt "ST_Klib,Desc_CobaltIngot.Desc_CobaltIngot_C.mDisplayName"
+msgid "Cobalt Ingot"
+msgstr "Кобальтовый слиток"
+
+msgctxt "ST_Klib,Desc_CobaltPlates.Desc_CobaltPlates_C.mDisplayName"
+msgid "Cobalt Plates"
+msgstr "Кобальтовые пластины"
+
+msgctxt "ST_Klib,Desc_EggDNA_Yellow.Desc_EggDNA_Yellow_C.mDescription"
+msgid "Collected genes from a slug, maybe an egg can be created from them? I guess we need an analysis of the genes."
+msgstr "Собрали гены у слизня, может быть, из них можно создать яйцо? Я думаю, нам нужен анализ генов."
+
+msgid "Collects air from the environment. The higher it is, the more air the Air Collector can collect.\\r\\n\\r\\nThe higher the elevation, the faster it can collect air.\\r\\n\\r\\nCollection speed will be reduced if other Air Collectors are nearby.  This range can be viewed with R (default) in build mode.\\r\\n\\r\\nIf placed nearly a Gas Pillar it will collect Toxic Air."
+msgstr "Собирает воздух из окружающей среды. Чем она выше, тем больше воздуха может собрать воздухосборник.\\r\\n\\r\\nЧем выше высота над уровнем моря, тем быстрее он может собирать воздух.\\r\\n\\r\\nСкорость сбора будет снижена, если поблизости находятся другие воздухосборники.  Этот диапазон можно просмотреть с помощью R (по умолчанию) в режиме сборки.\\r\\n\\r\\nЕсли поместить его рядом с газовой колонной, в нем будет скапливаться токсичный воздух."
+
+msgctxt "ST_Klib,Desc_CompactBiomass.Desc_CompactBiomass_C.mDisplayName"
+msgid "Compact Biomass"
+msgstr "Компактная биомасса"
+
+msgid "Compact Biomass to Burn in the Biomass Heater.\\r\\n\\r\\nCan not use in the Biomass Burner!"
+msgstr "Компактная биомасса для сжигания в нагревателе биомассы .Не используется в сжигателе биомассе!"
+
+msgctxt "ST_Klib,Desc_Neutronium.Desc_Neutronium_C.mDisplayName"
+msgid "Condensed Neutrium Gas"
+msgstr "Конденсированный нейтриевый газ"
+
+msgid "Contains 24 slots for storing large amounts of items.\\r\\nHas one input and output for conveyor belts.\\r\\n\\r\\nIf powered it will store items and automatically convert items in the bottom right slot to AWESOME sink points."
+msgstr "Содержит 24 слота для хранения большого количества предметов.\\r\\nИмеет один вход и один выход для конвейерных лент.\\r\\n\\r\\nПри включении он будет хранить предметы и автоматически преобразовывать предметы в нижнем правом слоте в ЧЮДО очки сбора."
+
+msgid "Contains 48 slots for storing large amounts of items.\\r\\nHas one input and output for conveyor belts.\\r\\n\\r\\nIf powered it will store items and automatically convert items in the bottom right slot to AWESOME sink points."
+msgstr "Содержит 48 ячеек для хранения большого количества предметов.\\r\\nИмеет один вход и один выход для конвейерных лент.\\r\\nПри включении он будет хранить предметы и автоматически преобразовывать предметы в нижнем правом слоте в отличные точки сбора."
+
+msgctxt "ST_Klib,Desc_PhotonPairConverter.Desc_PhotonPairConverter_C.mDescription"
+msgid "Converts laser light into correlated photon pair beams. Used in quantum optics and quantum computing."
+msgstr "Преобразует лазерное излучение в пучки пар коррелированных фотонов. Используется в квантовой оптике и квантовых вычислениях."
+
+msgctxt "StringTable_KLib_Buildings,Build_Conv_WallHole_N"
+msgid "Conveyor Wall Hole"
+msgstr "Отверстие в стене для конвейера"
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mAbbreviatedDisplayName"
+msgid "Cool"
+msgstr "Охлажденный"
+
+msgctxt "ST_Klib,Desc_CoolingWater.Desc_CoolingWater_C.mDisplayName"
+msgid "Coolant"
+msgstr "Хладогент"
+
+msgctxt "StringTable_Categorys,Cooling"
+msgid "Cooling"
+msgstr "Охлаждение"
+
+msgctxt "ST_Klib,Desc_PackagedCoolingWater.Desc_PackagedCoolingWater_C.mDescription"
+msgid "Cooling Water, packaged for alternative transport."
+msgstr "Охлаждающая вода, упакованная для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_CopperBusbar.Desc_CopperBusbar_C.mDisplayName"
+msgid "Copper Busbars"
+msgstr "Медные шины"
+
+msgctxt "ST_Klib,Desc_CopperRod.Desc_CopperRod_C.mDisplayName"
+msgid "Copper Rod"
+msgstr "Медный прут"
+
+msgctxt "ST_Klib,Desc_TinSheet.Desc_TinSheet_C.mDescription"
+msgid "Copper Sheets that have been covered in a tin layer, increasing corrosion resistance."
+msgstr "Медные листы, покрытые слоем олова, повышают коррозионную стойкость."
+
+msgctxt "ST_Klib,SlugDesc_Copper.SlugDesc_Copper_C.mDisplayName"
+msgid "Copper Slug"
+msgstr "Медный слизень"
+
+msgctxt "ST_Klib,EggDesc_Copper.EggDesc_Copper_C.mDisplayName"
+msgid "Copper Slug Egg"
+msgstr "Яйцо медного слизня"
+
+msgctxt "ST_Klib,Desc_CrushedAurovite.Desc_CrushedAurovite_C.mDisplayName"
+msgid "Crushed Aurovite"
+msgstr "Измельченный ауровит"
+
+msgctxt "ST_Klib,Desc_CrushedBauxite.Desc_CrushedBauxite_C.mDisplayName"
+msgid "Crushed Bauxite"
+msgstr "Измельченный боксит"
+
+msgctxt "ST_Klib,Desc_CrushedCallanite.Desc_CrushedCallanite_C.mDisplayName"
+msgid "Crushed Callanite"
+msgstr "Измельченный калланит"
+
+msgctxt "ST_Klib,Desc_CrushedCaterium.Desc_CrushedCaterium_C.mDisplayName"
+msgid "Crushed Caterium"
+msgstr "Измельченный катерий"
+
+msgctxt "ST_Klib,Desc_CrushedChrom.Desc_CrushedChrom_C.mDisplayName"
+msgid "Crushed Chrom"
+msgstr "Измельченный Хром"
+
+msgctxt "ST_Klib,Desc_CrushedCobalt.Desc_CrushedCobalt_C.mDisplayName"
+msgid "Crushed Cobalt"
+msgstr "Измельченный кобальт"
+
+msgctxt "ST_Klib,Desc_CrushedCopper.Desc_CrushedCopper_C.mDisplayName"
+msgid "Crushed Copper"
+msgstr "Измельченная медь"
+
+msgctxt "ST_Klib,Desc_Gangue.Desc_Gangue_C.mDisplayName"
+msgid "Crushed Gangue"
+msgstr "Измельченная порода"
+
+msgctxt "ST_Klib,Desc_CrushedIridium.Desc_CrushedIridium_C.mDisplayName"
+msgid "Crushed Iridium"
+msgstr "Измельченный иридий"
+
+msgctxt "ST_Klib,Desc_CrushedIron.Desc_CrushedIron_C.mDisplayName"
+msgid "Crushed Iron"
+msgstr "Измельченное железо"
+
+msgctxt "ST_Klib,Desc_CrushedLarrussite.Desc_CrushedLarrussite_C.mDisplayName"
+msgid "Crushed Larrussite"
+msgstr "Измельченный ларруссит"
+
+msgctxt "ST_Klib,Desc_CrushedLead.Desc_CrushedLead_C.mDisplayName"
+msgid "Crushed Lead"
+msgstr "Измельченный свинец"
+
+msgctxt "ST_Klib,Desc_CrushedMagnesium.Desc_CrushedMagnesium_C.mDisplayName"
+msgid "Crushed Magnesium"
+msgstr "Измельченный магний"
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDisplayName"
+msgid "Crushed Montanion"
+msgstr "Измельченный монтанион"
+
+msgctxt "ST_Klib,Desc_CrushedCrotinium.Desc_CrushedCrotinium_C.mDescription"
+msgid "Crushed Montanion, used in further processing and purification steps to extract different metals"
+msgstr "Измельченный монтанион, используемый на стадиях дальнейшей переработки и очистки для извлечения различных металлов"
+
+msgctxt "ST_Klib,Desc_CrushedNickle.Desc_CrushedNickle_C.mDisplayName"
+msgid "Crushed Nickel"
+msgstr "Измельченный никель"
+
+msgctxt "ST_Klib,Desc_CrushedPlatinum.Desc_CrushedPlatinum_C.mDisplayName"
+msgid "Crushed Platinum"
+msgstr "Измельченная платина"
+
+msgctxt "ST_Klib,Desc_CrushedTitan.Desc_CrushedTitan_C.mDisplayName"
+msgid "Crushed Rutile"
+msgstr "Измельченный рутил"
+
+msgctxt "ST_Klib,Desc_CrushedSilver.Desc_CrushedSilver_C.mDisplayName"
+msgid "Crushed Silver"
+msgstr "Измельченное серебро"
+
+msgctxt "ST_Klib,Desc_CrushedSiterite.Desc_CrushedSiterite_C.mDisplayName"
+msgid "Crushed Siterite"
+msgstr "Измельченный ситерит"
+
+msgctxt "ST_Klib,Desc_CrushedTin.Desc_CrushedTin_C.mDisplayName"
+msgid "Crushed Tin"
+msgstr "Измельченное олово"
+
+msgctxt "ST_Klib,Desc_CrushedTungsten.Desc_CrushedTungsten_C.mDisplayName"
+msgid "Crushed Tungsten"
+msgstr "Измельченный вольфрам"
+
+msgctxt "ST_Klib,Desc_CrushedZinc.Desc_CrushedZinc_C.mDisplayName"
+msgid "Crushed Zinc"
+msgstr "Измельченный цинк"
+
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Дробленый металл, который можно добывать из различных рудных скоплений. Используется для изготовления слитков или жидких металлов.\\r\\n\\r\\nЕго также можно очищать с помощью машин, чтобы извлечь из него больше металла."
+
+msgid "Crushed raw ores and seperates the wanted from the unwanted materials.\\r\\nThe first step of processing for many ores.\\r\\n\\r\\nSolid Output: The first solid output port is on the right."
+msgstr "Измельчает необработанные руды и отделяет полезные материалы от нежелательных.\\r\\nпервый этап обработки многих руд.\\r\\nВывод твердых частиц: первое отверстие для вывода твердых частиц находится справа."
+
+msgctxt "StringTable_KLib_Buildings,Build_Crusher_N"
+msgid "Crusher"
+msgstr "Дробилка"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Crusher_N"
+msgid "Crusher Module"
+msgstr "Модуль дробилка"
+
+msgctxt "StringTable_Categorys,CrushingOres"
+msgid "Crushing Ores"
+msgstr "Измельчение руд"
+
+msgctxt "StringTable_Categorys,CrushingPowders"
+msgid "Crushing Powders"
+msgstr "Измельчение порошков"
+
+msgctxt "ST_Klib,Desc_TimeC_Cable.Desc_TimeC_Cable_C.mDisplayName"
+msgid "Data Cable"
+msgstr "Кабель для передачи данных"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk3_N"
+msgid "Diamond Mining Head"
+msgstr "Алмазная буровая голова"
+
+msgctxt "ST_Klib,Desc_DieselOil.Desc_DieselOil_C.mDisplayName"
+msgid "Diesel Fuel"
+msgstr "Дизельное топливо"
+
+msgctxt "ST_Klib,Desc_PackagedDieselOil.Desc_PackagedDieselOil_C.mDescription"
+msgid "Diesel Fuel, packaged for alternative transport."
+msgstr "Дизельное топливо, упакованное для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_DieselOil.Desc_DieselOil_C.mDescription"
+msgid "Diesel fuel is mostly used to generate heat."
+msgstr "Дизельное топливо в основном используется для выработки тепла."
+
+msgctxt "ST_Klib,Desc_PackagedLiquidDirtyWater.Desc_PackagedLiquidDirtyWater_C.mDescription"
+msgid "Dirty Water, packaged for alternative transport."
+msgstr "Грязная вода, упакованная для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mDrillModule.mFunction"
+msgid "Drill"
+msgstr "Бур"
+
+msgctxt "ST_Klib,Node_Add.NewItem"
+msgid "Drill Tier is to low"
+msgstr "Уровень бура низок"
+
+msgctxt "ST_Klib,Desc_NC_Barrel.Desc_NC_Barrel_C.mDisplayName"
+msgid "Empty Barrel"
+msgstr "Пустая бочка"
+
+msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDisplayName"
+msgid "Empty Cryo Tank"
+msgstr "Пустой криобак"
+
+msgctxt "ST_Klib,Cat_SlugEnergy.Cat_SlugEnergy_C.mDisplayName"
+msgid "Energized Slug Slime"
+msgstr "Энергетическая слизь слизней"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule1.mFunction"
+msgid "Energy 1"
+msgstr "Энергия 1"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule2.mFunction"
+msgid "Energy 2"
+msgstr "Энергия 2"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mEnergyModule3.mFunction"
+msgid "Energy 3"
+msgstr "Энергия 3"
+
+msgctxt "ST_Klib,Desc_EnrichedUranium.Desc_EnrichedUranium_C.mDisplayName"
+msgid "Enriched Uranium"
+msgstr "Обогащенный уран"
+
+msgctxt "ST_Klib,Desc_Ethylene.Desc_Ethylene_C.mDisplayName"
+msgid "Ethylene Gas"
+msgstr "Газообразный этилен"
+
+msgid "Ethylene is made by cracking Naptha. It is a monomer used to make polymers like Polyethylene, a plastic.\\r\\nCan be burned in Solution Heaters."
+msgstr "Этилен получают путем крекинга Нафты. Это мономер, используемый для производства полимеров, таких как полиэтилен, пластик.\\r\\nМожет сжигаться в нагревателях растворов."
+
+msgid "Extracts Algal Mass from underground reservoirs.\\r\\nDefault extraction rate: 60 m^3 Alglas Mass per minute.\\r\\n\\r\\nNote: Must be placed on an Algal Mass node.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "Извлекает водоросли из подземных резервуаров. Скорость извлечения по умолчанию: 60 м^3 водорослей в минуту. \\r\\n Примечание: Должен быть размещен на узле с водорослями . \\r\\n\\r\\n Высота подъема: 10 метров. \\r\\n (Позволяет транспортировать жидкости на высоту 10 метров.)"
+
+msgctxt "ST_Klib,Desc_FanBlade.Desc_FanBlade_C.mDisplayName"
+msgid "Fan Blades"
+msgstr "Лопасти вентилятора"
+
+msgctxt "ST_Klib,Desc_PackagedGas_CarbonDioxide.Desc_PackagedGas_CarbonDioxide_C.mDescription"
+msgid "Flue Gas, packaged for alternative transport."
+msgstr "Дымовой газ, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mFluidModule.mFunction"
+msgid "Fluid"
+msgstr "Жидкость"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.SF+_WidgetComp_SubWindow.Title"
+msgid "Fluid Info"
+msgstr "Жидкость инфо"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Fluid_N"
+msgid "Fluid Module"
+msgstr "Жидкостный модуль"
+
+msgctxt "ST_Klib,Node_Select.Tank"
+msgid "Fluid Tank"
+msgstr "Жидкостный резервуар"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Tank_Module_Name"
+msgid "Fluid Tank Module"
+msgstr "Модуль жидкостный резервуар"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock.Text"
+msgid "Flush Fluid Tank"
+msgstr "Промыть жидкостный резервуар"
+
+msgctxt "ST_Klib,Desc_NC_Barrel.Desc_NC_Barrel_C.mDescription"
+msgid "For packing Oils"
+msgstr "Для упаковки Нефтепродуктов"
+
+msgctxt "ST_Klib,Desc_Air.Desc_Air_C.mDescription"
+msgid "Fresh Air. Low Nitrogen content but rich in CO2 and Oxygen."
+msgstr "Свежий воздух. Низкое содержание азота, но богатое CO2 и кислородом."
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_4.Desc_SnailFood_Tier_4_C.mDisplayName"
+msgid "Fruity Meal"
+msgstr "Фруктовый корм"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier2_N"
+msgid "Full Booster Module"
+msgstr "Полный разгонный модуль"
+
+msgctxt "ST_Klib,Build_ChemReactor.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Газ"
+
+msgctxt "ST_Klib,SlugDesc_Golden.SlugDesc_Golden_C.mDisplayName"
+msgid "Golden Slug"
+msgstr "Золотой слизень"
+
+msgctxt "ST_Klib,EggDesc_Golden.EggDesc_Golden_C.mDisplayName"
+msgid "Golden Slug Egg"
+msgstr "Яйцо золотого слизня"
+
+msgctxt "StringTable_KLib_Buildings,Build_Module_Energy_Tier1_N"
+msgid "Half Booster Module"
+msgstr "Половинный разгонный модуль"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk2_N"
+msgid "Hardened Mining Head"
+msgstr "Закаленная буровая голова"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam_Hot.Desc_PackagedGas_Steam_Hot_C.mDescription"
+msgid "Hot Steam, packaged for alternative transport."
+msgstr "Горячий пар, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Humidity"
+msgstr "Влажность"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Humidity_Module_Name"
+msgid "Humidity Module"
+msgstr "Модуль влажности"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName_1.Text"
+msgid "Humidity:"
+msgstr "Влажность:"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_34"
+msgid "Humidity: {TEMP}%"
+msgstr "Влажность: {TEMP}%"
+
+msgid "Humidity\\r\\n{value}%"
+msgstr "Влажность\\r\\n{value}%"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidHydrocarbons.Desc_PackagedLiquidHydrocarbons_C.mDescription"
+msgid "Hydrocarbons, packaged for alternative transport."
+msgstr "Углеводороды, упакованные для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_PackagedLiquidHydrochloricAcid.Desc_PackagedLiquidHydrochloricAcid_C.mDescription"
+msgid "Hydrochloric Acid, packaged for alternative transport."
+msgstr "Соляная кислота, упакованная для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Hydrogen.Desc_PackagedGas_Hydrogen_C.mDescription"
+msgid "Hydrogen , packaged for alternative transport."
+msgstr "Водород, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Widget_Cleaner.KUI_ProductionInfoWidget.mFuelText"
+msgid "INSERT FILTER"
+msgstr "ВСТАВЬТЕ ФИЛЬТР"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Incubator"
+msgstr "Инкубатор"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Small_Module_Name"
+msgid "Incubator Module"
+msgstr "Модуль инкубатор"
+
+msgctxt "ST_Klib,SlugDesc_Iron.SlugDesc_Iron_C.mDisplayName"
+msgid "Iron Slug"
+msgstr "Железный слизень"
+
+msgctxt "ST_Klib,EggDesc_Iron.EggDesc_Iron_C.mDisplayName"
+msgid "Iron Slug Egg"
+msgstr "Яйцо железного слизня"
+
+msgctxt "ST_Klib,Desc_ToxicAir.Desc_ToxicAir_C.mDescription"
+msgid "It stinks, it's irritating, it's full of Natural Gas and Hydrogen. Bad for you, good for the factory!"
+msgstr "Он воняет, раздражает, в нем много природного газа и водорода. Плохо для вас, хорошо для завода!"
+
+msgctxt "ST_Klib,SlugDesc_Lime.SlugDesc_Lime_C.mDisplayName"
+msgid "Lime Slug"
+msgstr "Лаймовый слизень"
+
+msgctxt "ST_Klib,EggDesc_Lime.EggDesc_Lime_C.mDisplayName"
+msgid "Lime Slug Egg"
+msgstr "Яйцо лаймового слизня"
+
+msgctxt "ST_Klib,Desc_MagnesiumGranules.Desc_MagnesiumGranules_C.mDisplayName"
+msgid "Magnesium Granules"
+msgstr "Магниевые гранулы"
+
+msgid "Mainly composed of carbon oxides and some sulfur compounds. A common product of burning carbon based fuels.\\r\\n\\r\\nCan be processed in the Filtrator to extract componds"
+msgstr "В основном состоит из оксидов углерода и некоторых соединений серы. Является распространенным продуктом сжигания топлива на основе углерода.\\r\\n\\r\\nМожет быть обработан в фильтраторе для извлечения компонентов"
+
+msgctxt "ST_Klib,Node_Add.NewItem_09"
+msgid "Missing Egg!"
+msgstr "Отсутствует яйцо!"
+
+msgctxt "StringTable_KLib_Buildings,ModularMiner_N"
+msgid "Modular Miner"
+msgstr "Модульный бур"
+
+msgid "Molecular Hydrogen in Gas Form. Hydrogen is an excellent fuel as well as an important reactant in chemistry. Usually made through steam reforming of Natural Gas.\\r\\nCan be burned in Solution Heaters and rapidly increases heat."
+msgstr ""
+"Молекулярный водород в газообразной форме. Водород является отличным топливом, а также важным химическим реагентом. Обычно его получают путем паровой конверсии природного газа.\\r\\n\n"
+"Его можно сжигать в нагревателях растворов и он быстро выделяет тепло."
+
+msgctxt "ST_Klib,Desc_LiquidHydrochloricAcid.Desc_LiquidHydrochloricAcid_C.mDisplayName"
+msgid "Muriatic Acid"
+msgstr "Соляная кислота"
+
+msgid "Muriatic Acid, more commonly known as Hydrochloric Acid, is the acidic counterpart of Caustic Soda.\\r\\nBoth are produced from Salt.\\r\\n\\r\\nCommonly used in ore washing processes and in Chlorine production."
+msgstr "Соляная кислота, более известная как хлороводородная кислота, является кислотным аналогом каустической соды.\\r\\n Оба они производятся из соли.\\r\\n\\r\\n Обычно используются в процессах промывки руды и в производстве хлора."
+
+msgctxt "ST_Klib,Node_Select.None"
+msgid "NOPE"
+msgstr "Пусто"
+
+msgctxt "ST_Klib,Desc_KLIB_NaturalGas.Desc_KLIB_NaturalGas_C.mDisplayName"
+msgid "Natural Gas"
+msgstr "Природный газ"
+
+msgctxt "ST_Klib,Disq_ModularMiner.Disq_ModularMiner_C.mDisqfualifyingText"
+msgid "No knowledge about these ore... need more research first!"
+msgstr "Никаких знаний об этих рудах... сначала нужно провести дополнительные исследования!"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.TextBlock_255.Text"
+msgid "Node quallity survey"
+msgstr "Оценка качества узла"
+
+msgctxt "ST_Klib,Node_Add.NewItem_08"
+msgid "Not enough fluid!"
+msgstr "Не хватает жидкости!"
+
+msgctxt "KLib_Item,SlugDesc_Show"
+msgid "Note: they use the same temperature and humidity as the eggs."
+msgstr "Примечание: для них используются те же температура и влажность, что и для яиц."
+
+msgctxt "ST_Klib,SlugDesc_Orange.SlugDesc_Orange_C.mDisplayName"
+msgid "Orange Slug"
+msgstr "Оранжевый слизень"
+
+msgctxt "ST_Klib,EggDesc_Orange.EggDesc_Orange_C.mDisplayName"
+msgid "Orange Slug Egg"
+msgstr "Яйцо оранжевого слизня"
+
+msgctxt "ST_Klib,Desc_PackagedGasOxygen.Desc_PackagedGasOxygen_C.mDescription"
+msgid "Oxygen, packaged for alternative transport."
+msgstr "Кислород, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_PackagedGas_Oxyhydrogen.Desc_PackagedGas_Oxyhydrogen_C.mDescription"
+msgid "Oxyhydrogen, packaged for alternative transport."
+msgstr "Оксиводород упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_PackagedAir.Desc_PackagedAir_C.mDisplayName"
+msgid "Packaged Air"
+msgstr "Баллон воздуха"
+
+msgctxt "ST_Klib,Desc_PackagedLiquidBioWater.Desc_PackagedLiquidBioWater_C.mDisplayName"
+msgid "Packaged Algal Mass"
+msgstr "Бутыль водорослей"
+
+msgctxt "ST_Klib,Desc_PackagedDieselOil.Desc_PackagedDieselOil_C.mDisplayName"
+msgid "Packaged Diesel Fuel"
+msgstr "Бочка дизельного топлива"
+
+msgctxt "ST_Klib,Desc_PackagedNaturalGas.Desc_PackagedNaturalGas_C.mDisplayName"
+msgid "Packaged Natural Gas"
+msgstr "Баллон природного газа"
+
+msgctxt "ST_Klib,Desc_PackagedGasOxygen.Desc_PackagedGasOxygen_C.mDisplayName"
+msgid "Packaged Oxygen"
+msgstr "Баллон Кислорода"
+
+msgctxt "ST_Klib,Desc_Packaged_Paraffin.Desc_Packaged_Paraffin_C.mDisplayName"
+msgid "Packaged Paraffin"
+msgstr "Бочка керосина"
+
+msgctxt "ST_Klib,Desc_PackagedToxicAir.Desc_PackagedToxicAir_C.mDisplayName"
+msgid "Packaged Toxic Air"
+msgstr "Баллон токсичного воздуха"
+
+msgctxt "KLib_Item,PackagedItemsDesc"
+msgid "Packaged fluid or gas for alternative transport."
+msgstr "Упакованная жидкость или газ для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Cat_Packaging_Oil.Cat_Packaging_Oil_C.mDisplayName"
+msgid "Packaging - Barrel"
+msgstr "Упаковка - Бочки"
+
+msgctxt "ST_Klib,Desc_Paint.Desc_Paint_C.mDisplayName"
+msgid "Paint"
+msgstr "Краска"
+
+msgctxt "ST_Klib,Desc_Paraffin.Desc_Paraffin_C.mDisplayName"
+msgid "Paraffin"
+msgstr "Керосин"
+
+msgctxt "ST_Klib,SlugDesc_Pink.SlugDesc_Pink_C.mDisplayName"
+msgid "Pink Slug"
+msgstr "Розовый слизень"
+
+msgctxt "ST_Klib,EggDesc_Pink.EggDesc_Pink_C.mDisplayName"
+msgid "Pink Slug Egg"
+msgstr "Яйцо розового слизня"
+
+msgctxt "ST_Klib,Desc_PlutoniumFuel.Desc_PlutoniumFuel_C.mDisplayName"
+msgid "Plutonium Fuel"
+msgstr "Плутониевое топливо"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_5.Desc_SnailFood_Tier_5_C.mDisplayName"
+msgid "Protein Meal"
+msgstr "Белковый корм"
+
+msgid "Purifies loose materials through industrial washing with a fluid. Outputs unwanted byproducts (like gangue) as a liquid slurry.\\r\\n\\r\\nHead Lift: 10 meters.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipeline input and output ports."
+msgstr "Очищает сыпучие материалы с помощью промышленной промывки жидкостью. Удаляет нежелательные побочные продукты (например, пустую породу) в виде жидкой взвеси.\\r\\n\\r\\nВысота подъема: 10 метров.\\r\\n (Позволяет транспортировать жидкости на высоту до 10 метров.)\\r\\n\\r\\nСодержит как ленту конвейера, так и входные и выходные отверстия трубопровода."
+
+msgctxt "ST_Klib,SlugDesc_Purple.SlugDesc_Purple_C.mDisplayName"
+msgid "Purple Slug"
+msgstr "Фиолетовый слизень"
+
+msgctxt "ST_Klib,EggDesc_EggPurple.EggDesc_EggPurple_C.mDisplayName"
+msgid "Purple Slug Egg"
+msgstr "Яйцо фиолетового слизня"
+
+msgctxt "ST_Klib,Desc_EnrichedUranium.Desc_EnrichedUranium_C.mDescription"
+msgid "Radioactive!"
+msgstr "Радиоактивно!"
+
+msgctxt "ST_Klib,SlugDesc_Red.SlugDesc_Red_C.mDisplayName"
+msgid "Red Slug"
+msgstr "Красный слизень"
+
+msgctxt "ST_Klib,EggDesc_Red.EggDesc_Red_C.mDisplayName"
+msgid "Red Slug Egg"
+msgstr "Яйцо красного слизня"
+
+msgctxt "ST_Klib,Desc_Fluid_RocketFuel.Desc_Fluid_RocketFuel_C.mDisplayName"
+msgid "Rocket Fuel"
+msgstr "Ракетное топливо"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Low.Desc_SlugSlime_Low_C.mAbbreviatedDisplayName"
+msgid "Slime"
+msgstr "Слизь"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Low.Desc_SlugSlime_Low_C.mDescription"
+msgid "Slime from Slugs in low concentration. Can be crystallized in the Filtrator to form Power Shard Crystals."
+msgstr "Слизь от слизней в низкой концентрации. Может кристаллизоваться в фильтраторе с образованием кристаллов Power Shard."
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mid.Desc_SlugSlime_Mid_C.mDescription"
+msgid "Slime from Slugs, completely de-energized. Can be recharged with thermal energy in a Boiler or with high energy beams."
+msgstr "Слизь из слизней, полностью разряженная. Можно заряжать тепловой энергией в котле или с помощью высокоэнергетических лучей."
+
+msgctxt "ST_Klib,Desc_EggDNA_Blue.Desc_EggDNA_Blue_C.mDisplayName"
+msgid "Slug DNA - Blue"
+msgstr "ДНК слизня - синяя"
+
+msgctxt "ST_Klib,Desc_EggDNA_Purple.Desc_EggDNA_Purple_C.mDisplayName"
+msgid "Slug DNA - Purple"
+msgstr "ДНК слизня - фиолетовая"
+
+msgctxt "ST_Klib,Desc_EggDNA_Yellow.Desc_EggDNA_Yellow_C.mDisplayName"
+msgid "Slug DNA - Yellow"
+msgstr "ДНК слизня - желтая"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName_9.Text"
+msgid "Slug Food"
+msgstr "Пища для слизней"
+
+msgctxt "ST_Klib,Cat_Slug.Cat_Slug_C.mDisplayName"
+msgid "Slug Slime"
+msgstr "Слизь слизня"
+
+msgctxt "StringTable_KLib_Buildings,Build_Terrarium_Name"
+msgid "Slug Terrarium"
+msgstr "Террариум для слизней"
+
+msgctxt "ST_Klib,Widget_ModularMiner_2.mSmelterModule.mFunction"
+msgid "Smelter"
+msgstr "Плавильня"
+
+msgctxt "StringTable_KLib_Buildings,Build_SmelterModule_N"
+msgid "Smelter Module"
+msgstr "Плавильный модуль"
+
+msgctxt "ST_Klib,Desc_Sulfurtrixid.Desc_Sulfurtrixid_C.mAbbreviatedDisplayName"
+msgid "Sour"
+msgstr "Кислый"
+
+msgctxt "ST_Klib,Desc_Sulfurtrixid.Desc_Sulfurtrixid_C.mDisplayName"
+msgid "Sour Gas"
+msgstr "Кислый газ"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mid.Desc_SlugSlime_Mid_C.mDisplayName"
+msgid "Spent Slug Slime"
+msgstr "Отработанная слизь слизняка"
+
+msgctxt "StringTable_KLib_Buildings,Build_MiningHead_Mk1_N"
+msgid "Standard Mining Head"
+msgstr "Стандартная буровая голова"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Steam.Desc_PackagedGas_Steam_C.mDescription"
+msgid "Steam, packaged for alternative transport."
+msgstr "Пар, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_SteelBolt.Desc_SteelBolt_C.mDisplayName"
+msgid "Steel Bolt"
+msgstr "Стальные Винты"
+
+msgctxt "ST_Klib,Desc_SulfurPowder.Desc_SulfurPowder_C.mDisplayName"
+msgid "Sulfur Powder"
+msgstr "Порошок серы"
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_3.Desc_SnailFood_Tier_3_C.mDisplayName"
+msgid "Sweet Meal"
+msgstr "Сладкий корм"
+
+msgctxt "ST_Klib,Desc_TitanModularFrame.Desc_TitanModularFrame_C.mDisplayName"
+msgid "TITAN Frame"
+msgstr "Титановая рама"
+
+msgctxt "ST_Klib,Desc_LiquidSlag.Desc_LiquidSlag_C.mDisplayName"
+msgid "Tailings Slurry"
+msgstr "Взвесь шлака"
+
+msgctxt "ST_Klib,Widget_Terrarium_New.ItemName.Text"
+msgid "Temp:"
+msgstr "Темп:"
+
+msgctxt "ST_Klib,Node_Select.Option_1_04"
+msgid "Temperature"
+msgstr "Температура"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Temperature_Module_Name"
+msgid "Temperature Module"
+msgstr "Температурный модуль"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.ItemName_3.Text"
+msgid "Temperature:"
+msgstr "Температура:"
+
+msgctxt "ST_Klib,Node_Format_Text.Format_33"
+msgid "Temperature: {TEMP}°C"
+msgstr "Температура: {TEMP}°C"
+
+msgid "Temperature\\r\\n{value}°C"
+msgstr "Температура\\r\\n{value}°C"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Desc"
+msgid "The Slug Hatchery provides a controlled environment to make slug eggs hatch into adult slugs.  Testing is required to find the best conditions for hatching!  Adult slugs require a separate habitat."
+msgstr "Инкубаторий для выведения слизней обеспечивает контролируемую среду обитания, в которой из яиц вылупляются взрослые слизни.  Чтобы подобрать наилучшие условия для вылупления, необходимо провести тестирование!  Взрослые слизни нуждаются в отдельной среде обитания."
+
+msgid "The most concentrated form of Slug Slime.\\r\\nThe energy from it can be used in varying ways, be it in the form of heat or electromagnetic radiation.\\r\\n\\r\\nCharging Power Shard Fragments with this energy leads to the creation of Power Shards.\\r\\nCan be used to power Steam Turbines."
+msgstr "Наиболее концентрированная форма слизи слизней.\\r\\nПолучаемая из нее энергия может быть использована различными способами, будь то в виде тепла или электромагнитного излучения.\\r\\n\\r\\nЗаряжая фрагменты энергетических осколков этой энергией, вы создаете Энергетические осколки.\\r\\nМожет использоваться для приведения в действие паровых турбин."
+
+msgctxt "ST_Klib,Desc_TitanPipe.Desc_TitanPipe_C.mDescription"
+msgid "The most robust pipes known to mankind. Used in superconducting magnets and nuclear fuel production."
+msgstr "Самые прочные трубы, известные человечеству. Используются в производстве сверхпроводящих магнитов и ядерного топлива."
+
+msgid "The slugs can reproduce happily in the terrarium. We need the eggs!\\r\\n\\r\\nNote: The Slugs need the same settings (Except the Time) as the egg type of them. you can adjust the temperature and the humidity in the terrarium. "
+msgstr "Слизни могут успешно размножаться в террариуме. Нам нужны яйца!\\r\\n\\r\\nПримечание: Для слизней необходимы те же параметры (за исключением времени), что и для их вида яиц. вы можете регулировать температуру и влажность в террариуме."
+
+msgid "This module regulates the humidity... Yes, some slugs like it dry on these planets! \\r\\n\\r\\nNote: This module can be built more than once on a Hatchery. The values are added!"
+msgstr "Этот модуль регулирует влажность... Да, некоторым слизнякам нравится, когда на этих планетах сухо!\\r\\n\\r\\n Примечание: Этот модуль можно устанавливать в инкубатории несколько раз. Значения складываются!"
+
+msgctxt "ST_Klib,Desc_Gas_Titantetrachlorid.Desc_Gas_Titantetrachlorid_C.mAbbreviatedDisplayName"
+msgid "TiCl"
+msgstr "TiCl"
+
+msgctxt "ST_Klib,Desc_Gas_Titantetrachlorid.Desc_Gas_Titantetrachlorid_C.mDisplayName"
+msgid "TiCl Gas"
+msgstr "TiCl Газ"
+
+msgctxt "ST_Klib,Widget_Hatchery_New.K2Node_Select_0.EnumEntryFriendlyNames[5]"
+msgid "Time"
+msgstr "Время"
+
+msgctxt "StringTable_KLib_Buildings,Build_Hatchery_Night_Module_Name"
+msgid "Time Module"
+msgstr "Модуль времени"
+
+msgctxt "ST_Klib,Desc_TinRod.Desc_TinRod_C.mDisplayName"
+msgid "Tin Rod"
+msgstr "Оловянный прут"
+
+msgctxt "ST_Klib,Desc_PackagedGas_Titantetrachlorid.Desc_PackagedGas_Titantetrachlorid_C.mDescription"
+msgid "Titantetrachlorid, packaged for alternative transport."
+msgstr "Тетрахлорид титана, упакованный для альтернативной транспортировки."
+
+msgctxt "ST_Klib,Desc_ToxicAir.Desc_ToxicAir_C.mDisplayName"
+msgid "Toxic Air"
+msgstr "Токсичный воздух"
+
+msgctxt "ST_Klib,SlugDesc_Turquise.SlugDesc_Turquise_C.mDisplayName"
+msgid "Turquoise Slug"
+msgstr "Бирюзовый слизень"
+
+msgctxt "ST_Klib,EggDesc_Turquise.EggDesc_Turquise_C.mDisplayName"
+msgid "Turquoise Slug Egg"
+msgstr "Яйцо бирюзового слизня"
+
+msgctxt "ST_Klib,Desc_SlugSlime_Mineral.Desc_SlugSlime_Mineral_C.mDisplayName"
+msgid "Universal Paint"
+msgstr "Универсальная краска"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Acid.Cat_Unpackaging_Acid_C.mDisplayName"
+msgid "Unpackaging - Acid"
+msgstr "Распаковка - Кислоты"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Oil.Cat_Unpackaging_Oil_C.mDisplayName"
+msgid "Unpackaging - Barrel"
+msgstr "Распаковка - Бочки"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Bottle.Cat_Unpackaging_Bottle_C.mDisplayName"
+msgid "Unpackaging - Bottle"
+msgstr "Распаковка - Бутылки"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Canister.Cat_Unpackaging_Canister_C.mDisplayName"
+msgid "Unpackaging - Canister"
+msgstr "Распаковка - Канистры"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Gas.Cat_Unpackaging_Gas_C.mDisplayName"
+msgid "Unpackaging - Gas"
+msgstr "Распаковка - Газ"
+
+msgctxt "ST_Klib,Cat_Unpackaging_Hot.Cat_Unpackaging_Hot_C.mDisplayName"
+msgid "Unpackaging - Hot"
+msgstr "Распаковка - Горячее"
+
+msgctxt "ST_Klib,Desc_UraniumFuel.Desc_UraniumFuel_C.mDisplayName"
+msgid "Uranium Fuel"
+msgstr "Урановое топливо"
+
+msgid "Used for crafting advanced parts.\\r\\nOne of the most basic steel parts.\\r\\nMany Pioneers can't tell the difference between screws and bolts."
+msgstr "Используется для изготовления сложных деталей.\\r\\nОдна из самых простых стальных деталей.\\r\\nМногие первопроходцы не видят разницы между шурупами и винтами"
+
+msgid "Used to seperate crushed ores into their primary, secondary and tertiary components.\\r\\nDifferent sorting tiers have different requirements for additional inputs, such as Air or Water.\\r\\n\\r\\nSolid Output: The first solid output port is on the right, the second one on the left."
+msgstr "Используется для разделения измельченной руды на первичные, вторичные и третичные компоненты.\\r\\nНа разных уровнях сортировки предъявляются разные требования к дополнительным ресурсам, таким как воздух или вода.\\r\\n\\r\\n Твердотельный вывод: Первый порт твердотельного вывода находится справа, второй - слева."
+
+msgctxt "ST_Klib,Desc_SnailFood_Tier_2.Desc_SnailFood_Tier_2_C.mDisplayName"
+msgid "Vegetable Meal"
+msgstr "Овощной корм"
+
+msgctxt "ST_Klib,SlugDesc_WhiteSlug.SlugDesc_WhiteSlug_C.mDisplayName"
+msgid "White Slug"
+msgstr "Белый слизень"
+
+msgctxt "ST_Klib,EggDesc_EggWhite.EggDesc_EggWhite_C.mDisplayName"
+msgid "White Slug Egg"
+msgstr "Яйцо белого слизня"
+
+msgctxt "ST_Klib,SlugDesc_YellowSlug.SlugDesc_YellowSlug_C.mDisplayName"
+msgid "Yellow Slug"
+msgstr "Желтый слизень"
+
+msgctxt "ST_Klib,EggDesc_EggYellow.EggDesc_EggYellow_C.mDisplayName"
+msgid "Yellow Slug Egg"
+msgstr "Яйцо желтого слизня"

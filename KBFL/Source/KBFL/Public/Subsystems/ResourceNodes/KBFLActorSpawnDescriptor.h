@@ -8,7 +8,7 @@
 /**
  *
  */
-UCLASS(Blueprintable, EditInlineNew, abstract, DefaultToInstanced)
+UCLASS(Blueprintable, EditInlineNew, DefaultToInstanced)
 class KBFL_API UKBFLActorSpawnDescriptor : public UKBFLActorSpawnDescriptorBase
 {
 	GENERATED_BODY()

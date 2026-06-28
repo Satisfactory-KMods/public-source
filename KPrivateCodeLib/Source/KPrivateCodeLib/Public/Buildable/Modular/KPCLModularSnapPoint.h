@@ -1,12 +1,14 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
 #include "CoreMinimal.h"
 
+#include "Descriptors/KAPIModularAttachmentDescriptor.h"
+
 #include "KPCLModularSnapPoint.generated.h"
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class KPRIVATECODELIB_API UKPCLModularSnapPoint : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -19,5 +21,5 @@ public:
 	int32 mIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 mStackerCount = 8;
+	int32 mStackerCount = 5;
 };

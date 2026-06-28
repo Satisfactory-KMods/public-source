@@ -3,12 +3,12 @@
 
 #include "Buildable/ModularMiner/KLMMBuildableModule.h"
 
-#include "FGFactoryConnectionComponent.h"
-#include "FGGasPillar.h"
-#include "FGPowerInfoComponent.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildable/ModularMiner/KLMMBuildableMiner.h"
 #include "Cpp/KBFLCppInventoryHelper.h"
+#include "FGFactoryConnectionComponent.h"
+#include "FGGasPillar.h"
+#include "FGPowerInfoComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "Net/UnrealNetwork.h"
@@ -36,6 +36,11 @@ void AKLMMBuildableModule::BeginPlay()
 void AKLMMBuildableModule::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+}
+
+void AKLMMBuildableModule::GetConditionalReplicatedProps(TArray<FFGCondReplicatedProperty>& outProps) const
+{
+	Super::GetConditionalReplicatedProps(outProps);
 }
 
 bool AKLMMBuildableModule::CanProduce_Implementation() const
@@ -76,10 +81,7 @@ bool AKLMMBuildableModule::Factory_HasPower() const
 	return Super::Factory_HasPower();
 }
 
-float AKLMMBuildableModule::GetPowerConsume() const
-{
-	return Super::GetPowerConsume();
-}
+float AKLMMBuildableModule::GetPowerConsume() const { return Super::GetPowerConsume(); }
 
 void AKLMMBuildableModule::CollectAndPushPipes(float dt, bool IsPush)
 {
@@ -91,26 +93,31 @@ void AKLMMBuildableModule::CollectAndPushPipes(float dt, bool IsPush)
 	}
 }
 
-void AKLMMBuildableModule::OnModuleProductionCompleted_Implementation()
-{
-}
+void AKLMMBuildableModule::OnModuleProductionCompleted_Implementation() {}
 
 void AKLMMBuildableModule::TryToRegister()
 {
+	if (HasMiner())
+	{
+		return;
+	}
+
 	TArray<AActor*> OutActors;
 	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = TArray<TEnumAsByte<EObjectTypeQuery>>{
-		ObjectTypeQuery1, ObjectTypeQuery2, ObjectTypeQuery3, ObjectTypeQuery4, ObjectTypeQuery5
-	};
-	const bool MinerFound = UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), 500.0f,
-	                                                                  ObjectTypes, AKLMMBuildableMiner::StaticClass(),
-	                                                                  {this}, OutActors);
+		ObjectTypeQuery1, ObjectTypeQuery2, ObjectTypeQuery3, ObjectTypeQuery4, ObjectTypeQuery5};
+	const bool MinerFound = UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(), GetActorLocation(), 500.0f, ObjectTypes, AKLMMBuildableMiner::StaticClass(), {this}, OutActors);
 
-	UE_LOG(LogTemp, Warning, TEXT("Miner in Area: %d because miner module '%s' need a new miner!"), MinerFound,
-	       *GetName());
-
-	// Grab Miner
+	// Grab the nearest miner so that a module placed between two miners binds to the correct one.
 	if (MinerFound)
 	{
+		OutActors.Sort(
+			[this](const AActor& A, const AActor& B)
+			{
+				return FVector::DistSquared(GetActorLocation(), A.GetActorLocation()) <
+					FVector::DistSquared(GetActorLocation(), B.GetActorLocation());
+			});
+
 		if (AKLMMBuildableMiner* lMiner = Cast<AKLMMBuildableMiner>(OutActors[0]))
 		{
 			Execute_AttachedActor(lMiner, this, mAttachmentClass, GetActorTransform(), 500);
@@ -141,17 +148,17 @@ void AKLMMBuildableModule::SetBelts()
 		}
 	}
 
-	//if (UFGPipeConnectionFactory* lPipe = GetPipe(0, KPCLOutput))
+	// if (UFGPipeConnectionFactory* lPipe = GetPipe(0, KPCLOutput))
 	//{
 	//	lPipe->SetInventory(GetInventory());
-	//}
+	// }
 
 	if (GetInventory())
 	{
 		if (GetMasterBuildable<AKLMMBuildableMiner>())
 		{
-			if (const TSubclassOf<UFGItemDescriptor> ItemClass = GetMasterBuildable<AKLMMBuildableMiner>()->
-				GetTrashDescriptor())
+			if (const TSubclassOf<UFGItemDescriptor> ItemClass =
+					GetMasterBuildable<AKLMMBuildableMiner>()->GetTrashDescriptor())
 			{
 				UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), 0, ItemClass);
 			}
@@ -164,11 +171,6 @@ void AKLMMBuildableModule::StorageItem(TSubclassOf<UFGItemDescriptor> Item, int 
 	UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, Item, Count);
 }
 
-void AKLMMBuildableModule::SetAllowedItem(TSubclassOf<UFGItemDescriptor> Item) const
-{
-	UKPCLBlueprintFunctionLib::SetAllowOnIndex_ThreadSafe(GetInventory(), 0, Item);
-}
-
 bool AKLMMBuildableModule::CanStorageOutput(TSubclassOf<UFGItemDescriptor> Item, int Count) const
 {
 	return UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 0, Item, Count);
@@ -179,42 +181,18 @@ TSubclassOf<UFGItemDescriptor> AKLMMBuildableModule::GetAllowedItem() const
 	return GetInventory()->GetAllowedItemOnIndex(0);
 }
 
-TSubclassOf<UKAPIModularAttachmentDescriptor> AKLMMBuildableModule::GetType() const
-{
-	return mAttachmentClass;
-}
+TSubclassOf<UKAPIModularAttachmentDescriptor> AKLMMBuildableModule::GetType() const { return mAttachmentClass; }
 
-bool AKLMMBuildableModule::HasMiner() const
-{
-	return GetMiner() != nullptr;
-}
+bool AKLMMBuildableModule::HasMiner() const { return GetMiner() != nullptr; }
 
-bool AKLMMBuildableModule::IsVariable() const
-{
-	return GetPowerOption().IsPowerVariable();
-}
+bool AKLMMBuildableModule::IsVariable() const { return GetPowerOption().IsPowerVariable(); }
 
-AKLMMBuildableBase* AKLMMBuildableModule::GetMiner() const
-{
-	return GetMasterBuildable<AKLMMBuildableBase>();
-}
+AKLMMBuildableBase* AKLMMBuildableModule::GetMiner() const { return GetMasterBuildable<AKLMMBuildableBase>(); }
 
-int AKLMMBuildableModule::GetTier() const
-{
-	return mTier;
-}
+int AKLMMBuildableModule::GetTier() const { return mTier; }
 
-float AKLMMBuildableModule::GetMalus() const
-{
-	return mMalus;
-}
+float AKLMMBuildableModule::GetMalus() const { return mMalus; }
 
-float AKLMMBuildableModule::GetBonus() const
-{
-	return mBonus;
-}
+float AKLMMBuildableModule::GetBonus() const { return mBonus; }
 
-bool AKLMMBuildableModule::HasPipeConnection() const
-{
-	return GetPipe(0, KPCLOutput) != nullptr;
-}
+bool AKLMMBuildableModule::HasPipeConnection() const { return GetPipe(0, KPCLOutput) != nullptr; }

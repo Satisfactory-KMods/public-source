@@ -3,18 +3,16 @@
 #include "FGBuildableSubsystem.h"
 #include "FGColorInterface.h"
 
-UKLCustomColorLamp::UKLCustomColorLamp()
-{
-	PrimaryComponentTick.bCanEverTick = false;
-}
+
+UKLCustomColorLamp::UKLCustomColorLamp() { PrimaryComponentTick.bCanEverTick = false; }
 
 void UKLCustomColorLamp::UpdateColor(FLinearColor Colour)
 {
 	if (mInstanceHandle.IsInstanced())
 	{
-		//mInstanceHandle.SetCustomDataById(17, Colour.R);
-		//mInstanceHandle.SetCustomDataById(18, Colour.G);
-		//mInstanceHandle.SetCustomDataById(19, Colour.B);
+		// mInstanceHandle.SetCustomDataById(17, Colour.R);
+		// mInstanceHandle.SetCustomDataById(18, Colour.G);
+		// mInstanceHandle.SetCustomDataById(19, Colour.B);
 
 		FFactoryCustomizationData Data = IFGColorInterface::Execute_GetCustomizationData(GetOwner());
 		Data.Data[17] = Colour.R;

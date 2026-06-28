@@ -2,15 +2,9 @@
 
 #include "FGBuildableSubsystem.h"
 
-UKPCLColoredStaticMesh::UKPCLColoredStaticMesh()
-{
-	mNumCustomDataFloats = 20 + mCustomExtraData.Num();
-}
+UKPCLColoredStaticMesh::UKPCLColoredStaticMesh() { mNumCustomDataFloats = 20 + mCustomExtraData.Num(); }
 
-bool UKPCLColoredStaticMesh::ShouldSave_Implementation() const
-{
-	return mShouldSave;
-}
+bool UKPCLColoredStaticMesh::ShouldSave_Implementation() const { return mShouldSave; }
 
 void UKPCLColoredStaticMesh::BeginPlay()
 {
@@ -77,8 +71,8 @@ void UKPCLColoredStaticMesh::ApplyNewData()
 bool UKPCLColoredStaticMesh::CheckIndex(FKPCLColorData ColorData, bool IsFG)
 {
 	int32 FirstIndex = IsFG ? 0 : 20;
-	if ((FirstIndex + ColorData.mColorIndex) < mNumCustomDataFloats && mCustomExtraData.IsValidIndex(
-		ColorData.mColorIndex))
+	if ((FirstIndex + ColorData.mColorIndex) < mNumCustomDataFloats &&
+		mCustomExtraData.IsValidIndex(ColorData.mColorIndex))
 	{
 		if (IsFG)
 		{
@@ -90,9 +84,9 @@ bool UKPCLColoredStaticMesh::CheckIndex(FKPCLColorData ColorData, bool IsFG)
 		}
 		return mCustomExtraData[ColorData.mColorIndex] != ColorData.mIndexData;
 	}
-	if (FirstIndex + ColorData.mColorIndex < mNumCustomDataFloats) UE_LOG(
-		LogTemp, Error, TEXT("Try set an invalid index %d for owner %s"), FirstIndex + ColorData.mColorIndex,
-		*GetOwner()->GetClass()->GetName())
+	if (FirstIndex + ColorData.mColorIndex < mNumCustomDataFloats)
+		UE_LOG(LogTemp, Error, TEXT("Try set an invalid index %d for owner %s"), FirstIndex + ColorData.mColorIndex,
+			   *GetOwner()->GetClass()->GetName())
 	return false;
 }
 
@@ -102,12 +96,12 @@ void UKPCLColoredStaticMesh::UpdateWorldTransform(FTransform Transform)
 	{
 		if (this)
 		{
-			if (!mBlockInstancing && !IsValid(this))
+			if (!mBlockInstancing && IsValid(this))
 			{
 				if (mInstanceHandle.IsInstanced() && AFGBuildableSubsystem::Get(this))
 				{
-					if (UFGColoredInstanceManager* Manager = AFGBuildableSubsystem::Get(this)->
-						GetColoredInstanceManager(this))
+					if (UFGColoredInstanceManager* Manager =
+							AFGBuildableSubsystem::Get(this)->GetColoredInstanceManager(this))
 					{
 						Manager->UpdateTransformForInstance(Transform, mInstanceHandle.GetHandleID());
 						Manager->UpdateColorForInstanceFromDataArray(mInstanceHandle);
@@ -120,26 +114,27 @@ void UKPCLColoredStaticMesh::UpdateWorldTransform(FTransform Transform)
 	}
 	else
 	{
-		AsyncTask(ENamedThreads::GameThread, [&, Transform]()
-		{
-			if (this)
-			{
-				if (!mBlockInstancing && !IsValid(this))
-				{
-					if (mInstanceHandle.IsInstanced() && AFGBuildableSubsystem::Get(this))
-					{
-						if (UFGColoredInstanceManager* Manager = AFGBuildableSubsystem::Get(this)->
-							GetColoredInstanceManager(this))
-						{
-							Manager->UpdateTransformForInstance(Transform, mInstanceHandle.GetHandleID());
-							Manager->UpdateColorForInstanceFromDataArray(mInstanceHandle);
-							mLastWorldTransform = Transform;
-							ApplyNewData();
-						}
-					}
-				}
-			}
-		});
+		AsyncTask(ENamedThreads::GameThread,
+				  [&, Transform]()
+				  {
+					  if (this)
+					  {
+						  if (!mBlockInstancing && IsValid(this))
+						  {
+							  if (mInstanceHandle.IsInstanced() && AFGBuildableSubsystem::Get(this))
+							  {
+								  if (UFGColoredInstanceManager* Manager =
+										  AFGBuildableSubsystem::Get(this)->GetColoredInstanceManager(this))
+								  {
+									  Manager->UpdateTransformForInstance(Transform, mInstanceHandle.GetHandleID());
+									  Manager->UpdateColorForInstanceFromDataArray(mInstanceHandle);
+									  mLastWorldTransform = Transform;
+									  ApplyNewData();
+								  }
+							  }
+						  }
+					  }
+				  });
 	}
 }
 
@@ -151,10 +146,7 @@ void UKPCLColoredStaticMesh::ApplyTransformToComponent()
 	}
 	else
 	{
-		AsyncTask(ENamedThreads::GameThread, [&]()
-		{
-			SetWorldTransform(mLastWorldTransform);
-		});
+		AsyncTask(ENamedThreads::GameThread, [&]() { SetWorldTransform(mLastWorldTransform); });
 	}
 }
 
@@ -166,8 +158,8 @@ void UKPCLColoredStaticMesh::UpdateStaticMesh(UKPCLColoredStaticMesh* Proxy, AAc
 		{
 			if (Mesh != Proxy->GetStaticMesh())
 			{
-				UKPCLColoredStaticMesh* NewProxy = NewObject<UKPCLColoredStaticMesh>(
-					Owner, NAME_None, RF_NoFlags, Proxy);
+				UKPCLColoredStaticMesh* NewProxy =
+					NewObject<UKPCLColoredStaticMesh>(Owner, NAME_None, RF_NoFlags, Proxy);
 				NewProxy->SetRelativeLocation(Proxy->GetRelativeLocation());
 				NewProxy->mShouldSave = Proxy->mShouldSave;
 				NewProxy->mStartWithDirtyState = true;
@@ -181,20 +173,21 @@ void UKPCLColoredStaticMesh::UpdateStaticMesh(UKPCLColoredStaticMesh* Proxy, AAc
 		}
 		else
 		{
-			AsyncTask(ENamedThreads::GameThread, [&, Proxy, Owner, Mesh]()
-			{
-				UKPCLColoredStaticMesh* NewProxy = NewObject<UKPCLColoredStaticMesh>(
-					Owner, NAME_None, RF_NoFlags, Proxy);
-				NewProxy->SetRelativeLocation(Proxy->GetRelativeLocation());
-				NewProxy->mShouldSave = Proxy->mShouldSave;
-				NewProxy->mStartWithDirtyState = true;
-				NewProxy->mCustomExtraData = Proxy->mCustomExtraData;
-				NewProxy->SetStaticMesh(Mesh);
-				NewProxy->SetupAttachment(Owner->GetRootComponent());
-				Proxy->DestroyComponent();
-				NewProxy->RegisterComponent();
-				NewProxy->ApplyNewData();
-			});
+			AsyncTask(ENamedThreads::GameThread,
+					  [&, Proxy, Owner, Mesh]()
+					  {
+						  UKPCLColoredStaticMesh* NewProxy =
+							  NewObject<UKPCLColoredStaticMesh>(Owner, NAME_None, RF_NoFlags, Proxy);
+						  NewProxy->SetRelativeLocation(Proxy->GetRelativeLocation());
+						  NewProxy->mShouldSave = Proxy->mShouldSave;
+						  NewProxy->mStartWithDirtyState = true;
+						  NewProxy->mCustomExtraData = Proxy->mCustomExtraData;
+						  NewProxy->SetStaticMesh(Mesh);
+						  NewProxy->SetupAttachment(Owner->GetRootComponent());
+						  Proxy->DestroyComponent();
+						  NewProxy->RegisterComponent();
+						  NewProxy->ApplyNewData();
+					  });
 		}
 	}
 }
@@ -223,20 +216,21 @@ void UKPCLColoredStaticMesh::ApplyNewColorDatas(TArray<FKPCLColorData> ColorData
 		{
 			if (IsInGameThread())
 			{
-				if (!IsValid(this))
+				if (IsValid(this))
 				{
 					ApplyNewData();
 				}
 			}
 			else
 			{
-				AsyncTask(ENamedThreads::GameThread, [&]()
-				{
-					if (!IsValid(this))
-					{
-						ApplyNewData();
-					}
-				});
+				AsyncTask(ENamedThreads::GameThread,
+						  [&]()
+						  {
+							  if (IsValid(this))
+							  {
+								  ApplyNewData();
+							  }
+						  });
 			}
 		}
 	}
@@ -315,20 +309,21 @@ void UKPCLColoredStaticMesh::ApplyFGNewColorDatas(TArray<FKPCLColorData> ColorDa
 		{
 			if (IsInGameThread())
 			{
-				if (!IsValid(this))
+				if (IsValid(this))
 				{
 					ApplyNewData();
 				}
 			}
 			else
 			{
-				AsyncTask(ENamedThreads::GameThread, [&]()
-				{
-					if (!IsValid(this))
-					{
-						ApplyNewData();
-					}
-				});
+				AsyncTask(ENamedThreads::GameThread,
+						  [&]()
+						  {
+							  if (IsValid(this))
+							  {
+								  ApplyNewData();
+							  }
+						  });
 			}
 		}
 	}
@@ -342,7 +337,7 @@ void UKPCLColoredStaticMesh::ApplyFgNewColorData(FKPCLColorData ColorData, bool 
 void UKPCLColoredStaticMesh::ApplyFgNewColorToType(FLinearColor Color, EKPCLDefaultColorIndex Type, bool MarkStateDirty)
 {
 	UE_LOG(LogTemp, Error, TEXT("ApplyFgNewColorToType: Try set an invalid index %d for owner %s"),
-	       static_cast<uint8>(Type), *GetOwner()->GetClass()->GetName())
+		   static_cast<uint8>(Type), *GetOwner()->GetClass()->GetName())
 	ApplyNewFGLinearColorData({FKPCLLinearColorData(static_cast<uint8>(Type), Color)}, MarkStateDirty);
 }
 
@@ -355,20 +350,21 @@ void UKPCLColoredStaticMesh::RemoveFGIndex(int32 Idx, bool MarkStateDirty)
 		{
 			if (IsInGameThread())
 			{
-				if (!IsValid(this))
+				if (IsValid(this))
 				{
 					ApplyNewData();
 				}
 			}
 			else
 			{
-				AsyncTask(ENamedThreads::GameThread, [&]()
-				{
-					if (!IsValid(this))
-					{
-						ApplyNewData();
-					}
-				});
+				AsyncTask(ENamedThreads::GameThread,
+						  [&]()
+						  {
+							  if (IsValid(this))
+							  {
+								  ApplyNewData();
+							  }
+						  });
 			}
 		}
 	}

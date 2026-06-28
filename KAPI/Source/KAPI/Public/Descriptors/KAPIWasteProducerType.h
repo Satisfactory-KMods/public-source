@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// ILikeBanas
 
 #pragma once
 
@@ -12,10 +12,7 @@ class KAPI_API UKAPIWasteProducerType : public UObject
 	GENERATED_BODY()
 
 public:
-	UKAPIWasteProducerType()
-	{
-		mName = FText::FromString("Unnamed Waste Descriptor");
-	}
+	UKAPIWasteProducerType() { mName = FText::FromString("Unnamed Waste Descriptor"); }
 
 	UPROPERTY(EditDefaultsOnly)
 	FText mName;

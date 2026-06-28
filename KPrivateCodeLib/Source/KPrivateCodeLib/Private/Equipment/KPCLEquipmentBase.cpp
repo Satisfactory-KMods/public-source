@@ -1,19 +1,19 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Equipment/KPCLEquipmentBase.h"
 
+#include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "EnhancedInputComponent.h"
 #include "FGCharacterPlayer.h"
 #include "KPrivateCodeLibModule.h"
-#include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 
 // Sets default values
 AKPCLEquipmentBase::AKPCLEquipmentBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	//mMappingContext = LoadObject<UInputMappingContext>(nullptr, TEXT(''), TEXT("/KPrivateCodeLib/InputAction/IMC_KPCL_Equipment.IMC_KPCL_Equipment_C"));
+	// mMappingContext = LoadObject<UInputMappingContext>(nullptr, TEXT(''),
+	// TEXT("/KPrivateCodeLib/InputAction/IMC_KPCL_Equipment.IMC_KPCL_Equipment_C"));
 }
 
 void AKPCLEquipmentBase::Tick(float DeltaSeconds)
@@ -107,8 +107,8 @@ void AKPCLEquipmentBase::Trace()
 
 	// Trace for signs
 	/*if (UKismetSystemLibrary::BoxTraceSingleForObjects(GetWorld(), Start, End, mTraceBoxHalfSize, FRotator(),
-	                                                   mTraceObjects, false, IgnoredActors, EDrawDebugTrace::None,
-	                                                   Result, false))
+													   mTraceObjects, false, IgnoredActors, EDrawDebugTrace::None,
+													   Result, false))
 	{
 		UKPCLBlueprintFunctionLib::ResolveHitResult(GetWorld(), Result, Result);
 		if (Result.IsValidBlockingHit())
@@ -134,17 +134,14 @@ void AKPCLEquipmentBase::Trace()
 	}*/
 }
 
-void AKPCLEquipmentBase::OnNewActorHit(AActor* Hit, AActor* Last)
-{
-}
+void AKPCLEquipmentBase::OnNewActorHit(AActor* Hit, AActor* Last) {}
 
-void AKPCLEquipmentBase::OnLastActorChanged(AActor* NewLast, AActor* LastLast)
-{
-}
+void AKPCLEquipmentBase::OnLastActorChanged(AActor* NewLast, AActor* LastLast) {}
 
 void AKPCLEquipmentBase::AddEquipmentActionBindings()
 {
-	// bind modded keybinds and make the consumed (for example MMB will copy otherwise the building to open the build gun)
+	// bind modded keybinds and make the consumed (for example MMB will copy otherwise the building to open the build
+	// gun)
 	Super::AddEquipmentActionBindings();
 
 	if (IsValid(GetInstigatorCharacter()))
@@ -152,7 +149,7 @@ void AKPCLEquipmentBase::AddEquipmentActionBindings()
 		UEnhancedInputComponent* EIC = Cast<UEnhancedInputComponent>(GetInstigatorCharacter()->InputComponent);
 		if (IsValid(EIC))
 		{
-			//SetEquipmentBindings(EIC);
+			// SetEquipmentBindings(EIC);
 		}
 		else
 		{
@@ -173,77 +170,37 @@ void AKPCLEquipmentBase::AddEquipmentActionBindings()
 		EIC->BindAction(Mapping->GetMappings()[1].Action, ETriggerEvent::Started, this, "OnRightClick");
 		EIC->BindAction(Mapping->GetMappings()[1].Action, ETriggerEvent::Completed, this, "OnRightClickReleased");
 		EIC->BindAction(Mapping->GetMappings()[2].Action, ETriggerEvent::Started, this, "OnMiddleMouseButton");
-		EIC->BindAction(Mapping->GetMappings()[2].Action, ETriggerEvent::Completed, this, "OnMiddleMouseButtonReleased");
-	} else {
-		UE_LOG(LogKPCL, Error, TEXT("Invalid MappingContext"))
+		EIC->BindAction(Mapping->GetMappings()[2].Action, ETriggerEvent::Completed, this,
+"OnMiddleMouseButtonReleased"); } else { UE_LOG(LogKPCL, Error, TEXT("Invalid MappingContext"))
 	}
 }*/
 
-UFGOutlineComponent* AKPCLEquipmentBase::GetCachedOutlineComponent() const
-{
-	return mCachedOutlineComponent;
-}
+UFGOutlineComponent* AKPCLEquipmentBase::GetCachedOutlineComponent() const { return mCachedOutlineComponent; }
 
-AActor* AKPCLEquipmentBase::GetCurrentHit() const
-{
-	return mCurrentActor;
-}
+AActor* AKPCLEquipmentBase::GetCurrentHit() const { return mCurrentActor; }
 
-AActor* AKPCLEquipmentBase::GetLastHit() const
-{
-	return mLastActor;
-}
+AActor* AKPCLEquipmentBase::GetLastHit() const { return mLastActor; }
 
-void AKPCLEquipmentBase::Input_PrimaryFire(const FInputActionValue& actionValue)
-{
-}
+void AKPCLEquipmentBase::Input_PrimaryFire(const FInputActionValue& actionValue) {}
 
-void AKPCLEquipmentBase::Input_SecondaryFire(const FInputActionValue& actionValue)
-{
-}
+void AKPCLEquipmentBase::Input_SecondaryFire(const FInputActionValue& actionValue) {}
 
-void AKPCLEquipmentBase::Input_Wheel(const FInputActionValue& actionValue)
-{
-}
+void AKPCLEquipmentBase::Input_Wheel(const FInputActionValue& actionValue) {}
 
-void AKPCLEquipmentBase::MultiCast_OnLeftClick_Implementation()
-{
-}
+void AKPCLEquipmentBase::MultiCast_OnLeftClick_Implementation() {}
 
-void AKPCLEquipmentBase::OnLeftClick()
-{
-	bLeftIsClicked = true;
-}
+void AKPCLEquipmentBase::OnLeftClick() { bLeftIsClicked = true; }
 
-void AKPCLEquipmentBase::OnLeftClickReleased()
-{
-	bLeftIsClicked = false;
-}
+void AKPCLEquipmentBase::OnLeftClickReleased() { bLeftIsClicked = false; }
 
-void AKPCLEquipmentBase::MultiCast_OnRightClick_Implementation()
-{
-}
+void AKPCLEquipmentBase::MultiCast_OnRightClick_Implementation() {}
 
-void AKPCLEquipmentBase::OnRightClick()
-{
-	bRightIsClicked = true;
-}
+void AKPCLEquipmentBase::OnRightClick() { bRightIsClicked = true; }
 
-void AKPCLEquipmentBase::OnRightClickReleased()
-{
-	bRightIsClicked = false;
-}
+void AKPCLEquipmentBase::OnRightClickReleased() { bRightIsClicked = false; }
 
-void AKPCLEquipmentBase::MultiCast_OnMiddleMouseButton_Implementation()
-{
-}
+void AKPCLEquipmentBase::MultiCast_OnMiddleMouseButton_Implementation() {}
 
-void AKPCLEquipmentBase::OnMiddleMouseButton()
-{
-	bMiddleMouseButtonIsClicked = true;
-}
+void AKPCLEquipmentBase::OnMiddleMouseButton() { bMiddleMouseButtonIsClicked = true; }
 
-void AKPCLEquipmentBase::OnMiddleMouseButtonReleased()
-{
-	bMiddleMouseButtonIsClicked = false;
-}
+void AKPCLEquipmentBase::OnMiddleMouseButtonReleased() { bMiddleMouseButtonIsClicked = false; }

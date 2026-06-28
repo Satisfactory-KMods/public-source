@@ -1,13 +1,16 @@
+// ILikeBanas
+
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "FGColoredInstanceMeshProxy.h"
+
 #include "KPCLOutlineSubsystem.h"
+
 #include "KPCLOutlineActor.generated.h"
 
-/**
-Actor for represend outlines
-*/
+/** Actor for representing outlines on a target actor. */
 UCLASS()
 class KPRIVATECODELIB_API AKPCLOutlineActor : public AActor
 {
@@ -32,6 +35,40 @@ public:
 		const uint8 OutlineColorSlot = static_cast<uint8>(Data.mOutlineColorSlot);
 		return OutlineColorSlot + OutlineType;
 	}
+
+	FORCEINLINE bool CreateOutlineFromActor(FOutlineData OutlineData)
+	{
+		if (OutlineData.mActorToOutline)
+		{
+			mOutlineData = OutlineData;
+			if (OutlineData.mActorToOutline)
+			{
+				for (UActorComponent* ComponentsByClass : OutlineData.mActorToOutline->GetComponents())
+				{
+					if (UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(ComponentsByClass))
+					{
+						CreateOutlineMesh(MeshComponent);
+						mOutlinedComponents.AddUnique(ComponentsByClass);
+					}
+					else if (USkeletalMeshComponent* SkeletalComponent =
+								 Cast<USkeletalMeshComponent>(ComponentsByClass))
+					{
+						SkeletalComponent->SetRenderCustomDepth(true);
+						SkeletalComponent->SetCustomDepthStencilValue(GetStencilFromData(mOutlineData));
+						mOutlinedComponents.AddUnique(ComponentsByClass);
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	UPROPERTY(Transient)
+	FOutlineData mOutlineData;
+
+	UPROPERTY(Transient)
+	TArray<TWeakObjectPtr<UActorComponent>> mOutlinedComponents;
 
 private:
 	FORCEINLINE void CreateOutlineMesh(UStaticMeshComponent* OtherMeshComponent)
@@ -58,10 +95,9 @@ private:
 						if (UStaticMeshComponent* NewComponent = NewObject<UStaticMeshComponent>(this))
 						{
 							NewComponent->AttachToComponent(GetRootComponent(),
-							                                FAttachmentTransformRules::KeepRelativeTransform);
+															FAttachmentTransformRules::KeepRelativeTransform);
 							NewComponent->SetStaticMesh(Mesh);
 
-							// Apply Material to new component
 							for (int i = 0; i < NewComponent->GetNumMaterials(); ++i)
 							{
 								if (i < OtherMeshComponent->GetNumMaterials())
@@ -84,7 +120,6 @@ private:
 							NewComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 							TArray<float> CustomPrimitivDatas;
-							//OtherMeshComponent->SetHiddenInGame(true);
 							if (MeshProxy->mInstanceHandle.IsInstanced())
 							{
 								MeshProxy->SetInstanced(false);
@@ -153,39 +188,4 @@ private:
 
 		Super::EndPlay(EndPlayReason);
 	};
-
-public:
-	FORCEINLINE bool CreateOutlineFromActor(FOutlineData OutlineData)
-	{
-		if (OutlineData.mActorToOutline)
-		{
-			mOutlineData = OutlineData;
-			if (OutlineData.mActorToOutline)
-			{
-				for (UActorComponent* ComponentsByClass : OutlineData.mActorToOutline->GetComponents())
-				{
-					if (UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(ComponentsByClass))
-					{
-						CreateOutlineMesh(MeshComponent);
-						mOutlinedComponents.AddUnique(ComponentsByClass);
-					}
-					else if (USkeletalMeshComponent* SkeletalComponent = Cast<
-						USkeletalMeshComponent>(ComponentsByClass))
-					{
-						SkeletalComponent->SetRenderCustomDepth(true);
-						SkeletalComponent->SetCustomDepthStencilValue(GetStencilFromData(mOutlineData));
-						mOutlinedComponents.AddUnique(ComponentsByClass);
-					}
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	UPROPERTY(Transient)
-	FOutlineData mOutlineData;
-
-	UPROPERTY(Transient)
-	TArray<TWeakObjectPtr<UActorComponent>> mOutlinedComponents;
 };

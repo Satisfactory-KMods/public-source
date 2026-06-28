@@ -1,336 +1,191 @@
-﻿# KPrivateCodeLib English translation.
-# 
 msgid ""
 msgstr ""
-"Project-Id-Version: KPrivateCodeLib\n"
-"POT-Creation-Date: 2026-01-20 10:44\n"
-"PO-Revision-Date: 2026-01-20 10:44\n"
-"Language-Team: \n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
 
-#. Key:	BP_KPCLCreatureSpawner.NewVariables[0].Category
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BP_KPCLCreatureSpawner.NewVariables[0].Category"
-msgid "KMods|MapDisplay"
-msgstr "KMods|MapDisplay"
-
-#. Key:	BP_KPCLUnlockSubsytem.Sprite.SpriteInfo.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BP_KPCLUnlockSubsytem.Sprite.SpriteInfo.DisplayName"
-msgid "Info"
-msgstr "Info"
-
-#. Key:	BP_SwatchSystem.K2Node_FunctionEntry_0.LocalVariables[0].Category
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BP_SwatchSystem.K2Node_FunctionEntry_0.LocalVariables[0].Category"
-msgid "Default"
-msgstr "Default"
-
-#. Key:	BPW_KPCL_CustomiserSaveIcon.BPW_KPCL_CustomiserSaveIcon_C.PaletteCategory
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.BPW_KPCL_CustomiserSaveIcon_C.PaletteCategory"
-msgid "User Created"
-msgstr "User Created"
-
-#. Key:	BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
-msgid "Save Color"
-msgstr "Save Color"
-
-#. Key:	BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
-msgid "Edit"
-msgstr "Edit"
-
-#. Key:	BPW_KPCL_Editor.mPrimary.Keybindings[0].HintText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.mPrimary.Keybindings[0].HintText"
-msgid "Not shown"
-msgstr "Not shown"
-
-#. Key:	BPW_KPCL_Editor.TextBlock.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.TextBlock.Text"
-msgid "Swatch Name"
-msgstr "Swatch Name"
-
-#. Key:	Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
-msgid "Missing master Building cannot attach module!"
-msgstr "Missing master Building cannot attach module!"
-
-#. Key:	Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
-msgid "Module is not allowed here"
-msgstr "Module is not allowed here"
-
-#. Key:	Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
-msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
-msgstr "Cannot Snap this module to the building. (To much, Invalid or no Place)"
-
-#. Key:	Hook_PlayerWidget.HookTargetNode_TargetExpression_14.GeneratedMemberReferenceDescriptors[0].DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Hook_PlayerWidget.HookTargetNode_TargetExpression_14.GeneratedMemberReferenceDescriptors[0].DisplayName"
-msgid "Target Function"
-msgstr "Target Function"
-
-#. Key:	IMC_KPCL_Equipment.mDisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
-msgid "KMods"
-msgstr "KMods"
-
-#. Key:	KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
-msgid "Show Patreon Button"
-msgstr "Show Patreon Button"
-
-#. Key:	KPCL_Config.BP_ConfigPropertyBool_C_2.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_2.DisplayName"
-msgid "Show KMods News Feed (SoonTM)"
-msgstr "Show KMods News Feed (SoonTM)"
-
-#. Key:	KPCL_Config.BP_ConfigPropertyBool_C_3.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_3.DisplayName"
-msgid "Use Wire Switch System"
-msgstr "Use Wire Switch System"
-
-#. Key:	KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
-msgid "Show Patreon List"
-msgstr "Show Patreon List"
-
-#. Key:	KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
-msgid "Use Custom Swatch System"
-msgstr "Use Custom Swatch System"
-
-#. Key:	KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
-msgid "Patreon Configuration"
-msgstr "Patreon Configuration"
-
-#. Key:	KPCL_Config.BP_ConfigPropertyString_C_0.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyString_C_0.DisplayName"
-msgid "Discord UserID"
-msgstr "Discord UserID"
-
-#. Key:	KPCL_Config.BP_ConfigPropertyString_C_1.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyString_C_1.DisplayName"
-msgid "Patreon Code"
-msgstr "Patreon Code"
-
-#. Key:	KPCL_Config.KPCL_Config_C.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,KPCL_Config.KPCL_Config_C.DisplayName"
-msgid "Private Code Lib for all K.Mods"
-msgstr "Private Code Lib for all K.Mods"
-
-#. Key:	MovieSceneFloatTrack_2.DisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,MovieSceneFloatTrack_2.DisplayName"
-msgid "Render Opacity"
-msgstr "Render Opacity"
-
-#. Key:	NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
-msgid "Enable Sink Option"
-msgstr "Enable Sink Option"
-
-#. Key:	NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
-msgid "Sink Utility"
-msgstr "Sink Utility"
-
-#. Key:	NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
-msgid "Enable pull rules"
-msgstr "Enable pull rules"
-
-#. Key:	NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName"
-msgid "Inventory Pull"
-msgstr "Inventory Pull"
-
-#. Key:	NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
-msgid "Enable push rule"
-msgstr "Enable push rule"
-
-#. Key:	NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName"
-msgid "Inventory Push Module"
-msgstr "Inventory Push Module"
-
-#. Key:	NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
-msgid "Enable remote access"
-msgstr "Enable remote access"
-
-#. Key:	NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
-msgid "Remote Access"
-msgstr "Remote Access"
-
-#. Key:	Widget_KPCL_PatreonsList.mHeadline.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
-msgid "K.Mods Patreons"
-msgstr "K.Mods Patreons"
-
-#. Key:	Widget_KPCL_PatreonsList.mHeadline_1.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
-msgid "Thanks to all supporter!"
-msgstr "Thanks to all supporter!"
-
-#. Key:	Widget_PatreonUser.mUserName.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
-msgid "Text Block"
-msgstr "Text Block"
-
-#. Key:	Widget_SettingPopup.RichTextBlock.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
 msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
 msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 msgstr "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 
-#. Key:	Widget_SettingPopup.RichTextBlock_108.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock_108.Text"
-msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
-msgstr "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
 
-#. Key:	Widget_SettingPopup.TextBlock_2.Text
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.TextBlock_2.Text"
-msgid "Show KMods Neewsfeed (SoonTM)"
-msgstr "Show KMods Neewsfeed (SoonTM)"
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
+msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
+msgstr "Cannot Snap this module to the building. (To much, Invalid or no Place)"
 
-#. Key:	Widget_SettingPopup.Widget_StandardButton.mText
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
-msgid "Save And Close"
-msgstr "Save And Close"
-
-#. Key:	Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[0]
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[0]"
-msgid "Visible"
-msgstr "Visible"
-
-#. Key:	Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[1]
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
 msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[1]"
 msgid "Collapsed"
 msgstr "Collapsed"
 
-#. Key:	Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[2]
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
+msgctxt "ST_KPrivateCodeLib,BP_SwatchSystem.K2Node_FunctionEntry_0.LocalVariables[0].Category"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyString_C_0.DisplayName"
+msgid "Discord UserID"
+msgstr "Discord UserID"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSettingsButton.TextBlock_148.Text"
+msgid "Edit"
+msgstr "Edit"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable Sink Option"
+msgstr "Enable Sink Option"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable pull rules"
+msgstr "Enable pull rules"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable push rule"
+msgstr "Enable push rule"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.BP_UnlockInfoOnly_C_0.mUnlockName"
+msgid "Enable remote access"
+msgstr "Enable remote access"
+
 msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[2]"
 msgid "Hidden"
 msgstr "Hidden"
 
-#. Key:	Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[3]
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
+msgctxt "ST_KPrivateCodeLib,BP_KPCLUnlockSubsytem.Sprite.SpriteInfo.DisplayName"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Pull.NetworkSchematic_Unlock_Pull_C.mDisplayName"
+msgid "Inventory Pull"
+msgstr "Inventory Pull"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_Push.NetworkSchematic_Unlock_Push_C.mDisplayName"
+msgid "Inventory Push Module"
+msgstr "Inventory Push Module"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline.Text"
+msgid "K.Mods Patreons"
+msgstr "K.Mods Patreons"
+
+msgctxt "ST_KPrivateCodeLib,IMC_KPCL_Equipment.mDisplayName"
+msgid "KMods"
+msgstr "KMods"
+
+msgctxt "ST_KPrivateCodeLib,BP_KPCLCreatureSpawner.NewVariables[0].Category"
+msgid "KMods|MapDisplay"
+msgstr "KMods|MapDisplay"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_MissingMaster.Disqualifier_MissingMaster_C.mDisqfualifyingText"
+msgid "Missing master Building cannot attach module!"
+msgstr "Missing master Building cannot attach module!"
+
+msgctxt "ST_KPrivateCodeLib,Disqualifier_ModuleNowAllowed.Disqualifier_ModuleNowAllowed_C.mDisqfualifyingText"
+msgid "Module is not allowed here"
+msgstr "Module is not allowed here"
+
 msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[3]"
 msgid "Not Hit-Testable (Self & All Children)"
 msgstr "Not Hit-Testable (Self & All Children)"
 
-#. Key:	Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[4]
-#. SourceLocation:	/KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
-#: /KPrivateCodeLib/ST_KPrivateCodeLib.ST_KPrivateCodeLib
 msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[4]"
 msgid "Not Hit-Testable (Self Only)"
 msgstr "Not Hit-Testable (Self Only)"
 
-#. Key:	KPCL_NetNetworkTier
-#. SourceLocation:	/KPrivateCodeLib/SubSystem/ST_NetworkTier.ST_NetworkTier
-#: /KPrivateCodeLib/SubSystem/ST_NetworkTier.ST_NetworkTier
-msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
-msgid "Unlock new network tier"
-msgstr "Unlock new network tier"
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.mPrimary.Keybindings[0].HintText"
+msgid "Not shown"
+msgstr "Not shown"
 
-#. Key:	Key
-#. SourceLocation:	Mods/KPrivateCodeLib/Source/KPrivateCodeLib/Public/KPrivateCodeLibModule.h(67)
-#: Mods/KPrivateCodeLib/Source/KPrivateCodeLib/Public/KPrivateCodeLibModule.h(67)
-msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
-msgid "SourceString"
-msgstr "SourceString"
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyString_C_1.DisplayName"
+msgid "Patreon Code"
+msgstr "Patreon Code"
 
-#. Key:	ConstructDisqualifier_MaxCountReached
-#. SourceLocation:	Mods/KPrivateCodeLib/Source/KPrivateCodeLib/Public/Network/KPCLNetworkCoreHologram.h(35)
-#: Mods/KPrivateCodeLib/Source/KPrivateCodeLib/Public/Network/KPCLNetworkCoreHologram.h(35)
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.HeaderText"
+msgid "Patreon Configuration"
+msgstr "Patreon Configuration"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.KPCL_Config_C.DisplayName"
+msgid "Private Code Lib for all K.Mods"
+msgstr "Private Code Lib for all K.Mods"
+
 msgctxt "KPrivateCodeLib,ConstructDisqualifier_MaxCountReached"
 msgid "Reached global max count for this building (5)"
 msgstr "Reached global max count for this building (5)"
 
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_RemoteAccess.NetworkSchematic_Unlock_RemoteAccess_C.mDisplayName"
+msgid "Remote Access"
+msgstr "Remote Access"
+
+msgctxt "ST_KPrivateCodeLib,MovieSceneFloatTrack_2.DisplayName"
+msgid "Render Opacity"
+msgstr "Render Opacity"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.Widget_StandardButton.mText"
+msgid "Save And Close"
+msgstr "Save And Close"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.mMaterialName.Text"
+msgid "Save Color"
+msgstr "Save Color"
+
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.TextBlock_2.Text"
+msgid "Show KMods Neewsfeed (SoonTM)"
+msgstr "Show KMods Neewsfeed (SoonTM)"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_2.DisplayName"
+msgid "Show KMods News Feed (SoonTM)"
+msgstr "Show KMods News Feed (SoonTM)"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_1.DisplayName"
+msgid "Show Patreon Button"
+msgstr "Show Patreon Button"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Show Patreon List"
+msgstr "Show Patreon List"
+
+msgctxt "ST_KPrivateCodeLib,NetworkSchematic_Unlock_AllowOverflowSink.NetworkSchematic_Unlock_AllowOverflowSink_C.mDisplayName"
+msgid "Sink Utility"
+msgstr "Sink Utility"
+
+msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
+msgid "SourceString"
+msgstr "SourceString"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_Editor.TextBlock.Text"
+msgid "Swatch Name"
+msgstr "Swatch Name"
+
+msgctxt "ST_KPrivateCodeLib,Hook_PlayerWidget.HookTargetNode_TargetExpression_14.GeneratedMemberReferenceDescriptors[0].DisplayName"
+msgid "Target Function"
+msgstr "Target Function"
+
+msgctxt "ST_KPrivateCodeLib,Widget_PatreonUser.mUserName.Text"
+msgid "Text Block"
+msgstr "Text Block"
+
+msgctxt "ST_KPrivateCodeLib,Widget_KPCL_PatreonsList.mHeadline_1.Text"
+msgid "Thanks to all supporter!"
+msgstr "Thanks to all supporter!"
+
+msgctxt "ST_NetworkTier,KPCL_NetNetworkTier"
+msgid "Unlock new network tier"
+msgstr "Unlock new network tier"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertySection_C_0.BP_ConfigPropertySection_C_0.BP_ConfigPropertyBool_C_0.DisplayName"
+msgid "Use Custom Swatch System"
+msgstr "Use Custom Swatch System"
+
+msgctxt "ST_KPrivateCodeLib,KPCL_Config.BP_ConfigPropertyBool_C_3.DisplayName"
+msgid "Use Wire Switch System"
+msgstr "Use Wire Switch System"
+
+msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.BPW_KPCL_CustomiserSaveIcon_C.PaletteCategory"
+msgid "User Created"
+msgstr "User Created"
+
+msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Visible"
+msgstr "Visible"

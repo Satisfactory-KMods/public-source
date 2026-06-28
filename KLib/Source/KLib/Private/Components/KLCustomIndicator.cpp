@@ -3,19 +3,14 @@
 #include "FGBuildableSubsystem.h"
 #include "FGColorInterface.h"
 
-UKLCustomIndicator::UKLCustomIndicator()
-{
-	PrimaryComponentTick.bCanEverTick = false;
-}
 
-void UKLCustomIndicator::BeginPlay()
-{
-	Super::BeginPlay();
-}
+UKLCustomIndicator::UKLCustomIndicator() { PrimaryComponentTick.bCanEverTick = false; }
+
+void UKLCustomIndicator::BeginPlay() { Super::BeginPlay(); }
 
 void UKLCustomIndicator::UpdateColors(const TArray<FLinearColor>& ColorArray)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("UpdateColors"));
+	// UE_LOG(LogTemp, Warning, TEXT("UpdateColors"));
 	mColorArray = ColorArray;
 }
 
@@ -27,7 +22,12 @@ void UKLCustomIndicator::UpdateColorIndex(int NewIndex)
 	}
 	mMaterialIndex = NewIndex;
 
-	//UE_LOG(LogTemp, Warning, TEXT("UpdateColorIndex, %d"), NewIndex);
+	if (!mColorArray.IsValidIndex(mMaterialIndex))
+	{
+		return;
+	}
+
+	// UE_LOG(LogTemp, Warning, TEXT("UpdateColorIndex, %d"), NewIndex);
 	if (mInstanceHandle.IsInstanced())
 	{
 		FFactoryCustomizationData Data = IFGColorInterface::Execute_GetCustomizationData(GetOwner());
@@ -64,7 +64,12 @@ void UKLCustomIndicator::onUpdatedColorIndex_Implementation(int NewIndex)
 	}
 	mMaterialIndex = NewIndex;
 
-	//UE_LOG(LogTemp, Warning, TEXT("onUpdatedColorIndex_Implementation, %d"), NewIndex);
+	if (!mColorArray.IsValidIndex(mMaterialIndex))
+	{
+		return;
+	}
+
+	// UE_LOG(LogTemp, Warning, TEXT("onUpdatedColorIndex_Implementation, %d"), NewIndex);
 	if (mInstanceHandle.IsInstanced())
 	{
 		FFactoryCustomizationData Data = IFGColorInterface::Execute_GetCustomizationData(GetOwner());

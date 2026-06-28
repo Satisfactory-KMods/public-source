@@ -1,6 +1,12 @@
-﻿#pragma once
-#include "FGInventoryComponent.h"
+// ILikeBanas
+
+#pragma once
+
+#include "CoreMinimal.h"
+
 #include "Buildables/FGBuildableFactory.h"
+#include "FGInventoryComponent.h"
+
 #include "KPCLInventoryStructure.generated.h"
 
 UENUM(BlueprintType)

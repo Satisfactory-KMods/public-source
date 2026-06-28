@@ -1,3 +1,5 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
 
 #include "CoreMinimal.h"

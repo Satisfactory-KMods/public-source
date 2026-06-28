@@ -49,7 +49,7 @@ public:
 	TSubclassOf<AFGResourceNodeBase> mResourceNodeClass = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Resource Node")
-	TMap<uint8, UMaterialInterface*> mResourceNodeMaterialInfo;
+	TMap<uint8, TObjectPtr<UMaterialInterface>> mResourceNodeMaterialInfo;
 
 	/** Only add this to OilPump if the Allowed form is valid! */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Extractor")

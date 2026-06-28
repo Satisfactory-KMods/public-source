@@ -1,14 +1,19 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Hologram/KLAirCollectorHologram.h"
 
-#include "FGConstructDisqualifier.h"
 #include "BlueprintFunctionLib/KPCLBlueprintFunctionLib.h"
 #include "Buildable/KLBuildableAirCollector.h"
 #include "Buildables/FGBuildableFoundation.h"
+#include "FGConstructDisqualifier.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+
+AKLAirCollectorHologram::AKLAirCollectorHologram()
+{
+	mSphere = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Sphere"));
+	mSphere->SetupAttachment(GetRootComponent());
+}
 
 void AKLAirCollectorHologram::GetSupportedBuildModes_Implementation(
 	TArray<TSubclassOf<UFGBuildGunModeDescriptor>>& out_buildmodes) const
@@ -17,7 +22,7 @@ void AKLAirCollectorHologram::GetSupportedBuildModes_Implementation(
 
 	if (mSphereMode)
 	{
-		out_buildmodes.Add(mSphereMode);
+		out_buildmodes.AddUnique(mSphereMode);
 	}
 }
 
@@ -25,12 +30,6 @@ void AKLAirCollectorHologram::OnBuildModeChanged(TSubclassOf<UFGHologramBuildMod
 {
 	Super::OnBuildModeChanged(buildMode);
 	mSphere->SetHiddenInGame(buildMode != mSphereMode);
-}
-
-AKLAirCollectorHologram::AKLAirCollectorHologram()
-{
-	mSphere = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Sphere"));
-	mSphere->SetupAttachment(GetRootComponent());
 }
 
 void AKLAirCollectorHologram::BeginPlay()
@@ -42,14 +41,15 @@ void AKLAirCollectorHologram::BeginPlay()
 	if (IsValid(Default) && IsValid(Default->GetLightweightInstanceData()))
 	{
 		mFoundationMeshMapping = Default->mFoundationMeshMapping;
+		mCachedScanRange = Default->mRangeForFindCollectors;
 
 		for (UActorComponent* Component : GetComponents())
 		{
 			mStaticMesh = Cast<UStaticMeshComponent>(Component);
 			if (IsValid(mStaticMesh))
 			{
-				if (Default->GetLightweightInstanceData()->GetInstanceData()[0].StaticMesh == mStaticMesh->
-					GetStaticMesh())
+				if (Default->GetLightweightInstanceData()->GetInstanceData()[0].StaticMesh ==
+					mStaticMesh->GetStaticMesh())
 				{
 					break;
 				}
@@ -58,44 +58,62 @@ void AKLAirCollectorHologram::BeginPlay()
 		}
 
 		mSphere->SetHiddenInGame(!IsCurrentBuildMode(mSphereMode));
-		mSphere->SetWorldScale3D(FVector(GetScanRange() / 50));
+		mSphere->SetWorldScale3D(FVector(mCachedScanRange / 50));
+	}
+}
+
+void AKLAirCollectorHologram::UpdateFoundationMesh(const AActor* HitActor)
+{
+	if (!IsValid(mStaticMesh))
+	{
+		return;
+	}
+
+	UStaticMesh* NewMesh = nullptr;
+
+	if (const AFGBuildableFoundation* Foundation = Cast<AFGBuildableFoundation>(HitActor))
+	{
+		const int32 Key = FMath::TruncToInt(Foundation->mHeight / 100);
+		if (Key != 0)
+		{
+			if (TObjectPtr<UStaticMesh>* Found = mFoundationMeshMapping.Find(Key))
+			{
+				NewMesh = Found->Get();
+			}
+		}
+	}
+
+	// Fall back to the default (key 1) mesh when not on a matching foundation.
+	if (!NewMesh)
+	{
+		if (TObjectPtr<UStaticMesh>* Fallback = mFoundationMeshMapping.Find(1))
+		{
+			NewMesh = Fallback->Get();
+		}
+	}
+
+	if (NewMesh)
+	{
+		mStaticMesh->SetMobility(EComponentMobility::Stationary);
+		mStaticMesh->SetStaticMesh(NewMesh);
+		mStaticMesh->SetMobility(EComponentMobility::Movable);
 	}
 }
 
 bool AKLAirCollectorHologram::TrySnapToActor(const FHitResult& hitResult)
 {
-	//FHitResult ResolvedHitResult;
-	//UKPCLBlueprintFunctionLib::ResolveHitResult( GetWorld(), hitResult, ResolvedHitResult );
+	const bool bSnapped = Super::TrySnapToActor(hitResult);
 
-	bool Super = Super::TrySnapToActor(hitResult);
-
-	if (Super && GetSnappedBuilding() && hitResult.bBlockingHit)
+	if (bSnapped && GetSnappedBuilding() && hitResult.bBlockingHit)
 	{
-		if (AFGBuildableFoundation* Foundation = ExactCast<AFGBuildableFoundation>(GetSnappedBuilding()))
-		{
-			const int Key = FMath::TruncToInt(Foundation->mHeight / 100);
-			if (Key)
-			{
-				if (mFoundationMeshMapping.Contains(Key))
-				{
-					if (mFoundationMeshMapping[Key])
-					{
-						mStaticMesh->SetMobility(EComponentMobility::Stationary);
-						mStaticMesh->SetStaticMesh(mFoundationMeshMapping[Key]);
-						mStaticMesh->SetMobility(EComponentMobility::Movable);
-					}
-				}
-			}
-		}
+		UpdateFoundationMesh(ExactCast<AFGBuildableFoundation>(GetSnappedBuilding()));
 	}
 	else
 	{
-		mStaticMesh->SetMobility(EComponentMobility::Stationary);
-		mStaticMesh->SetStaticMesh(mFoundationMeshMapping[1]);
-		mStaticMesh->SetMobility(EComponentMobility::Movable);
+		UpdateFoundationMesh(nullptr);
 	}
 
-	return Super;
+	return bSnapped;
 }
 
 void AKLAirCollectorHologram::SetHologramLocationAndRotation(const FHitResult& hitResult)
@@ -104,45 +122,32 @@ void AKLAirCollectorHologram::SetHologramLocationAndRotation(const FHitResult& h
 
 	if (hitResult.bBlockingHit && hitResult.GetActor())
 	{
-		if (AFGBuildableFoundation* Foundation = Cast<AFGBuildableFoundation>(hitResult.GetActor()))
-		{
-			const int Key = FMath::TruncToInt(Foundation->mHeight / 100);
-			if (Key)
-			{
-				if (mFoundationMeshMapping.Contains(Key))
-				{
-					if (mFoundationMeshMapping[Key])
-					{
-						mStaticMesh->SetMobility(EComponentMobility::Stationary);
-						mStaticMesh->SetStaticMesh(mFoundationMeshMapping[Key]);
-						mStaticMesh->SetMobility(EComponentMobility::Movable);
-					}
-				}
-			}
-		}
+		UpdateFoundationMesh(Cast<AFGBuildableFoundation>(hitResult.GetActor()));
 	}
 	else
 	{
-		mStaticMesh->SetMobility(EComponentMobility::Stationary);
-		mStaticMesh->SetStaticMesh(mFoundationMeshMapping[1]);
-		mStaticMesh->SetMobility(EComponentMobility::Movable);
+		UpdateFoundationMesh(nullptr);
 	}
 
-	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = TArray<TEnumAsByte<EObjectTypeQuery>>{
-		ObjectTypeQuery1, ObjectTypeQuery2
-	};
+	// Only run the range-overlap check and sphere color update in sphere build mode —
+	// the sphere is hidden otherwise and the overlap cost is wasted.
+	if (!IsCurrentBuildMode(mSphereMode) || !IsValid(mGameUserSettings))
+	{
+		return;
+	}
+
+	const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes =
+		TArray<TEnumAsByte<EObjectTypeQuery>>{ObjectTypeQuery1, ObjectTypeQuery2};
 
 	TArray<AActor*> ActorsToIgnore = {this};
 	TArray<AActor*> OutActors = {};
 
-	bool IsInRangeCache = UKismetSystemLibrary::SphereOverlapActors(this, GetActorLocation(), GetScanRange(),
-	                                                                ObjectTypes,
-	                                                                AKLBuildableAirCollector::StaticClass(),
-	                                                                ActorsToIgnore, OutActors);
+	const bool bIsInRange =
+		UKismetSystemLibrary::SphereOverlapActors(this, GetActorLocation(), mCachedScanRange, ObjectTypes,
+		                                          AKLBuildableAirCollector::StaticClass(), ActorsToIgnore, OutActors);
 
-	mSphere->SetCustomPrimitiveDataVector3(0, IsInRangeCache
-		                                          ? mGameUserSettings->mInvalidPlacementHologramColour
-		                                          : mGameUserSettings->mBuildHologramColour);
+	mSphere->SetCustomPrimitiveDataVector3(
+		0, bIsInRange ? mGameUserSettings->mInvalidPlacementHologramColour : mGameUserSettings->mBuildHologramColour);
 }
 
 float AKLAirCollectorHologram::GetScanRange() const

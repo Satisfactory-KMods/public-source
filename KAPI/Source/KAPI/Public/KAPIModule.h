@@ -1,8 +1,12 @@
-﻿#pragma once
+// ILikeBanas
+
+#pragma once
+
+#include "CoreMinimal.h"
 
 #include "Modules/ModuleManager.h"
 
-#define LOCTEXT_NAMESPACE "KAPI"
+#undef LOCTEXT_CPP_STRING_TABLE
 #define LOCTEXT_CPP_STRING_TABLE "KAPI/ST_KAPI_CPP"
 
 /**
@@ -79,7 +83,11 @@ DECLARE_LOG_CATEGORY_EXTERN(LogKApiCDOHelper, Log, All);
 class FKAPIModule : public FDefaultGameModuleImpl
 {
 public:
+	//~ Begin FDefaultGameModuleImpl Interface
 	virtual void StartupModule() override;
 
 	virtual bool IsGameModule() const override { return true; }
+	//~ End FDefaultGameModuleImpl Interface
+
+	void GameFix();
 };
