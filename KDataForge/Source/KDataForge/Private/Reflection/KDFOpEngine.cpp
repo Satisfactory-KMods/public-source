@@ -52,7 +52,7 @@ namespace
 		return Property->IsA<FStrProperty>() || Property->IsA<FNameProperty>() || Property->IsA<FTextProperty>();
 	}
 
-	bool GetNodeAsDouble(const FKDFNode* Node, double& OutValue, FString& OutError)
+	bool TryReadNumericNode(const FKDFNode* Node, double& OutValue, FString& OutError)
 	{
 		if (Node == nullptr || !Node->TryGetFloat(OutValue))
 		{
@@ -169,7 +169,7 @@ namespace
 		{
 			double MinValue = 0.0;
 			double MaxValue = 0.0;
-			if (!GetNodeAsDouble(Args.mMin, MinValue, OutError) || !GetNodeAsDouble(Args.mMax, MaxValue, OutError))
+			if (!TryReadNumericNode(Args.mMin, MinValue, OutError) || !TryReadNumericNode(Args.mMax, MaxValue, OutError))
 			{
 				return false;
 			}
@@ -178,7 +178,7 @@ namespace
 		else
 		{
 			double Operand = 0.0;
-			if (!GetNodeAsDouble(Args.mValue, Operand, OutError))
+			if (!TryReadNumericNode(Args.mValue, Operand, OutError))
 			{
 				return false;
 			}
