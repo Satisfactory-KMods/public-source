@@ -20,35 +20,57 @@ class KBFL_API UKBFLContentCDOHelperSubsystem : public UGameInstanceSubsystem,
 
 	/** Implement this for initialization of instances of the system */
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	/**
+	 * Cleans up the subsystem: clears cached classes/objects, removes the world-added and lazy-load
+	 * listeners, and calls Clear() on every registered non-world CDO overwrite.
+	 */
 	virtual void Deinitialize() override;
 
 public:
+	/** Returns the game-instance instance of this subsystem for the given context, or null if invalid. */
 	static UKBFLContentCDOHelperSubsystem* Get(UObject* Context);
 
+	/**
+	 * Main entry point: discovers all CDO overwrite data assets, sorts them by priority, applies regular
+	 * overwrites immediately, registers world-based ones with each game world, and installs the lazy-load
+	 * listener that re-applies overwrites to classes loaded after this pass.
+	 */
 	UFUNCTION()
 	void OnTimerCallback();
 
+	/**
+	 * Returns the CDO for the given class and stores both the class and its CDO so they are retained
+	 * against garbage collection (no-op storage in editor builds).
+	 */
 	UFUNCTION(BlueprintPure, Category = "KMods", meta = (DeterminesOutputType = "Class"))
 	UObject* GetAndStoreDefaultObject(UClass* Class);
 
+	/** Static convenience wrapper around GetAndStoreDefaultObject that resolves the subsystem from Context. */
 	UFUNCTION(BlueprintPure, Category = "KMods", meta = (DeterminesOutputType = "Class", DefaultToSelf = "Context"))
 	static UObject* GetAndStoreCDO(UClass* Class, UObject* Context);
 
+	/** Typed variant of GetAndStoreDefaultObject; returns the CDO cast to T and retains it against GC. */
 	template <typename T>
 	T* GetAndStoreDefaultObject_Native(UClass* Class);
 
+	/** Static typed variant; resolves the subsystem from Context then calls the instance overload. */
 	template <typename T>
 	static T* GetAndStoreDefaultObject_Native(UClass* Class, UObject* Context);
 
+	/** Manually retains a class against garbage collection. */
 	UFUNCTION(BlueprintCallable, Category = "KMods")
 	void StoreClass(UClass* Class);
 
+	/** Manually retains an object against garbage collection. */
 	UFUNCTION(BlueprintCallable, Category = "KMods")
 	void StoreObject(UObject* Object);
 
+	/** Releases a previously stored class so it may be garbage collected again. */
 	UFUNCTION(BlueprintCallable, Category = "KMods")
 	void RemoveClass(UClass* Class);
 
+	/** Releases a previously stored object so it may be garbage collected again. */
 	UFUNCTION(BlueprintCallable, Category = "KMods")
 	void RemoveObject(UObject* Object);
 

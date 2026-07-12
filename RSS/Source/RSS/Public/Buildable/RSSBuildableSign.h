@@ -148,6 +148,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "RSS")
 	void ValidateCustom();
 
+	/** Same as ValidateCustom(), but retries next-tick until ARSSImageSubsystem exists in the world */
+	void ValidateCustomDeferred();
+
 	/** Release any cached image references this sign is using */
 	void ReleaseCacheReferences();
 

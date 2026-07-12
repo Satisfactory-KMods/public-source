@@ -104,6 +104,18 @@ void UKBFLSubLevelSpawning::SpawnSubLevel()
 
 void UKBFLSubLevelSpawning::Reset()
 {
+	// Unbind the dynamic delegates we registered on the streaming-level objects. They point at THIS
+	// persistent data asset (reused across worlds): leaving them bound leaks references into the dying
+	// world's streaming objects and lets stale callbacks fire on this asset during world travel.
+	for (ULevelStreaming* LevelStreaming : mLevelStreaming)
+	{
+		if (IsValid(LevelStreaming))
+		{
+			LevelStreaming->OnLevelLoaded.RemoveDynamic(this, &UKBFLSubLevelSpawning::OnLevelLoaded);
+			LevelStreaming->OnLevelShown.RemoveDynamic(this, &UKBFLSubLevelSpawning::OnLevelShown);
+		}
+	}
+
 	// Empty all Ref if we load to a other savegame
 	mSubsystem = nullptr;
 	mLevelStreaming.Empty();

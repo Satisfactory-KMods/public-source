@@ -308,6 +308,12 @@ void UKBFLContentCDOHelperSubsystem::NotifyUObjectCreated(const UObjectBase* Obj
 		return;
 	}
 	mCalledClasses.Add(NewClass);
+	
+	// We wait for the asset data subsystem now
+	if (!mAssetDataSubsystem)
+	{
+		mAssetDataSubsystem = GetGameInstance()->GetSubsystem<UKBFLAssetDataSubsystem>();
+	}
 
 	// On the game thread we can apply immediately (avoids one task per loaded class). Off-thread we must
 	// defer: TryApplyToClass touches UObject/CDO state that is game-thread-only. Exactly one of the two

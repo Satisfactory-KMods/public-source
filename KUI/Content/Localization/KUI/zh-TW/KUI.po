@@ -410,7 +410,7 @@ msgstr "{From} 到 {To}°C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "{From}% 到 {To}%"
+msgstr "{From}%% 到 {To}%%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -418,7 +418,7 @@ msgstr "{Time} 秒"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %"
+msgstr "{Value} %%"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"

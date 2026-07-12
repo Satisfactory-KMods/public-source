@@ -378,34 +378,34 @@ public:
 	// assets that arrived before they bound.
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnSchematicAdded(FKBFLOnSchematicAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnSchematicAdded(FKBFLOnSchematicAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnBuildableAdded(FKBFLOnBuildableAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnBuildableAdded(FKBFLOnBuildableAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnHologramAdded(FKBFLOnHologramAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnHologramAdded(FKBFLOnHologramAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnModModuleAdded(FKBFLOnModModuleAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnModModuleAdded(FKBFLOnModModuleAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnResourceDescriptorAdded(FKBFLOnResourceDescriptorAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnResourceDescriptorAdded(FKBFLOnResourceDescriptorAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	UFUNCTION(BlueprintCallable, Category = "Asset Data Subsystem|Events")
-	void BindOnSessionSettingAdded(FKBFLOnSessionSettingAddedEvent Delegate, bool bEnsureLoaded = false);
+	void BindOnSessionSettingAdded(FKBFLOnSessionSettingAddedEvent Delegate, bool bEnsureLoaded = true);
 
 	/**
 	 * Notify the subsystem that a class was (lazily) loaded. Classifies it into its category and routes to
@@ -435,6 +435,9 @@ private:
 
 	/** Set of category Type codes already resolved (loaded + indexed), to avoid re-loading. */
 	TSet<int32> mResolvedTypes;
+
+	/** Category types requested while bWasInit was false; flushed by ScanOnInitialize after InitAssetFinder. */
+	TSet<int32> mDeferredCategoryTypes;
 
 	/** Scan mScannedAssets for unloaded BP classes of the given category and kick off async loads. */
 	void TriggerAsyncLoadsForCategory(int32 Type);

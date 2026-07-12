@@ -105,45 +105,13 @@ void ARSSImageSubsystem::Tick(float DeltaSeconds)
 		}
 	}
 
-	if (mInitTimer <= 5.0f)
-	{
-		mInitTimer += DeltaSeconds;
-		return;
-	}
+	mInitTimer += DeltaSeconds;
 
-	if (!bInitDone && !bInitIsRunning && bAllowToRunInitQuery)
-	{
-		UE_LOG(RSSImageSubsystemLog, Log, TEXT("Init: %d, %d, %d"), mInitRequests.Num(), mInitRequests.IsValidIndex(0),
-			   mRuntimeRequests.Num());
-		if (mInitRequests.IsValidIndex(0))
-		{
-			UE_LOG(RSSImageSubsystemLog, Log, TEXT("mInitRequests.IsValidIndex(0)"));
-			FInitRequests Request = mInitRequests[0];
-			if (IsUrlValid(Request.mUrl))
-			{
-				bInitIsRunning = true;
-
-				mDownloadTask = NewObject<URssDownloadImage>();
-
-				mDownloadTask->Subsystem = this;
-
-				mDownloadTask->OnFail.AddDynamic(this, &ARSSImageSubsystem::OnDownloadFailed);
-				mDownloadTask->OnSuccess.AddDynamic(this, &ARSSImageSubsystem::OnDownloadSuccess);
-
-				// Use cache for init requests
-				mDownloadTask->StartWithCache(Request.mUrl, this);
-
-				UE_LOG(RSSImageSubsystemLog, Log, TEXT("mInitRequests, %s"), *Request.mUrl);
-			}
-			else
-			{
-				mInitRequests.RemoveAt(0);
-			}
-		}
-
-		bInitDone = mInitRequests.Num() == 0;
-	}
-	else if (bInitDone && !bRequestIsRunning && mRuntimeRequests.IsValidIndex(0))
+	// Runtime (interactive) requests always take priority and are never gated behind bInitDone/the 5s
+	// startup delay - a player confirming a URL right now must not have to wait for every previously-saved
+	// custom image to finish downloading first (that background catalog can take much longer than the few
+	// seconds a user will wait before assuming nothing happened and trying again).
+	if (!bRequestIsRunning && !bInitIsRunning && mRuntimeRequests.IsValidIndex(0))
 	{
 		FRssSignRequestData Request = mRuntimeRequests[0];
 		if (IsValid(Request.mBuildable))
@@ -185,6 +153,45 @@ void ARSSImageSubsystem::Tick(float DeltaSeconds)
 
 		mRuntimeRequests.RemoveAt(0);
 		SendRequestBack(Request);
+		return;
+	}
+
+	if (mInitTimer <= 5.0f)
+	{
+		return;
+	}
+
+	if (!bInitDone && !bInitIsRunning && !bRequestIsRunning && bAllowToRunInitQuery)
+	{
+		UE_LOG(RSSImageSubsystemLog, Log, TEXT("Init: %d, %d, %d"), mInitRequests.Num(), mInitRequests.IsValidIndex(0),
+			   mRuntimeRequests.Num());
+		if (mInitRequests.IsValidIndex(0))
+		{
+			UE_LOG(RSSImageSubsystemLog, Log, TEXT("mInitRequests.IsValidIndex(0)"));
+			FInitRequests Request = mInitRequests[0];
+			if (IsUrlValid(Request.mUrl))
+			{
+				bInitIsRunning = true;
+
+				mDownloadTask = NewObject<URssDownloadImage>();
+
+				mDownloadTask->Subsystem = this;
+
+				mDownloadTask->OnFail.AddDynamic(this, &ARSSImageSubsystem::OnDownloadFailed);
+				mDownloadTask->OnSuccess.AddDynamic(this, &ARSSImageSubsystem::OnDownloadSuccess);
+
+				// Use cache for init requests
+				mDownloadTask->StartWithCache(Request.mUrl, this);
+
+				UE_LOG(RSSImageSubsystemLog, Log, TEXT("mInitRequests, %s"), *Request.mUrl);
+			}
+			else
+			{
+				mInitRequests.RemoveAt(0);
+			}
+		}
+
+		bInitDone = mInitRequests.Num() == 0;
 	}
 }
 

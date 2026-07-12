@@ -18,7 +18,7 @@ This repository uses **dual licensing**:
 - ⚠️ Personal use only (non-distributed)
 - ✅ May be used with explicit permission and credit
 
-**Mods included**: KAPI, KBFL, KBlueprintDesignPlus, KLib, KPrivateCodeLib, KUI, MoreSwatchSlots, RSS
+**Mods included**: KAPI, KBFL, KBlueprintDesignPlus, KDataForge, KLib, KPrivateCodeLib, KUI, MoreSwatchSlots, RSS
 
 Please review both license files before using any part of this project.
 

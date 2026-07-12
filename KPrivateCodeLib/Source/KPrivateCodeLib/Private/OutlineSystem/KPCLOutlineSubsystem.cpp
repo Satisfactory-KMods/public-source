@@ -122,17 +122,21 @@ void AKPCLOutlineSubsystem::CreateOutline(FOutlineData OutlineData, bool Multica
 				}
 
 				FTransform Transform = Actor->GetTransform();
-				if (AKPCLOutlineActor* OutlineActor = GetWorld()->SpawnActorDeferred<AKPCLOutlineActor>(
-						AKPCLOutlineActor::StaticClass(), Transform, GetWorld()->GetFirstPlayerController()))
+				UWorld* SpawnWorld = GetWorld();
+				if (SpawnWorld)
 				{
-					if (OutlineActor->CreateOutlineFromActor(OutlineData))
+					if (AKPCLOutlineActor* OutlineActor = SpawnWorld->SpawnActorDeferred<AKPCLOutlineActor>(
+							AKPCLOutlineActor::StaticClass(), Transform, SpawnWorld->GetFirstPlayerController()))
 					{
-						OutlineActor->FinishSpawning(Transform, true);
-						mOutlineMap.Add(Actor, OutlineActor);
-					}
-					else
-					{
-						OutlineActor->Destroy();
+						if (OutlineActor->CreateOutlineFromActor(OutlineData))
+						{
+							OutlineActor->FinishSpawning(Transform, true);
+							mOutlineMap.Add(Actor, OutlineActor);
+						}
+						else
+						{
+							OutlineActor->Destroy();
+						}
 					}
 				}
 			}

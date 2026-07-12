@@ -8,22 +8,28 @@
 
 void URssSignWidget::SetBuildable(AActor* Buildable)
 {
-	if (Buildable)
+	if (IsValid(Buildable) && UKismetSystemLibrary::DoesImplementInterface(Buildable, URssSignInterface::StaticClass()))
 	{
-		if (UKismetSystemLibrary::DoesImplementInterface(Buildable, URssSignInterface::StaticClass()))
-		{
-			mBuildable = Buildable;
-			mSignWidgetData = IRssSignInterface::Execute_GetSignData(mBuildable);
-			mUIData = IRssSignInterface::Execute_GetSignUiIData(mBuildable);
-			OnBuildableSet(mBuildable);
-		}
+		mBuildable = Buildable;
+		mSignWidgetData = IRssSignInterface::Execute_GetSignData(Buildable);
+		mUIData = IRssSignInterface::Execute_GetSignUiIData(Buildable);
+		OnBuildableSet(Buildable);
+		return;
 	}
+
+	// Pooled render components may be reassigned after their previous sign was destroyed.
+	// Do not leave a stale actor for Blueprint event handlers to cast or dereference.
+	mBuildable = nullptr;
 }
 
 void URssSignWidget::UpdateSignData(FRssSignData SignData)
 {
 	mSignWidgetData = SignData;
-	OnSignDataUpdated(mSignWidgetData);
+	if (IsValid(mBuildable) &&
+		UKismetSystemLibrary::DoesImplementInterface(mBuildable, URssSignInterface::StaticClass()))
+	{
+		OnSignDataUpdated(mSignWidgetData);
+	}
 }
 
 void URssSignWidget::OnRequestUpdateSign_Implementation() {}

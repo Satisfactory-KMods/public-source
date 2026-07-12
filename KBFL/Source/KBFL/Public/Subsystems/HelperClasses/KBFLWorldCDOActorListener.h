@@ -24,11 +24,22 @@ class KBFL_API UKBFLWorldCDOActorListener : public UKBFLCDOOverwriteWorldBasedBa
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Registers the appropriate world delegate based on mEventToListenFor (spawn or destroy). For spawn events with
+	 * bListenStreamingLevel, also hooks LevelAddedToWorld so actors loaded via streaming levels are processed.
+	 */
 	virtual void Start() override;
+
+	/** Runs OnActorEvent against all actors of the configured classes that already exist in the world. */
 	virtual void ApplyToActorsInWorld() override;
+
+	/** Unregisters the spawn/destroy delegate (and the streaming-level handler, if registered). */
 	virtual void Clear() override;
 
-	// Called when a relevant actor is spawned or destroyed
+	/**
+	 * Delegate callback for actor spawn/destroy. If Actor matches a configured class (honoring bUseSubclassCheck) and
+	 * passes the requirements, fires the OnModify notify, calls OnActorMatched, then the OnModified notify.
+	 */
 	UFUNCTION()
 	void OnActorEvent(AActor* Actor);
 
@@ -54,6 +65,7 @@ public:
 	TArray<TSubclassOf<AActor>> mActorClassesToListenFor;
 
 protected:
+	/** Streaming-level callback: runs OnActorEvent for every actor in a level newly added to this listener's world. */
 	void OnLevelAddedToWorld(ULevel* Level, UWorld* World);
 
 	FDelegateHandle mActorHandle;

@@ -24,8 +24,15 @@ class KBFL_API UKBFLCDOOverwriteBase : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Entry point invoked by the subsystem. Skips when disabled, loads requirements, runs ApplyToInstances,
+	 * retains every modified instance via the subsystem (to prevent GC), then fires the finished-all notifications.
+	 */
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
 	virtual void Start();
 
+	/** Override in subclasses to perform the actual CDO modifications. Base implementation does nothing. */
 	virtual void ApplyToInstances() {};
 
 	/**
@@ -40,19 +47,27 @@ public:
 	/** Applies this overwrite to a single CDO instance. Override in subclasses. */
 	virtual void ApplyToInstance(UObject* Instance) {};
 
+	/** Resets transient state: clears applied instances, cached requirements, and the subsystem back-reference. */
 	virtual void Clear();
 
+	/** Synchronously resolves a soft class pointer, loading it if necessary, and returns the loaded class. */
 	template <typename T>
 	static TSubclassOf<T> LoadSoftClass(TSoftClassPtr<T> SoftClassPtr);
 
+	/** Resolves an array of soft class pointers, returning only the entries that successfully load. */
 	template <typename T>
 	static TArray<TSubclassOf<T>> LoadSoftClassesArray(TArray<TSoftClassPtr<T>> SoftClassPtrs);
 
+	/** Returns true only if every cached requirement reports met for the given target instance. */
 	virtual bool Requirements_IsMet(UObject* TargetInstance);
+	/** Notifies all cached requirements that the target is about to be modified. */
 	virtual void Requirements_NotifyOnModify(UObject* TargetInstance);
+	/** Notifies all cached requirements that the target was just modified. */
 	virtual void Requirements_NotifyOnModified(UObject* TargetInstance);
+	/** Notifies all cached requirements that the full apply pass finished and dispatches any deferred calls. */
 	virtual void Requirements_NotifyOnFinishedAll();
 
+	/** Instantiates requirement objects from the mRequirements classes and caches them for this run. */
 	virtual void LoadRequirements();
 
 	// ===== Basic Settings =====
@@ -130,22 +145,31 @@ class KBFL_API UKBFLCDOOverwriteWorldBasedBase : public UKBFLCDOOverwriteBase
 	GENERATED_BODY()
 
 public:
+	/** Returns all actors of the given class found in this overwrite's world. */
 	template <typename T>
 	TArray<T*> GetAllActorsInWorldOfClass(TSubclassOf<T> ActorClass);
 
+	/** Validates that the overwrite is enabled and has a valid world, runs base Start once, then applies to actors. */
 	virtual void Start() override;
+	/** Clears base state plus the world reference, the applied flag, and the tickable requirement cache. */
 	virtual void Clear() override;
+	/** Like the base, but also injects the world into UKBFLWorldCDOCallRequirement instances and tracks tickable ones.
+	 */
 	virtual void LoadRequirements() override;
 
+	/** Override to modify actors in the world. Base implementation does nothing. */
 	UFUNCTION(BlueprintCallable)
 	virtual void ApplyToActorsInWorld() {};
 
+	/** Returns the world previously assigned via SetWorld. */
 	virtual class UWorld* GetWorld() const override;
 
 	/** Set the world for this world-based overwrite */
 	void SetWorld(UWorld* World) { mWorld = World; }
 
+	/** Returns whether this overwrite wants to receive Tick (driven by bTickable). */
 	virtual bool ShouldTick() const { return bTickable; }
+	/** Forwards the tick to all cached tickable world requirements. */
 	virtual void Tick(float dt);
 
 	// ===== World Settings =====

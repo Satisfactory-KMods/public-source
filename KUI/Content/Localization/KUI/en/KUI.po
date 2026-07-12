@@ -9,7 +9,7 @@ msgstr ""
 
 msgctxt "ST_KUI,KUI_CustomOverclockingUI.mPercentText.HintText"
 msgid "%"
-msgstr "%"
+msgstr "%%"
 
 msgctxt "KUI_GeneralWords,/min"
 msgid "/ min"
@@ -728,7 +728,7 @@ msgstr "{From} to {To}°C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "{From}% to {To}%"
+msgstr "{From}%% to {To}%%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -736,7 +736,7 @@ msgstr "{Time} Sec"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %"
+msgstr "{Value} %%"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"
@@ -764,4 +764,4 @@ msgstr "{count}x"
 
 msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Format_Text.Format"
 msgid "{value}%"
-msgstr "{value}%"
+msgstr "{value}%%"

@@ -178,15 +178,20 @@ class KBFL_API UKBFLCDOOverwrite : public UKBFLCDOOverwriteBase
 	GENERATED_BODY()
 
 public:
+	/** Default constructor. */
 	UKBFLCDOOverwrite();
 
 	// UObject interface
+	/** Ensures mNativeClass is resolved and recreates the property container if it is missing or class-mismatched. */
 	virtual void PostLoad() override;
 	// End UObject interface
 
 #if WITH_EDITOR
+	/** Editor: clears overrides and refreshes the container when the target class changes; revalidates manual props. */
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	/** Editor: rebuilds mModifiedProperties when a value inside mPropertyContainer is edited. */
 	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent) override;
+	/** Editor: validates the target class, mAlsoApplyOn subclassing, and each manual property override. */
 	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
 
 	/** Validate and auto-detect property types for manual property overrides */
@@ -196,6 +201,7 @@ public:
 	/** Get the property type from an FProperty */
 	static EKBFLPropertyType GetPropertyType(const FProperty* Property);
 
+	/** Walks up from mTargetClass to the first non-Blueprint (native) super class. */
 	UClass* GetSuperClass() const;
 
 	// ===== Target Settings =====
@@ -234,18 +240,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
 			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
 	bool bOnlyApplyOnSubclasses = false;
+	/** True when subclass application is on and the target class itself should be skipped. */
 	bool OnlyApplyOnSubclasses() const { return bApplyOnSubclasses && bOnlyApplyOnSubclasses; }
 
 	/** If true, use native class for subclass checks instead of generated class */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
 			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
 	bool bUseNativeForSubclasses = false;
+	/** True when subclass application is on and the native (non-Blueprint) class should be used for subclass checks. */
 	bool UseNativeForSubclasses() const { return bApplyOnSubclasses && bUseNativeForSubclasses; }
 
 	/** If true, use mTargetClass as subclass filter instead of all subclasses */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Subclass Handling",
 			  meta = (EditCondition = "bApplyOnSubclasses", EditConditionHides))
 	bool bUseTargetAsSubclassFilter = false;
+	/** True when subclass application is on and mTargetClass should be used as the subclass filter. */
 	bool UseTargetAsSubclassFilter() const { return bApplyOnSubclasses && bUseTargetAsSubclassFilter; }
 
 	/** Additional subclasses to include in the override process */
@@ -290,6 +299,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Property Overrides", meta = (TitleProperty = "mPropertyName"))
 	TSet<FKBFLCDOOverwriteProperty> mManuelPropertiesOverwrite;
 
+	/** Cheap O(1) check (lazy-load path) for whether a single newly-loaded class matches this overwrite's targeting. */
 	virtual bool ShouldCallForInstance(UClass* NewClass) override;
 
 protected:
@@ -326,6 +336,7 @@ private:
 							 UObject* TargetInstance);
 
 public:
+	/** Collects every targeted class CDO (target + subclasses + paths) and applies the configured overrides to each. */
 	virtual void ApplyToInstances() override;
 
 	/** Refresh the property container when TargetClass changes */

@@ -425,7 +425,7 @@ msgstr "Good for small text"
 
 msgctxt "ST_RSS,TextBlock_101.Text"
 msgid "HEX Colour      #"
-msgstr "HEX Colour      ''''''#''''''"
+msgstr "HEX Colour      #"
 
 msgid "HUDasfasf\\r\\nasfas"
 msgstr "HUDasfasf\\r\\nasfas"
@@ -1001,11 +1001,11 @@ msgstr "Sign Materials"
 
 msgctxt "ST_RSS,Build_SignPole_C.mDisplayName"
 msgid "Sign Pole #1"
-msgstr "Sign Pole ''''''#''''''1"
+msgstr "Sign Pole #1"
 
 msgctxt "ST_RSS,Sink_RSS_Support_Poles_1_C.mDisplayName"
 msgid "Sign Poles #1"
-msgstr "Sign Poles ''''''#''''''1"
+msgstr "Sign Poles #1"
 
 msgctxt "ST_RSS,SinkCatSub_Rss_SignSupport_C.mDisplayName"
 msgid "Sign Support"
@@ -1223,7 +1223,7 @@ msgstr "WARNING: Changes to this setting can significantly impact performance."
 
 msgctxt "ST_RSS,Sink_Material_RSS_Holo_WallOutside_C.mDisplayName"
 msgid "Wall #2 Signs"
-msgstr "Wall ''''''#''''''2 Signs"
+msgstr "Wall #2 Signs"
 
 msgctxt "ST_RSS,Build_RSS_Holoscreen_1x1_Wall_C.mDisplayName"
 msgid "Wall Holo Sign 1x1"

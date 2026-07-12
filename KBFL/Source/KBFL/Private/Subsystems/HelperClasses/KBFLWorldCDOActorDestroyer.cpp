@@ -1,8 +1,10 @@
 ﻿#include "Subsystems/HelperClasses/KBFLWorldCDOActorDestroyer.h"
 
+#include "Engine/World.h"
 #include "FGDismantleInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Logging/StructuredLog.h"
+#include "TimerManager.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogKBFLActorDestroyer, VeryVerbose, All);
 
@@ -86,17 +88,23 @@ void UKBFLWorldCDOActorDestroyer::Start()
 		return;
 	}
 
+	TWeakObjectPtr<UKBFLWorldCDOActorDestroyer> WeakThis(this);
 	mActorHandle = GetWorld()->AddOnActorSpawnedHandler(FOnActorSpawned::FDelegate::CreateLambda(
-		[&](AActor* Actor)
+		[WeakThis](AActor* Actor)
 		{
+			if (!IsValid(Actor))
+			{
+				return;
+			}
 			Actor->GetWorldTimerManager().SetTimerForNextTick(
-				[&, Actor]()
+				[WeakThis, Actor]()
 				{
-					if (!IsValid(Actor))
+					UKBFLWorldCDOActorDestroyer* StrongThis = WeakThis.Get();
+					if (!IsValid(StrongThis) || !IsValid(Actor))
 					{
 						return;
 					}
-					OnActorEvent(Actor);
+					StrongThis->OnActorEvent(Actor);
 				});
 		}));
 
@@ -147,29 +155,52 @@ void UKBFLWorldCDOActorDestroyer::HandleDestroyActor(AActor* Actor)
 						  "HandleDestroyActor: Destroying actor {ActorName} of class {ClassName} | Asset: {AssetPath}",
 						  Actor->GetName(), Actor->GetClass()->GetName(), GetPathName());
 
-				Requirements_NotifyOnModify(Actor);
-
-				if (Actor->Implements<UFGDismantleInterface>())
+				UWorld* World = Actor->GetWorld();
+				if (!IsValid(World))
 				{
-					TArray<AActor*> ActorsToDestroy;
-					IFGDismantleInterface::Execute_GetChildDismantleActors(Actor, ActorsToDestroy);
-					for (AActor* ToDestroy : ActorsToDestroy)
+					break;
+				}
+
+				TWeakObjectPtr<UKBFLWorldCDOActorDestroyer> WeakThis(this);
+				TWeakObjectPtr<AActor> WeakActor(Actor);
+				World->GetTimerManager().SetTimerForNextTick(
+					[WeakThis, WeakActor]()
 					{
-						if (ToDestroy->Implements<UFGDismantleInterface>())
+						UKBFLWorldCDOActorDestroyer* StrongThis = WeakThis.Get();
+						AActor* StrongActor = WeakActor.Get();
+						if (!IsValid(StrongThis) || !IsValid(StrongActor))
 						{
-							IFGDismantleInterface::Execute_Dismantle(ToDestroy);
+							return;
+						}
+
+						StrongThis->Requirements_NotifyOnModify(StrongActor);
+
+						if (StrongActor->Implements<UFGDismantleInterface>())
+						{
+							TArray<AActor*> ActorsToDestroy;
+							IFGDismantleInterface::Execute_GetChildDismantleActors(StrongActor, ActorsToDestroy);
+							for (AActor* ToDestroy : ActorsToDestroy)
+							{
+								if (!IsValid(ToDestroy))
+								{
+									continue;
+								}
+								if (ToDestroy->Implements<UFGDismantleInterface>())
+								{
+									IFGDismantleInterface::Execute_Dismantle(ToDestroy);
+								}
+								else
+								{
+									ToDestroy->Destroy();
+								}
+							}
+							IFGDismantleInterface::Execute_Dismantle(StrongActor);
 						}
 						else
 						{
-							ToDestroy->Destroy();
+							StrongActor->Destroy();
 						}
-					}
-					IFGDismantleInterface::Execute_Dismantle(Actor);
-				}
-				else
-				{
-					Actor->Destroy();
-				}
+					});
 			}
 			else
 			{

@@ -41,8 +41,6 @@ public:
 
 	bool GatherDefaultCollections();
 	bool GatherProviders();
-	bool RegisterSwatchesInSubsystem(
-		const TMap<TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>, FKBFLSwatchInformation>& SwatchMap);
 	bool
 	RegisterSwatchGroups(TMap<TSubclassOf<UFGSwatchGroup>, TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> Map);
 	void CDOMaterials(TArray<FKBFLMaterialDescriptorInformation> CDOInformation);

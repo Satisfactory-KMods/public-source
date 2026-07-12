@@ -5,6 +5,11 @@
 #include "Subsystems/HelperClasses/KBFLWorldCDOCallRequirement.h"
 #include "Subsystems/KBFLContentCDOHelperSubsystem.h"
 
+FPrimaryAssetId UKBFLCDOOverwriteBase::GetPrimaryAssetId() const
+{
+	return FPrimaryAssetId(FName("KBFLCDOOverwrite"), GetFName());
+}
+
 void UKBFLCDOOverwriteBase::TryApplyToClass(UClass* NewClass)
 {
 	if (!bEnabled || !bWasApplied || !IsValid(NewClass) || !IsValid(mSubsystem))
@@ -106,6 +111,7 @@ void UKBFLCDOOverwriteBase::Requirements_NotifyOnModified(UObject* TargetInstanc
 		if (IsValid(Requirement))
 		{
 			Requirement->OnModified(mSubsystem, this, TargetInstance);
+			Requirement->DispatchDeferedCall(mSubsystem, this, TargetInstance);
 		}
 	}
 }

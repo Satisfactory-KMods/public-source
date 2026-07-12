@@ -4,7 +4,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals = 3; plural = (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)\n"
+"Plural-Forms: nplurals = 3; plural = (n %% 10 === 1 && n %% 100 !== 11 ? 0 : n %% 10 >= 2 && n %% 10 <= 4 && (n %% 100 < 10 || n %% 100 >= 20) ? 1 : 2)\n"
 "X-Generator: Tolgee\n"
 
 msgctxt "ST_Klib,Desc_Gas_Steam_Hot.Desc_Gas_Steam_Hot_C.mAbbreviatedDisplayName"
@@ -13,7 +13,7 @@ msgstr "(H₂O)"
 
 msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDescription"
 msgid "93.6% pure Titanium Dioxide. Processing it into TiCl might require a few attempts."
-msgstr "Диоксид титана чистотой 93,6%. Для получения из него TiCl может потребоваться несколько попыток."
+msgstr "Диоксид титана чистотой 93,6%%. Для получения из него TiCl может потребоваться несколько попыток."
 
 msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDescription"
 msgid "A Container for easy transport"
@@ -161,13 +161,13 @@ msgid "Asphalt"
 msgstr "Асфальт"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 30/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 30 /мин = 15 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 30/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50%% х 30 /мин = 15 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 60/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 60 /мин = 30 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nДля добычи некоторых руд требуются головки более высокого уровня.\\r\\nСтандартная скорость извлечения: 60/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50%% х 60 /мин = 30 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nЕго достаточно для добычи любой руды.\\r\\nСтандартная скорость извлечения: 120/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50% х 120 /мин = 60 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
+msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\nЕго достаточно для добычи любой руды.\\r\\nСтандартная скорость извлечения: 120/мин на выход.\\r\\n\\r\\nВсе бонусы за майнинг (\"Эффективность майнинга\") напрямую зависят от производительности бура.\\r\\nПример: 50%% х 120 /мин = 60 /мин на выход .Примечание: Чистота узла учитывается при начислении бонуса за майнинг, а не в базовой скорости добычи."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
 msgstr "Подключается к модульному буру.\\r\\nУвеличивает энергопотребление модульного бура.\\r\\n\\r\\nПовышает эффективность работы комбайна в зависимости от подаваемой жидкости. Бур не будет активирован, если не будет подана жидкость.\\r\\n\\r\\nБонусы за эффективность майнинга можно посмотреть на панели \"Информация о жидкости\" в меню бура."
@@ -179,7 +179,7 @@ msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the M
 msgstr "Присоединяется к модульному буру.\\r\\nУвеличивает мощность, необходимую для работы модульного бура\\r\\n\\r\\nПостоянно плавит добытую руду до первичных металлических слитков и выбрасывает шлак через жидкостный выход. \\r\\nГрязь сгорает и превращается в измельченную пустую породу.\\r\\nВысота подъема: 10 м. (Позволяет перемещать жидкости на 10 метров вверх.) Примечание: Модуль не совместим с модулем дробилки."
 
 msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
-msgstr "Подключается к модульному буру.\\r\\n\\r\\nПотребление энергии теперь зависит от:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nРазгоняет цепь питания бура.\\r\\n\\r\\nБонус за эффективность добычи: {BonusOnProduction}%"
+msgstr "Подключается к модульному буру.\\r\\n\\r\\nПотребление энергии теперь зависит от:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nРазгоняет цепь питания бура.\\r\\n\\r\\nБонус за эффективность добычи: {BonusOnProduction}%%"
 
 msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
 msgid "BD1"
@@ -691,10 +691,10 @@ msgstr "Влажность:"
 
 msgctxt "ST_Klib,Node_Format_Text.Format_34"
 msgid "Humidity: {TEMP}%"
-msgstr "Влажность: {TEMP}%"
+msgstr "Влажность: {TEMP}%%"
 
 msgid "Humidity\\r\\n{value}%"
-msgstr "Влажность\\r\\n{value}%"
+msgstr "Влажность\\r\\n{value}%%"
 
 msgctxt "ST_Klib,Desc_PackagedLiquidHydrocarbons.Desc_PackagedLiquidHydrocarbons_C.mDescription"
 msgid "Hydrocarbons, packaged for alternative transport."

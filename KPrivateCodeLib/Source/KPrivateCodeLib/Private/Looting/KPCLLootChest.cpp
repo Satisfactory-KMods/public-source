@@ -287,7 +287,18 @@ void AKPCLLootChest::BeginPlay()
 
 	GetInventory()->mItemFilter.BindUObject(this, &AKPCLLootChest::FilterItemClasses);
 
-	GetWorldTimerManager().SetTimerForNextTick([&]() { UpdateActorState(bIsEmpty); });
+	{
+		bool bEmptyCapture = bIsEmpty;
+		TWeakObjectPtr<AKPCLLootChest> WeakThis(this);
+		GetWorldTimerManager().SetTimerForNextTick(
+			[WeakThis, bEmptyCapture]()
+			{
+				if (WeakThis.IsValid())
+				{
+					WeakThis->UpdateActorState(bEmptyCapture);
+				}
+			});
+	}
 
 	if (HasAuthority())
 	{

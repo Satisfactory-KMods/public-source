@@ -1,14 +1,13 @@
 //
 #include "Subsystems/HelperClasses/KBFLCDOItemStackSize.h"
 
+#include "FGResourceSettings.h"
 #include "Resources/FGItemDescriptor.h"
 #include "Subsystems/KBFLContentCDOHelperSubsystem.h"
 
 void UKBFLCDOItemStackSize::ApplyToInstances()
 {
 	Super::ApplyToInstances();
-
-	const FString AssetPath = GetPathName();
 
 	for (const TPair<EStackSize, FKBFLItemArray>& Pair : mItemStackSizeCDO)
 	{
@@ -19,20 +18,9 @@ void UKBFLCDOItemStackSize::ApplyToInstances()
 				continue;
 			}
 
+			// Resolve + store the CDO (GC retention) before delegating the actual apply.
 			UFGItemDescriptor* DefaultObject = mSubsystem->GetAndStoreDefaultObject_Native<UFGItemDescriptor>(Item);
-			if (!IsValid(DefaultObject) || !Requirements_IsMet(DefaultObject))
-			{
-				continue;
-			}
-
-			Requirements_NotifyOnModify(DefaultObject);
-			DefaultObject->mStackSize = Pair.Key;
-			DefaultObject->mCachedStackSize = UFGItemDescriptor::GetStackSize(Item);
-			Requirements_NotifyOnModified(DefaultObject);
-
-			UE_LOGFMT(LogKBFLCDOOverwrite, Warning,
-					  "KBFLCDOItemStackSize: Set StackSize {0} to Item {1} | Asset: {AssetPath}",
-					  static_cast<int32>(Pair.Key), *Item->GetName(), AssetPath);
+			ApplyToInstance(DefaultObject);
 		}
 	}
 }
@@ -59,7 +47,7 @@ bool UKBFLCDOItemStackSize::ShouldCallForInstance(UClass* NewClass)
 void UKBFLCDOItemStackSize::ApplyToInstance(UObject* Instance)
 {
 	UFGItemDescriptor* DefaultObject = Cast<UFGItemDescriptor>(Instance);
-	if (!IsValid(DefaultObject))
+	if (!IsValid(DefaultObject) || !Requirements_IsMet(DefaultObject))
 	{
 		return;
 	}
@@ -70,8 +58,16 @@ void UKBFLCDOItemStackSize::ApplyToInstance(UObject* Instance)
 	{
 		if (Pair.Value.mItems.Contains(InstanceClass))
 		{
+			Requirements_NotifyOnModify(DefaultObject);
 			DefaultObject->mStackSize = Pair.Key;
-			DefaultObject->mCachedStackSize = UFGItemDescriptor::GetStackSize(InstanceClass);
+			if (const int32* FoundSize = UFGResourceSettings::Get()->mStackSizes.FindKey(DefaultObject->mStackSize))
+			{
+				DefaultObject->mCachedStackSize = *FoundSize;
+			}
+			Requirements_NotifyOnModified(DefaultObject);
+
+			UE_LOGFMT(LogKBFLCDOOverwrite, Warning, "KBFLCDOItemStackSize: Set StackSize {0} to Item {1} | Asset: {2}",
+					  static_cast<int32>(Pair.Key), *InstanceClass->GetName(), GetPathName());
 			return;
 		}
 	}

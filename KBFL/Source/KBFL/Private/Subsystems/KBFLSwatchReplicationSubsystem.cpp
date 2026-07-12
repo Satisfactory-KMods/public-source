@@ -15,40 +15,6 @@
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 #include "Subsystems/KBFLCustomizerSubsystem.h"
 
-void FKBFLReplicatedColorSlot::PatchName(
-	const FText& Name, const TSet<TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>>& EditableSwatch)
-{
-	if (Name.IsEmpty())
-	{
-		return;
-	}
-
-	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Class = LoadClass();
-	if (!IsValid(Class))
-	{
-		return;
-	}
-
-	if (Class->IsChildOf(UFGFactoryCustomizationDescriptor_PaintFinish::StaticClass()))
-	{
-		return;
-	}
-
-	if (bIsBaseGame && !EditableSwatch.Contains(Class))
-	{
-		UE_LOGFMT(CustomizerSubsystem, Warning,
-				  "Attempted to patch name for base-game swatch '{0}' that is not in mEditableSwatchNames - skipping",
-				  Class->GetName());
-		return;
-	}
-
-	mSlotName = Name;
-	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> SwatchClass = GetCachedClass();
-	if (IsValid(SwatchClass))
-	{
-		SwatchClass->GetDefaultObject<UFGFactoryCustomizationDescriptor_Swatch>()->mDisplayName = Name;
-	}
-}
 TSoftClassPtr<UFGFactoryCustomizationDescriptor_Swatch> FKBFLReplicatedColorSlot::GetSoftClass() const
 {
 	if (IsValid(mCachedClass))
@@ -77,20 +43,6 @@ UKBFLColorRCO* UKBFLColorRCO::Get(UObject* WorldContext)
 {
 	AFGPlayerController* PlayerController = UKBFL_Player::GetFGController(WorldContext);
 	return IsValid(PlayerController) ? PlayerController->GetRemoteCallObjectOfClass<UKBFLColorRCO>() : nullptr;
-}
-
-void UKBFLColorRCO::UpdateSwatchName_Implementation(AKBFLSwatchReplicationSubsystem* Subsystem,
-													TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch,
-													const FText& NewName)
-{
-	Subsystem->UpdateSwatchName(Swatch, NewName);
-}
-
-bool UKBFLColorRCO::UpdateSwatchName_Validate(AKBFLSwatchReplicationSubsystem* Subsystem,
-											  TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch,
-											  const FText& NewName)
-{
-	return true;
 }
 
 void UKBFLColorRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -160,6 +112,24 @@ void AKBFLSwatchReplicationSubsystem::PostLoadGame_Implementation(int32 saveVers
 		UE_LOGFMT(CustomizerSubsystem, Log,
 				  "KBFLSwatchReplicationSubsystem::PostLoadGame - Loaded {0} saved color slots",
 				  mReplicatedColorSlots.Num());
+
+		// SaveGame properties can be restored after BeginPlay. If BeginPlay already ran the initial
+		// patch against an empty slot array, the one-shot guard would otherwise prevent the saved
+		// swatch IDs from ever being applied to this loaded world.
+		bSwatchesPatched = false;
+		bColorSlotsApplied = false;
+		if (UWorld* World = GetWorld())
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid() && WeakThis->HasAuthority())
+					{
+						WeakThis->TryToPatchSwatches();
+					}
+				});
+		}
 	}
 }
 
@@ -169,13 +139,28 @@ void AKBFLSwatchReplicationSubsystem::OnRep_ColorSlots()
 			  "KBFLSwatchReplicationSubsystem::OnRep_ColorSlots - Received {0} color slots on client",
 			  mReplicatedColorSlots.Num());
 
-	// Apply saved names (which may have been edited by the player) to CDOs
-	for (FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
+	// Apply immediately once play has begun; otherwise defer one tick so world/gamestate is settled.
+	if (UWorld* World = GetWorld())
 	{
-		Slot.PatchName(Slot.mSlotName, mEditableSwatchNames);
+		if (World->HasBegunPlay())
+		{
+			ApplyColorSlotsToWorld();
+		}
+		else
+		{
+			{
+				TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+				World->GetTimerManager().SetTimerForNextTick(
+					[WeakThis]()
+					{
+						if (WeakThis.IsValid())
+						{
+							WeakThis->ApplyColorSlotsToWorld();
+						}
+					});
+			}
+		}
 	}
-
-	ApplyColorSlotsToWorld();
 }
 
 void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
@@ -200,7 +185,17 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 	{
 		UE_LOGFMT(CustomizerSubsystem, Warning,
 				  "TryToPatchSwatches: World or GameInstance not ready, retrying next tick");
-		World->GetTimerManager().SetTimerForNextTick([this]() { TryToPatchSwatches(); });
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid())
+					{
+						WeakThis->TryToPatchSwatches();
+					}
+				});
+		}
 		return;
 	}
 
@@ -209,7 +204,17 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 	{
 		UE_LOGFMT(CustomizerSubsystem, Warning,
 				  "TryToPatchSwatches: AssetDataSubsystem not available, retrying next tick");
-		World->GetTimerManager().SetTimerForNextTick([this]() { TryToPatchSwatches(); });
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid())
+					{
+						WeakThis->TryToPatchSwatches();
+					}
+				});
+		}
 		return;
 	}
 
@@ -217,15 +222,28 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 	AssetDataSubsystem->GetObjectsOfChilds({UFGFactoryCustomizationDescriptor_Swatch::StaticClass()}, OutObjects);
 	AssetDataSubsystem->GetObjectsOfChilds({UFGFactoryCustomizationDescriptor_Swatch::StaticClass()}, OutObjects, true);
 
-	// Deduplicate - GetObjectsOfChilds can return the same class from multiple sources
+	// Deduplicate - GetObjectsOfChilds can return the same class from multiple sources.
+	// UniversalSwatchSlots manages its own swatches; fully ignore them here (never assign/save/process),
+	// but reserve their slot IDs so our swatches never conflict with them.
 	TSet<TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> UniqueSwatches;
+	TSet<int32> UniversalReservedIDs;
 	for (TSubclassOf<UObject> OutObject : OutObjects)
 	{
 		TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> AsSwatch{OutObject};
-		if (IsValid(AsSwatch))
+		if (!IsValid(AsSwatch))
 		{
-			UniqueSwatches.Add(AsSwatch);
+			continue;
 		}
+		if (AsSwatch->GetPathName().Contains(TEXT("UniversalSwatchSlots")))
+		{
+			const int32 Id = AsSwatch.GetDefaultObject()->ID;
+			if (Id >= 0 && Id <= 254)
+			{
+				UniversalReservedIDs.Add(Id);
+			}
+			continue;
+		}
+		UniqueSwatches.Add(AsSwatch);
 	}
 
 	// Sort by path to ensure deterministic order for consistent Swatch IDs
@@ -248,16 +266,60 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 	{
 		UE_LOGFMT(CustomizerSubsystem, Warning,
 				  "TryToPatchSwatches: BuildableSubsystem or GameState not available, retrying next tick");
-		World->GetTimerManager().SetTimerForNextTick([this]() { TryToPatchSwatches(); });
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid())
+					{
+						WeakThis->TryToPatchSwatches();
+					}
+				});
+		}
 		return;
 	}
 
-	// Collect all IDs that are already reserved (base-game swatches + saved slots)
+	// Wait until the base game has populated its color palette. Running earlier would back-fill base
+	// indices with default colors when creating a modded slot, wiping the base-game swatches.
+	int32 MaxBaseSwatchId = INDEX_NONE;
+	for (TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> AsSwatch : SortedSwatches)
+	{
+		if (IsBaseGameSwatch(AsSwatch))
+		{
+			const int32 BaseId = AsSwatch.GetDefaultObject()->ID;
+			if (BaseId != 255 && BaseId != INDEX_NONE)
+			{
+				MaxBaseSwatchId = FMath::Max(MaxBaseSwatchId, BaseId);
+			}
+		}
+	}
+	if (MaxBaseSwatchId != INDEX_NONE && Subsystem->mColorSlots_Data.Num() <= MaxBaseSwatchId)
+	{
+		UE_LOGFMT(CustomizerSubsystem, Warning,
+				  "TryToPatchSwatches: base color palette not ready ({0} <= {1}), retrying next tick",
+				  Subsystem->mColorSlots_Data.Num(), MaxBaseSwatchId);
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid())
+					{
+						WeakThis->TryToPatchSwatches();
+					}
+				});
+		}
+		return;
+	}
+
+	// Collect all IDs that are already reserved (base-game swatches + saved slots + UniversalSwatchSlots)
 	// This set is shared across all PatchSwatch calls to prevent duplicate ID assignment
 	TSet<int32> ReservedIDs;
+	ReservedIDs.Append(UniversalReservedIDs);
 	for (const FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
 	{
-		if (Slot.mSlotIndex != INDEX_NONE && Slot.mSlotIndex != 255)
+		if (Slot.mSlotIndex != 255)
 		{
 			ReservedIDs.Add(Slot.mSlotIndex);
 		}
@@ -270,6 +332,9 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 			ReservedIDs.Add(BaseID);
 		}
 	}
+
+	// Phase 0: Fix up any duplicate slot indices already baked into the save before assigning/keeping IDs.
+	DeduplicateSavedSlots(ReservedIDs);
 
 	// Phase 1a: First pass - assign saved IDs and keep IDs for swatches used in world (except ID 0)
 	// This ensures used swatches lock in their IDs before new assignment
@@ -307,6 +372,14 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 		int32 ColourIndex = SwatchDefaults->ID;
 		bool bIsBase = IsBaseGameSwatch(AsSwatch);
 
+		// A modded swatch with no valid color slot (out of the 0-254 range / 255 sentinel) can't be placed.
+		if (!bIsBase && ColourIndex > 254)
+		{
+			UE_LOGFMT(CustomizerSubsystem, Warning, "Skipping swatch {0} - no valid color slot (ID {1})",
+					  AsSwatch->GetName(), ColourIndex);
+			continue;
+		}
+
 		// ColourIndex is always unique and can be used as menu priority directly for all swatches
 		SwatchDefaults->mMenuPriority = static_cast<float>(ColourIndex);
 
@@ -321,19 +394,10 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 			}
 		}
 
-		// If existing slot has a saved name, apply it to the CDO via PatchName
-		// But never rename PaintFinish swatches - they keep their original name
 		if (ExistingSlot)
 		{
 			ExistingSlot->mCachedClass = AsSwatch;
 			// mSlotIndex is NOT overwritten here - it is fixed after initial creation (source of truth from save)
-			bool bIsPaintFinish = SwatchDefaults->IsA<UFGFactoryCustomizationDescriptor_PaintFinish>();
-			if (!bIsPaintFinish && !ExistingSlot->mSlotName.IsEmpty())
-			{
-				ExistingSlot->PatchName(ExistingSlot->mSlotName, mEditableSwatchNames);
-				UE_LOGFMT(CustomizerSubsystem, Log, "Restored saved name for {0}: '{1}'", AsSwatch->GetName(),
-						  ExistingSlot->mSlotName.ToString());
-			}
 		}
 
 		// Only non-base-game swatches need color slot setup (base game already has them)
@@ -342,36 +406,42 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 			bool bIsPaintFinish = SwatchDefaults->IsA<UFGFactoryCustomizationDescriptor_PaintFinish>();
 			bool bSlotAlreadyExists = Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex);
 
-			// Determine the color to use for a NEW slot:
+			// Determine the color to use for the slot.
 			FFactoryCustomizationColorSlot NewColourSlot;
 			NewColourSlot.PaintFinish = TSubclassOf<UFGFactoryCustomizationDescriptor_PaintFinish>(AsSwatch);
 
-			if (UKBFLactoryCustomizationDescriptor_Swatch* SwatchInterface =
-					Cast<UKBFLactoryCustomizationDescriptor_Swatch>(SwatchDefaults))
+			if (bIsPaintFinish)
 			{
-				// Always use the mod author's specified default color
-				NewColourSlot = SwatchInterface->mDefaultColorSlot;
-			}
-			else if (bIsPaintFinish)
-			{
+				// PaintFinish always forces its exact color.
 				UFGFactoryCustomizationDescriptor_PaintFinish* PaintFinish =
 					Cast<UFGFactoryCustomizationDescriptor_PaintFinish>(SwatchDefaults);
 				NewColourSlot = FFactoryCustomizationColorSlot(PaintFinish->mForcedColor, PaintFinish->mForcedColor);
 				NewColourSlot.PaintFinish = TSubclassOf<UFGFactoryCustomizationDescriptor_PaintFinish>(AsSwatch);
 			}
-			else if (bSlotAlreadyExists)
+			else if (ExistingSlot || bSlotAlreadyExists)
 			{
-				// Slot already exists - keep the existing color, do not overwrite
-				NewColourSlot = Subsystem->mColorSlots_Data[ColourIndex];
+				// Swatch was already assigned before (known in save or the palette already has the slot).
+				// NEVER regenerate - keep the existing color so saved/player colors are never overwritten.
+				if (Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex))
+				{
+					NewColourSlot = Subsystem->mColorSlots_Data[ColourIndex];
+				}
+			}
+			else if (UKBFLactoryCustomizationDescriptor_Swatch* SwatchInterface =
+						 Cast<UKBFLactoryCustomizationDescriptor_Swatch>(SwatchDefaults))
+			{
+				// Brand-new swatch with an author-specified default color.
+				NewColourSlot = SwatchInterface->mDefaultColorSlot;
 			}
 			else
 			{
-				// New slot with no custom color defined - generate a random color combination
-				FRandomStream Rng(ColourIndex * 2654435761u); // deterministic seed based on slot index
+				// Brand-new swatch with no defined color - generate one deterministically from the swatch
+				// identity (not the slot index) so the same swatch always gets the same color across sessions.
+				const uint32 Seed = GetTypeHash(AsSwatch->GetPathName());
+				FRandomStream Rng(static_cast<int32>(Seed));
 				auto RandChannel = [&]() -> float { return Rng.FRandRange(0.1f, 0.9f); };
 
 				FLinearColor PrimaryColor(RandChannel(), RandChannel(), RandChannel(), 1.0f);
-				// Secondary color: complementary hue shift
 				FLinearColor SecondaryColor(FMath::Fmod(PrimaryColor.R + 0.5f, 1.0f),
 											FMath::Fmod(PrimaryColor.G + 0.5f, 1.0f),
 											FMath::Fmod(PrimaryColor.B + 0.5f, 1.0f), 1.0f);
@@ -379,9 +449,8 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 				NewColourSlot.PrimaryColor = PrimaryColor;
 				NewColourSlot.SecondaryColor = SecondaryColor;
 
-				UE_LOGFMT(CustomizerSubsystem, Log,
-						  "Generated random color for new swatch slot {0} (Index: {1}): Primary({2},{3},{4})",
-						  AsSwatch->GetName(), ColourIndex, PrimaryColor.R, PrimaryColor.G, PrimaryColor.B);
+				UE_LOGFMT(CustomizerSubsystem, Log, "Generated stable color for new swatch slot {0} (Index: {1})",
+						  AsSwatch->GetName(), ColourIndex);
 			}
 
 			// Check and create missing slots in Subsystem
@@ -445,108 +514,31 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 
 				NewColourSlot = NewColourSlotFinished;
 			}
-
-			// Update color slot in existing replicated entry
-			if (ExistingSlot)
-			{
-				ExistingSlot->mColorSlot = Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex)
-					? Subsystem->mColorSlots_Data[ColourIndex]
-					: NewColourSlot;
-			}
 		}
 
-		// Append-only: only add new entries to mReplicatedColorSlots
+		// Append-only: one entry per swatch (keyed by path). Multiple swatches may share the same
+		// mSlotIndex when the safe range wrapped - that is allowed and required so clients can sync
+		// every swatch's CDO ID from replication.
 		if (!ExistingSlot)
 		{
-			// For non-base-game: skip if duplicate ID and not used
-			if (!bIsBase && IsColorIdDuplicate(AsSwatch) && !IsSwatchUsed(AsSwatch))
-			{
-				UE_LOGFMT(CustomizerSubsystem, Warning,
-						  "Swatch {0} has duplicate color ID {1} and is not used - skipping", AsSwatch->GetName(),
-						  ColourIndex);
-				continue;
-			}
-
-			// Collect new swatches that need to be added; name assignment happens after sorting
+			// Collect new swatches that need to be added.
 			FKBFLReplicatedColorSlot NewSlot;
-			NewSlot.mSlotIndex = ColourIndex;
+			NewSlot.mSlotIndex = static_cast<uint8>(ColourIndex);
 			NewSlot.mPath = AsSwatch->GetPathName();
 			NewSlot.mModName = GetModNameFromPath(AsSwatch->GetPathName());
 			NewSlot.bIsBaseGame = bIsBase;
 			NewSlot.mCachedClass = AsSwatch;
 
-			if (!bIsBase && Subsystem->mColorSlots_Data.IsValidIndex(ColourIndex))
-			{
-				NewSlot.mColorSlot = Subsystem->mColorSlots_Data[ColourIndex];
-			}
-
-			// Base-game swatches and PaintFinish swatches always keep their original CDO name
-			bool bIsPaintFinish = SwatchDefaults->IsA<UFGFactoryCustomizationDescriptor_PaintFinish>();
-			if (bIsBase || bIsPaintFinish)
-			{
-				NewSlot.mSlotName = SwatchDefaults->mDisplayName;
-			}
-
 			NewSwatchSlots.Add(NewSlot);
 		}
 	}
 
-	// Sort new slots by index so sequential names match index order
 	NewSwatchSlots.Sort([](const FKBFLReplicatedColorSlot& A, const FKBFLReplicatedColorSlot& B)
 						{ return A.mSlotIndex < B.mSlotIndex; });
 
-	// Assign sequential "Swatch N" names to mod swatches, continuing from where base-game ends.
-	// Scan base-game slot names for "Swatch N" pattern to find the highest N already used.
-	int32 HighestBaseSwatchNumber = 0;
-	const FString SwatchPrefix = TEXT("Swatch ");
-	auto ParseSwatchNumber = [&](const FText& Name) -> int32
-	{
-		FString Str = Name.ToString();
-		if (Str.StartsWith(SwatchPrefix))
-		{
-			int32 N = FCString::Atoi(*Str.Mid(SwatchPrefix.Len()));
-			if (N > 0)
-			{
-				return N;
-			}
-		}
-		return 0;
-	};
-	for (const FKBFLReplicatedColorSlot& NewSlot : NewSwatchSlots)
-	{
-		if (NewSlot.bIsBaseGame)
-		{
-			HighestBaseSwatchNumber = FMath::Max(HighestBaseSwatchNumber, ParseSwatchNumber(NewSlot.mSlotName));
-		}
-	}
-	// Also check already-saved slots from previous sessions
-	for (const FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
-	{
-		if (Slot.bIsBaseGame)
-		{
-			HighestBaseSwatchNumber = FMath::Max(HighestBaseSwatchNumber, ParseSwatchNumber(Slot.mSlotName));
-		}
-	}
-
-	int32 SwatchCounter = HighestBaseSwatchNumber + 1;
+	// Append-only; swatch display names are left untouched (no auto-rename).
 	for (FKBFLReplicatedColorSlot& NewSlot : NewSwatchSlots)
 	{
-		if (NewSlot.mSlotName.IsEmpty())
-		{
-			FText GeneratedName = FText::Format(NSLOCTEXT("KBFLCustomizer", "SwatchNameFormat", "Swatch {0}"),
-												FText::AsNumber(SwatchCounter));
-			SwatchCounter++;
-			NewSlot.mSlotName = GeneratedName;
-
-			// Apply the generated name to the CDO
-			if (IsValid(NewSlot.mCachedClass))
-			{
-				NewSlot.mCachedClass->GetDefaultObject<UFGFactoryCustomizationDescriptor_Swatch>()->mDisplayName =
-					GeneratedName;
-			}
-		}
-
-		// Set menu priority: ColourIndex is unique across all swatches
 		if (!NewSlot.bIsBaseGame && IsValid(NewSlot.mCachedClass))
 		{
 			NewSlot.mCachedClass->GetDefaultObject<UFGFactoryCustomizationDescriptor_Swatch>()->mMenuPriority =
@@ -555,12 +547,12 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 
 		mReplicatedColorSlots.Add(NewSlot);
 
-		UE_LOGFMT(CustomizerSubsystem, Log, "Added replicated slot: {0} (Index: {1}, BaseGame: {2}, Name: '{3}')",
+		UE_LOGFMT(CustomizerSubsystem, Log, "Added replicated slot: {0} (Index: {1}, BaseGame: {2})",
 				  NewSlot.mCachedClass ? NewSlot.mCachedClass->GetName() : NewSlot.mPath, NewSlot.mSlotIndex,
-				  NewSlot.bIsBaseGame ? TEXT("true") : TEXT("false"), NewSlot.mSlotName.ToString());
+				  NewSlot.bIsBaseGame ? TEXT("true") : TEXT("false"));
 	}
 
-	// Apply locally on the server (also applies PatchName for all slots)
+	// Apply locally on the server.
 	OnRep_ColorSlots();
 
 	bSwatchesPatched = true;
@@ -568,6 +560,49 @@ void AKBFLSwatchReplicationSubsystem::TryToPatchSwatches()
 	UE_LOGFMT(CustomizerSubsystem, Log,
 			  "KBFLSwatchReplicationSubsystem: TryToPatchSwatches complete - {0} color slots stored for replication",
 			  mReplicatedColorSlots.Num());
+}
+
+void AKBFLSwatchReplicationSubsystem::DeduplicateSavedSlots(TSet<int32>& ReservedIDs)
+{
+	TSet<int32> ClaimedIndices;
+	for (FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
+	{
+		if (Slot.mSlotIndex == 255 || Slot.bIsBaseGame)
+		{
+			continue;
+		}
+
+		if (!ClaimedIndices.Contains(Slot.mSlotIndex))
+		{
+			ClaimedIndices.Add(Slot.mSlotIndex);
+			continue;
+		}
+
+		// Two different swatch classes were saved under the same slot index (historical corruption) - move
+		// this entry to a fresh, unused slot so both swatches stay visible and distinct going forward.
+		constexpr int32 SafeMin = 28;
+		constexpr int32 SafeMax = 254;
+		int32 NewIndex = SafeMin;
+		while (NewIndex <= SafeMax && (ReservedIDs.Contains(NewIndex) || ClaimedIndices.Contains(NewIndex)))
+		{
+			++NewIndex;
+		}
+		if (NewIndex > SafeMax)
+		{
+			UE_LOGFMT(CustomizerSubsystem, Warning,
+					  "DeduplicateSavedSlots: no free slot to resolve duplicate index {0} for {1} - leaving as-is",
+					  Slot.mSlotIndex, Slot.mPath);
+			continue;
+		}
+
+		UE_LOGFMT(CustomizerSubsystem, Warning,
+				  "DeduplicateSavedSlots: {0} was saved with duplicate slot index {1} - reassigning to {2}", Slot.mPath,
+				  Slot.mSlotIndex, NewIndex);
+
+		Slot.mSlotIndex = static_cast<uint8>(NewIndex);
+		ReservedIDs.Add(NewIndex);
+		ClaimedIndices.Add(NewIndex);
+	}
 }
 
 void AKBFLSwatchReplicationSubsystem::PatchSwatchFromSave(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch,
@@ -644,11 +679,25 @@ void AKBFLSwatchReplicationSubsystem::PatchSwatchAssignNew(TSubclassOf<UFGFactor
 		}
 	}
 
-	// Find the next available unique ID, starting above SF's reserved range (0-27)
-	int32 NewID = 28;
-	while (ReservedIDs.Contains(NewID) || NewID == 255)
+	// Valid mod color-slot range is 28-254 (slot index is a uint8, 255 = invalid/none sentinel).
+	constexpr int32 SafeMin = 28;
+	constexpr int32 SafeMax = 254;
+	constexpr int32 SafeCount = SafeMax - SafeMin + 1;
+
+	// Find the next free ID within the safe range.
+	int32 NewID = SafeMin;
+	while (NewID <= SafeMax && ReservedIDs.Contains(NewID))
 	{
 		NewID++;
+	}
+
+	if (NewID > SafeMax)
+	{
+		// Safe range full - wrap back to a deterministic slot in the safe range (shared color) instead of
+		// going out of range / into base slots. Hash keeps it stable per swatch across sessions.
+		NewID = SafeMin + static_cast<int32>(GetTypeHash(Swatch->GetPathName()) % SafeCount);
+		UE_LOGFMT(CustomizerSubsystem, Warning, "Color slots full - Swatch {0} reuses slot {1}", Swatch->GetName(),
+				  NewID);
 	}
 
 	SwatchDefault->ID = NewID;
@@ -677,14 +726,24 @@ void AKBFLSwatchReplicationSubsystem::ApplyColorSlotsToWorld()
 				  "available, retrying next tick");
 
 		// Retry next tick
-		World->GetTimerManager().SetTimerForNextTick([this]() { ApplyColorSlotsToWorld(); });
+		{
+			TWeakObjectPtr<AKBFLSwatchReplicationSubsystem> WeakThis(this);
+			World->GetTimerManager().SetTimerForNextTick(
+				[WeakThis]()
+				{
+					if (WeakThis.IsValid())
+					{
+						WeakThis->ApplyColorSlotsToWorld();
+					}
+				});
+		}
 		return;
 	}
 
-	for (const FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
+	for (FKBFLReplicatedColorSlot& Slot : mReplicatedColorSlots)
 	{
 		const int32 SlotIndex = Slot.mSlotIndex;
-		if (SlotIndex < 0)
+		if (SlotIndex == 255)
 		{
 			continue;
 		}
@@ -695,27 +754,70 @@ void AKBFLSwatchReplicationSubsystem::ApplyColorSlotsToWorld()
 			continue;
 		}
 
-		// Ensure arrays are large enough
+		// Sync the swatch CDO ID to the replicated slot index. IDs are only assigned on the server
+		// (TryToPatchSwatches), so clients would otherwise keep the asset-default ID and reference the
+		// wrong color slot.
+		if (TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> SwatchClass = Slot.LoadClass())
+		{
+			if (UFGFactoryCustomizationDescriptor_Swatch* SwatchCDO = SwatchClass.GetDefaultObject())
+			{
+				SwatchCDO->ID = SlotIndex;
+				SwatchCDO->mMenuPriority = static_cast<float>(SlotIndex);
+			}
+		}
+
+		// Colour source of truth is the game palette, never the replicated struct.
+		// Prefer the SaveGame subsystem palette, fall back to the replicated GameState palette.
+		FFactoryCustomizationColorSlot ColourToUse;
+		if (BuildableSubsystem->mColorSlots_Data.IsValidIndex(SlotIndex))
+		{
+			ColourToUse = BuildableSubsystem->mColorSlots_Data[SlotIndex];
+		}
+		else if (GameState->mBuildingColorSlots_Data.IsValidIndex(SlotIndex))
+		{
+			ColourToUse = GameState->mBuildingColorSlots_Data[SlotIndex];
+		}
+		else
+		{
+			// Palette has no colour for this slot yet - nothing to apply.
+			continue;
+		}
+
 		if (!BuildableSubsystem->mColorSlots_Data.IsValidIndex(SlotIndex))
 		{
+			// Fill any gap from the replicated palette (never default) so we don't wipe base/known indices.
+			const int32 OldNum = BuildableSubsystem->mColorSlots_Data.Num();
 			BuildableSubsystem->mColorSlots_Data.SetNum(SlotIndex + 1, EAllowShrinking::No);
+			for (int32 i = OldNum; i < SlotIndex; ++i)
+			{
+				if (GameState->mBuildingColorSlots_Data.IsValidIndex(i))
+				{
+					BuildableSubsystem->mColorSlots_Data[i] = GameState->mBuildingColorSlots_Data[i];
+				}
+			}
 		}
-		if (!GameState->mBuildingColorSlots_Data.IsValidIndex(SlotIndex))
-		{
-			GameState->mBuildingColorSlots_Data.SetNum(SlotIndex + 1, EAllowShrinking::No);
-		}
-
-		BuildableSubsystem->mColorSlots_Data[SlotIndex] = Slot.mColorSlot;
-		GameState->mBuildingColorSlots_Data[SlotIndex] = Slot.mColorSlot;
-
-		BuildableSubsystem->SetColorSlot_Data(SlotIndex, Slot.mColorSlot);
+		BuildableSubsystem->mColorSlots_Data[SlotIndex] = ColourToUse;
+		BuildableSubsystem->SetColorSlot_Data(SlotIndex, ColourToUse);
 		BuildableSubsystem->mColorSlotsAreDirty = true;
 		BuildableSubsystem->mDirtyColorSlots.AddUnique(SlotIndex);
 		BuildableSubsystem->mOnColorIndexChanged.Broadcast(SlotIndex);
+
+		// GameState palette is replicated + server-authoritative - clients must never write it.
+		if (HasAuthority())
+		{
+			if (!GameState->mBuildingColorSlots_Data.IsValidIndex(SlotIndex))
+			{
+				GameState->mBuildingColorSlots_Data.SetNum(SlotIndex + 1, EAllowShrinking::No);
+			}
+			GameState->mBuildingColorSlots_Data[SlotIndex] = ColourToUse;
+		}
 	}
 
-	// Final sync
-	GameState->SetupColorSlots_Data(BuildableSubsystem->mColorSlots_Data);
+	// Final sync - GameState palette is server-authoritative, only sync it on the server.
+	if (HasAuthority())
+	{
+		GameState->SetupColorSlots_Data(BuildableSubsystem->mColorSlots_Data);
+	}
 	BuildableSubsystem->mColorSlotsAreDirty = true;
 
 	bColorSlotsApplied = true;
@@ -724,26 +826,7 @@ void AKBFLSwatchReplicationSubsystem::ApplyColorSlotsToWorld()
 			  "KBFLSwatchReplicationSubsystem: Applied {0} color slots to world (Authority: {1})",
 			  mReplicatedColorSlots.Num(), HasAuthority() ? TEXT("true") : TEXT("false"));
 
-	for (TActorIterator<AFGBuildable> It(GetWorld(), AFGBuildable::StaticClass(), EActorIteratorFlags::AllActors); It;
-		 ++It)
-	{
-		AFGBuildable* CurrentActor = *It;
-		if (IFGColorInterface::Execute_GetCanBeColored(CurrentActor))
-		{
-			FFactoryCustomizationData CustomizationData = IFGColorInterface::Execute_GetCustomizationData(CurrentActor);
-			int32 ColorIdx = CustomizationData.ColorSlot;
-			int32 SwatchColorIdx = GetSwatchIdSafe(CustomizationData.SwatchDesc);
-
-			if (SwatchColorIdx == INDEX_NONE || ColorIdx == SwatchColorIdx || ColorIdx == INDEX_NONE)
-			{
-				continue;
-			}
-			CustomizationData.ColorSlot = SwatchColorIdx;
-			IFGColorInterface::Execute_SetCustomizationData(CurrentActor, CustomizationData);
-			// UE_LOGFMT(CustomizerSubsystem, Warning, "UpdateSwatchColorData: {0} from {1} to {2}",
-			// 		  CurrentActor->GetName(), ColorIdx, SwatchColorIdx);
-		}
-	}
+	// Existing buildables are intentionally NOT recolored - that corrupted player colours on ID shifts.
 
 	if (IsValid(BuildableLightSubsystem))
 	{
@@ -867,52 +950,4 @@ FString AKBFLSwatchReplicationSubsystem::GetModNameFromPath(const FString& ModPa
 {
 	FString Result;
 	return ModPath.Split(TEXT("/"), nullptr, &Result) ? Result : FString();
-}
-void AKBFLSwatchReplicationSubsystem::UpdateSwatchName(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch,
-													   const FText& NewName)
-{
-	if (!IsValid(Swatch))
-	{
-		return;
-	}
-
-	// PaintFinish swatches can never be renamed
-	if (Swatch->GetDefaultObject<UFGFactoryCustomizationDescriptor_Swatch>()
-			->IsA<UFGFactoryCustomizationDescriptor_PaintFinish>())
-	{
-		UE_LOGFMT(CustomizerSubsystem, Warning, "UpdateSwatchName: PaintFinish swatch {0} cannot be renamed",
-				  Swatch->GetName());
-		return;
-	}
-
-	// Base-game swatches can only be renamed if in mEditableSwatchNames
-	if (IsBaseGameSwatch(Swatch) && !mEditableSwatchNames.Contains(Swatch))
-	{
-		UE_LOGFMT(CustomizerSubsystem, Warning,
-				  "UpdateSwatchName: Base-game swatch {0} is not in mEditableSwatchNames - cannot rename",
-				  Swatch->GetName());
-		return;
-	}
-
-	if (!HasAuthority())
-	{
-		UKBFLColorRCO::Get(GetWorld())->UpdateSwatchName(this, Swatch, NewName);
-		return;
-	}
-
-	FKBFLReplicatedColorSlot* SlotToUpdate = mReplicatedColorSlots.FindByPredicate(
-		[&](const FKBFLReplicatedColorSlot& Slot) { return Slot.GetCachedClass() == Swatch; });
-
-	if (SlotToUpdate && !NewName.IsEmpty())
-	{
-		UE_LOGFMT(CustomizerSubsystem, Log, "UpdateSwatchName: {0} -> '{1}'", Swatch->GetName(), NewName.ToString());
-		SlotToUpdate->PatchName(NewName, mEditableSwatchNames);
-		ForceNetUpdate();
-	}
-	else
-	{
-		UE_LOGFMT(CustomizerSubsystem, Warning,
-				  "UpdateSwatchName: Swatch {0} not found in replicated slots or name is empty",
-				  Swatch ? Swatch->GetName() : TEXT("null"));
-	}
 }

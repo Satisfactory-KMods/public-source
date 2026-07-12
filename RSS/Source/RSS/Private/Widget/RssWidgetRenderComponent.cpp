@@ -184,6 +184,14 @@ void URssWidgetRenderComponent::ResetForPooling()
 	bOwnerImplementsInterface = false;
 	mCachedDataManager.Reset();
 
+	// The widget object is intentionally retained for pooling, but its previous sign
+	// must not survive the ownership transition. Otherwise a later Blueprint update
+	// can cast/dereference the destroyed or unrelated former owner.
+	if (mRssWidget)
+	{
+		mRssWidget->mBuildable = nullptr;
+	}
+
 	// Reset timers
 	mRedrawTime.Reset();
 

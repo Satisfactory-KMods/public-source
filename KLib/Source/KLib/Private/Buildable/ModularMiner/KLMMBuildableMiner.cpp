@@ -320,33 +320,32 @@ bool AKLMMBuildableMiner::CheckStorage() const
 		return false;
 	}
 
-	if (GetClampedPossibleProduction() > 0)
+	if (GetClampedPossibleProduction() <= 0)
 	{
-		bool ModuleCheck = true;
-
-		AKLMMBuildableModule* lModule = GetFirstModule(mWasteProducerAttachmentClass);
-		if (lModule)
-		{
-			ModuleCheck = lModule->CanStorageOutput(GetTrashDescriptor(), GetProductionCrusherAmount());
-			if (!ModuleCheck)
-			{
-				return false;
-			}
-		}
-
-		lModule = GetFirstModule(mFluidAttachmentClass);
-		if (lModule)
-		{
-			TSubclassOf<UFGItemDescriptor> lEmtpyFiller;
-			ModuleCheck = UKBFLCppInventoryHelper::HasItems(
-				GetInventory(), GetCurrentFluid(),
-				GetCurrentFluidInfo(lEmtpyFiller).mNormalFluidCountPerSecond * GetPurityMulti());
-		}
-
-		return ModuleCheck;
+		return false;
 	}
 
-	return false;
+	// Waste/crusher module: if its output storage cannot take this cycle's trash, STOP.
+	if (AKLMMBuildableModule* WasteModule = GetFirstModule(mWasteProducerAttachmentClass))
+	{
+		if (!WasteModule->CanStorageOutput(GetTrashDescriptor(), GetProductionCrusherAmount()))
+		{
+			return false;
+		}
+	}
+
+	// Fluid module: requires enough input fluid buffered to consume this cycle, else STOP.
+	if (GetFirstModule(mFluidAttachmentClass))
+	{
+		TSubclassOf<UFGItemDescriptor> lEmptyFiller;
+		const float NeededFluid = GetCurrentFluidInfo(lEmptyFiller).mNormalFluidCountPerSecond * GetPurityMulti();
+		if (!UKBFLCppInventoryHelper::HasItems(GetInventory(), GetCurrentFluid(), NeededFluid))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool AKLMMBuildableMiner::CheckProduction() const
@@ -454,36 +453,45 @@ void AKLMMBuildableMiner::OnMainProductionFinial_Implementation()
 {
 	Super::OnMainProductionFinial_Implementation();
 
-	if (!GetInventory())
-	{
-		return;
-	}
-	if (!GetResourceToProduce())
-	{
-		return;
-	}
-	if (GetProductionAmount() <= 0)
+	if (!GetInventory() || !GetResourceToProduce() || GetProductionAmount() <= 0)
 	{
 		return;
 	}
 
+	const int32 Amount = GetProductionAmount();
 	const bool bCanStoreSlot0 =
-		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 0, GetResourceToProduce(), GetProductionAmount());
+		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 0, GetResourceToProduce(), Amount);
 	const bool bCanStoreSlot1 =
-		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 1, GetResourceToProduce(), GetProductionAmount());
+		UKBFLCppInventoryHelper::CanStoreItem(GetInventory(), 1, GetResourceToProduce(), Amount);
 
-	// Support for dynamic fill outputs
-	if (!bCanStoreSlot0 || !bCanStoreSlot1)
+	if (bCanStoreSlot0 && bCanStoreSlot1)
 	{
-		UKBFLCppInventoryHelper::AddItemsInInventory(GetInventory(), GetResourceToProduce(),
-													 GetClampedPossibleProduction());
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, GetResourceToProduce(), Amount);
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 1, GetResourceToProduce(), Amount);
+		return;
+	}
+
+	const int32 ClampedAmount = GetClampedPossibleProduction();
+	if (ClampedAmount <= 0)
+	{
+		return;
+	}
+
+	if (bCanStoreSlot1)
+	{
+		// Slot 0 full/nearly full — redirect all production to slot 1
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 1, GetResourceToProduce(), ClampedAmount);
+	}
+	else if (bCanStoreSlot0)
+	{
+		// Slot 1 full/nearly full — redirect all production to slot 0
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, GetResourceToProduce(), ClampedAmount);
 	}
 	else
 	{
-		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, GetResourceToProduce(),
-															GetProductionAmount());
-		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 1, GetResourceToProduce(),
-															GetProductionAmount());
+		// Both slots partially full — partial-fill each via StoreItemAmountInInventory's fallback
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 0, GetResourceToProduce(), Amount);
+		UKBFLCppInventoryHelper::StoreItemAmountInInventory(GetInventory(), 1, GetResourceToProduce(), Amount);
 	}
 }
 

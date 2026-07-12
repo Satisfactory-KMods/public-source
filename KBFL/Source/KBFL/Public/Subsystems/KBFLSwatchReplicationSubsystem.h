@@ -18,14 +18,9 @@ struct FKBFLReplicatedColorSlot
 {
 	GENERATED_BODY()
 
+	// Swatch slot ID (color slot index). Range 0-254; 255 = invalid/none.
 	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FText mSlotName;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	int32 mSlotIndex = INDEX_NONE;
-
-	UPROPERTY(SaveGame, EditAnywhere, BlueprintReadWrite)
-	FFactoryCustomizationColorSlot mColorSlot;
+	uint8 mSlotIndex = 255;
 
 	UPROPERTY(SaveGame)
 	FString mPath;
@@ -35,9 +30,6 @@ struct FKBFLReplicatedColorSlot
 
 	UPROPERTY(SaveGame, VisibleAnywhere, BlueprintReadOnly)
 	bool bIsBaseGame = false;
-
-	void PatchName(const FText& Name,
-				   const TSet<TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>>& EditableSwatch);
 
 	UPROPERTY()
 	TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> mCachedClass = nullptr;
@@ -57,10 +49,6 @@ class KBFL_API UKBFLColorRCO : public UFGRemoteCallObject
 public:
 	UFUNCTION(BlueprintCallable)
 	static UKBFLColorRCO* Get(UObject* WorldContext);
-
-	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
-	void UpdateSwatchName(class AKBFLSwatchReplicationSubsystem* Subsystem,
-						  TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch, const FText& NewName);
 
 	UPROPERTY(Replicated)
 	bool bTest = true;
@@ -131,13 +119,17 @@ public:
 	UFUNCTION(BlueprintPure, Category = "KMods|Swatch Replication")
 	bool IsSwatchEditable(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> InClass) const;
 
-	UFUNCTION(BlueprintCallable, Category = "KMods|Swatch Replication")
-	void UpdateSwatchName(TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch> Swatch, const FText& NewName);
-
 	UPROPERTY(EditDefaultsOnly, Category = "Swatch")
 	TSet<TSubclassOf<UFGFactoryCustomizationDescriptor_Swatch>> mEditableSwatchNames;
 
 private:
+	/**
+	 * Phase 0: Historical bugs could persist two different swatch classes under the same mSlotIndex in
+	 * mReplicatedColorSlots. Detects any such duplicates and reassigns the later entry to a fresh, unused
+	 * slot so both swatches render distinctly instead of silently colliding on the same colour slot.
+	 */
+	void DeduplicateSavedSlots(TSet<int32>& ReservedIDs);
+
 	/**
 	 * Phase 1a: Assigns saved IDs or keeps world-used IDs for non-base-game swatches.
 	 * Swatches with ID 0 are never kept (0 is reserved for base game).

@@ -13,7 +13,7 @@ msgstr "（水）"
 
 msgctxt "ST_Klib,Desc_PurifiedTitan.Desc_PurifiedTitan_C.mDescription"
 msgid "93.6% pure Titanium Dioxide. Processing it into TiCl might require a few attempts."
-msgstr "纯度为93.6%的二氧化钛。将其加工成TiCl可能需要几次尝试。"
+msgstr "纯度为93.6%%的二氧化钛。将其加工成TiCl可能需要几次尝试。"
 
 msgctxt "ST_Klib,Desc_NC_CryoTankEmpty.Desc_NC_CryoTankEmpty_C.mDescription"
 msgid "A Container for easy transport"
@@ -137,7 +137,7 @@ msgid "Algal Mass Extractor"
 msgstr "藻类团块提取器"
 
 msgid "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "允许最多6个数据电缆连接。\\r\\n使用数据电缆连接Faxit扫描仪、复印机和Nexus，可将数据传输速率提高100%。\\r\\n\\r\\n注意：存储Nexus后无法连接到属于另一个存储Nexus的Faxit网络。"
+msgstr "允许最多6个数据电缆连接。\\r\\n使用数据电缆连接Faxit扫描仪、复印机和Nexus，可将数据传输速率提高100%%。\\r\\n\\r\\n注意：存储Nexus后无法连接到属于另一个存储Nexus的Faxit网络。"
 
 msgctxt "StringTable_Categorys,Alloys"
 msgid "Alloys"
@@ -180,13 +180,13 @@ msgid "Asphalt"
 msgstr "沥青"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "附加到模块化采矿机上。\\r\\n增加模块化采矿机的功耗。\\r\\n某些矿石需要更高级别的采矿头。\\r\\n标准提取率：每个输出30/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50% x 30/分钟 = 每个输出15/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
+msgstr "附加到模块化采矿机上。\\r\\n增加模块化采矿机的功耗。\\r\\n某些矿石需要更高级别的采矿头。\\r\\n标准提取率：每个输出30/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50%% x 30/分钟 = 每个输出15/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "附加到模块化采矿机上。\\r\\n增加模块化采矿机的功耗。\\r\\n某些矿石需要更高级别的采矿头。\\r\\n标准提取率：每个输出60/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50% x 60/分钟 = 每个输出30/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
+msgstr "附加到模块化采矿机上。\\r\\n增加模块化采矿机的功耗。\\r\\n某些矿石需要更高级别的采矿头。\\r\\n标准提取率：每个输出60/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50%% x 60/分钟 = 每个输出30/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "附加到模块化采矿机。\\r\\n增加模块化采矿机的功耗。\\r\\n足够坚固可开采任何矿石。\\r\\n标准提取率：每个输出120/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50% x 120/分钟 = 每个输出60/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
+msgstr "附加到模块化采矿机。\\r\\n增加模块化采矿机的功耗。\\r\\n足够坚固可开采任何矿石。\\r\\n标准提取率：每个输出120/分钟。\\r\\n\\r\\n所有采矿加成（'采矿效率'）直接应用于矿工的提取率。\\r\\n示例：50%% x 120/分钟 = 每个输出60/分钟。\\r\\n\\r\\n注意：节点纯度计入采矿加成，不计入基础提取率。"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
 msgstr "附加到模块化采矿机。\\r\\n增加模块化采矿机所需的功率。\\r\\n\\r\\n根据供应的流体提高采矿机的采矿效率。除非供应流体，否则采矿机不会启动。\\r\\n\\r\\n采矿效率加成可在采矿机菜单的'流体信息'面板中查看。"
@@ -198,7 +198,7 @@ msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the M
 msgstr "附加到模块化采矿机。rn增加模块化采矿机所需的功率。\\r\\n\\r\\n立即将提取的矿石熔炼成其主要金属锭，并通过流体输出排出尾矿浆。\\r\\n泥土燃烧并变成碎尾矿。\\r\\n扬程：10米。\\r\\n（允许流体向上运输10米。）\\r\\n\\r\\n注意：模块与粉碎模块不兼容。"
 
 msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
-msgstr "附加到模块化采矿机。\\r\\n\\r\\n能耗现在变化范围：\\r\\n（每个模块{PowerMin}-{PowerMax} MW）\\r\\n超频采矿机的电源电路。\\r\\n\\r\\n采矿效率加成 {BonusOnProduction}%"
+msgstr "附加到模块化采矿机。\\r\\n\\r\\n能耗现在变化范围：\\r\\n（每个模块{PowerMin}-{PowerMax} MW）\\r\\n超频采矿机的电源电路。\\r\\n\\r\\n采矿效率加成 {BonusOnProduction}%%"
 
 msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
 msgid "BD1"
@@ -304,7 +304,7 @@ msgid "Can be used as a connection for conveyor belts. "
 msgstr "可用作传送带的连接。"
 
 msgid "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%,\\r\\nNormal: 100%,\\r\\nPure: 200%"
-msgstr "能够装备不同的模块。\\r\\n需要采矿头来提取矿石，某些矿石需要额外的模块。缺失的模块将以蓝光指示。\\r\\n\\r\\n注意：节点纯度和模块影响矿工的'采矿效率'。该值与所附采矿头的基础提取率相乘。\\r\\n\\r\\n每个节点纯度的基础效率：\\r\\n不纯：50%，\\r\\n普通：100%，\\r\\n纯净：200%"
+msgstr "能够装备不同的模块。\\r\\n需要采矿头来提取矿石，某些矿石需要额外的模块。缺失的模块将以蓝光指示。\\r\\n\\r\\n注意：节点纯度和模块影响矿工的'采矿效率'。该值与所附采矿头的基础提取率相乘。\\r\\n\\r\\n每个节点纯度的基础效率：\\r\\n不纯：50%%，\\r\\n普通：100%%，\\r\\n纯净：200%%"
 
 msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipe inputs and outputs.\\r\\n\\r\\nFluid Output: The first fluid output is at the bottom\\r\\nSolid Output: The first solid output is on the right."
 msgstr "能够进行复杂的分馏和精炼过程。\\r\\n扬程：10米\\r\\n（允许流体向上运输10米。）\\r\\n\\r\\n包含传送带和管道输入输出。\\r\\n\\r\\n流体输出：第一个流体输出在底部\\r\\n固体输出：第一个固体输出在右侧。"
@@ -876,20 +876,20 @@ msgid "Full Booster Module"
 msgstr "全效增压模块"
 
 msgid "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "功能类似电信杆，但附着在墙上。墙两侧各有一个连接器。\\r\\n\\r\\n每侧最多允许6个数据电缆连接。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
+msgstr "功能类似电信杆，但附着在墙上。墙两侧各有一个连接器。\\r\\n\\r\\n每侧最多允许6个数据电缆连接。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
 
 msgid "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "功能类似电信杆，但附着在墙上。\\r\\n\\r\\n每侧最多允许6个数据电缆连接。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
+msgstr "功能类似电信杆，但附着在墙上。\\r\\n\\r\\n每侧最多允许6个数据电缆连接。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
 
 msgctxt "ST_Klib,Build_ChemReactor.K2Node_Select_0.EnumEntryFriendlyNames[3]"
 msgid "Gas"
 msgstr "气体"
 
 msgid "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "在流体被解构为光子之前生成其精确全息副本。\\r\\n全息数据和光子流被发送到存储核心。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%。"
+msgstr "在流体被解构为光子之前生成其精确全息副本。\\r\\n全息数据和光子流被发送到存储核心。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%%。"
 
 msgid "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "在物体被解构为光子之前生成其精确全息副本。\\r\\n全息数据和光子流被发送到存储核心。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%。"
+msgstr "在物体被解构为光子之前生成其精确全息副本。\\r\\n全息数据和光子流被发送到存储核心。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%%。"
 
 msgctxt "ST_Klib,Desc_Glass.Desc_Glass_C.mDisplayName"
 msgid "Glass"
@@ -916,7 +916,7 @@ msgid "Heating"
 msgstr "加热"
 
 msgid "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "帮助数据电缆跨越更远距离。\\r\\n电信塔底部有一个额外连接器，可连接到其他建筑，如电信杆。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
+msgstr "帮助数据电缆跨越更远距离。\\r\\n电信塔底部有一个额外连接器，可连接到其他建筑，如电信杆。\\r\\n\\r\\n使用数据电缆连接Faxit扫描仪、复印机和核心，可将数据传输速率提高100%%。\\r\\n\\r\\n注意：存储核心无法连接到属于另一个存储核心的Faxit网络。"
 
 msgctxt "ST_Klib,Desc_PackagedGas_Steam_Hot.Desc_PackagedGas_Steam_Hot_C.mDescription"
 msgid "Hot Steam, packaged for alternative transport."
@@ -936,10 +936,10 @@ msgstr "湿度："
 
 msgctxt "ST_Klib,Node_Format_Text.Format_34"
 msgid "Humidity: {TEMP}%"
-msgstr "适度：{TEMP}%"
+msgstr "适度：{TEMP}%%"
 
 msgid "Humidity\\r\\n{value}%"
-msgstr "湿度\\r\\n{value}%"
+msgstr "湿度\\r\\n{value}%%"
 
 msgctxt "ST_Klib,Node_Select.Option_0_04"
 msgid "Humidty"
@@ -1097,10 +1097,10 @@ msgid "Melting Point: 1084°C\\r\\n\\r\\nCopper in liquid form, useful for bulk 
 msgstr "熔点：1084°C\\r\\n\\r\\n液态铜，适用于批量铸造锭或其他部件，以及制造黄铜。"
 
 msgid "Melting Point: 1160°C, Carbon Content: 3.80 %\\r\\n\\r\\nGrey Cast Iron in liquid form, useful for bulk casting ingots or other parts, as well as making steel."
-msgstr "熔点：1160°C，碳含量：3.80%\\r\\n\\r\\n液态灰铸铁，适用于批量铸造锭或其他部件，以及制造钢。"
+msgstr "熔点：1160°C，碳含量：3.80%%\\r\\n\\r\\n液态灰铸铁，适用于批量铸造锭或其他部件，以及制造钢。"
 
 msgid "Melting Point: 1380°C, Carbon Content: 0.85 %\\r\\n\\r\\nLiquid Steel. When cooled slowly, tough and ductile Pearlite is formed.\\r\\nWhen cooled quickly, hard and brittle Martensite is formed."
-msgstr "熔点：1380°C，碳含量：0.85%\\r\\n\\r\\n液态钢。缓慢冷却时形成坚韧有韧性的珠光体。\\r\\n快速冷却时形成硬而脆的马氏体。"
+msgstr "熔点：1380°C，碳含量：0.85%%\\r\\n\\r\\n液态钢。缓慢冷却时形成坚韧有韧性的珠光体。\\r\\n快速冷却时形成硬而脆的马氏体。"
 
 msgid "Melting Point: 1390°C\\r\\n\\r\\nMagnitar™ is FICSIT's internally developed iron-nickel-cobalt (Fernico) alloy.\\r\\nIt is ferromagnetic and can be processed into permanent magnets or magnetic cores."
 msgstr "熔点：1390°C\\r\\n\\r\\n磁星铁™是FICSIT内部开发的铁镍钴合金。\\r\\n具有铁磁性，可加工成永磁体或磁芯。"
@@ -1539,7 +1539,7 @@ msgstr "生产时间： {time} 秒"
 
 msgctxt "ST_Klib,Node_Format_Text.Format_28"
 msgid "Productivity: {perc}%"
-msgstr "生产效率：{perc}%"
+msgstr "生产效率：{perc}%%"
 
 msgctxt "ST_Klib,Desc_SnailFood_Tier_5.Desc_SnailFood_Tier_5_C.mDisplayName"
 msgid "Protein Meal"
@@ -1573,10 +1573,10 @@ msgid "Raw Sludge"
 msgstr "未处理的污泥"
 
 msgid "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
-msgstr "使用全息模板从光子重建流体的精确副本。\\r\\n全息数据和光子流从存储核心接收。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%。\\r\\n\\r\\n扬程：10米\\r\\n（允许流体向上运输10米。）"
+msgstr "使用全息模板从光子重建流体的精确副本。\\r\\n全息数据和光子流从存储核心接收。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%%。\\r\\n\\r\\n扬程：10米\\r\\n（允许流体向上运输10米。）"
 
 msgid "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "使用全息模板从光子重建物体的精确副本。\\r\\n全息数据和光子流从存储核心接收。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%。"
+msgstr "使用全息模板从光子重建物体的精确副本。\\r\\n全息数据和光子流从存储核心接收。\\r\\n\\r\\n无线模式下数据吞吐量有限。使用数据电缆将其连接到存储网络可将吞吐量提高100%%。"
 
 msgctxt "ST_Klib,SlugDesc_Red.SlugDesc_Red_C.mDisplayName"
 msgid "Red Slug"
@@ -1896,7 +1896,7 @@ msgid "Time System"
 msgstr "时间系统"
 
 msgid "Time to Hatch: {HatchingTime} seconds\\r\\nTemperature: {MinHeat}-{MaxHeat}°C\\r\\nHumidity: {MinHumidity}-{MaxHumidity}%\\r\\nDay Time: {SlugTime}\\r\\nNeed Fluid: {IsFluidConsume}\\r\\nIncubator Tier: {IncubatorTier}\\r\\n\\r\\nNote: can't sink!"
-msgstr "孵化时间：{HatchingTime}秒\\r\\n温度：{MinHeat}-{MaxHeat}°C\\r\\n湿度：{MinHumidity}-{MaxHumidity}%\\r\\n白天时间：{SlugTime}\\r\\n需要流体： {IsFluidConsume}\\r\\n孵化器等级：{IncubatorTier}\\r\\n\\r\\n注意：不能低于此等级！"
+msgstr "孵化时间：{HatchingTime}秒\\r\\n温度：{MinHeat}-{MaxHeat}°C\\r\\n湿度：{MinHumidity}-{MaxHumidity}%%\\r\\n白天时间：{SlugTime}\\r\\n需要流体： {IsFluidConsume}\\r\\n孵化器等级：{IncubatorTier}\\r\\n\\r\\n注意：不能低于此等级！"
 
 msgctxt "ST_Klib,Desc_TinPlates.Desc_TinPlates_C.mAbbreviatedDisplayName"
 msgid "Tin"

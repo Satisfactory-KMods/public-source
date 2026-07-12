@@ -16,10 +16,16 @@ class KBFL_API UKBFLCDORecipeMover : public UKBFLCDOOverwriteBase
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Moves every recipe produced in mSourceTarget over to the mProducedIn producers (replacing or merging the existing
+	 * producer set per bReplace), skipping any recipes listed in mRecipesToIgnore.
+	 */
 	virtual void ApplyToInstances() override;
 
 	// Lazy-load path: re-apply to a single recipe class loaded after the initial CDO pass.
 	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+
+	/** Lazy-load handler: re-targets a single loaded recipe's producers from mSourceTarget to mProducedIn. */
 	virtual void ApplyToInstance(UObject* Instance) override;
 
 	// ===== Source Settings =====

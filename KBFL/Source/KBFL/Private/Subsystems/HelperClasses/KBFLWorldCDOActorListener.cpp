@@ -88,12 +88,17 @@ void UKBFLWorldCDOActorListener::ApplyToActorsInWorld()
 
 void UKBFLWorldCDOActorListener::Clear()
 {
+	// LevelAddedToWorld is a PROCESS-GLOBAL delegate. Its removal must NOT be gated behind GetWorld():
+	// during world teardown mWorld is often already stale/null, so a GetWorld()-gated removal would leak a
+	// binding to this persistent data asset into every subsequent world and accumulate across save->save travel.
+	if (mLevelAddedHandle.IsValid())
+	{
+		FWorldDelegates::LevelAddedToWorld.Remove(mLevelAddedHandle);
+		mLevelAddedHandle.Reset();
+	}
+
 	if (GetWorld() && mActorHandle.IsValid())
 	{
-		const FString EventTypeStr = mEventToListenFor == EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent
-			? TEXT("Spawned")
-			: TEXT("Destroyed");
-
 		switch (mEventToListenFor)
 		{
 		case EKBFLWorldCDOActorListenerEvent::DestroyedActorEvent:
@@ -101,19 +106,15 @@ void UKBFLWorldCDOActorListener::Clear()
 			break;
 		case EKBFLWorldCDOActorListenerEvent::SpawnedActorEvent:
 			GetWorld()->RemoveOnActorSpawnedHandler(mActorHandle);
-			if (mLevelAddedHandle.IsValid())
-			{
-				FWorldDelegates::LevelAddedToWorld.Remove(mLevelAddedHandle);
-				mLevelAddedHandle.Reset();
-			}
 			break;
 		default:
 			break;
 		}
 
-		UE_LOGFMT(LogKBFLActorListener, Verbose, "Clear: Unregistered {EventType} listener | Asset: {AssetPath}",
-				  EventTypeStr, GetPathName());
+		UE_LOGFMT(LogKBFLActorListener, Verbose, "Clear: Unregistered listener | Asset: {AssetPath}", GetPathName());
 	}
+
+	mActorHandle.Reset();
 
 	Super::Clear();
 }

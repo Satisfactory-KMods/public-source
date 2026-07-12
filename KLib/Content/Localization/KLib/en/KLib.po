@@ -68,7 +68,7 @@ msgid "<White10Reg>{Amount}m³</>"
 msgstr "<White10Reg>{Amount}m³</>"
 
 msgid "<White12Reg> Cabel boost (100%)</>\\r\\n {IS}"
-msgstr "<White12Reg> Cabel boost (100%)</>\\r\\n {IS}"
+msgstr "<White12Reg> Cabel boost (100%%)</>\\r\\n {IS}"
 
 msgid "<White12Reg> Current transfer Rate </>\\r\\n<Orange10Reg> {Amount} / min </>"
 msgstr "<White12Reg> Current transfer Rate </>\\r\\n<Orange10Reg> {Amount} / min </>"
@@ -320,7 +320,7 @@ msgid "Algal Mass Extractor"
 msgstr "Algal Mass Extractor"
 
 msgid "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Allows up to 6 Data Cable connections.\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
 
 msgctxt "StringTable_Categorys,Alloys"
 msgid "Alloys"
@@ -367,13 +367,13 @@ msgid "Asphalt"
 msgstr "Asphalt"
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 30 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50%% x 30 / min = 15 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nSome ores require higher tier mining heads.\\r\\nStandard extraction rate: 60 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50%% x 60 / min = 30 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
-msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
+msgstr "Attached to the Modular Miner.\\r\\nIncreases Modular Miner power consumption.\\r\\nTough enough to mine any ore.\\r\\nStandard extraction rate: 120 / min per output.\\r\\n\\r\\nAll mining bonuses ('Mining Efficiency') are directly applied to the extraction rate of the miner.\\r\\nExample: 50%% x 120 / min = 60 / min per output.\\r\\n\\r\\nNOTE: Node purity counts towards the mining bonus and NOT towards the base extraction rate."
 
 msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
 msgstr "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nIncreases the Miner's Mining Efficiency based on the supplied fluid. Miner will not activate unless a fluid is supplied.\\r\\n\\r\\nBonus to Mining Efficiency can be viewed from inside the Miner Menu 'Fluid Info' panel."
@@ -385,7 +385,7 @@ msgid "Attached to the Modular Miner.\\r\\nIncreases the power required by the M
 msgstr "Attached to the Modular Miner.\\r\\nIncreases the power required by the Modular Miner.\\r\\n\\r\\nInstantly smelts the extracted ores down to their primary metal ingots and ejects Tailings Slurry via the fluid output.\\r\\nDirt combusts and becomes Crushed Gangue.\\r\\nHead Lift: 10 m.\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nNOTE: Module is not compatible with Crusher Module."
 
 msgid "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
-msgstr "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%"
+msgstr "Attached to the Modular Miner.\\r\\n\\r\\nEnergy consumption now varies by:\\r\\n({PowerMin}-{PowerMax} MW per Module)\\r\\nOverclocks the miner's power circuit.\\r\\n\\r\\nMining Efficiency Bonus: {BonusOnProduction}%%"
 
 msgctxt "ST_Klib,Desc_BeltDriveMk1.Desc_BeltDriveMk1_C.mAbbreviatedDisplayName"
 msgid "BD1"
@@ -515,7 +515,7 @@ msgid "Can be used as a connection for conveyor belts. "
 msgstr "Can be used as a connection for conveyor belts. "
 
 msgid "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%,\\r\\nNormal: 100%,\\r\\nPure: 200%"
-msgstr "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%,\\r\\nNormal: 100%,\\r\\nPure: 200%"
+msgstr "Capable of being equipped with different modules.\\r\\nRequires a Mining Head to extract ores, some ores require additional modules. Missing Modules will be indicated with a blue light.\\r\\n\\r\\nNOTE: Node purity and modules affect the miner's 'Mining Efficiency'. This value is multiplied with the base extraction rate of the attached mining head.\\r\\n\\r\\nBase Efficiency per Node Purity:\\r\\nImpure: 50%%,\\r\\nNormal: 100%%,\\r\\nPure: 200%%"
 
 msgid "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipe inputs and outputs.\\r\\n\\r\\nFluid Output: The first fluid output is at the bottom\\r\\nSolid Output: The first solid output is on the right."
 msgstr "Capable of complex distillation and refining processes.\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)\\r\\n\\r\\nContains both Conveyor Belt and Pipe inputs and outputs.\\r\\n\\r\\nFluid Output: The first fluid output is at the bottom\\r\\nSolid Output: The first solid output is on the right."
@@ -1186,10 +1186,10 @@ msgid "Full Booster Module"
 msgstr "Full Booster Module"
 
 msgid "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Functions like a Telecom Pole, but attaches to a wall. Has one connector on each side of the wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections per side.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
 
 msgid "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Functions like a Telecom Pole, but attaches to a wall.\\r\\n\\r\\nAllows up to 6 Data Cable connections.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
 
 msgctxt ",3A704CD84C344A4272DBF284FE41B8E0"
 msgid "GRAPH"
@@ -1208,10 +1208,10 @@ msgid "Gas"
 msgstr "Gas"
 
 msgid "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Generates an exact holographic copy of a fluid before being deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%%."
 
 msgid "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Generates an exact holographic copy of an object before it is deconstructed into photons.\\r\\nThe hologram data and photon stream are sent to the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%%."
 
 msgctxt "ST_Klib,Anim_MinerHeadMk3.K2Node_AnimGetter_1.CachedTitle"
 msgid "Get Relevant Anim Time Remaining (Start)"
@@ -1262,7 +1262,7 @@ msgid "Heating"
 msgstr "Heating"
 
 msgid "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
-msgstr "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
+msgstr "Helps span Data Cables across greater distances.\\r\\nThere is an additional connector at the bottom of the Telecom Tower to connect it to other buildings, such as Telecom Poles.\\r\\n\\r\\nConnect Faxit Scanners, Copiers and a Nexus with Data Cables to increase the data transmission rate by 100%%.\\r\\n\\r\\nNOTE: A Storage Nexus cannot be connected to a Faxit Network belonging to another Storage Nexus."
 
 msgctxt "ST_Klib,Widget_KeyBind_SFP_NetworkDisplay.K2Node_Select_0.EnumEntryFriendlyNames[2]"
 msgid "Hidden"
@@ -1293,7 +1293,7 @@ msgid "Humidity: {TEMP}%"
 msgstr "Humidity: {TEMP}%%"
 
 msgid "Humidity\\r\\n{value}%"
-msgstr "Humidity\\r\\n{value}%"
+msgstr "Humidity\\r\\n{value}%%"
 
 msgctxt "ST_Klib,Node_Select.Option_0_04"
 msgid "Humidty"
@@ -1546,10 +1546,10 @@ msgid "Melting Point: 1084°C\\r\\n\\r\\nCopper in liquid form, useful for bulk 
 msgstr "Melting Point: 1084°C\\r\\n\\r\\nCopper in liquid form, useful for bulk casting ingots or other parts, as well as making Brass."
 
 msgid "Melting Point: 1160°C, Carbon Content: 3.80 %\\r\\n\\r\\nGrey Cast Iron in liquid form, useful for bulk casting ingots or other parts, as well as making steel."
-msgstr "Melting Point: 1160°C, Carbon Content: 3.80 %\\r\\n\\r\\nGrey Cast Iron in liquid form, useful for bulk casting ingots or other parts, as well as making steel."
+msgstr "Melting Point: 1160°C, Carbon Content: 3.80 %%\\r\\n\\r\\nGrey Cast Iron in liquid form, useful for bulk casting ingots or other parts, as well as making steel."
 
 msgid "Melting Point: 1380°C, Carbon Content: 0.85 %\\r\\n\\r\\nLiquid Steel. When cooled slowly, tough and ductile Pearlite is formed.\\r\\nWhen cooled quickly, hard and brittle Martensite is formed."
-msgstr "Melting Point: 1380°C, Carbon Content: 0.85 %\\r\\n\\r\\nLiquid Steel. When cooled slowly, tough and ductile Pearlite is formed.\\r\\nWhen cooled quickly, hard and brittle Martensite is formed."
+msgstr "Melting Point: 1380°C, Carbon Content: 0.85 %%\\r\\n\\r\\nLiquid Steel. When cooled slowly, tough and ductile Pearlite is formed.\\r\\nWhen cooled quickly, hard and brittle Martensite is formed."
 
 msgid "Melting Point: 1390°C\\r\\n\\r\\nMagnitar™ is FICSIT's internally developed iron-nickel-cobalt (Fernico) alloy.\\r\\nIt is ferromagnetic and can be processed into permanent magnets or magnetic cores."
 msgstr "Melting Point: 1390°C\\r\\n\\r\\nMagnitar™ is FICSIT's internally developed iron-nickel-cobalt (Fernico) alloy.\\r\\nIt is ferromagnetic and can be processed into permanent magnets or magnetic cores."
@@ -2138,7 +2138,7 @@ msgid "Power Shard Fragment"
 msgstr "Power Shard Fragment"
 
 msgid "Power Slug Slime in crystallized form, used for construction of Booster Modules or to produce Power Shards.\\r\\n\\r\\nMade from Slug Slime through the Filtrator.\\r\\n\\r\\nCan be used to overclock special K-Mods buildings by 25% per shard."
-msgstr "Power Slug Slime in crystallized form, used for construction of Booster Modules or to produce Power Shards.\\r\\n\\r\\nMade from Slug Slime through the Filtrator.\\r\\n\\r\\nCan be used to overclock special K-Mods buildings by 25% per shard."
+msgstr "Power Slug Slime in crystallized form, used for construction of Booster Modules or to produce Power Shards.\\r\\n\\r\\nMade from Slug Slime through the Filtrator.\\r\\n\\r\\nCan be used to overclock special K-Mods buildings by 25%% per shard."
 
 msgctxt "ST_Klib,Node_Format_Text.Format_27"
 msgid "Power: {cur}/{max} MW"
@@ -2225,10 +2225,10 @@ msgid "Recipes"
 msgstr "Recipes"
 
 msgid "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
-msgstr "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
+msgstr "Reconstructs an exact copy of a fluid out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%%.\\r\\n\\r\\nHead Lift: 10 m\\r\\n(Allows fluids to be transported 10 meters upwards.)"
 
 msgid "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
-msgstr "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%."
+msgstr "Reconstructs an exact copy of an object out of photons by using hologram templates.\\r\\nThe hologram data and photon stream are received from the Storage Nexus.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to the Storage Network with Data Cables increases throughput by 100%%."
 
 msgctxt "ST_Klib,SlugDesc_Red.SlugDesc_Red_C.mDisplayName"
 msgid "Red Slug"
@@ -2486,7 +2486,7 @@ msgid "Storage Network Wire"
 msgstr "Storage Network Wire"
 
 msgid "Stores hologram data and manages photon streams received from Scanners.\\r\\n\\r\\nItem data, building limit and storage size is limited by the installed number of FaxIt Disks.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to other FaxIT buildings with Data Cables increases throughput by 100%."
-msgstr "Stores hologram data and manages photon streams received from Scanners.\\r\\n\\r\\nItem data, building limit and storage size is limited by the installed number of FaxIt Disks.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to other FaxIT buildings with Data Cables increases throughput by 100%."
+msgstr "Stores hologram data and manages photon streams received from Scanners.\\r\\n\\r\\nItem data, building limit and storage size is limited by the installed number of FaxIt Disks.\\r\\n\\r\\nData throughput is limited in wireless mode. Connecting it to other FaxIT buildings with Data Cables increases throughput by 100%%."
 
 msgctxt "ST_Klib,BPW_SplitterBalanceSmartRule.mSubmit.mText"
 msgid "Submit"
@@ -2689,7 +2689,7 @@ msgid "Time System"
 msgstr "Time System"
 
 msgid "Time to Hatch: {HatchingTime} seconds\\r\\nTemperature: {MinHeat}-{MaxHeat}°C\\r\\nHumidity: {MinHumidity}-{MaxHumidity}%\\r\\nDay Time: {SlugTime}\\r\\nNeed Fluid: {IsFluidConsume}\\r\\nIncubator Tier: {IncubatorTier}\\r\\n\\r\\nNote: can't sink!"
-msgstr "Time to Hatch: {HatchingTime} seconds\\r\\nTemperature: {MinHeat}-{MaxHeat}°C\\r\\nHumidity: {MinHumidity}-{MaxHumidity}%\\r\\nDay Time: {SlugTime}\\r\\nNeed Fluid: {IsFluidConsume}\\r\\nIncubator Tier: {IncubatorTier}\\r\\n\\r\\nNote: can't sink!"
+msgstr "Time to Hatch: {HatchingTime} seconds\\r\\nTemperature: {MinHeat}-{MaxHeat}°C\\r\\nHumidity: {MinHumidity}-{MaxHumidity}%%\\r\\nDay Time: {SlugTime}\\r\\nNeed Fluid: {IsFluidConsume}\\r\\nIncubator Tier: {IncubatorTier}\\r\\n\\r\\nNote: can't sink!"
 
 msgctxt "ST_Klib,Desc_TinPlates.Desc_TinPlates_C.mAbbreviatedDisplayName"
 msgid "Tin"

@@ -21,15 +21,23 @@ class KBFL_API UKBFLPrimaryDataAssetOverwrite : public UKBFLCDOOverwriteBase
 	GENERATED_BODY()
 
 public:
+	/** Default constructor. */
 	UKBFLPrimaryDataAssetOverwrite();
 
 	// UObject interface
+	/** Recreates the property container if it is missing or its class no longer matches the target instance/class
+	 * (accounting for an abstract target's concrete container class). */
 	virtual void PostLoad() override;
 	// End UObject interface
 
 #if WITH_EDITOR
+	/** Editor: refreshes the container and clears overrides when the target class/instance/container class changes;
+	 * revalidates manual property overrides when they are edited. */
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	/** Editor: rebuilds mModifiedProperties when a value inside mPropertyContainer is edited. */
 	virtual void PostEditChangeChainProperty(FPropertyChangedChainEvent& PropertyChangedEvent) override;
+	/** Editor: validates the target class is set, requires a concrete container class for abstract targets, and checks
+	 * each manual property name exists on the target class. */
 	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
 
 	/** Validate and auto-detect property types for manual property overrides */
@@ -45,9 +53,7 @@ public:
 	 * template. mTargetDataAssetClass still identifies which assets to target; this class is only used so the
 	 * property container can be created and edited. Must be a non-abstract subclass of mTargetDataAssetClass. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Target Settings",
-			  meta = (AllowAbstract = "false",
-					  EditCondition = "mTargetDataAssetClass != nullptr",
-					  EditConditionHides))
+			  meta = (AllowAbstract = "false", EditCondition = "mTargetDataAssetClass != nullptr", EditConditionHides))
 	TSubclassOf<UDataAsset> mAbstractContainerClass;
 
 	/** Target object instance (alternative to class-based targeting) */
@@ -129,6 +135,8 @@ private:
 							 UObject* TargetInstance);
 
 public:
+	/** Applies the overrides to the specific target instance if one is set, otherwise to all matching DataAsset
+	 * instances discovered for the target class. */
 	virtual void ApplyToInstances() override;
 
 	/** Refresh the property container when TargetClass changes */

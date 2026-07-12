@@ -20,6 +20,8 @@
 //   "Subsystem/RSSImageSubsystem.h"
 //   "Widget/RssWidgetRenderComponent.h"
 
+#include "TimerManager.h"
+
 RSS_SIGN_IMPL_CLASS::RSS_SIGN_IMPL_CLASS()
 {
 	bReplicates = true;
@@ -113,9 +115,40 @@ void RSS_SIGN_IMPL_CLASS::RequestCustomSign_Implementation(FRssSignRequestData R
 	}
 }
 
-void RSS_SIGN_IMPL_CLASS::OnRep_SignDataDirty() { Execute_UpdateSign(this); }
+void RSS_SIGN_IMPL_CLASS::OnRep_SignDataDirty()
+{
+	Execute_UpdateSign(this);
+
+	// SetSignData()/UpdateSignData() (the normal widget edit path) only ever route through here - unlike
+	// ApplySignData_Implementation, they never called ValidateCustom(). A freshly-confirmed custom URL was
+	// therefore never actually requested until something else happened to re-validate later (e.g. BeginPlay
+	// on next load), which looked like "must confirm the link twice".
+	ValidateCustom();
+}
 
 void RSS_SIGN_IMPL_CLASS::ValidateCustom() { URssBlueprintFunctionLibrary::ValidateCustomData(this); }
+
+void RSS_SIGN_IMPL_CLASS::ValidateCustomDeferred()
+{
+	if (URssBlueprintFunctionLibrary::GetImageSubsystem(this))
+	{
+		ValidateCustom();
+		return;
+	}
+
+	// ARSSImageSubsystem (SpawnLocal) has no guaranteed spawn order relative to saved buildings' BeginPlay.
+	// If it isn't up yet, ValidateCustomData() would silently no-op and never retry on its own, leaving the
+	// sign blank until something else happens to call ValidateCustom() again (e.g. reopening the sign UI).
+	TWeakObjectPtr<RSS_SIGN_IMPL_CLASS> WeakThis(this);
+	GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda(
+		[WeakThis]()
+		{
+			if (RSS_SIGN_IMPL_CLASS* Self = WeakThis.Get())
+			{
+				Self->ValidateCustomDeferred();
+			}
+		}));
+}
 
 void RSS_SIGN_IMPL_CLASS::RequestCustomSignMulticast_Implementation(FRssSignRequestData Request)
 {
@@ -135,7 +168,7 @@ void RSS_SIGN_IMPL_CLASS::BeginPlay()
 	mScreenRender = Cast<URssWidgetRenderComponent>(GetComponentByClass(URssWidgetRenderComponent::StaticClass()));
 
 	Execute_UpdateSign(this);
-	ValidateCustom();
+	ValidateCustomDeferred();
 
 	if (ARssDataManagerSubsystem* DataManager = ARssDataManagerSubsystem::GetRSSDataManagerSubsystem(GetWorld()))
 	{

@@ -13,7 +13,8 @@ void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 {
 	Super::Unlock(unlockSubssytem);
 
-	if (unlockSubssytem->GetWorld()->GetNetMode() != NM_Client)
+	UWorld* World = unlockSubssytem->GetWorld();
+	if (IsValid(World) && World->GetNetMode() != NM_Client)
 	{
 		AFGTutorialIntroManager* TutorialIntro = AFGTutorialIntroManager::Get(unlockSubssytem);
 		FVector TerminalLocation = FVector::ZeroVector;
@@ -25,7 +26,7 @@ void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 		}
 
 		AFGCharacterPlayer* NearstPlayerToHub = nullptr;
-		for (TPlayerControllerIterator<AFGPlayerController>::ServerAll It(unlockSubssytem->GetWorld()); It; ++It)
+		for (TPlayerControllerIterator<AFGPlayerController>::ServerAll It(World); It; ++It)
 		{
 			if (!It || !IsValid(*It))
 			{

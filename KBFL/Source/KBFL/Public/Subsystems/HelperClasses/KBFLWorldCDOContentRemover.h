@@ -20,21 +20,53 @@ class KBFL_API UKBFLWorldCDOContentRemover : public UKBFLCDOOverwriteWorldBasedB
 	GENERATED_BODY()
 
 public:
+	/**
+	 * Entry point: resolves the soft-class remove/keep lists, expands the path-based lists against all discovered
+	 * schematics/recipes/research trees (keep overrides remove), then removes schematics, recipes, and research trees.
+	 */
 	virtual void ApplyToActorsInWorld() override;
+
+	/** Empties all cached remove/keep lists. */
 	virtual void Clear() override;
 
+	/** Returns true if Target's path name contains any of the substrings in PathList. */
 	bool IsInPathList(TSubclassOf<UObject> Target, const TArray<FString>& PathList) const;
 
+	/**
+	 * Removes all cached schematics from the schematic manager. When bListenOnSchematicManager is set, also subscribes
+	 * to PurchasedSchematicDelegate so schematics are removed again if unlocked later.
+	 */
 	void HandleSchematicsRemoval();
+
+	/**
+	 * Removes a single schematic from the manager (reset purchased, drop from all/purchased lists, clear active/last
+	 * active, repopulate). Skipped if the schematic is in the keep list or fails the requirements check.
+	 */
 	void HandleSingleSchematicRemoval(TSubclassOf<UFGSchematic> Schematic, AFGSchematicManager* SchematicManager);
 
+	/** Removes all cached recipes from the recipe manager. */
 	void HandleRecipesRemoval();
+
+	/**
+	 * Removes a single recipe from the manager (available/all lists, plus the customization list if it is a
+	 * customization recipe) and rebuilds derived recipe data. Skipped if kept or requirements not met.
+	 */
 	void HandleSingleRecipeRemoval(TSubclassOf<UFGRecipe> Recipe, AFGRecipeManager* RecipeManager);
 
+	/** Removes all cached research trees from the research manager. */
 	void HandleResearchTreesRemoval();
+
+	/**
+	 * Removes a single research tree from the manager's available and unlocked lists. Skipped if the tree is in the
+	 * keep list or fails the requirements check.
+	 */
 	void HandleSingleResearchTreeRemoval(TSubclassOf<UFGResearchTree> ResearchTree,
 										 AFGResearchManager* ResearchManager);
 
+	/**
+	 * PurchasedSchematicDelegate callback (active when bListenOnSchematicManager): re-removes a just-unlocked schematic
+	 * if it is marked for removal, or leaves it in place if it is in the keep list.
+	 */
 	UFUNCTION()
 	void OnSchematicUnlocked(TSubclassOf<UFGSchematic> UnlockedSchematic);
 

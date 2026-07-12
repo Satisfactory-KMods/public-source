@@ -146,7 +146,16 @@ void UKPCLColoredStaticMesh::ApplyTransformToComponent()
 	}
 	else
 	{
-		AsyncTask(ENamedThreads::GameThread, [&]() { SetWorldTransform(mLastWorldTransform); });
+		TWeakObjectPtr<UKPCLColoredStaticMesh> WeakThis(this);
+		FTransform CapturedTransform = mLastWorldTransform;
+		AsyncTask(ENamedThreads::GameThread,
+				  [WeakThis, CapturedTransform]()
+				  {
+					  if (WeakThis.IsValid())
+					  {
+						  WeakThis->SetWorldTransform(CapturedTransform);
+					  }
+				  });
 	}
 }
 
@@ -174,7 +183,7 @@ void UKPCLColoredStaticMesh::UpdateStaticMesh(UKPCLColoredStaticMesh* Proxy, AAc
 		else
 		{
 			AsyncTask(ENamedThreads::GameThread,
-					  [&, Proxy, Owner, Mesh]()
+					  [Proxy, Owner, Mesh]()
 					  {
 						  UKPCLColoredStaticMesh* NewProxy =
 							  NewObject<UKPCLColoredStaticMesh>(Owner, NAME_None, RF_NoFlags, Proxy);
@@ -223,12 +232,13 @@ void UKPCLColoredStaticMesh::ApplyNewColorDatas(TArray<FKPCLColorData> ColorData
 			}
 			else
 			{
+				TWeakObjectPtr<UKPCLColoredStaticMesh> WeakThis(this);
 				AsyncTask(ENamedThreads::GameThread,
-						  [&]()
+						  [WeakThis]()
 						  {
-							  if (IsValid(this))
+							  if (WeakThis.IsValid())
 							  {
-								  ApplyNewData();
+								  WeakThis->ApplyNewData();
 							  }
 						  });
 			}
@@ -316,12 +326,13 @@ void UKPCLColoredStaticMesh::ApplyFGNewColorDatas(TArray<FKPCLColorData> ColorDa
 			}
 			else
 			{
+				TWeakObjectPtr<UKPCLColoredStaticMesh> WeakThis(this);
 				AsyncTask(ENamedThreads::GameThread,
-						  [&]()
+						  [WeakThis]()
 						  {
-							  if (IsValid(this))
+							  if (WeakThis.IsValid())
 							  {
-								  ApplyNewData();
+								  WeakThis->ApplyNewData();
 							  }
 						  });
 			}
@@ -357,12 +368,13 @@ void UKPCLColoredStaticMesh::RemoveFGIndex(int32 Idx, bool MarkStateDirty)
 			}
 			else
 			{
+				TWeakObjectPtr<UKPCLColoredStaticMesh> WeakThis(this);
 				AsyncTask(ENamedThreads::GameThread,
-						  [&]()
+						  [WeakThis]()
 						  {
-							  if (IsValid(this))
+							  if (WeakThis.IsValid())
 							  {
-								  ApplyNewData();
+								  WeakThis->ApplyNewData();
 							  }
 						  });
 			}

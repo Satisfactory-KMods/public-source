@@ -47,6 +47,8 @@ class KBFL_API UKBFLActorSpawnDescriptorBase : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
+
 	virtual void BeginSpawning();
 
 	// Begin Requirements Handling

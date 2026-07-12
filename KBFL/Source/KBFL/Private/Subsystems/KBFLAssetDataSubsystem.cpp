@@ -194,7 +194,19 @@ void UKBFLAssetDataSubsystem::EnsureCategoryResolved(int32 Type)
 	EnsureRegistryScanned();
 	if (!bWasInit)
 	{
-		// Registry still streaming - resolution deferred until OnFilesLoaded re-runs the scan.
+		// Registry still streaming — register a one-shot callback to retry after OnFilesLoaded.
+		if (!mDeferredCategoryTypes.Contains(Type))
+		{
+			mDeferredCategoryTypes.Add(Type);
+			FAssetRegistryModule& AssetRegistryModule =
+				FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+			AssetRegistryModule.Get().OnFilesLoaded().AddWeakLambda(this,
+																	[this, Type]()
+																	{
+																		mDeferredCategoryTypes.Remove(Type);
+																		EnsureCategoryResolved(Type);
+																	});
+		}
 		return;
 	}
 
@@ -1136,7 +1148,6 @@ void UKBFLAssetDataSubsystem::BroadcastCategoryEvent(UClass* Class, int32 Type)
 
 void UKBFLAssetDataSubsystem::BindOnSchematicAdded(FKBFLOnSchematicAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnSchematicAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(0);
@@ -1145,11 +1156,11 @@ void UKBFLAssetDataSubsystem::BindOnSchematicAdded(FKBFLOnSchematicAddedEvent De
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnSchematicAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnRecipeAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(1);
@@ -1158,11 +1169,11 @@ void UKBFLAssetDataSubsystem::BindOnRecipeAdded(FKBFLOnRecipeAddedEvent Delegate
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnRecipeAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnItemAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(2);
@@ -1171,11 +1182,11 @@ void UKBFLAssetDataSubsystem::BindOnItemAdded(FKBFLOnItemAddedEvent Delegate, bo
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnItemAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnBuildableAdded(FKBFLOnBuildableAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnBuildableAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(3);
@@ -1184,11 +1195,11 @@ void UKBFLAssetDataSubsystem::BindOnBuildableAdded(FKBFLOnBuildableAddedEvent De
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnBuildableAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnDriveablePawnAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(4);
@@ -1197,11 +1208,11 @@ void UKBFLAssetDataSubsystem::BindOnDriveablePawnAdded(FKBFLOnDriveablePawnAdded
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnDriveablePawnAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnHologramAdded(FKBFLOnHologramAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnHologramAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(5);
@@ -1210,11 +1221,11 @@ void UKBFLAssetDataSubsystem::BindOnHologramAdded(FKBFLOnHologramAddedEvent Dele
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnHologramAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnModModuleAdded(FKBFLOnModModuleAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnModModuleAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(6);
@@ -1223,12 +1234,12 @@ void UKBFLAssetDataSubsystem::BindOnModModuleAdded(FKBFLOnModModuleAddedEvent De
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnModModuleAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnResourceDescriptorAdded(FKBFLOnResourceDescriptorAddedEvent Delegate,
 															bool bEnsureLoaded)
 {
-	OnResourceDescriptorAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(8);
@@ -1237,11 +1248,11 @@ void UKBFLAssetDataSubsystem::BindOnResourceDescriptorAdded(FKBFLOnResourceDescr
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnResourceDescriptorAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnResearchTreeAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(10);
@@ -1250,11 +1261,11 @@ void UKBFLAssetDataSubsystem::BindOnResearchTreeAdded(FKBFLOnResearchTreeAddedEv
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnResearchTreeAdded.Add(Delegate);
 }
 
 void UKBFLAssetDataSubsystem::BindOnSessionSettingAdded(FKBFLOnSessionSettingAddedEvent Delegate, bool bEnsureLoaded)
 {
-	OnSessionSettingAdded.Add(Delegate);
 	if (bEnsureLoaded)
 	{
 		EnsureCategoryResolved(11);
@@ -1263,4 +1274,5 @@ void UKBFLAssetDataSubsystem::BindOnSessionSettingAdded(FKBFLOnSessionSettingAdd
 	{
 		Delegate.ExecuteIfBound(Item);
 	}
+	OnSessionSettingAdded.Add(Delegate);
 }

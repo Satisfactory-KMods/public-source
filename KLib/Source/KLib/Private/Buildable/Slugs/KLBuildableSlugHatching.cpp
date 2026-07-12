@@ -438,7 +438,7 @@ void AKLBuildableSlugHatching::onProducingFinal_Implementation()
 				  {
 					  if (IsValid(mSlugSubsystem))
 					  {
-						  mSlugSubsystem->AddBreededSlugs(EggClass);
+						  mSlugSubsystem->AddBreededEgg(EggClass);
 					  }
 				  });
 	}
@@ -728,11 +728,8 @@ bool AKLBuildableSlugHatching::CheckModules() const
 	if (HatchingData->IncubationFluidRequired())
 	{
 		const FInventoryStack Stack = GetStackFromIndex(FLUID_IDX);
-		if (Stack.HasItems())
-		{
-			return Stack.Item.GetItemClass() == HatchingData->mFluidClass &&
-				Stack.NumItems >= HatchingData->mFluidConsume;
-		}
+		return Stack.HasItems() && Stack.Item.GetItemClass() == HatchingData->mFluidClass &&
+			Stack.NumItems >= HatchingData->mFluidConsume;
 	}
 
 	return true;

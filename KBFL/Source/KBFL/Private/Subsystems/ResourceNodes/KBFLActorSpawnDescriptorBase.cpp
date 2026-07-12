@@ -18,6 +18,11 @@ bool UKBFLSpawnRequirement::IsRequirementMetActor_Implementation(class UKBFLActo
 	return true;
 }
 
+FPrimaryAssetId UKBFLActorSpawnDescriptorBase::GetPrimaryAssetId() const
+{
+	return FPrimaryAssetId(FName("KBFLActorSpawnDescriptor"), GetFName());
+}
+
 void UKBFLActorSpawnDescriptorBase::BeginSpawning()
 {
 	UE_LOGFMT(KBFLActorSpawnerLog, Log, "BeginSpawning called for descriptor: {0}", GetName());
@@ -276,7 +281,8 @@ void UKBFLActorSpawnDescriptorBase::RemoveWrongActors(TArray<AActor*>& ActorArra
 	}
 }
 
-void UKBFLActorSpawnDescriptorBase::ApplyMaterialData(AActor* Actor, TMap<uint8, TObjectPtr<UMaterialInterface>> MaterialInfo)
+void UKBFLActorSpawnDescriptorBase::ApplyMaterialData(AActor* Actor,
+													  TMap<uint8, TObjectPtr<UMaterialInterface>> MaterialInfo)
 {
 	UE_LOGFMT(KBFLActorSpawnerLog, Log, "ApplyMaterialData: Actor '{0}', Materials: {1}", Actor->GetName(),
 			  MaterialInfo.Num());

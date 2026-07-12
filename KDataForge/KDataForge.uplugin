@@ -1,0 +1,50 @@
+{
+	"FileVersion": 3,
+	"Version": 9999,
+	"VersionName": "9999.9.9",
+	"SemVersion": "9999.9.9",
+	"FriendlyName": "KDataForge",
+	"Description": "Data-driven runtime content editing framework: zero-code balancing and editing of Satisfactory game content through YAML files and an in-game editor.",
+	"Category": "Modding",
+	"CreatedBy": "Kyri123/Kyrium",
+	"CreatedByURL": "https://github.com/Kyri123",
+	"MarketplaceURL": "",
+	"DocsURL": "https://k-mods.com/documentation/kdataforge",
+	"SupportURL": "https://discord.gg/JsJ9XXWS7Q",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "KDataForgeApi",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "KDataForgeYaml",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "KDataForge",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "KDataForgeEditorUI",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "SML",
+			"SemVersion": "^3.12.0",
+			"Enabled": true
+		}
+	],
+	"AcceptsAnyRemoteVersion": false,
+	"GameVersion": ">=491125",
+	"GameFeatures": true
+}

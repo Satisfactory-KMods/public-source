@@ -22,7 +22,15 @@ void UKPCLBetterIndicator::SetState(ENewProductionState NewState, bool MarkState
 		}
 		else
 		{
-			AsyncTask(ENamedThreads::GameThread, [&]() { OnIndicatorStateChanged.Broadcast(mCurrentState); });
+			TWeakObjectPtr<UKPCLBetterIndicator> WeakThis(this);
+			AsyncTask(ENamedThreads::GameThread,
+					  [WeakThis, NewState]()
+					  {
+						  if (WeakThis.IsValid())
+						  {
+							  WeakThis->OnIndicatorStateChanged.Broadcast(NewState);
+						  }
+					  });
 		}
 	}
 	ApplyNewColorData(FKPCLColorData(0, GetEmissive()), MarkStateDirty);

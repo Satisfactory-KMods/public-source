@@ -13,6 +13,11 @@
 
 void URssBlueprintFunctionLibrary::ValidateCustomData(AActor* Building)
 {
+	if (!IsValid(Building) || !UKismetSystemLibrary::DoesImplementInterface(Building, URssSignInterface::StaticClass()))
+	{
+		return;
+	}
+
 	FRssSignRequestData Request;
 	Request.mBuildable = Building;
 	FRssSignData ModifyData = IRssSignInterface::Execute_GetSignData(Building);
@@ -79,6 +84,11 @@ void URssBlueprintFunctionLibrary::ValidateCustomData(AActor* Building)
 
 void URssBlueprintFunctionLibrary::RequestUpgradeSignToCustom(AActor* Building, FRssSignRequestData Request)
 {
+	if (!IsValid(Building) || !UKismetSystemLibrary::DoesImplementInterface(Building, URssSignInterface::StaticClass()))
+	{
+		return;
+	}
+
 	FRssSignData ModifyData = IRssSignInterface::Execute_GetSignData(Building);
 	if (Request.mWasSuccess && Request.mSuccessTexture && !Request.mOnlyAddToUI)
 	{
@@ -110,7 +120,7 @@ void URssBlueprintFunctionLibrary::RequestUpgradeSignToCustom(AActor* Building, 
 
 void URssBlueprintFunctionLibrary::UpdateSignGeneralFunction(AActor* Building)
 {
-	if (Building)
+	if (IsValid(Building))
 	{
 		if (UKismetSystemLibrary::DoesImplementInterface(Building, URssSignInterface::StaticClass()))
 		{

@@ -26,10 +26,13 @@ class KBFL_API UKBFLCDOItemStackSize : public UKBFLCDOOverwriteBase
 	GENERATED_BODY()
 
 public:
+	/** Applies each configured stack size to its mapped item descriptors, updating mStackSize and the cached value. */
 	virtual void ApplyToInstances() override;
 
 	// Lazy-load path: re-apply to a single item class loaded after the initial CDO pass.
 	virtual bool ShouldCallForInstance(UClass* NewClass) override;
+
+	/** Lazy-load handler: sets the configured stack size on a single loaded item descriptor instance. */
 	virtual void ApplyToInstance(UObject* Instance) override;
 
 	// ===== Stack Size Settings =====
