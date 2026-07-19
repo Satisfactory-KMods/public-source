@@ -81,9 +81,9 @@ void AKPCLNetworkCore::BeginPlay()
 		if (!IsValid(mFaxitSubsystem))
 		{
 			UE_LOG(LogFaxit, Error,
-			       TEXT("AKPCLNetworkCore::BeginPlay - mFaxitSubsystem is null for %s. "
-				       "Network will not be initialised."),
-			       *GetName());
+				   TEXT("AKPCLNetworkCore::BeginPlay - mFaxitSubsystem is null for %s. "
+						"Network will not be initialised."),
+				   *GetName());
 			return;
 		}
 
@@ -133,7 +133,7 @@ void AKPCLNetworkCore::GetDismantleInventoryReturns(TArray<FInventoryStack>& out
 				if (form == EResourceForm::RF_SOLID)
 				{
 					UFGInventoryLibrary::MergeInventoryItem(out_returns,
-					                                        FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
+															FInventoryStack(ItemAmount.Amount, ItemAmount.ItemClass));
 				}
 			}
 		}
@@ -187,7 +187,7 @@ void AKPCLNetworkCore::GetConditionalReplicatedProps(TArray<FFGCondReplicatedPro
 }
 
 void AKPCLNetworkCore::GetDismantleRefund_Implementation(TArray<FInventoryStack>& out_refund,
-                                                         bool noBuildCostEnabled) const
+														 bool noBuildCostEnabled) const
 {
 	if (noBuildCostEnabled)
 	{
@@ -281,20 +281,18 @@ void AKPCLNetworkCore::SaveStateBundle()
 		}
 	}
 	mStateBundels.Emplace(NewBundel);
-	while (mStateBundels.Num() > 60)
-	{
-		mStateBundels.Pop(EAllowShrinking::No);
-	}
 	mStateBundels.Sort([](const FKPCLFaxitNetworkStatDataBundle& a, const FKPCLFaxitNetworkStatDataBundle& b)
+					   { return a.mTimestamp > b.mTimestamp; });
+	if (mStateBundels.Num() > 60)
 	{
-		return a.mTimestamp > b.mTimestamp;
-	});
+		mStateBundels.SetNum(60, EAllowShrinking::No);
+	}
 	bStatBundleChanged = true;
 	mPropertyReplicator.MarkPropertyDirty(FName("mStateBundels"));
 }
 
 bool AKPCLNetworkCore::CanItemBeStoredInNetwork(TSubclassOf<AKPCLNetworkCore> CoreClass,
-                                                TSubclassOf<UFGItemDescriptor> Item)
+												TSubclassOf<UFGItemDescriptor> Item)
 {
 	if (!IsValid(Item) || !IsValid(CoreClass))
 	{
@@ -345,7 +343,7 @@ void AKPCLNetworkCore::DebugInventory() const
 	for (FItemAmount Storage : mStorage.ToItemAmountArray())
 	{
 		UE_LOG(LogFaxit, Log, TEXT("Item: %s | Amount: %d"),
-		       *UFGItemDescriptor::GetItemName(Storage.ItemClass).ToString(), Storage.Amount);
+			   *UFGItemDescriptor::GetItemName(Storage.ItemClass).ToString(), Storage.Amount);
 	}
 	UE_LOG(LogFaxit, Warning, TEXT("----- END ---> Faxit Network Core Inventory -----"));
 }
@@ -395,7 +393,7 @@ void AKPCLNetworkCore::PostInitializeComponents()
 	for (UFGPowerConnectionComponent* PowerConnectionComponent : PowerConnectionComponents)
 	{
 		if (UKPCLNetworkConnectionComponent* NetworkConnectionComponent =
-			Cast<UKPCLNetworkConnectionComponent>(PowerConnectionComponent))
+				Cast<UKPCLNetworkConnectionComponent>(PowerConnectionComponent))
 		{
 			mNetworkConnection = NetworkConnectionComponent;
 		}
@@ -500,7 +498,7 @@ FItemAmount AKPCLNetworkCore::GetAmountForItem(TSubclassOf<UFGItemDescriptor> It
 }
 
 void AKPCLNetworkCore::UpdateItemList(TArray<TSubclassOf<UFGItemDescriptor>>& Items,
-                                      TArray<TSubclassOf<UFGItemDescriptor>>& OutNewItems) const
+									  TArray<TSubclassOf<UFGItemDescriptor>>& OutNewItems) const
 {
 	for (FItemAmount AmountArray : mStorage.ToItemAmountArray())
 	{
@@ -680,7 +678,7 @@ bool AKPCLNetworkCore::IsStorageEmpty(TSubclassOf<UFGItemDescriptor> Item) const
 }
 
 int32 AKPCLNetworkCore::TryToStoreItem(UFGInventoryComponent* Inventory, TSubclassOf<UFGItemDescriptor> Item,
-                                       int32 Amount, int32 InventorySlot)
+									   int32 Amount, int32 InventorySlot)
 {
 	if (IsItemBlacklisted(Item))
 	{
@@ -722,7 +720,7 @@ int32 AKPCLNetworkCore::TryToStoreItemAmount(TSubclassOf<UFGItemDescriptor> Item
 }
 
 int32 AKPCLNetworkCore::TryToGrabItem(UFGInventoryComponent* Inventory, TSubclassOf<UFGItemDescriptor> Item,
-                                      int32 Amount, int32 InventorySlot)
+									  int32 Amount, int32 InventorySlot)
 {
 	InventorySlot = FMath::Max(InventorySlot, 0);
 
@@ -803,7 +801,7 @@ bool AKPCLNetworkCore::FilterInputInventory(TSubclassOf<UObject> object, int32 i
 }
 
 void AKPCLNetworkCore::OnInputItemRemoved(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-                                          UFGInventoryComponent* sourceInventory)
+										  UFGInventoryComponent* sourceInventory)
 {
 	Super::OnInputItemRemoved(itemClass, numRemoved, sourceInventory);
 	UpdateStorageState();
@@ -811,7 +809,7 @@ void AKPCLNetworkCore::OnInputItemRemoved(TSubclassOf<UFGItemDescriptor> itemCla
 }
 
 void AKPCLNetworkCore::OnInputItemAdded(TSubclassOf<UFGItemDescriptor> itemClass, int32 numRemoved,
-                                        UFGInventoryComponent* sourceInventory)
+										UFGInventoryComponent* sourceInventory)
 {
 	Super::OnInputItemAdded(itemClass, numRemoved, sourceInventory);
 	UpdateStorageState();

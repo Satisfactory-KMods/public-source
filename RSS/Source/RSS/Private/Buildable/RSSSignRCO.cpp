@@ -11,11 +11,35 @@
 #include "Equipment/RssSignGun.h"
 #include "Interface/RssSignInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "RssBlueprintFunctionLibrary.h"
 
 #include "Net/UnrealNetwork.h"
 
 
 // RCO
+
+namespace
+{
+bool IsRssSignActor(AActor* Building)
+{
+	return IsValid(Building) &&
+		UKismetSystemLibrary::DoesImplementInterface(Building, URssSignInterface::StaticClass());
+}
+
+bool IsCallerNear(const URSSSignRCO* RCO, const AActor* Building)
+{
+	const AFGPlayerController* Controller = RCO ? RCO->GetTypedOuter<AFGPlayerController>() : nullptr;
+	const APawn* Pawn = Controller ? Controller->GetPawn() : nullptr;
+	return Pawn && Building && Pawn->GetWorld() == Building->GetWorld() &&
+		FVector::DistSquared(Pawn->GetActorLocation(), Building->GetActorLocation()) <= FMath::Square(16000.0f);
+}
+
+bool IsRequestSafe(const AActor* Building, const FRssSignRequestData& Request)
+{
+	return Request.mBuildable == Building && Request.mRequestUrl.Len() <= 2048 &&
+		Request.mRequestOnImageIndex >= -1 && Request.mRequestOnImageIndex < 128;
+}
+}
 
 void URSSSignRCO::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -33,7 +57,11 @@ void URSSSignRCO::RCO_Server_UpdateSignData_Implementation(AActor* building, FRs
 	}
 }
 
-bool URSSSignRCO::RCO_Server_UpdateSignData_Validate(AActor* building, FRssSignData Data) { return true; }
+bool URSSSignRCO::RCO_Server_UpdateSignData_Validate(AActor* building, FRssSignData Data)
+{
+	return IsRssSignActor(building) && IsCallerNear(this, building) &&
+		URssBlueprintFunctionLibrary::IsSignDataSafe(Data);
+}
 
 void URSSSignRCO::RCO_MultiCast_ApplySignData_Implementation(AActor* building, FRssSignData Data)
 {
@@ -44,7 +72,10 @@ void URSSSignRCO::RCO_MultiCast_ApplySignData_Implementation(AActor* building, F
 	}
 }
 
-bool URSSSignRCO::RCO_MultiCast_ApplySignData_Validate(AActor* building, FRssSignData Data) { return true; }
+bool URSSSignRCO::RCO_MultiCast_ApplySignData_Validate(AActor* building, FRssSignData Data)
+{
+	return IsRssSignActor(building) && URssBlueprintFunctionLibrary::IsSignDataSafe(Data);
+}
 
 void URSSSignRCO::RCO_MultiCast_RequestSignData_Implementation(AActor* building, FRssSignRequestData Request)
 {
@@ -55,7 +86,10 @@ void URSSSignRCO::RCO_MultiCast_RequestSignData_Implementation(AActor* building,
 	}
 }
 
-bool URSSSignRCO::RCO_MultiCast_RequestSignData_Validate(AActor* building, FRssSignRequestData Request) { return true; }
+bool URSSSignRCO::RCO_MultiCast_RequestSignData_Validate(AActor* building, FRssSignRequestData Request)
+{
+	return IsRssSignActor(building) && IsRequestSafe(building, Request);
+}
 
 void URSSSignRCO::RCO_Server_RequestSignData_Implementation(AActor* building, FRssSignRequestData Request)
 {
@@ -66,7 +100,10 @@ void URSSSignRCO::RCO_Server_RequestSignData_Implementation(AActor* building, FR
 	}
 }
 
-bool URSSSignRCO::RCO_Server_RequestSignData_Validate(AActor* building, FRssSignRequestData Request) { return true; }
+bool URSSSignRCO::RCO_Server_RequestSignData_Validate(AActor* building, FRssSignRequestData Request)
+{
+	return IsRssSignActor(building) && IsCallerNear(this, building) && IsRequestSafe(building, Request);
+}
 
 void URSSSignRCO::RCO_Client_RequestSignData_Implementation(AActor* building, FRssSignRequestData Request)
 {
@@ -77,7 +114,10 @@ void URSSSignRCO::RCO_Client_RequestSignData_Implementation(AActor* building, FR
 	}
 }
 
-bool URSSSignRCO::RCO_Client_RequestSignData_Validate(AActor* building, FRssSignRequestData Request) { return true; }
+bool URSSSignRCO::RCO_Client_RequestSignData_Validate(AActor* building, FRssSignRequestData Request)
+{
+	return IsRssSignActor(building) && IsRequestSafe(building, Request);
+}
 
 void URSSSignRCO::RCO_Server_OpenWidget_Implementation(AActor* building, AFGPlayerController* PlayerController)
 {
@@ -90,7 +130,8 @@ void URSSSignRCO::RCO_Server_OpenWidget_Implementation(AActor* building, AFGPlay
 
 bool URSSSignRCO::RCO_Server_OpenWidget_Validate(AActor* building, AFGPlayerController* PlayerController)
 {
-	return true;
+	return IsRssSignActor(building) && PlayerController == GetTypedOuter<AFGPlayerController>() &&
+		IsCallerNear(this, building);
 }
 
 void URSSSignRCO::RCO_Server_CloseWidget_Implementation(AActor* building, AFGPlayerController* PlayerController)
@@ -104,7 +145,8 @@ void URSSSignRCO::RCO_Server_CloseWidget_Implementation(AActor* building, AFGPla
 
 bool URSSSignRCO::RCO_Server_CloseWidget_Validate(AActor* building, AFGPlayerController* PlayerController)
 {
-	return true;
+	return IsRssSignActor(building) && PlayerController == GetTypedOuter<AFGPlayerController>() &&
+		IsCallerNear(this, building);
 }
 
 void URSSSignRCO::RCO_Client_PasteSignData_Implementation(ARssSignGun* SignGun)
@@ -115,4 +157,7 @@ void URSSSignRCO::RCO_Client_PasteSignData_Implementation(ARssSignGun* SignGun)
 	}
 }
 
-bool URSSSignRCO::RCO_Client_PasteSignData_Validate(ARssSignGun* SignGun) { return true; }
+bool URSSSignRCO::RCO_Client_PasteSignData_Validate(ARssSignGun* SignGun)
+{
+	return IsValid(SignGun) && SignGun->GetWorld() == GetWorld();
+}

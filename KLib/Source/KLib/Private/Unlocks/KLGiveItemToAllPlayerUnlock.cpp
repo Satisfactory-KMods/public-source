@@ -2,108 +2,58 @@
 
 #include "Unlocks/KLGiveItemToAllPlayerUnlock.h"
 
-#include "Buildables/FGBuildableHubTerminal.h"
+#include "Buildables/FGBuildableStorage.h"
 #include "Buildables/FGBuildableTradingPost.h"
+#include "FGInventoryComponent.h"
 #include "FGItemPickup_Spawnable.h"
 
 
-bool UKLGiveItemToAllPlayerUnlock::IsRepeatPurchasesAllowed_Implementation() const { return mCanRepeat; }
+bool UKLGiveItemToAllPlayerUnlock::IsRepeatPurchasesAllowed_Implementation() const { return bCanRepeat; }
 
 void UKLGiveItemToAllPlayerUnlock::Unlock(AFGUnlockSubsystem* unlockSubssytem)
 {
 	Super::Unlock(unlockSubssytem);
 
-	UWorld* World = unlockSubssytem->GetWorld();
-	if (IsValid(World) && World->GetNetMode() != NM_Client)
-	{
-		AFGTutorialIntroManager* TutorialIntro = AFGTutorialIntroManager::Get(unlockSubssytem);
-		FVector TerminalLocation = FVector::ZeroVector;
-
-		if (IsValid(TutorialIntro) && IsValid(TutorialIntro->mTradingPost) &&
-			IsValid(TutorialIntro->mTradingPost->mHubTerminal))
-		{
-			TerminalLocation = TutorialIntro->mTradingPost->mHubTerminal->GetActorLocation();
-		}
-
-		AFGCharacterPlayer* NearstPlayerToHub = nullptr;
-		for (TPlayerControllerIterator<AFGPlayerController>::ServerAll It(World); It; ++It)
-		{
-			if (!It || !IsValid(*It))
-			{
-				continue;
-			}
-			AFGPlayerController* PC = *It;
-			AFGCharacterPlayer* Player = Cast<AFGCharacterPlayer>(PC->GetCharacter());
-
-			if (!IsValid(Player))
-			{
-				continue;
-			}
-
-			if (mToAllPlayer)
-			{
-				GiveToPlayer(Player);
-			}
-			else
-			{
-				if (!IsValid(NearstPlayerToHub))
-				{
-					NearstPlayerToHub = Player;
-					continue;
-				}
-
-				float CurrentDistance = FVector::DistSquared(Player->GetActorLocation(), TerminalLocation);
-				float NearestDistance = FVector::DistSquared(NearstPlayerToHub->GetActorLocation(), TerminalLocation);
-				if (CurrentDistance < NearestDistance)
-				{
-					NearstPlayerToHub = Player;
-				}
-			}
-		}
-
-		if (!mToAllPlayer)
-		{
-			fgcheck(IsValid(NearstPlayerToHub)) GiveToPlayer(NearstPlayerToHub);
-		}
-	}
-}
-
-void UKLGiveItemToAllPlayerUnlock::GiveToPlayer(AFGCharacterPlayer* Player)
-{
-	if (!IsValid(Player))
+	if (!IsValid(unlockSubssytem))
 	{
 		return;
 	}
 
-	TArray<FInventoryStack> Stacks;
+	UWorld* World = unlockSubssytem->GetWorld();
+	if (!IsValid(World) || World->GetNetMode() == NM_Client)
+	{
+		return;
+	}
+
+	AFGTutorialIntroManager* TutorialIntro = AFGTutorialIntroManager::Get(unlockSubssytem);
+	AFGBuildableTradingPost* TradingPost = IsValid(TutorialIntro) ? TutorialIntro->mTradingPost.Get() : nullptr;
+	AFGBuildableStorage* TradingPostStorage =
+		IsValid(TradingPost) ? Cast<AFGBuildableStorage>(TradingPost->mStorage) : nullptr;
+	UFGInventoryComponent* StorageInventory =
+		IsValid(TradingPostStorage) ? TradingPostStorage->GetStorageInventory() : nullptr;
+
+	TArray<FInventoryStack> OverflowStacks;
 	for (const FItemAmount& Amount : mAmounts)
 	{
-		Stacks.Add(FInventoryStack(Amount.Amount, Amount.ItemClass));
-	}
+		if (!Amount.ItemClass || Amount.Amount <= 0)
+		{
+			continue;
+		}
 
-	TArray<FInventoryStack> StacksThatCantFitIntoInventory;
-
-	UFGInventoryComponent* PlayerInventory = Player->GetInventory();
-	if (!IsValid(PlayerInventory))
-	{
-		return;
-	}
-
-	for (FInventoryStack Stack : Stacks)
-	{
-		int32 StoredAmount = PlayerInventory->AddStack(Stack, true);
+		FInventoryStack Stack(Amount.Amount, Amount.ItemClass);
+		const int32 StoredAmount = IsValid(StorageInventory) ? StorageInventory->AddStack(Stack, true) : 0;
 		if (StoredAmount < Stack.NumItems)
 		{
 			Stack.NumItems -= StoredAmount;
-			StacksThatCantFitIntoInventory.Add(Stack);
+			OverflowStacks.Add(Stack);
 		}
 	}
 
-	if (!StacksThatCantFitIntoInventory.IsEmpty())
+	if (!OverflowStacks.IsEmpty())
 	{
-		FVector DropLocation = Player->GetInventoryDropLocation();
-		AFGCrate* SpawnedCrate = nullptr;
-		AFGItemPickup_Spawnable::SpawnInventoryCrate(Player->GetWorld(), StacksThatCantFitIntoInventory, DropLocation,
-													 {}, SpawnedCrate, EFGCrateType::CT_None);
+		const FVector DropLocation = IsValid(TradingPostStorage) ? TradingPostStorage->GetActorLocation()
+			: IsValid(TradingPost)								 ? TradingPost->GetActorLocation()
+																 : unlockSubssytem->GetActorLocation();
+		AFGItemPickup_Spawnable::SpawnInventoryCrate(World, OverflowStacks, DropLocation);
 	}
 }

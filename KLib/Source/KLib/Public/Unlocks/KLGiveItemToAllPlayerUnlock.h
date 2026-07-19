@@ -20,14 +20,9 @@ public:
 	virtual void Unlock(AFGUnlockSubsystem* unlockSubssytem) override;
 	//~ End UFGUnlock Interface
 
-	void GiveToPlayer(AFGCharacterPlayer* Player);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KMods|Unlocks|Repeat Purchases")
+	bool bCanRepeat = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool mCanRepeat = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool mToAllPlayer = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KMods|Unlocks|Items")
 	TArray<FItemAmount> mAmounts;
 };

@@ -1,5 +1,6 @@
 ﻿#include "RssBlueprintFunctionLibrary.h"
 
+#include "Algo/AllOf.h"
 #include "Buildables/FGBuildable.h"
 #include "Cache/RssImageCache.h"
 #include "Components/WidgetComponent.h"
@@ -10,6 +11,20 @@
 #include "Subsystem/RSSDataManagerSubsystem.h"
 #include "Widget/RssSignWidget.h"
 #include "Widget/RssWidgetRenderComponent.h"
+
+#if WITH_DEV_AUTOMATION_TESTS
+#include "Misc/AutomationTest.h"
+#endif
+
+void URssBlueprintFunctionLibrary::HexToLinearColor(const FString& InString, FLinearColor& OutConvertedColor,
+													bool& OutIsValid)
+{
+	FString Hex = InString.TrimStartAndEnd();
+	Hex.RemoveFromStart(TEXT("#"));
+	OutIsValid = (Hex.Len() == 6 || Hex.Len() == 8) &&
+		Algo::AllOf(Hex, [](TCHAR Character) { return FChar::IsHexDigit(Character); });
+	OutConvertedColor = OutIsValid ? FLinearColor(FColor::FromHex(Hex)) : FLinearColor::Black;
+}
 
 void URssBlueprintFunctionLibrary::ValidateCustomData(AActor* Building)
 {
@@ -464,3 +479,56 @@ FVector2D URssBlueprintFunctionLibrary::GetScreenSize(ESignSize SignSize)
 		return FVector2D(0);
 	}
 }
+
+bool URssBlueprintFunctionLibrary::IsSignDataSafe(const FRssSignData& SignData)
+{
+	if (SignData.mSignType == ESignType::RSS_InValid || SignData.mSignTypeSize == ESignSize::RSS_InValid ||
+		SignData.mElements.Num() > 128 || SignData.mTemplateData.mTemplateName.ToString().Len() > 128 ||
+		!FMath::IsFinite(SignData.mMaterialData.mEmissiveIntensity))
+	{
+		return false;
+	}
+
+	for (const FRssElement& Element : SignData.mElements)
+	{
+		const FRssElementSharedData& Shared = Element.mSharedData;
+		if (Element.mTextData.mText.ToString().Len() > 2048 || Shared.mElementName.ToString().Len() > 128 ||
+			Shared.mUrl.Len() > 2048 || !FMath::IsFinite(Shared.mPosition.X) || !FMath::IsFinite(Shared.mPosition.Y) ||
+			!FMath::IsFinite(Shared.mOpacity) || !FMath::IsFinite(Shared.mRotation) ||
+			!FMath::IsFinite(Element.mImageData.mImageSize.X) || !FMath::IsFinite(Element.mImageData.mImageSize.Y) ||
+			!FMath::IsFinite(Element.mEffectData.mStepFrequenz))
+		{
+			return false;
+		}
+		if (Shared.mIsUsingCustom &&
+			!(Shared.mUrl.StartsWith(TEXT("http://"), ESearchCase::IgnoreCase) ||
+			  Shared.mUrl.StartsWith(TEXT("https://"), ESearchCase::IgnoreCase)))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+#if WITH_DEV_AUTOMATION_TESTS
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FRssHexToLinearColorTest, "RSS.Color.HexToLinearColor",
+								 EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FRssHexToLinearColorTest::RunTest(const FString& Parameters)
+{
+	FLinearColor Color;
+	bool bIsValid = false;
+	URssBlueprintFunctionLibrary::HexToLinearColor(TEXT("#FF0000"), Color, bIsValid);
+	TestTrue(TEXT("Six-digit customizer hex input is valid"), bIsValid);
+	TestEqual(TEXT("Red channel"), Color.R, 1.0f);
+	TestEqual(TEXT("Six-digit input defaults alpha to opaque"), Color.A, 1.0f);
+
+	URssBlueprintFunctionLibrary::HexToLinearColor(TEXT("00FF0080"), Color, bIsValid);
+	TestTrue(TEXT("Eight-digit hex input is valid"), bIsValid);
+	TestEqual(TEXT("Eight-digit input preserves alpha"), Color.A, 128.0f / 255.0f);
+
+	URssBlueprintFunctionLibrary::HexToLinearColor(TEXT("not-a-color"), Color, bIsValid);
+	TestFalse(TEXT("Malformed input is rejected"), bIsValid);
+	return true;
+}
+#endif

@@ -195,10 +195,6 @@ TSharedRef<SWidget> SKDFEditorWindow::BuildToolbar()
 			MakeButton(TEXT("Export Full"),
 					   FOnClicked::CreateLambda([this]() { return OnExport(false); }))
 		]
-		+ SHorizontalBox::Slot().AutoWidth().Padding(0, 0, PadL, 0)
-		[
-			MakeButton(TEXT("Reload"), FOnClicked::CreateSP(this, &SKDFEditorWindow::OnReload))
-		]
 		+ SHorizontalBox::Slot().AutoWidth()
 		[
 			MakeButton(TEXT("✕"), FOnClicked::CreateSP(this, &SKDFEditorWindow::OnClose))
@@ -1365,23 +1361,6 @@ FReply SKDFEditorWindow::OnCreate()
 			*mCreateKind, mCreateIdBox->GetText().ToString(), mCreateParentBox->GetText().ToString(),
 			mCreateRegisterAs.IsValid() ? *mCreateRegisterAs : FString(), Message);
 		SetStatus(Message, !bOk);
-	}
-	return FReply::Handled();
-}
-
-FReply SKDFEditorWindow::OnReload()
-{
-	if (UKDFEditorModel* Model = mModel.Get())
-	{
-		FString ReportText;
-		const int32 AppliedDocuments = Model->ReloadFromDisk(ReportText);
-		RefreshAll();
-		SetStatus(FString::Printf(TEXT("Reload done — %d document(s) applied"), AppliedDocuments), false);
-
-		// A blunt but reliable "did anything go wrong" check — BuildReportString only ever appends
-		// diagnostic lines starting with "[Warning]"/"[Error]" (Info is filtered out already).
-		const bool bHasErrors = ReportText.Contains(TEXT("[Error]"));
-		ShowResultDialog(TEXT("KDataForge Reload Result"), ReportText, bHasErrors);
 	}
 	return FReply::Handled();
 }

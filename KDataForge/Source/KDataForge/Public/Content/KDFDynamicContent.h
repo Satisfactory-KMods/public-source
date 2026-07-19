@@ -8,8 +8,8 @@ class UKDFSubsystem;
 struct KDATAFORGE_API FKDFGeneratedRecord
 {
 	FString mPackRef;
-	FString mId;
 	FString mParentClassPath;
+	FString mId;
 	bool bIsAsset = false;
 };
 
@@ -35,6 +35,10 @@ public:
 
 	/** Idempotent: returns the existing class for (PackRef, Id) or generates it. */
 	UClass* GetOrCreateClass(const FString& PackRef, const FString& Id, UClass* ParentClass, FString& OutError);
+
+	/** Generates a plain UClass or a real UBlueprintGeneratedClass matching the parent's meta-class. */
+	static UClass* GenerateRuntimeClass(const FString& PackageName, const FString& ClassName, UClass* ParentClass,
+		FString& OutError);
 
 	/** Idempotent: returns the existing asset instance for (PackRef, Id) or creates + announces it. */
 	UObject* GetOrCreateAsset(const FString& PackRef, const FString& Id, UClass* AssetClass, FString& OutError);

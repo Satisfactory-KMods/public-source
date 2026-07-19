@@ -327,27 +327,6 @@ void ARssDataManagerSubsystem::BeginPlay()
 	{
 		LoadConfig();
 	}
-
-	// Pool warmup with 1 second delay
-	if (bEnableComponentPooling)
-	{
-		FTimerHandle WarmupTimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(
-			WarmupTimerHandle,
-			[this]()
-			{
-				if (!IsValid(this) || !GetWorld())
-				{
-					return;
-				}
-
-				UE_LOG(LogRSS, Warning, TEXT("RSSDataManagerSubsystem: Starting pool warmup..."));
-
-				// Warmup will happen as components are requested
-				// Each bucket will be created on-demand when first component of that class is requested
-			},
-			1.0f, false);
-	}
 }
 
 void ARssDataManagerSubsystem::LoadConfig()
@@ -381,6 +360,10 @@ bool ARssDataManagerSubsystem::AcquirePooledComponent(AActor* InOwner,
 	{
 		UE_LOG(LogRSS, Warning, TEXT("RSSDataManagerSubsystem: Cannot acquire component - invalid parameters"));
 		return false;
+	}
+	if (HasActorAlreadyAssignedComponent(InOwner))
+	{
+		return true;
 	}
 
 	// Check if actor implements significance interface
@@ -812,6 +795,11 @@ void ARssDataManagerSubsystem::ProcessPendingComponentRequests()
 		}
 
 		TSubclassOf<URssWidgetRenderComponent> ComponentClass = *ComponentClassPtr;
+		if (HasActorAlreadyAssignedComponent(Actor))
+		{
+			mPendingRequestClasses.Remove(Actor);
+			continue;
+		}
 
 		// Get or create bucket for this component class
 		FScopeLock MapLock(&mPoolMapLock);
@@ -979,9 +967,10 @@ void ARssDataManagerSubsystem::UpdateVisibleComponentsAsync()
 	}
 
 	// Process in background thread using AsyncTask — pure math on snapshotted data, no UObject access.
+	TWeakObjectPtr<ARssDataManagerSubsystem> WeakThis(this);
 	AsyncTask(
 		ENamedThreads::AnyBackgroundThreadNormalTask,
-		[this, AllActiveComponents = MoveTemp(AllActiveComponents), OwnerOrigins = MoveTemp(OwnerOrigins),
+		[WeakThis, AllActiveComponents = MoveTemp(AllActiveComponents), OwnerOrigins = MoveTemp(OwnerOrigins),
 			ShouldCheckInView = MoveTemp(ShouldCheckInView), CameraLocation, CameraForward, MinDot]()
 		{
 			TArray<TWeakObjectPtr<URssWidgetRenderComponent>> NewVisibleComponents;
@@ -1017,11 +1006,15 @@ void ARssDataManagerSubsystem::UpdateVisibleComponentsAsync()
 
 			// Update visible components list on game thread
 			AsyncTask(ENamedThreads::GameThread,
-			          [this, NewVisibleComponents = MoveTemp(NewVisibleComponents)]()
+			          [WeakThis, NewVisibleComponents = MoveTemp(NewVisibleComponents)]()
 			          {
-				          FScopeLock Lock(&mVisibilityLock);
-				          mVisibleComponents = TSet<TWeakObjectPtr<URssWidgetRenderComponent>>(NewVisibleComponents);
-				          bFrustumCheckInProgress = false;
+				          if (ARssDataManagerSubsystem* Self = WeakThis.Get())
+				          {
+					          FScopeLock Lock(&Self->mVisibilityLock);
+					          Self->mVisibleComponents =
+						          TSet<TWeakObjectPtr<URssWidgetRenderComponent>>(NewVisibleComponents);
+					          Self->bFrustumCheckInProgress = false;
+				          }
 			          });
 		});
 }
@@ -1041,16 +1034,18 @@ void ARssDataManagerSubsystem::CheckKeys()
 {
 	if (const AFGPlayerController* Controller = UKBFL_Player::GetFGController(this))
 	{
-		for (auto Key : mKeysToCheck)
+		for (const FKey& Key : mKeysToCheck)
 		{
-			const bool KeyWasDown = Controller->IsInputKeyDown(Key) || Controller->WasInputKeyJustPressed(Key);
-			if (!mKeyDown.Contains(Key) && KeyWasDown)
+			const bool bWasDown = mKeyDown.Contains(Key);
+			const bool bIsDown = Controller->IsInputKeyDown(Key);
+			if (!bWasDown && bIsDown)
 			{
+				mKeyDown.Add(Key);
 				OnKeyPressed.Broadcast(Key);
 			}
-
-			if (mKeyDown.Contains(Key) && !KeyWasDown)
+			else if (bWasDown && !bIsDown)
 			{
+				mKeyDown.Remove(Key);
 				OnKeyReleased.Broadcast(Key);
 			}
 		}
@@ -1102,7 +1097,8 @@ FString ARssDataManagerSubsystem::SignDataToString(UObject* WorldContext, FRssSi
 {
 	UScriptStruct* Struct = SignData.StaticStruct();
 	FString Output = TEXT("");
-	Struct->ExportText(Output, &SignData, new FRssSignData, WorldContext,
+	FRssSignData DefaultData;
+	Struct->ExportText(Output, &SignData, &DefaultData, WorldContext,
 	                   (PPF_ExportsNotFullyQualified | PPF_Copy | PPF_Delimited | PPF_IncludeTransient), nullptr);
 	return Output;
 }
@@ -1111,11 +1107,9 @@ FRssSignData ARssDataManagerSubsystem::StringToSignData(UObject* WorldContext, F
 {
 	FRssSignData OutStruc = FRssSignData();
 
-	WasSuccess = true;
-
 	static UScriptStruct* Struct = OutStruc.StaticStruct();
-	Struct->ImportText(*SignData, &OutStruc, WorldContext, (PPF_Copy | PPF_Delimited | PPF_IncludeTransient), nullptr,
-	                   "FRssSignData");
+	WasSuccess = Struct->ImportText(*SignData, &OutStruc, WorldContext,
+		(PPF_Copy | PPF_Delimited | PPF_IncludeTransient), nullptr, "FRssSignData") != nullptr;
 
 	return OutStruc;
 }

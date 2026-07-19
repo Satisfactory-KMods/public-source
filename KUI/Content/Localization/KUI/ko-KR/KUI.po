@@ -75,8 +75,9 @@ msgctxt "KUI_GeneralWords,Workbench"
 msgid "Craft Bench"
 msgstr "작업대"
 
-msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
-msgstr "다양한 광석 덩어리에서 채굴할 수 있는 분쇄된 형태의 금속입니다. 주괴나 녹은 금속 제작에 사용됩니다.\\r\\n\\r\\n기계를 사용해 세척하여 더 많은 금속을 추출할 수도 있습니다."
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "다양한 광석 덩어리에서 채굴할 수 있는 분쇄된 형태의 금속입니다. 주괴나 녹은 금속 제작에 사용됩니다.\r\n\r\n기계를 사용해 세척하여 더 많은 금속을 추출할 수도 있습니다."
 
 msgctxt "KUI_GeneralWords,CycleTime"
 msgid "Cycle Time"
@@ -90,8 +91,9 @@ msgctxt "KUI_GeneralWords,Delete"
 msgid "Delete"
 msgstr "삭제"
 
-msgid "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
-msgstr "정말 이 웹사이트 주소에 접속하는 것을 원하시나요? 웹 브라우저가 열릴 것입니다!\\r\\n\\r\\n{url}"
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "정말 이 웹사이트 주소에 접속하는 것을 원하시나요? 웹 브라우저가 열릴 것입니다!\r\n\r\n{url}"
 
 msgctxt "KUI_GeneralWords,Edit"
 msgid "Edit"
@@ -113,16 +115,29 @@ msgctxt "KUI_GeneralWords,State_Error"
 msgid "Error"
 msgstr "오류"
 
-msgid "FUNCTION:\\r\\n{Function}"
-msgstr "함수:\\r\\n{Function}"
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "함수:\r\n{Function}"
 
 msgctxt "KUI_ItemFormat,Liquid"
 msgid "Fluid"
 msgstr "유체"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "가스"
+
 msgctxt "KUI_ItemFormat,Gas"
 msgid "Gas"
 msgstr "가스"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "열"
+
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "열"
 
 msgctxt "KUI_ItemFormat,Heat"
 msgid "Heat"
@@ -132,6 +147,10 @@ msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
 msgid "INSERT FUEL"
 msgstr "연료 투입"
 
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "유휴 상태"
+
 msgctxt "KUI_GeneralWords,State_Idle"
 msgid "Idle"
 msgstr "유휴 상태"
@@ -139,6 +158,14 @@ msgstr "유휴 상태"
 msgctxt "KUI_GeneralWords,Image"
 msgid "Image"
 msgstr "이미지"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "잘못됨"
+
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "잘못됨"
 
 msgctxt "KUI_GeneralWords,Time_Invalid"
 msgid "Invalid"
@@ -203,6 +230,10 @@ msgstr "유체 없음!"
 msgctxt "KUI_GeneralWords,NoInv"
 msgid "No Inventory set"
 msgstr "인벤토리 셋 없음"
+
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "전력 없음"
 
 msgctxt "KUI_GeneralWords,State_NoPower"
 msgid "No Power"
@@ -316,6 +347,10 @@ msgctxt "KUI_GeneralWords,SlotNotUsed"
 msgid "Slot not in use"
 msgstr "슬롯 미사용 중"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "고체"
+
 msgctxt "KUI_ItemFormat,Solid"
 msgid "Solid"
 msgstr "고체"
@@ -410,7 +445,7 @@ msgstr "{From} ~ {To}°C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "{From}%% ~ {To}%%"
+msgstr "{From}% ~ {To}%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -418,7 +453,7 @@ msgstr "{Time} 초"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %%"
+msgstr "{Value} %"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"

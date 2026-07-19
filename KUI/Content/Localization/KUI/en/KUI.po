@@ -9,7 +9,7 @@ msgstr ""
 
 msgctxt "ST_KUI,KUI_CustomOverclockingUI.mPercentText.HintText"
 msgid "%"
-msgstr "%%"
+msgstr "%"
 
 msgctxt "KUI_GeneralWords,/min"
 msgid "/ min"
@@ -43,8 +43,9 @@ msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForPro
 msgid "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
 msgstr "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
 
-msgid "Allows us to only see this Actor in the Editor, and not in the actual game.\\n@see SetActorHiddenInGame()"
-msgstr "Allows us to only see this Actor in the Editor, and not in the actual game.\\n@see SetActorHiddenInGame()"
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[10].PropertyTooltip"
+msgid "Allows us to only see this Actor in the Editor, and not in the actual game.\n@see SetActorHiddenInGame()"
+msgstr "Allows us to only see this Actor in the Editor, and not in the actual game.\\\\\\n@see SetActorHiddenInGame()"
 
 msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[9].PropertyTooltip"
 msgid "Always relevant for network (overrides bOnlyRelevantToOwner)."
@@ -154,6 +155,10 @@ msgctxt "KUI_GeneralWords,ConsumedIn"
 msgid "Consumed In"
 msgstr "Consumed In"
 
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[22].PropertyTooltip"
+msgid "Controls how to handle spawning this actor in a situation where it's colliding with something else. \"Default\" means AlwaysSpawn here."
+msgstr "Controls how to handle spawning this actor in a situation where it's colliding with something else. Default means AlwaysSpawn here."
+
 msgctxt "KUI_GeneralWords,Copy"
 msgid "Copy"
 msgstr "Copy"
@@ -162,8 +167,9 @@ msgctxt "KUI_GeneralWords,Workbench"
 msgid "Craft Bench"
 msgstr "Craft Bench"
 
-msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
-msgstr "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
 
 msgctxt "KUI_GeneralWords,CycleTime"
 msgid "Cycle Time"
@@ -181,8 +187,9 @@ msgctxt "KUI_GeneralWords,Delete"
 msgid "Delete"
 msgstr "Delete"
 
-msgid "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
-msgstr "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
 
 msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[21].PropertyTooltip"
 msgid "Dormancy setting for actor to take itself off of the replication list without being destroyed on clients."
@@ -208,8 +215,9 @@ msgctxt "KUI_GeneralWords,State_Error"
 msgid "Error"
 msgstr "Error"
 
-msgid "FUNCTION:\\r\\n{Function}"
-msgstr "FUNCTION:\\r\\n{Function}"
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "FUNCTION:\r\n{Function}"
 
 msgctxt "KUI_ItemFormat,Liquid"
 msgid "Fluid"
@@ -235,6 +243,10 @@ msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[2
 msgid "Foreground Color when the check state is indeterminate"
 msgstr "Foreground Color when the check state is indeterminate"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Gas"
+
 msgctxt "KUI_ItemFormat,Gas"
 msgid "Gas"
 msgstr "Gas"
@@ -242,6 +254,14 @@ msgstr "Gas"
 msgctxt "ST_KUI,KUI_CustomOverclockingUI.NewVariables[0].Category"
 msgid "HeaderButton"
 msgstr "HeaderButton"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "Heat"
+
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "Heat"
 
 msgctxt "KUI_ItemFormat,Heat"
 msgid "Heat"
@@ -263,8 +283,9 @@ msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[6
 msgid "How to draw the outline.  Currently only used for RoundedBox type brushes."
 msgstr "How to draw the outline.  Currently only used for RoundedBox type brushes."
 
-msgid "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\\n          comes from a hardware device such as a web camera."
-msgstr "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\\n          comes from a hardware device such as a web camera."
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[2].PropertyTooltip"
+msgid "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\n          comes from a hardware device such as a web camera."
+msgstr "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\\\\\\n          comes from a hardware device such as a web camera."
 
 msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[1].PropertyTooltip"
 msgid "How to tile the image in Image mode"
@@ -274,6 +295,10 @@ msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
 msgid "INSERT FUEL"
 msgstr "INSERT FUEL"
 
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "Idle"
+
 msgctxt "KUI_GeneralWords,State_Idle"
 msgid "Idle"
 msgstr "Idle"
@@ -281,6 +306,10 @@ msgstr "Idle"
 msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[11].PropertyTooltip"
 msgid "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
 msgstr "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[12].PropertyTooltip"
+msgid "If true then destroy self when \"finished\", meaning all relevant components report that they are done and no timelines or timers are in flight."
+msgstr "If true then destroy self when finished, meaning all relevant components report that they are done and no timelines or timers are in flight."
 
 msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[8].PropertyTooltip"
 msgid "If true, this actor is only relevant to its owner. If this flag is changed during play, all non-owner channels would need to be explicitly closed."
@@ -290,11 +319,13 @@ msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForPro
 msgid "If true, this actor should search for an owned camera component to view through when used as a view target."
 msgstr "If true, this actor should search for an owned camera component to view through when used as a view target."
 
-msgid "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\\n@see UpdateOverlapsMethodDuringLevelStreaming"
-msgstr "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\\n@see UpdateOverlapsMethodDuringLevelStreaming"
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[15].PropertyTooltip"
+msgid "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\n@see UpdateOverlapsMethodDuringLevelStreaming"
+msgstr "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\\\\\\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\\\\\\n@see UpdateOverlapsMethodDuringLevelStreaming"
 
-msgid "If true, this actor will replicate to remote machines\\n@see SetReplicates()"
-msgstr "If true, this actor will replicate to remote machines\\n@see SetReplicates()"
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[17].PropertyTooltip"
+msgid "If true, this actor will replicate to remote machines\n@see SetReplicates()"
+msgstr "If true, this actor will replicate to remote machines\\\\\\n@see SetReplicates()"
 
 msgctxt "KUI_GeneralWords,Image"
 msgid "Image"
@@ -303,6 +334,14 @@ msgstr "Image"
 msgctxt "ST_KUI,Subsystem_WidgetModifier.Sprite.SpriteInfo.DisplayName"
 msgid "Info"
 msgstr "Info"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "Invalid"
+
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "Invalid"
 
 msgctxt "KUI_GeneralWords,Time_Invalid"
 msgid "Invalid"
@@ -375,6 +414,10 @@ msgstr "No Fluid!"
 msgctxt "KUI_GeneralWords,NoInv"
 msgid "No Inventory set"
 msgstr "No Inventory set"
+
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "No Power"
 
 msgctxt "KUI_GeneralWords,State_NoPower"
 msgid "No Power"
@@ -516,6 +559,10 @@ msgctxt "KUI_GeneralWords,SlotNotUsed"
 msgid "Slot not in use"
 msgstr "Slot not in use"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "Solid"
+
 msgctxt "KUI_ItemFormat,Solid"
 msgid "Solid"
 msgstr "Solid"
@@ -560,8 +607,9 @@ msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForPro
 msgid "The GUID for this actor's content bundle."
 msgstr "The GUID for this actor's content bundle."
 
-msgid "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
-msgstr "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[29].PropertyTooltip"
+msgid "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+msgstr "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\\\\\\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\\\\\\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\\\\\\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
 
 msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[1].PropertyTooltip"
 msgid "The amount of this item."
@@ -579,11 +627,13 @@ msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForPro
 msgid "The human readable display name of this object."
 msgstr "The human readable display name of this object."
 
-msgid "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\\nthe AtlasedTextureInterface."
-msgstr "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\\nthe AtlasedTextureInterface."
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[7].PropertyTooltip"
+msgid "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\nthe AtlasedTextureInterface."
+msgstr "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\\\\\\nthe AtlasedTextureInterface."
 
-msgid "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\\n@see         ActorGuid\\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
-msgstr "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\\n@see         ActorGuid\\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[30].PropertyTooltip"
+msgid "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\n@see         ActorGuid\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+msgstr "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\\\\\\n@see         ActorGuid\\\\\\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
 
 msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[0].PropertyTooltip"
 msgid "The item."
@@ -641,8 +691,9 @@ msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForPro
 msgid "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
 msgstr "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
 
-msgid "Used to sync and start build effect on buildings when created, but not after creation.\\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
-msgstr "Used to sync and start build effect on buildings when created, but not after creation.\\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[4].PropertyTooltip"
+msgid "Used to sync and start build effect on buildings when created, but not after creation.\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+msgstr "Used to sync and start build effect on buildings when created, but not after creation.\\\\\\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
 
 msgctxt "ST_KUI,BPW_KUI_ItemDisplay.BPW_KUI_ItemDisplay_C.PaletteCategory"
 msgid "User Created"
@@ -656,11 +707,13 @@ msgctxt "KUI_GeneralWords,Rare_VeryRare"
 msgid "Very Rare"
 msgstr "Very Rare"
 
-msgid "When true the replication system will only replicate the registered subobjects and the replicated actor components list\\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
-msgstr "When true the replication system will only replicate the registered subobjects and the replicated actor components list\\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[18].PropertyTooltip"
+msgid "When true the replication system will only replicate the registered subobjects and the replicated actor components list\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+msgstr "When true the replication system will only replicate the registered subobjects and the replicated actor components list\\\\\\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
 
-msgid "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\\n@see https://www.unrealengine.com/blog/damage-in-ue4\\n@see TakeDamage(), ReceiveDamage()"
-msgstr "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\\n@see https://www.unrealengine.com/blog/damage-in-ue4\\n@see TakeDamage(), ReceiveDamage()"
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[13].PropertyTooltip"
+msgid "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\n@see https://www.unrealengine.com/blog/damage-in-ue4\n@see TakeDamage(), ReceiveDamage()"
+msgstr "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\\\\\\n@see https://www.unrealengine.com/blog/damage-in-ue4\\\\\\n@see TakeDamage(), ReceiveDamage()"
 
 msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[16].PropertyTooltip"
 msgid "Whether this actor should be considered or not during HLOD generation."
@@ -728,7 +781,7 @@ msgstr "{From} to {To}°C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "{From}%% to {To}%%"
+msgstr "{From}% to {To}%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -736,7 +789,7 @@ msgstr "{Time} Sec"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %%"
+msgstr "{Value} %"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"
@@ -764,4 +817,4 @@ msgstr "{count}x"
 
 msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Format_Text.Format"
 msgid "{value}%"
-msgstr "{value}%%"
+msgstr "{value}%"

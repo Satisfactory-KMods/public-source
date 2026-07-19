@@ -2,7 +2,9 @@
 
 #include "Async/Async.h"
 #include "Async/ParallelFor.h"
+#include "Containers/Ticker.h"
 #include "Engine/BlueprintGeneratedClass.h"
+#include "Engine/DataAsset.h"
 #include "Engine/DataTable.h"
 #include "Engine/GameInstance.h"
 #include "Engine/World.h"
@@ -10,6 +12,7 @@
 #include "Handlers/KDFAssetHandler.h"
 #include "Handlers/KDFCdoHandler.h"
 #include "Handlers/KDFContentClassHandler.h"
+#include "Handlers/KDFCurveHandler.h"
 #include "Handlers/KDFDataAssetHandler.h"
 #include "Handlers/KDFGameTagHandler.h"
 #include "Handlers/KDFLocalizationHandler.h"
@@ -17,6 +20,7 @@
 #include "KDFLogging.h"
 #include "KDFYamlParser.h"
 #include "Loader/KDFConditionEvaluator.h"
+#include "Loader/KDFDocumentType.h"
 #include "Loader/KDFPackScanner.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
@@ -28,17 +32,6 @@
 namespace
 {
 	/**
-	 * Stages that are safe to re-apply while a world session is running. The SML content registry
-	 * freezes at world begin play (no new recipes/schematics/research), but CDO edits, tags,
-	 * localization, and asset/data-asset creation (consumers rescan) all work live.
-	 */
-	bool IsLiveSafeStage(EKDFStage Stage)
-	{
-		return Stage == EKDFStage::GameTags || Stage == EKDFStage::Assets || Stage == EKDFStage::Localization ||
-			Stage == EKDFStage::CDOChanges || Stage == EKDFStage::RuntimePatches;
-	}
-
-	/**
 	 * @param bAllowFilenameFallback The `<name>.<type>.yml` filename convention only makes sense for
 	 *        single-document files — a multi-document file's name can't encode more than one type,
 	 *        so every document in a `---`-separated stream must declare its own `type:` key.
@@ -47,10 +40,10 @@ namespace
 	{
 		if (const FKDFNode* TypeNode = Root.Find(TEXT("type")))
 		{
-			const FString TypeName = TypeNode->GetString().ToLower();
-			if (!TypeName.IsEmpty())
+			const FName RootType = KDFDocumentType::Normalize(TypeNode->GetString());
+			if (!RootType.IsNone())
 			{
-				return FName(*TypeName);
+				return RootType;
 			}
 		}
 		if (!bAllowFilenameFallback)
@@ -62,7 +55,7 @@ namespace
 		FPaths::GetCleanFilename(RelativeFile).ParseIntoArray(Tokens, TEXT("."));
 		if (Tokens.Num() >= 3)
 		{
-			return FName(*Tokens[Tokens.Num() - 2].ToLower());
+			return KDFDocumentType::Normalize(Tokens[Tokens.Num() - 2]);
 		}
 		return NAME_None;
 	}
@@ -76,6 +69,17 @@ namespace
 	bool DocumentMatchesInclude(const FString& RelativeFile, const FString& Include)
 	{
 		return RelativeFile == Include || RelativeFile.StartsWith(Include + TEXT("["));
+	}
+
+	bool IsReadyForLazyPatch(const UObject* Object)
+	{
+		constexpr EObjectFlags PendingLoadFlags =
+			RF_NeedInitialization | RF_NeedLoad | RF_NeedPostLoad | RF_NeedPostLoadSubobjects;
+		constexpr EInternalObjectFlags PendingInternalFlags =
+			EInternalObjectFlags::Async | EInternalObjectFlags::AsyncLoadingPhase1 |
+			EInternalObjectFlags::AsyncLoadingPhase2 | EInternalObjectFlags::PendingConstruction;
+		return IsValid(Object) && !Object->HasAnyFlags(PendingLoadFlags) &&
+			!Object->HasAnyInternalFlags(PendingInternalFlags);
 	}
 } // namespace
 
@@ -106,6 +110,7 @@ void UKDFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	RegisterHandler(NewObject<UKDFCdoHandler>(this));
 	RegisterHandler(NewObject<UKDFGameTagHandler>(this));
 	RegisterHandler(NewObject<UKDFAssetHandler>(this));
+	RegisterHandler(NewObject<UKDFCurveHandler>(this));
 	RegisterHandler(NewObject<UKDFDataAssetHandler>(this));
 	RegisterHandler(NewObject<UKDFLocalizationHandler>(this));
 	RegisterHandler(NewObject<UKDFClassHandler>(this));
@@ -119,17 +124,23 @@ void UKDFSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	RegisterHandler(NewObject<UKDFSinkPointsHandler>(this));
 
 	// Lazy-load CDO re-apply (KBFL parity): fires on every UObject construction engine-wide, so
-	// NotifyUObjectCreated must stay cheap (mLazyClassWatches.IsEmpty() early-out) when unused.
+	// NotifyUObjectCreated must stay cheap (atomic no-watch early-out) when unused.
 	GUObjectArray.AddUObjectCreateListener(this);
 }
 
 void UKDFSubsystem::Deinitialize()
 {
+	bHasLazyClassWatches.store(false, std::memory_order_release);
 	GUObjectArray.RemoveUObjectCreateListener(this);
+	if (mLazyClassTickerHandle.IsValid())
+	{
+		FTSTicker::GetCoreTicker().RemoveTicker(mLazyClassTickerHandle);
+		mLazyClassTickerHandle.Reset();
+	}
 	FKDFValueCodec::SetDynamicContentRegistry(nullptr); // mDynamicContent is about to go away with us
 	mActorPatches.Reset();
 	mLazyClassWatches.Reset();
-	mLazyPatchedClasses.Reset();
+	mPendingLazyClasses.Reset();
 	mHandlerObjects.Reset();
 	mRetainedObjects.Reset();
 	mClassCache.Reset();
@@ -148,7 +159,7 @@ void UKDFSubsystem::RegisterHandler(UObject* HandlerObject)
 	if (bLoadedOnce)
 	{
 		UE_LOG(LogKDataForge, Warning,
-			   TEXT("RegisterHandler(%s): registered after the initial load — its documents apply on next reload"),
+			   TEXT("RegisterHandler(%s): registered after the initial load — its documents apply next session"),
 			   *HandlerObject->GetName());
 	}
 	mHandlerObjects.AddUnique(HandlerObject);
@@ -162,7 +173,7 @@ void UKDFSubsystem::RunInitialLoad()
 	}
 	const double StartTime = FPlatformTime::Seconds();
 	ScanAndParse();
-	ApplyStages(false);
+	ApplyStages();
 
 	// Persistence: recreate manifest-recorded classes the current YAML no longer defines, so any
 	// save referencing them keeps loading (tombstones).
@@ -182,31 +193,6 @@ void UKDFSubsystem::RunInitialLoad()
 	bLoadedOnce = true;
 	UE_LOG(LogKDataForge, Log, TEXT("Initial load finished in %.2f ms — %s"),
 		   (FPlatformTime::Seconds() - StartTime) * 1000.0, *BuildReportString());
-}
-
-int32 UKDFSubsystem::Reload(bool bLiveReload)
-{
-	const int32 RecordsBefore = mPatchRecords.Num();
-	if (bLiveReload)
-	{
-		RevertLiveReloadPatches();
-	}
-	else
-	{
-		RevertAppliedPatches();
-		mSinkTableRequests.Reset();
-	}
-	ClearActorPatches();
-	mLazyClassWatches.Reset();
-	mLazyPatchedClasses.Reset();
-	mDiagnostics.Reset();
-	ScanAndParse();
-	ApplyStages(bLiveReload);
-	NotifyDataAssetConsumers();
-	bLoadedOnce = true;
-	UE_LOG(LogKDataForge, Log, TEXT("Reload (%s) — reverted %d, applied %d document(s)"),
-		   bLiveReload ? TEXT("live") : TEXT("full"), RecordsBefore, mPatchRecords.Num());
-	return mPatchRecords.Num();
 }
 
 void UKDFSubsystem::ScanAndParse()
@@ -238,17 +224,60 @@ void UKDFSubsystem::ScanAndParse()
 			return true;
 		});
 
+	// A pack removed by `conditions:` also invalidates every dependant. ScanPacks validated and
+	// topologically sorted the original graph; condition filtering is the only operation that can
+	// make a previously valid dependency disappear here.
+	TSet<FString> ActivePackRefs;
+	for (const FKDFPack& Pack : mPacks)
+	{
+		ActivePackRefs.Add(Pack.mRef);
+	}
+	TSet<FString> InvalidPackRefs;
+	bool bInvalidatedAny = true;
+	while (bInvalidatedAny)
+	{
+		bInvalidatedAny = false;
+		for (const FKDFPack& Pack : mPacks)
+		{
+			if (InvalidPackRefs.Contains(Pack.mRef))
+			{
+				continue;
+			}
+			for (const FString& Dependency : Pack.mDependencies)
+			{
+				if (!ActivePackRefs.Contains(Dependency) || InvalidPackRefs.Contains(Dependency))
+				{
+					FKDFDiagnostic& Diagnostic = mDiagnostics.AddDefaulted_GetRef();
+					Diagnostic.mSeverity = EKDFSeverity::Warning;
+					Diagnostic.mFile = Pack.mDirectory / TEXT("pack.yml");
+					Diagnostic.mMessage = FString::Printf(
+						TEXT("Pack '%s' skipped: dependency '%s' was skipped by conditions"), *Pack.mRef, *Dependency);
+					InvalidPackRefs.Add(Pack.mRef);
+					bInvalidatedAny = true;
+					break;
+				}
+			}
+		}
+	}
+	for (const FString& InvalidPackRef : InvalidPackRefs)
+	{
+		FilesByPack.Remove(InvalidPackRef);
+	}
+	mPacks.RemoveAll([&InvalidPackRefs](const FKDFPack& Pack) { return InvalidPackRefs.Contains(Pack.mRef); });
+
 	struct FPendingFile
 	{
 		FString mAbsoluteFile;
 		FString mRelativeFile;
 		FString mPackRef;
 		int32 mPackPriority = 100;
+		int32 mPackOrder = INDEX_NONE;
 		bool bPackDebug = false;
 	};
 	TArray<FPendingFile> PendingFiles;
-	for (const FKDFPack& Pack : mPacks)
+	for (int32 PackOrder = 0; PackOrder < mPacks.Num(); ++PackOrder)
 	{
+		const FKDFPack& Pack = mPacks[PackOrder];
 		const TArray<FString>* Files = FilesByPack.Find(Pack.mRef);
 		if (Files == nullptr)
 		{
@@ -262,6 +291,7 @@ void UKDFSubsystem::ScanAndParse()
 			FPaths::MakePathRelativeTo(Pending.mRelativeFile, *(Pack.mDirectory + TEXT("/")));
 			Pending.mPackRef = Pack.mRef;
 			Pending.mPackPriority = Pack.mPriority;
+			Pending.mPackOrder = PackOrder;
 			Pending.bPackDebug = Pack.bDebug;
 		}
 	}
@@ -332,6 +362,7 @@ void UKDFSubsystem::ScanAndParse()
 			Document.mRelativeFile = DocRelativeFile;
 			Document.mPackRef = Pending.mPackRef;
 			Document.mPackPriority = Pending.mPackPriority;
+			Document.mPackOrder = Pending.mPackOrder;
 			Document.bDebug = Pending.bPackDebug || DocRoot->GetBool(TEXT("debug"), false);
 			Document.mRoot = DocRoot;
 			Document.mRootType = DetectRootType(*DocRoot, Pending.mRelativeFile, /*bAllowFilenameFallback=*/!bMultiDoc);
@@ -368,15 +399,16 @@ void UKDFSubsystem::ScanAndParse()
 
 void UKDFSubsystem::SortStageDocuments(TArray<int32>& DocumentIndices) const
 {
-	// Deterministic base order: pack priority desc, pack ref, relative path.
+	// Deterministic base order: the pack scanner's topological order (dependencies first, then
+	// priority desc/ref asc among ready packs), followed by relative path.
 	DocumentIndices.StableSort(
 		[this](int32 IndexA, int32 IndexB)
 		{
 			const FKDFDocument& A = mDocuments[IndexA];
 			const FKDFDocument& B = mDocuments[IndexB];
-			if (A.mPackPriority != B.mPackPriority)
+			if (A.mPackOrder != B.mPackOrder)
 			{
-				return A.mPackPriority > B.mPackPriority;
+				return A.mPackOrder < B.mPackOrder;
 			}
 			if (A.mPackRef != B.mPackRef)
 			{
@@ -416,7 +448,7 @@ void UKDFSubsystem::SortStageDocuments(TArray<int32>& DocumentIndices) const
 	}
 }
 
-void UKDFSubsystem::ApplyStages(bool bLiveReload)
+void UKDFSubsystem::ApplyStages()
 {
 	UGameInstance* GameInstance = GetGameInstance();
 
@@ -464,10 +496,6 @@ void UKDFSubsystem::ApplyStages(bool bLiveReload)
 	for (int64 StageValue = 0; StageValue <= static_cast<int64>(EKDFStage::Validation); ++StageValue)
 	{
 		const EKDFStage Stage = static_cast<EKDFStage>(StageValue);
-		if (bLiveReload && !IsLiveSafeStage(Stage))
-		{
-			continue;
-		}
 
 		// Handlers of this stage, deterministic order: priority desc, root type asc.
 		TArray<IKDFDataEditorHandler*> StageHandlers = AllHandlers.FilterByPredicate(
@@ -520,8 +548,6 @@ void UKDFSubsystem::ApplyStages(bool bLiveReload)
 				ApplyContext.mPackRef = Document.mPackRef;
 				ApplyContext.bDebug = Document.bDebug;
 				ApplyContext.mDiagnostics = &mDiagnostics;
-				ApplyContext.bLiveReload = bLiveReload;
-				ApplyContext.bLiveReloadSafeStage = IsLiveSafeStage(Stage);
 				ApplyContext.mPatchRecord = &PatchRecord;
 
 				// Bare generated-content ids (e.g. "MySuperIngot" instead of the full
@@ -547,114 +573,6 @@ void UKDFSubsystem::ApplyStages(bool bLiveReload)
 			Diagnostic.mFile = mDocuments[Index].mRelativeFile;
 			Diagnostic.mMessage = FString::Printf(
 				TEXT("No handler registered for document type '%s' (planned for a later phase?)"), *Type.ToString());
-		}
-	}
-}
-
-void UKDFSubsystem::RevertAppliedPatches()
-{
-	RevertHandlerSideEffects(false);
-	int32 RestoredCount = 0;
-	for (const TTuple<FObjectKey, TMap<FString, FString>>& ObjectSnapshots : mVanillaCache.GetAllSnapshots())
-	{
-		UObject* Object = ObjectSnapshots.Key.ResolveObjectPtr();
-		if (!IsValid(Object))
-		{
-			continue;
-		}
-		for (const TTuple<FString, FString>& Snapshot : ObjectSnapshots.Value)
-		{
-			FKDFPropertyPath Path;
-			FString Error;
-			FKDFResolvedProperty Resolved;
-			if (FKDFPropertyPath::Parse(Snapshot.Key, Path, Error) &&
-				FKDFPropertyResolver::Resolve(Object, Path, Resolved, Error) &&
-				FKDFValueCodec::ImportText(Snapshot.Value, Resolved.mProperty, Resolved.mValuePtr))
-			{
-				++RestoredCount;
-			}
-			else
-			{
-				UE_LOG(LogKDataForge, Warning, TEXT("Revert failed for %s.%s: %s"), *Object->GetPathName(),
-					   *Snapshot.Key, *Error);
-			}
-		}
-	}
-	UE_LOG(LogKDataForge, Log, TEXT("Reverted %d property value(s) to vanilla"), RestoredCount);
-	mVanillaCache.Reset();
-	mLiveReloadCache.Reset();
-	mPatchRecords.Reset();
-}
-
-void UKDFSubsystem::RevertLiveReloadPatches()
-{
-	RevertHandlerSideEffects(true);
-	int32 RestoredCount = 0;
-	for (const TTuple<FObjectKey, TMap<FString, FString>>& ObjectSnapshots : mLiveReloadCache.GetAllSnapshots())
-	{
-		UObject* Object = ObjectSnapshots.Key.ResolveObjectPtr();
-		if (!IsValid(Object))
-		{
-			continue;
-		}
-		for (const TTuple<FString, FString>& Snapshot : ObjectSnapshots.Value)
-		{
-			FKDFPropertyPath Path;
-			FString Error;
-			FKDFResolvedProperty Resolved;
-			if (FKDFPropertyPath::Parse(Snapshot.Key, Path, Error) &&
-				FKDFPropertyResolver::Resolve(Object, Path, Resolved, Error) &&
-				FKDFValueCodec::ImportText(Snapshot.Value, Resolved.mProperty, Resolved.mValuePtr))
-			{
-				FKDFPatchUtil::PostWriteFixups(Object, Snapshot.Key);
-				++RestoredCount;
-			}
-			else
-			{
-				UE_LOG(LogKDataForge, Warning, TEXT("Live-reload revert failed for %s.%s: %s"),
-					*Object->GetPathName(), *Snapshot.Key, *Error);
-			}
-		}
-	}
-	mLiveReloadCache.Reset();
-	mPatchRecords.RemoveAll(
-		[this](const FKDFPatchRecord& Record)
-		{
-			for (const TObjectPtr<UObject>& HandlerObject : mHandlerObjects)
-			{
-				const IKDFDataEditorHandler* Handler = Cast<IKDFDataEditorHandler>(HandlerObject.Get());
-				if (Handler != nullptr && Handler->GetRootType() == Record.mRootType)
-				{
-					return IsLiveSafeStage(Handler->GetStage());
-				}
-			}
-			return false;
-		});
-	UE_LOG(LogKDataForge, Log, TEXT("Reverted %d live-safe property value(s)"), RestoredCount);
-}
-
-void UKDFSubsystem::RevertHandlerSideEffects(const bool bLiveSafeOnly)
-{
-	for (int32 RecordIndex = mPatchRecords.Num() - 1; RecordIndex >= 0; --RecordIndex)
-	{
-		const FKDFPatchRecord& Record = mPatchRecords[RecordIndex];
-		for (const TObjectPtr<UObject>& HandlerObject : mHandlerObjects)
-		{
-			IKDFDataEditorHandler* Handler = Cast<IKDFDataEditorHandler>(HandlerObject.Get());
-			if (Handler == nullptr || Handler->GetRootType() != Record.mRootType ||
-				(bLiveSafeOnly && !IsLiveSafeStage(Handler->GetStage())))
-			{
-				continue;
-			}
-			FKDFApplyContext Context;
-			Context.mGameInstance = GetGameInstance();
-			Context.mSourceFile = Record.mSourceFile;
-			Context.mPackRef = Record.mPackRef;
-			Context.mDiagnostics = &mDiagnostics;
-			Context.bLiveReload = bLiveSafeOnly;
-			Context.bLiveReloadSafeStage = IsLiveSafeStage(Handler->GetStage());
-			Handler->RevertDocument(Record, Context);
-			break;
 		}
 	}
 }
@@ -1002,12 +920,13 @@ void UKDFSubsystem::RegisterLazyClassWatch(const FKDFLazyClassWatch& Watch)
 				Existing.mSourceFile == Watch.mSourceFile;
 		});
 	mLazyClassWatches.Add(Watch);
+	bHasLazyClassWatches.store(true, std::memory_order_release);
 }
 
 void UKDFSubsystem::NotifyUObjectCreated(const UObjectBase* Object, int32 /*Index*/)
 {
 	// Fires for every UObject constructed engine-wide — stay cheap when no watch cares.
-	if (Object == nullptr || mLazyClassWatches.IsEmpty())
+	if (Object == nullptr || !bHasLazyClassWatches.load(std::memory_order_acquire))
 	{
 		return;
 	}
@@ -1022,53 +941,89 @@ void UKDFSubsystem::NotifyUObjectCreated(const UObjectBase* Object, int32 /*Inde
 	}
 	UClass* NewClass = const_cast<UClass*>(static_cast<const UClass*>(Object));
 
-	// ApplyLazyWatchesToClass touches UObject/CDO state — game-thread only. NotifyUObjectCreated can
-	// fire off-thread during async loading, so defer there (KBFL's same lazy-load listener does this).
-	if (IsInGameThread())
-	{
-		ApplyLazyWatchesToClass(NewClass);
-	}
-	else
-	{
-		TWeakObjectPtr<UKDFSubsystem> WeakThis(this);
-		TWeakObjectPtr<UClass> WeakClass(NewClass);
-		AsyncTask(ENamedThreads::GameThread,
-				  [WeakThis, WeakClass]()
+	// FUObjectArray announces allocation, not completed construction or package loading. Always
+	// leave this callback before touching class/CDO state, even when allocation happened on the game thread.
+	TWeakObjectPtr<UKDFSubsystem> WeakThis(this);
+	TWeakObjectPtr<UClass> WeakClass(NewClass);
+	AsyncTask(ENamedThreads::GameThread,
+			  [WeakThis, WeakClass]()
+			  {
+				  UKDFSubsystem* Subsystem = WeakThis.Get();
+				  UClass* Class = WeakClass.Get();
+				  if (Subsystem != nullptr && Class != nullptr)
 				  {
-					  UKDFSubsystem* Subsystem = WeakThis.Get();
-					  UClass* Class = WeakClass.Get();
-					  if (Subsystem != nullptr && Class != nullptr)
-					  {
-						  Subsystem->ApplyLazyWatchesToClass(Class);
-					  }
-				  });
-	}
+					  Subsystem->QueueLazyClassForProcessing(Class);
+				  }
+			  });
 }
 
 void UKDFSubsystem::OnUObjectArrayShutdown() { GUObjectArray.RemoveUObjectCreateListener(this); }
 
-void UKDFSubsystem::ApplyLazyWatchesToClass(UClass* NewClass)
+void UKDFSubsystem::QueueLazyClassForProcessing(UClass* NewClass)
 {
-	// Once per class, never once per instance: this patches the newly loaded class's CDO exactly
-	// once, the same single write the initial GatherTargets pass would have made had the class
-	// already been loaded. Per-instance propagation is a separate, existing concern — reload-time
-	// `propagateToInstances` and the actor-spawn listener (UKDFActorPatchSubsystem, which already
-	// re-checks `Actor->IsA(TargetClass)` at every spawn, so it needs no lazy-load help) — untouched.
-	if (!IsValid(NewClass) || mLazyPatchedClasses.Contains(NewClass))
+	check(IsInGameThread());
+	if (!bHasLazyClassWatches.load(std::memory_order_acquire) || !IsValid(NewClass))
 	{
 		return;
 	}
-	mLazyPatchedClasses.Add(NewClass);
-
-	UObject* CDO = NewClass->GetDefaultObject();
-	if (!IsValid(CDO))
+	mPendingLazyClasses.Add(NewClass);
+	if (!mLazyClassTickerHandle.IsValid())
 	{
-		return;
+		mLazyClassTickerHandle = FTSTicker::GetCoreTicker().AddTicker(
+			FTickerDelegate::CreateUObject(this, &UKDFSubsystem::ProcessPendingLazyClasses));
+	}
+}
+
+bool UKDFSubsystem::ProcessPendingLazyClasses(float /*DeltaTime*/)
+{
+	check(IsInGameThread());
+	if (!bLoadedOnce)
+	{
+		return true;
 	}
 
-	for (const FKDFLazyClassWatch& Watch : mLazyClassWatches)
+	for (auto It = mPendingLazyClasses.CreateIterator(); It; ++It)
 	{
-		if (!Watch.mPropertiesNode.IsValid())
+		UClass* NewClass = It->Get();
+		if (!IsValid(NewClass))
+		{
+			It.RemoveCurrent();
+			continue;
+		}
+		if (!IsReadyForLazyPatch(NewClass) || NewClass->ClassWithin == nullptr ||
+			NewClass->ClassConstructor == nullptr)
+		{
+			continue;
+		}
+
+		// Never force CDO creation here. Cooked Blueprint CDOs are separate exports and may still be
+		// loading after their UClass allocation; creating one early either asserts or gets overwritten.
+		UObject* CDO = NewClass->GetDefaultObject(false);
+		if (!IsReadyForLazyPatch(CDO))
+		{
+			continue;
+		}
+
+		It.RemoveCurrent();
+		ApplyLazyWatchesToClass(NewClass, CDO);
+	}
+
+	if (mPendingLazyClasses.IsEmpty())
+	{
+		mLazyClassTickerHandle.Reset();
+		return false;
+	}
+	return true;
+}
+
+void UKDFSubsystem::ApplyLazyWatchesToClass(UClass* NewClass, UObject* CDO)
+{
+	check(IsInGameThread());
+	check(IsValid(NewClass) && IsValid(CDO));
+
+	for (FKDFLazyClassWatch& Watch : mLazyClassWatches)
+	{
+		if (!Watch.mPropertiesNode.IsValid() || Watch.mAppliedClasses.Contains(NewClass))
 		{
 			continue;
 		}
@@ -1099,6 +1054,9 @@ void UKDFSubsystem::ApplyLazyWatchesToClass(UClass* NewClass)
 			}
 		}
 
+		// Record before applying. A partially failing op sequence must not repeat successful additive
+		// operations if duplicate class-created notifications arrive.
+		Watch.mAppliedClasses.Add(NewClass);
 		RetainObject(CDO);
 		FKDFPatchRecord Record;
 		Record.mSourceFile = Watch.mSourceFile;
@@ -1112,11 +1070,7 @@ void UKDFSubsystem::ApplyLazyWatchesToClass(UClass* NewClass)
 		Context.bDebug = Watch.bDebug;
 		Context.mDiagnostics = &mDiagnostics;
 		Context.mPatchRecord = &Record;
-		// bLiveReload stays false: propagateToInstances is a reload-time concern (existing instances
-		// of an already-loaded CDO catching up) and does not apply here — there are no instances of
-		// this brand-new class yet other than the CDO being patched.
-		if (FKDFPatchUtil::ApplyOpsToObject(CDO, *Watch.mPropertiesNode, Watch.bPropagate, Context) &&
-			!Record.mOps.IsEmpty())
+		if (FKDFPatchUtil::ApplyOpsToObject(CDO, *Watch.mPropertiesNode, Context) && !Record.mOps.IsEmpty())
 		{
 			UE_LOG(LogKDataForge, Log, TEXT("Lazy-loaded class '%s' matched a watch from %s — CDO patched"),
 				   *NewClass->GetName(), *Watch.mSourceFile);

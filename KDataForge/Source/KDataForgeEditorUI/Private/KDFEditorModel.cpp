@@ -1284,19 +1284,6 @@ bool UKDFEditorModel::ExportSelected(bool bDiffOnly, FString& OutMessage)
 	return true;
 }
 
-int32 UKDFEditorModel::ReloadFromDisk(FString& OutReportText)
-{
-	UKDFSubsystem* KDF = GetKDF();
-	if (KDF == nullptr)
-	{
-		OutReportText = TEXT("KDataForge subsystem unavailable");
-		return 0;
-	}
-	const int32 AppliedDocuments = KDF->Reload(/*bLiveReload=*/true);
-	OutReportText = KDF->BuildReportString();
-	return AppliedDocuments;
-}
-
 bool UKDFEditorModel::CreateContentDraft(const FString& Kind, const FString& Id, const FString& ParentOrClassPath,
 										 const FString& RegisterAs, FString& OutMessage)
 {
@@ -1363,17 +1350,7 @@ bool UKDFEditorModel::CreateContentDraft(const FString& Kind, const FString& Id,
 		return false;
 	}
 
-	if (bIsDataAsset)
-	{
-		// Data assets are live-safe — a live reload applies the draft immediately.
-		KDF->Reload(true);
-		OutMessage = FString::Printf(TEXT("Created %s and applied live (consumers rescanned)"), *FilePath);
-	}
-	else
-	{
-		OutMessage =
-			FString::Printf(TEXT("Created %s — new %s content registers on the next session"), *FilePath, *Kind);
-	}
+	OutMessage = FString::Printf(TEXT("Created %s — restart the session to load the new %s content"), *FilePath, *Kind);
 	return true;
 }
 

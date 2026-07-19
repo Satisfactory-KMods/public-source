@@ -46,9 +46,6 @@ public:
 	/** Applies a validated document to the running game. */
 	virtual bool ApplyDocument(const FKDFNode& Document, FKDFApplyContext& Context) = 0;
 
-	/** Reverts a previously applied document (live reload / rollback). Optional. */
-	virtual bool RevertDocument(const FKDFPatchRecord& Record, FKDFApplyContext& Context) { return false; }
-
 	/** Exports a runtime object back into a document of this root type. Optional (used by the in-game editor). */
 	virtual bool ExportObject(UObject* Target, FKDFNode& OutDocument, FKDFExportContext& Context) { return false; }
 

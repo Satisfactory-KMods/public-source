@@ -2,6 +2,7 @@
 
 
 #include "Subsystem/RSSTemplateSubsystem.h"
+#include "RssBlueprintFunctionLibrary.h"
 
 #include "FGPlayerController.h"
 #include "Net/UnrealNetwork.h"
@@ -172,13 +173,19 @@ void ARSSTemplateSubsystem::RemoveTemplate(int TemplateIdx)
 
 void URSSTemplateSubsystemRCO::RCO_AddTemplate_Implementation(ARSSTemplateSubsystem* Subsystem, FRssSignData Data)
 {
+	if (!IsValid(Subsystem) || !URssBlueprintFunctionLibrary::IsSignDataSafe(Data))
+	{
+		return;
+	}
 	Subsystem->mTemplates.Add(Data);
 	Subsystem->ForceNetUpdate();
 }
 
 bool URSSTemplateSubsystemRCO::RCO_AddTemplate_Validate(ARSSTemplateSubsystem* Subsystem, FRssSignData Data)
 {
-	return true;
+	return IsValid(Subsystem) && Subsystem->HasAuthority() && Subsystem->GetWorld() == GetWorld() &&
+		Subsystem->mTemplates.Num() < 512 && URssBlueprintFunctionLibrary::IsSignDataSafe(Data) &&
+		!Data.mTemplateData.mTemplateName.IsEmpty();
 }
 
 // RCO
@@ -201,7 +208,8 @@ void URSSTemplateSubsystemRCO::RCO_RemoveTemplate_Implementation(ARSSTemplateSub
 
 bool URSSTemplateSubsystemRCO::RCO_RemoveTemplate_Validate(ARSSTemplateSubsystem* Subsystem, int TemplateIdx)
 {
-	return true;
+	return IsValid(Subsystem) && Subsystem->HasAuthority() && Subsystem->GetWorld() == GetWorld() &&
+		Subsystem->mTemplates.IsValidIndex(TemplateIdx);
 }
 
 void URSSTemplateSubsystemRCO::RCO_RenameTemplate_Implementation(ARSSTemplateSubsystem* Subsystem, const FText& NewName,
@@ -218,5 +226,7 @@ void URSSTemplateSubsystemRCO::RCO_RenameTemplate_Implementation(ARSSTemplateSub
 bool URSSTemplateSubsystemRCO::RCO_RenameTemplate_Validate(ARSSTemplateSubsystem* Subsystem, const FText& NewName,
 														   int TemplateIdx)
 {
-	return true;
+	const FString Name = NewName.ToString().TrimStartAndEnd();
+	return IsValid(Subsystem) && Subsystem->HasAuthority() && Subsystem->GetWorld() == GetWorld() &&
+		Subsystem->mTemplates.IsValidIndex(TemplateIdx) && !Name.IsEmpty() && Name.Len() <= 128;
 }

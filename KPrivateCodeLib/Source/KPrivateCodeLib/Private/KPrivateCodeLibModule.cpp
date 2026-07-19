@@ -6,6 +6,8 @@
 #include "FGConstructDisqualifier.h"
 #include "FGPlayerState.h"
 #include "FGSaveSession.h"
+#include "FGSchematic.h"
+#include "FGSchematicManager.h"
 #include "Hologram/FGPowerPoleHologram.h"
 #include "Hologram/FGPowerPoleWallHologram.h"
 #include "HttpModule.h"
@@ -17,6 +19,7 @@
 #include "Patching/NativeHookManager.h"
 #include "Replication/FGReplicationGraph.h"
 #include "Replication/KPCLDefaultRCO.h"
+#include "Subsystem/KPCLUnlockSubsystem.h"
 
 DEFINE_LOG_CATEGORY(LogKPCL);
 DEFINE_LOG_CATEGORY(LogFaxit);
@@ -91,6 +94,39 @@ void FKPrivateCodeLib::StartupModule()
 
 	GConfig->SetArray(TEXT("Internationalization"), TEXT("LocalizationPaths"), NewLocalizationPaths, GGameIni);
 	GConfig->SetArray(TEXT("Internationalization"), TEXT("LocalizationPaths"), NewLocalizationPaths, GEngineIni);
+#endif
+
+#if !WITH_EDITOR
+	SUBSCRIBE_METHOD(UFGSchematic::GetCost,
+					 [](auto& Scope, TSubclassOf<UFGSchematic> SchematicClass)
+					 {
+						 const TArray<FItemAmount> VanillaCost = Scope(SchematicClass);
+						 if (AKPCLUnlockSubsystem* UnlockSubsystem = AKPCLUnlockSubsystem::GetFromCurrentWorld())
+						 {
+							 Scope.Override(UnlockSubsystem->GetScaledSchematicCost(SchematicClass, VanillaCost));
+						 }
+					 });
+
+	SUBSCRIBE_METHOD(UFGSchematic::CanGiveAccessToSchematic,
+					 [](auto& Scope, TSubclassOf<UFGSchematic> SchematicClass, UObject* WorldContext)
+					 {
+						 if (AKPCLUnlockSubsystem* UnlockSubsystem = AKPCLUnlockSubsystem::Get(WorldContext);
+							 IsValid(UnlockSubsystem) && !UnlockSubsystem->CanPurchaseRepeatSchematic(SchematicClass))
+						 {
+							 Scope.Override(false);
+						 }
+					 });
+
+	SUBSCRIBE_METHOD(AFGSchematicManager::CanGiveAccessToSchematic,
+					 [](auto& Scope, const AFGSchematicManager* SchematicManager,
+						TSubclassOf<UFGSchematic> SchematicClass)
+					 {
+						 if (AKPCLUnlockSubsystem* UnlockSubsystem = AKPCLUnlockSubsystem::Get(SchematicManager->GetWorld());
+							 IsValid(UnlockSubsystem) && !UnlockSubsystem->CanPurchaseRepeatSchematic(SchematicClass))
+						 {
+							 Scope.Override(false);
+						 }
+					 });
 #endif
 
 	if (!WITH_EDITOR)

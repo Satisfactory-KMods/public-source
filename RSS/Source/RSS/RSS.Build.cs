@@ -38,7 +38,7 @@ public class RSS : ModuleRules
 				"EnhancedInput",
 				"GameplayCameras",
 				"TemplateSequence",
-				"NetCore", "HTTP",
+				"NetCore", "HTTP", "Sockets", "Networking",
 				"GameplayTags"
 			});
 

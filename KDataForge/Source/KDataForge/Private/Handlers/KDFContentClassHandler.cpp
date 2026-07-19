@@ -55,6 +55,41 @@ namespace
 		return true;
 	}
 
+	bool ReadGridPoint(const FStructProperty* PointStruct, const void* PointPtr, FKDFGridPoint& OutPoint)
+	{
+		if (PointStruct == nullptr || PointStruct->Struct == nullptr || PointPtr == nullptr)
+		{
+			return false;
+		}
+		const FIntProperty* XProperty = CastField<FIntProperty>(FindStructMember(PointStruct->Struct, TEXT("X")));
+		const FIntProperty* YProperty = CastField<FIntProperty>(FindStructMember(PointStruct->Struct, TEXT("Y")));
+		if (XProperty == nullptr || YProperty == nullptr)
+		{
+			return false;
+		}
+		OutPoint.X = XProperty->GetPropertyValue_InContainer(PointPtr);
+		OutPoint.Y = YProperty->GetPropertyValue_InContainer(PointPtr);
+		return true;
+	}
+
+	/** Builds vanilla-style road points: adjacent grid cells, excluding the parent and including the child. */
+	TArray<FKDFGridPoint> BuildAutoRoadPoints(const FKDFGridPoint& Parent, const FKDFGridPoint& Child)
+	{
+		TArray<FKDFGridPoint> Points;
+		FKDFGridPoint Cursor = Parent;
+		while (Cursor.X != Child.X)
+		{
+			Cursor.X += Cursor.X < Child.X ? 1 : -1;
+			Points.Add(Cursor);
+		}
+		while (Cursor.Y != Child.Y)
+		{
+			Cursor.Y += Cursor.Y < Child.Y ? 1 : -1;
+			Points.Add(Cursor);
+		}
+		return Points;
+	}
+
 	/** Replaces an array-of-{X,Y}-struct property's contents (Parents / NodesToUnhide / road Points). */
 	bool WriteGridPointArray(const FArrayProperty* ArrayProperty, void* ArrayPtr, const TArray<FKDFGridPoint>& Points)
 	{
@@ -70,6 +105,40 @@ namespace
 		{
 			const int32 NewIndex = Helper.AddValue();
 			WriteGridPoint(ElementStruct, Helper.GetRawPtr(NewIndex), Point.X, Point.Y);
+		}
+		return true;
+	}
+
+	/** Preserves existing array entries and appends only coordinates not already present. */
+	bool AppendUniqueGridPoints(const FArrayProperty* ArrayProperty, void* ArrayPtr,
+								const TArray<FKDFGridPoint>& Points)
+	{
+		const FStructProperty* ElementStruct =
+			ArrayProperty != nullptr ? CastField<FStructProperty>(ArrayProperty->Inner) : nullptr;
+		if (ElementStruct == nullptr)
+		{
+			return false;
+		}
+
+		FScriptArrayHelper Helper(ArrayProperty, ArrayPtr);
+		TArray<FKDFGridPoint> Existing;
+		for (int32 Index = 0; Index < Helper.Num(); ++Index)
+		{
+			FKDFGridPoint Point;
+			if (ReadGridPoint(ElementStruct, Helper.GetRawPtr(Index), Point))
+			{
+				Existing.Add(Point);
+			}
+		}
+		for (const FKDFGridPoint& Point : Points)
+		{
+			if (Existing.Contains(Point))
+			{
+				continue;
+			}
+			const int32 NewIndex = Helper.AddValue();
+			WriteGridPoint(ElementStruct, Helper.GetRawPtr(NewIndex), Point.X, Point.Y);
+			Existing.Add(Point);
 		}
 		return true;
 	}
@@ -148,12 +217,30 @@ namespace
 		FScriptMapHelper Helper(RoadsProperty, RoadsProperty->ContainerPtrToValuePtr<void>(NodeDataPtr));
 		for (const TPair<FKDFGridPoint, TArray<FKDFGridPoint>>& Road : Roads)
 		{
-			const int32 NewIndex = Helper.AddDefaultValue_Invalid_NeedsRehash();
-			WriteGridPoint(KeyStruct, Helper.GetKeyPtr(NewIndex), Road.Key.X, Road.Key.Y);
-			void* ValuePtr = Helper.GetValuePtr(NewIndex);
+			int32 TargetIndex = INDEX_NONE;
+			for (int32 Index = 0; Index < Helper.GetMaxIndex(); ++Index)
+			{
+				if (!Helper.IsValidIndex(Index))
+				{
+					continue;
+				}
+				FKDFGridPoint ExistingKey;
+				if (ReadGridPoint(KeyStruct, Helper.GetKeyPtr(Index), ExistingKey) && ExistingKey == Road.Key)
+				{
+					TargetIndex = Index;
+					break;
+				}
+			}
+			if (TargetIndex == INDEX_NONE)
+			{
+				TargetIndex = Helper.AddDefaultValue_Invalid_NeedsRehash();
+				WriteGridPoint(KeyStruct, Helper.GetKeyPtr(TargetIndex), Road.Key.X, Road.Key.Y);
+			}
+			void* ValuePtr = Helper.GetValuePtr(TargetIndex);
 			WriteGridPointArray(PointsMember, PointsMember->ContainerPtrToValuePtr<void>(ValuePtr), Road.Value);
+			// Blueprint struct keys use reflected hash/equality. Restore valid map state before next lookup.
+			Helper.Rehash();
 		}
-		Helper.Rehash();
 		return true;
 	}
 
@@ -223,6 +310,52 @@ namespace
 		const FStructProperty* NodeDataStruct = nullptr;
 		void* NodeDataPtr = nullptr;
 		const FKDFNode* SourceNode = nullptr; // the whole `nodes:` entry — schematic/coordinate/parents/… live here
+		bool bExisting = false;
+		bool bSkipAppend = false;
+	};
+
+	/** Adds existing tree nodes to the same schematic→coordinate index used by newly authored nodes. */
+	void IndexExistingResearchNodes(UObject* TreeCDO, const FArrayProperty* NodesArray,
+									const FObjectProperty* NodeInner,
+									TMap<UClass*, FKDFGridPoint>& CoordinateBySchematic,
+									TArray<FKDFResearchNodeWork>& WorkingNodes)
+	{
+		FScriptArrayHelper NodesHelper(NodesArray, NodesArray->ContainerPtrToValuePtr<void>(TreeCDO));
+		for (int32 Index = 0; Index < NodesHelper.Num(); ++Index)
+		{
+			UObject* Instance = NodeInner->GetObjectPropertyValue(NodesHelper.GetRawPtr(Index));
+			if (Instance == nullptr)
+			{
+				continue;
+			}
+			FKDFResearchNodeWork& Work = WorkingNodes.AddDefaulted_GetRef();
+			Work.Instance = Instance;
+			Work.NodeClass = Instance->GetClass();
+			Work.bExisting = true;
+			Work.NodeDataStruct = CastField<FStructProperty>(
+				FKDFPropertyResolver::FindPropertyByNameFlexible(Work.NodeClass, TEXT("mNodeDataStruct")));
+			Work.NodeDataPtr =
+				Work.NodeDataStruct != nullptr ? Work.NodeDataStruct->ContainerPtrToValuePtr<void>(Instance) : nullptr;
+			if (Work.NodeDataStruct == nullptr || Work.NodeDataPtr == nullptr)
+			{
+				continue;
+			}
+			const FClassProperty* SchematicMember =
+				CastField<FClassProperty>(FindStructMember(Work.NodeDataStruct->Struct, TEXT("Schematic")));
+			const FStructProperty* CoordinateMember =
+				CastField<FStructProperty>(FindStructMember(Work.NodeDataStruct->Struct, TEXT("Coordinates")));
+			if (SchematicMember != nullptr && CoordinateMember != nullptr)
+			{
+				Work.SchematicClass = Cast<UClass>(SchematicMember->GetObjectPropertyValue(Work.NodeDataPtr));
+				Work.bHasCoordinate =
+					ReadGridPoint(CoordinateMember, CoordinateMember->ContainerPtrToValuePtr<void>(Work.NodeDataPtr),
+								  Work.Coordinate);
+				if (Work.SchematicClass != nullptr && Work.bHasCoordinate)
+				{
+					CoordinateBySchematic.Add(Work.SchematicClass, Work.Coordinate);
+				}
+			}
+		}
 	};
 
 	/**
@@ -364,7 +497,7 @@ bool UKDFContentClassHandler::ApplyInstancedObjects(UObject* TargetCDO, const FK
 		UObject* EntryInstance = NewObject<UObject>(TargetCDO, EntryClass);
 		if (const FKDFNode* Properties = Entry.Find(TEXT("properties")))
 		{
-			FKDFPatchUtil::ApplyOpsToObject(EntryInstance, *Properties, false, Context);
+			FKDFPatchUtil::ApplyOpsToObject(EntryInstance, *Properties, Context);
 		}
 
 		FScriptArrayHelper Helper(TargetArray, TargetArray->ContainerPtrToValuePtr<void>(TargetCDO));
@@ -384,13 +517,173 @@ bool UKDFContentClassHandler::ApplyInstancedObjects(UObject* TargetCDO, const FK
 	return bAddedAny;
 }
 
+bool UKDFContentClassHandler::ApplyClassListShortcutUnlock(UObject* TargetCDO, const FKDFNode& EntriesNode,
+														   const TCHAR* UnlockClassPath, const TCHAR* ValueField,
+														   const TCHAR* RequiredBaseClassPath,
+														   const TCHAR* ShortcutName, FKDFApplyContext& Context)
+{
+	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
+	if (!EntriesNode.IsSequence())
+	{
+		Context.AddError(FString::Printf(TEXT("'%s' must be a sequence"), ShortcutName), EntriesNode.Line);
+		return false;
+	}
+
+	FString Error;
+	UClass* RequiredBaseClass = Subsystem->FindOrLoadClassCached(RequiredBaseClassPath, Error);
+	TArray<UClass*> Values;
+	for (const TSharedRef<FKDFNode>& EntryRef : EntriesNode.Sequence)
+	{
+		const FKDFNode& Entry = EntryRef.Get();
+		if (!Entry.IsScalar() || Entry.Scalar.IsEmpty())
+		{
+			Context.AddError(FString::Printf(TEXT("'%s' entries must be class references"), ShortcutName), Entry.Line);
+			continue;
+		}
+		UClass* ValueClass = Subsystem->FindOrLoadClassCached(Entry.Scalar, Error);
+		if (ValueClass == nullptr || (RequiredBaseClass != nullptr && !ValueClass->IsChildOf(RequiredBaseClass)))
+		{
+			Context.AddError(FString::Printf(TEXT("'%s' entry '%s' is not a valid %s class (%s)"), ShortcutName,
+											 *Entry.Scalar, RequiredBaseClassPath,
+											 ValueClass == nullptr ? *Error : TEXT("wrong base class")),
+							 Entry.Line);
+			continue;
+		}
+		Values.AddUnique(ValueClass);
+	}
+	if (Values.Num() == 0 || Context.bDryRun)
+	{
+		return Values.Num() > 0;
+	}
+
+	const FArrayProperty* UnlocksArray = CastField<FArrayProperty>(
+		FKDFPropertyResolver::FindPropertyByNameFlexible(TargetCDO->GetClass(), TEXT("mUnlocks")));
+	const FObjectProperty* UnlockInner =
+		UnlocksArray != nullptr ? CastField<FObjectProperty>(UnlocksArray->Inner) : nullptr;
+	UClass* UnlockClass = Subsystem->FindOrLoadClassCached(UnlockClassPath, Error);
+	const FArrayProperty* ValueArray = nullptr;
+	if (UnlockInner == nullptr || UnlockClass == nullptr || !UnlockClass->IsChildOf(UnlockInner->PropertyClass) ||
+		(ValueArray = CastField<FArrayProperty>(
+			 FKDFPropertyResolver::FindPropertyByNameFlexible(UnlockClass, ValueField))) == nullptr ||
+		CastField<FClassProperty>(ValueArray->Inner) == nullptr)
+	{
+		Context.AddError(FString::Printf(TEXT("Cannot create '%s' shortcut unlock (%s)"), ShortcutName, *Error),
+						 EntriesNode.Line);
+		return false;
+	}
+
+	UObject* UnlockInstance = NewObject<UObject>(TargetCDO, UnlockClass);
+	const FClassProperty* ValueInner = CastField<FClassProperty>(ValueArray->Inner);
+	FScriptArrayHelper ValueHelper(ValueArray, ValueArray->ContainerPtrToValuePtr<void>(UnlockInstance));
+	for (UClass* ValueClass : Values)
+	{
+		const int32 Index = ValueHelper.AddValue();
+		ValueInner->SetObjectPropertyValue(ValueHelper.GetRawPtr(Index), ValueClass);
+	}
+	FScriptArrayHelper UnlockHelper(UnlocksArray, UnlocksArray->ContainerPtrToValuePtr<void>(TargetCDO));
+	const int32 UnlockIndex = UnlockHelper.AddValue();
+	UnlockInner->SetObjectPropertyValue(UnlockHelper.GetRawPtr(UnlockIndex), UnlockInstance);
+	++Context.mAppliedOpCount;
+	return true;
+}
+
+bool UKDFContentClassHandler::ApplyCountShortcutUnlock(UObject* TargetCDO, const FKDFNode& CountNode,
+													   const TCHAR* UnlockClassPath, const TCHAR* ValueField,
+													   const TCHAR* ShortcutName, FKDFApplyContext& Context)
+{
+	int32 Count = 0;
+	if (!CountNode.IsScalar() || !LexTryParseString(Count, *CountNode.Scalar) || Count <= 0)
+	{
+		Context.AddError(FString::Printf(TEXT("'%s' must be a positive integer"), ShortcutName), CountNode.Line);
+		return false;
+	}
+	if (Context.bDryRun)
+	{
+		return true;
+	}
+
+	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
+	FString Error;
+	const FArrayProperty* UnlocksArray = CastField<FArrayProperty>(
+		FKDFPropertyResolver::FindPropertyByNameFlexible(TargetCDO->GetClass(), TEXT("mUnlocks")));
+	const FObjectProperty* UnlockInner =
+		UnlocksArray != nullptr ? CastField<FObjectProperty>(UnlocksArray->Inner) : nullptr;
+	UClass* UnlockClass = Subsystem->FindOrLoadClassCached(UnlockClassPath, Error);
+	const FIntProperty* CountProperty = UnlockClass != nullptr
+		? CastField<FIntProperty>(FKDFPropertyResolver::FindPropertyByNameFlexible(UnlockClass, ValueField))
+		: nullptr;
+	if (UnlockInner == nullptr || UnlockClass == nullptr || !UnlockClass->IsChildOf(UnlockInner->PropertyClass) ||
+		CountProperty == nullptr)
+	{
+		Context.AddError(FString::Printf(TEXT("Cannot create '%s' shortcut unlock (%s)"), ShortcutName, *Error),
+						 CountNode.Line);
+		return false;
+	}
+
+	UObject* UnlockInstance = NewObject<UObject>(TargetCDO, UnlockClass);
+	CountProperty->SetPropertyValue_InContainer(UnlockInstance, Count);
+	FScriptArrayHelper UnlockHelper(UnlocksArray, UnlocksArray->ContainerPtrToValuePtr<void>(TargetCDO));
+	const int32 UnlockIndex = UnlockHelper.AddValue();
+	UnlockInner->SetObjectPropertyValue(UnlockHelper.GetRawPtr(UnlockIndex), UnlockInstance);
+	++Context.mAppliedOpCount;
+	return true;
+}
+
+bool UKDFContentClassHandler::ApplyScannableResourcesShortcutUnlock(UObject* TargetCDO, const FKDFNode& EntriesNode,
+																	FKDFApplyContext& Context)
+{
+	if (!EntriesNode.IsSequence())
+	{
+		Context.AddError(TEXT("'scannableResources' must be a sequence"), EntriesNode.Line);
+		return false;
+	}
+
+	// Reuse the generic instanced-unlock path after translating the compact public form into the
+	// engine's exact FScannableResourcePair property shape. This keeps class resolution and all value
+	// conversion (including vanilla, mod, and generated resources) identical to ordinary unlocks.
+	TSharedRef<FKDFNode> Pairs = FKDFNode::MakeSequence();
+	for (const TSharedRef<FKDFNode>& EntryRef : EntriesNode.Sequence)
+	{
+		const FKDFNode& Entry = EntryRef.Get();
+		TSharedPtr<FKDFNode> Resource = Entry.FindShared(TEXT("resource"));
+		if (!Entry.IsMap() || !Resource.IsValid() || !Resource->IsScalar())
+		{
+			Context.AddError(TEXT("'scannableResources' entries need a scalar 'resource' class reference"), Entry.Line);
+			continue;
+		}
+		TSharedRef<FKDFNode> Pair = FKDFNode::MakeMap();
+		Pair->SetChild(TEXT("ResourceDescriptor"), Resource.ToSharedRef());
+		TSharedPtr<FKDFNode> NodeType = Entry.FindShared(TEXT("nodeType"));
+		Pair->SetChild(TEXT("ResourceNodeType"),
+					   NodeType.IsValid() ? NodeType.ToSharedRef() : FKDFNode::MakeScalar(TEXT("Node")));
+		Pairs->AddChild(Pair);
+	}
+	if (Pairs->Num() == 0)
+	{
+		return false;
+	}
+
+	TSharedRef<FKDFNode> Property = FKDFNode::MakeMap();
+	Property->SetChild(TEXT("path"), FKDFNode::MakeScalar(TEXT("mResourcePairsToAddToScanner")));
+	Property->SetChild(TEXT("value"), Pairs);
+	TSharedRef<FKDFNode> Properties = FKDFNode::MakeSequence();
+	Properties->AddChild(Property);
+	TSharedRef<FKDFNode> Unlock = FKDFNode::MakeMap();
+	Unlock->SetChild(TEXT("class"), FKDFNode::MakeScalar(TEXT("/Script/FactoryGame.FGUnlockScannableResource")));
+	Unlock->SetChild(TEXT("properties"), Properties);
+	TSharedRef<FKDFNode> Unlocks = FKDFNode::MakeSequence();
+	Unlocks->AddChild(Unlock);
+	return ApplyInstancedObjects(TargetCDO, Unlocks.Get(), TEXT("mUnlocks"),
+								 TEXT("Schematic class has no mUnlocks object array"), Context);
+}
+
 bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& NodesNode, bool bAutoPath,
 										 FKDFApplyContext& Context)
 {
 	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
 	if (!NodesNode.IsSequence())
 	{
-		Context.AddError(TEXT("'nodes' must be a sequence"));
+		Context.AddError(TEXT("Research node additions must be a sequence ('addNodes' or legacy 'nodes')"));
 		return false;
 	}
 
@@ -419,6 +712,20 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 	// those can point at a node defined later in the same list.
 	TArray<FKDFResearchNodeWork> WorkingNodes;
 	TMap<UClass*, FKDFGridPoint> CoordinateBySchematic;
+	IndexExistingResearchNodes(TreeCDO, NodesArray, NodeInner, CoordinateBySchematic, WorkingNodes);
+	TSet<UClass*> ClaimedSchematics;
+	TSet<FKDFGridPoint> ClaimedCoordinates;
+	for (const FKDFResearchNodeWork& ExistingWork : WorkingNodes)
+	{
+		if (ExistingWork.SchematicClass != nullptr)
+		{
+			ClaimedSchematics.Add(ExistingWork.SchematicClass);
+		}
+		if (ExistingWork.bHasCoordinate)
+		{
+			ClaimedCoordinates.Add(ExistingWork.Coordinate);
+		}
+	}
 	for (const TSharedRef<FKDFNode>& NodeRef : NodesNode.Sequence)
 	{
 		const FKDFNode& Node = NodeRef.Get();
@@ -450,9 +757,20 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 			FKDFPropertyResolver::FindPropertyByNameFlexible(NodeClass, TEXT("mNodeDataStruct")));
 		Work.NodeDataPtr =
 			Work.NodeDataStruct != nullptr ? Work.NodeDataStruct->ContainerPtrToValuePtr<void>(NodeInstance) : nullptr;
+		if (Work.NodeDataPtr == nullptr)
+		{
+			Context.AddError(FString::Printf(TEXT("Node class %s has no mNodeDataStruct"), *NodeClass->GetPathName()),
+							 Node.Line);
+			Work.bSkipAppend = true;
+		}
 
 		const FString SchematicPath = Node.GetString(TEXT("schematic"), FString());
-		if (!SchematicPath.IsEmpty())
+		if (SchematicPath.IsEmpty())
+		{
+			Context.AddError(TEXT("Node entry requires a 'schematic' class reference"), Node.Line);
+			Work.bSkipAppend = true;
+		}
+		else
 		{
 			UClass* SchematicClass = Subsystem->FindOrLoadClassCached(SchematicPath, Error);
 			if (SchematicClass == nullptr ||
@@ -461,6 +779,14 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 				Context.AddError(FString::Printf(TEXT("Node 'schematic' is invalid (%s)"),
 												 SchematicClass == nullptr ? *Error : TEXT("not a schematic class")),
 								 Node.Line);
+				Work.bSkipAppend = true;
+			}
+			else if (ClaimedSchematics.Contains(SchematicClass))
+			{
+				Context.AddError(FString::Printf(TEXT("Research tree already contains a node for schematic %s"),
+												 *SchematicClass->GetPathName()),
+								 Node.Line);
+				Work.bSkipAppend = true;
 			}
 			else if (Work.NodeDataPtr != nullptr)
 			{
@@ -470,14 +796,14 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 				{
 					SchematicMember->SetObjectPropertyValue(Work.NodeDataPtr, SchematicClass);
 					Work.SchematicClass = SchematicClass;
+					ClaimedSchematics.Add(SchematicClass);
 				}
 				else
 				{
-					Context.AddWarning(
-						FString::Printf(TEXT("Node class %s has no discoverable 'Schematic' field for 'schematic:' — ")
-											TEXT("use 'properties:' with the exact path instead"),
-										*NodeClass->GetName()),
-						Node.Line);
+					Context.AddError(FString::Printf(TEXT("Node class %s has no discoverable 'Schematic' field"),
+													 *NodeClass->GetName()),
+									 Node.Line);
+					Work.bSkipAppend = true;
 				}
 			}
 		}
@@ -510,15 +836,29 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 
 		if (Work.SchematicClass != nullptr && Work.bHasCoordinate)
 		{
-			CoordinateBySchematic.Add(Work.SchematicClass, Work.Coordinate);
+			if (ClaimedCoordinates.Contains(Work.Coordinate))
+			{
+				Context.AddError(FString::Printf(TEXT("Research tree coordinate {%d,%d} is already occupied"),
+												 Work.Coordinate.X, Work.Coordinate.Y),
+								 Node.Line);
+				Work.bSkipAppend = true;
+				ClaimedSchematics.Remove(Work.SchematicClass);
+			}
+			else
+			{
+				ClaimedCoordinates.Add(Work.Coordinate);
+				CoordinateBySchematic.Add(Work.SchematicClass, Work.Coordinate);
+			}
 		}
 	}
 
 	// --- Phase 2: `parents:` / `nodesToUnhide:` / `unhiddenBy:`, and (manual mode) `childrenAndRoads:`.
 	TMultiMap<FKDFGridPoint, FKDFGridPoint> AutoEdgesByParent; // only populated when bAutoPath
+	TMultiMap<FKDFGridPoint, FKDFGridPoint> AutoUnhideEdgesByTarget;
 	for (FKDFResearchNodeWork& Work : WorkingNodes)
 	{
-		if (Work.NodeDataStruct == nullptr || Work.NodeDataPtr == nullptr)
+		if (Work.bExisting || Work.bSkipAppend || Work.SourceNode == nullptr || Work.NodeDataStruct == nullptr ||
+			Work.NodeDataPtr == nullptr)
 		{
 			continue;
 		}
@@ -528,8 +868,16 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 								 &ResolvedParents);
 		ResolveAndWriteGridArray(Work, TEXT("nodesToUnhide"), TEXT("NodesToUnhide"), CoordinateBySchematic, Subsystem,
 								 Context);
+		TArray<FKDFGridPoint> ResolvedUnhiddenBy;
 		ResolveAndWriteGridArray(Work, TEXT("unhiddenBy"), TEXT("UnhiddenBy"), CoordinateBySchematic, Subsystem,
-								 Context);
+								 Context, &ResolvedUnhiddenBy);
+		if (Work.bHasCoordinate)
+		{
+			for (const FKDFGridPoint& TargetPoint : ResolvedUnhiddenBy)
+			{
+				AutoUnhideEdgesByTarget.Add(TargetPoint, Work.Coordinate);
+			}
+		}
 
 		if (!bAutoPath)
 		{
@@ -548,15 +896,40 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 		}
 	}
 
+	// Both inverse reveal fields drive locked-node hover highlighting. Preserve target entries while
+	// adding every child that names the target through `unhiddenBy:`.
+	for (FKDFResearchNodeWork& Work : WorkingNodes)
+	{
+		if (Work.bSkipAppend || !Work.bHasCoordinate || Work.NodeDataStruct == nullptr || Work.NodeDataPtr == nullptr)
+		{
+			continue;
+		}
+		TArray<FKDFGridPoint> NodesToUnhide;
+		AutoUnhideEdgesByTarget.MultiFind(Work.Coordinate, NodesToUnhide);
+		if (NodesToUnhide.Num() == 0)
+		{
+			continue;
+		}
+		NodesToUnhide.Sort([](const FKDFGridPoint& A, const FKDFGridPoint& B)
+						   { return A.X != B.X ? A.X < B.X : A.Y < B.Y; });
+		const FArrayProperty* NodesToUnhideMember =
+			CastField<FArrayProperty>(FindStructMember(Work.NodeDataStruct->Struct, TEXT("NodesToUnhide")));
+		if (NodesToUnhideMember != nullptr)
+		{
+			AppendUniqueGridPoints(NodesToUnhideMember,
+				NodesToUnhideMember->ContainerPtrToValuePtr<void>(Work.NodeDataPtr), NodesToUnhide);
+		}
+	}
+
 	// --- Phase 3 (autoPath only): invert every recorded parent edge into that parent's own
-	// ChildrenAndRoads as a straight two-point connector. No equivalent road-layout utility exists
+	// ChildrenAndRoads as an orthogonal, one-grid-step path. No equivalent road-layout utility exists
 	// in KBFL/KPrivateCodeLib to call into instead — this is a new, intentionally simple default;
 	// use a manual `childrenAndRoads:` (autoPath: false) for anything more elaborate.
 	if (bAutoPath)
 	{
 		for (FKDFResearchNodeWork& Work : WorkingNodes)
 		{
-			if (!Work.bHasCoordinate || Work.NodeDataStruct == nullptr)
+			if (Work.bSkipAppend || !Work.bHasCoordinate || Work.NodeDataStruct == nullptr)
 			{
 				continue;
 			}
@@ -581,10 +954,8 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 			TArray<TPair<FKDFGridPoint, TArray<FKDFGridPoint>>> Roads;
 			for (const FKDFGridPoint& Child : Children)
 			{
-				TArray<FKDFGridPoint> RoadPoints;
-				RoadPoints.Add(Work.Coordinate);
-				RoadPoints.Add(Child);
-				Roads.Add(TPair<FKDFGridPoint, TArray<FKDFGridPoint>>(Child, RoadPoints));
+				Roads.Add(TPair<FKDFGridPoint, TArray<FKDFGridPoint>>(
+					Child, BuildAutoRoadPoints(Work.Coordinate, Child)));
 			}
 			WriteChildrenAndRoadsMap(RoadsMember, Work.NodeDataPtr, Roads);
 		}
@@ -594,9 +965,13 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 	bool bAddedAny = false;
 	for (FKDFResearchNodeWork& Work : WorkingNodes)
 	{
+		if (Work.bExisting || Work.bSkipAppend || Work.SourceNode == nullptr)
+		{
+			continue;
+		}
 		if (const FKDFNode* Properties = Work.SourceNode->Find(TEXT("properties")))
 		{
-			FKDFPatchUtil::ApplyOpsToObject(Work.Instance, *Properties, false, Context);
+			FKDFPatchUtil::ApplyOpsToObject(Work.Instance, *Properties, Context);
 		}
 
 		FScriptArrayHelper Helper(NodesArray, NodesArray->ContainerPtrToValuePtr<void>(TreeCDO));
@@ -614,6 +989,149 @@ bool UKDFContentClassHandler::ApplyNodes(UObject* TreeCDO, const FKDFNode& Nodes
 		}
 	}
 	return bAddedAny;
+}
+
+bool UKDFContentClassHandler::RemoveNodesBySchematic(UObject* TreeCDO, const FKDFNode& EntriesNode,
+													 FKDFApplyContext& Context)
+{
+	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
+	if (!EntriesNode.IsSequence())
+	{
+		Context.AddError(TEXT("'removeNodes' must be a sequence"), EntriesNode.Line);
+		return false;
+	}
+
+	TSet<UClass*> SchematicsToRemove;
+	FString Error;
+	for (const TSharedRef<FKDFNode>& EntryRef : EntriesNode.Sequence)
+	{
+		const FKDFNode& Entry = EntryRef.Get();
+		const FString Reference = Entry.IsScalar() ? Entry.Scalar : Entry.GetString(TEXT("schematic"), FString());
+		UClass* SchematicClass = Reference.IsEmpty() ? nullptr : Subsystem->FindOrLoadClassCached(Reference, Error);
+		if (SchematicClass == nullptr)
+		{
+			Context.AddError(FString::Printf(TEXT("'removeNodes' entry needs a valid schematic class (%s)"), *Error),
+							 Entry.Line);
+			continue;
+		}
+		SchematicsToRemove.Add(SchematicClass);
+	}
+	if (SchematicsToRemove.Num() == 0 || Context.bDryRun)
+	{
+		return SchematicsToRemove.Num() > 0;
+	}
+
+	const FArrayProperty* NodesArray = CastField<FArrayProperty>(
+		FKDFPropertyResolver::FindPropertyByNameFlexible(TreeCDO->GetClass(), TEXT("mNodes")));
+	const FObjectProperty* NodeInner = NodesArray != nullptr ? CastField<FObjectProperty>(NodesArray->Inner) : nullptr;
+	if (NodeInner == nullptr)
+	{
+		Context.AddError(TEXT("Research tree class has no mNodes object array"), EntriesNode.Line);
+		return false;
+	}
+
+	TSet<FKDFGridPoint> CoordinatesToRemove;
+	FScriptArrayHelper NodesHelper(NodesArray, NodesArray->ContainerPtrToValuePtr<void>(TreeCDO));
+	bool bSnapshotRecorded = false;
+	int32 RemovedNodeCount = 0;
+	for (int32 Index = NodesHelper.Num() - 1; Index >= 0; --Index)
+	{
+		UObject* Node = NodeInner->GetObjectPropertyValue(NodesHelper.GetRawPtr(Index));
+		const FStructProperty* Data = Node != nullptr
+			? CastField<FStructProperty>(
+				  FKDFPropertyResolver::FindPropertyByNameFlexible(Node->GetClass(), TEXT("mNodeDataStruct")))
+			: nullptr;
+		void* DataPtr = Data != nullptr ? Data->ContainerPtrToValuePtr<void>(Node) : nullptr;
+		const FClassProperty* Schematic =
+			Data != nullptr ? CastField<FClassProperty>(FindStructMember(Data->Struct, TEXT("Schematic"))) : nullptr;
+		const FStructProperty* Coordinate =
+			Data != nullptr ? CastField<FStructProperty>(FindStructMember(Data->Struct, TEXT("Coordinates"))) : nullptr;
+		UClass* SchematicClass =
+			Schematic != nullptr ? Cast<UClass>(Schematic->GetObjectPropertyValue(DataPtr)) : nullptr;
+		if (SchematicClass == nullptr || !SchematicsToRemove.Contains(SchematicClass))
+		{
+			continue;
+		}
+		FKDFGridPoint Point;
+		if (Coordinate != nullptr &&
+			ReadGridPoint(Coordinate, Coordinate->ContainerPtrToValuePtr<void>(DataPtr), Point))
+		{
+			CoordinatesToRemove.Add(Point);
+		}
+		if (!bSnapshotRecorded)
+		{
+			Subsystem->GetVanillaCache().RecordSnapshot(
+				TreeCDO, TEXT("mNodes"),
+				FKDFValueCodec::ExportText(NodesArray, NodesArray->ContainerPtrToValuePtr<void>(TreeCDO)));
+			bSnapshotRecorded = true;
+		}
+		NodesHelper.RemoveValues(Index, 1);
+		++RemovedNodeCount;
+		++Context.mAppliedOpCount;
+		if (Context.mPatchRecord != nullptr)
+		{
+			FKDFOpRecord& OpRecord = Context.mPatchRecord->mOps.AddDefaulted_GetRef();
+			OpRecord.mTargetObjectPath = TreeCDO->GetPathName();
+			OpRecord.mPropertyPath = TEXT("mNodes");
+			OpRecord.mOp = EKDFOp::Remove;
+			OpRecord.mValueText = SchematicClass->GetPathName();
+		}
+	}
+
+	// Every surviving node is purged of prerequisite/reveal links and outgoing roads to the removed points.
+	for (int32 Index = 0; Index < NodesHelper.Num(); ++Index)
+	{
+		UObject* Node = NodeInner->GetObjectPropertyValue(NodesHelper.GetRawPtr(Index));
+		const FStructProperty* Data = Node != nullptr
+			? CastField<FStructProperty>(
+				  FKDFPropertyResolver::FindPropertyByNameFlexible(Node->GetClass(), TEXT("mNodeDataStruct")))
+			: nullptr;
+		void* DataPtr = Data != nullptr ? Data->ContainerPtrToValuePtr<void>(Node) : nullptr;
+		if (Data == nullptr || DataPtr == nullptr)
+		{
+			continue;
+		}
+		for (const TCHAR* FieldName : {TEXT("Parents"), TEXT("NodesToUnhide"), TEXT("UnhiddenBy")})
+		{
+			const FArrayProperty* Field = CastField<FArrayProperty>(FindStructMember(Data->Struct, FieldName));
+			const FStructProperty* PointType = Field != nullptr ? CastField<FStructProperty>(Field->Inner) : nullptr;
+			if (PointType == nullptr)
+			{
+				continue;
+			}
+			FScriptArrayHelper FieldHelper(Field, Field->ContainerPtrToValuePtr<void>(DataPtr));
+			for (int32 PointIndex = FieldHelper.Num() - 1; PointIndex >= 0; --PointIndex)
+			{
+				FKDFGridPoint Point;
+				if (ReadGridPoint(PointType, FieldHelper.GetRawPtr(PointIndex), Point) &&
+					CoordinatesToRemove.Contains(Point))
+				{
+					FieldHelper.RemoveValues(PointIndex, 1);
+				}
+			}
+		}
+		const FMapProperty* Roads = CastField<FMapProperty>(FindStructMember(Data->Struct, TEXT("ChildrenAndRoads")));
+		const FStructProperty* KeyType = Roads != nullptr ? CastField<FStructProperty>(Roads->KeyProp) : nullptr;
+		if (KeyType != nullptr)
+		{
+			FScriptMapHelper RoadsHelper(Roads, Roads->ContainerPtrToValuePtr<void>(DataPtr));
+			for (int32 RoadIndex = RoadsHelper.GetMaxIndex() - 1; RoadIndex >= 0; --RoadIndex)
+			{
+				if (!RoadsHelper.IsValidIndex(RoadIndex))
+				{
+					continue;
+				}
+				FKDFGridPoint Point;
+				if (ReadGridPoint(KeyType, RoadsHelper.GetKeyPtr(RoadIndex), Point) &&
+					CoordinatesToRemove.Contains(Point))
+				{
+					RoadsHelper.RemoveAt(RoadIndex);
+				}
+			}
+			RoadsHelper.Rehash();
+		}
+	}
+	return RemovedNodeCount > 0;
 }
 
 bool UKDFContentClassHandler::ApplyEntry(const FKDFNode& Entry, FKDFApplyContext& Context)
@@ -685,7 +1203,7 @@ bool UKDFContentClassHandler::ApplyEntry(const FKDFNode& Entry, FKDFApplyContext
 
 	if (const FKDFNode* Properties = Entry.Find(TEXT("properties")))
 	{
-		FKDFPatchUtil::ApplyOpsToObject(TargetCDO, *Properties, false, Context);
+		FKDFPatchUtil::ApplyOpsToObject(TargetCDO, *Properties, Context);
 	}
 	if (bSupportsUnlocks)
 	{
@@ -693,6 +1211,32 @@ bool UKDFContentClassHandler::ApplyEntry(const FKDFNode& Entry, FKDFApplyContext
 		{
 			ApplyInstancedObjects(TargetCDO, *Unlocks, TEXT("mUnlocks"),
 								  TEXT("Schematic class has no mUnlocks object array"), Context);
+		}
+		if (const FKDFNode* Recipes = Entry.Find(TEXT("recipes")))
+		{
+			ApplyClassListShortcutUnlock(TargetCDO, *Recipes, TEXT("/Script/FactoryGame.FGUnlockRecipe"),
+										 TEXT("mRecipes"), TEXT("/Script/FactoryGame.FGRecipe"), TEXT("recipes"),
+										 Context);
+		}
+		if (const FKDFNode* Schematics = Entry.Find(TEXT("schematics")))
+		{
+			ApplyClassListShortcutUnlock(TargetCDO, *Schematics, TEXT("/Script/FactoryGame.FGUnlockSchematic"),
+										 TEXT("mSchematics"), TEXT("/Script/FactoryGame.FGSchematic"),
+										 TEXT("schematics"), Context);
+		}
+		if (const FKDFNode* HandSlots = Entry.Find(TEXT("handSlots")))
+		{
+			ApplyCountShortcutUnlock(TargetCDO, *HandSlots, TEXT("/Script/FactoryGame.FGUnlockArmEquipmentSlot"),
+									 TEXT("mNumArmEquipmentSlotsToUnlock"), TEXT("handSlots"), Context);
+		}
+		if (const FKDFNode* InventorySlots = Entry.Find(TEXT("inventorySlots")))
+		{
+			ApplyCountShortcutUnlock(TargetCDO, *InventorySlots, TEXT("/Script/FactoryGame.FGUnlockInventorySlot"),
+									 TEXT("mNumInventorySlotsToUnlock"), TEXT("inventorySlots"), Context);
+		}
+		if (const FKDFNode* Resources = Entry.Find(TEXT("scannableResources")))
+		{
+			ApplyScannableResourcesShortcutUnlock(TargetCDO, *Resources, Context);
 		}
 	}
 	if (bSupportsDependencies)
@@ -705,9 +1249,27 @@ bool UKDFContentClassHandler::ApplyEntry(const FKDFNode& Entry, FKDFApplyContext
 	}
 	if (bSupportsNodes)
 	{
-		if (const FKDFNode* Nodes = Entry.Find(TEXT("nodes")))
+		if (const FKDFNode* RemoveNodes = Entry.Find(TEXT("removeNodes")))
 		{
-			ApplyNodes(TargetCDO, *Nodes, Entry.GetBool(TEXT("autoPath"), false), Context);
+			RemoveNodesBySchematic(TargetCDO, *RemoveNodes, Context);
+		}
+		const FKDFNode* AddNodes = Entry.Find(TEXT("addNodes"));
+		const FKDFNode* LegacyNodes = Entry.Find(TEXT("nodes"));
+		if (AddNodes != nullptr)
+		{
+			ApplyNodes(TargetCDO, *AddNodes, Entry.GetBool(TEXT("autoPath"), false), Context);
+		}
+		if (LegacyNodes != nullptr)
+		{
+			if (AddNodes != nullptr)
+			{
+				Context.AddWarning(TEXT("Both 'addNodes' and legacy 'nodes' are present; ignoring 'nodes'"),
+								   LegacyNodes->Line);
+			}
+			else
+			{
+				ApplyNodes(TargetCDO, *LegacyNodes, Entry.GetBool(TEXT("autoPath"), false), Context);
+			}
 		}
 	}
 

@@ -685,15 +685,21 @@ void AKPCLFaxitSubsystem::DestroyNetworkBuilding(AKPCLNetworkBuildingBase* Build
 		return;
 	}
 
+	AKPCLNetworkCore* CoreToDestroy = nullptr;
 	for (FKPCLFaxitNetwork& Network : mNetworks)
 	{
-		Network.RemoveActorFromNetwork(Building);
-
 		if (Network.mCore == Building)
 		{
-			// If the core is destroyed, destroy the whole network
-			DestoryNetwork(CastChecked<AKPCLNetworkCore>(Building));
+			CoreToDestroy = CastChecked<AKPCLNetworkCore>(Building);
 		}
+
+		Network.RemoveActorFromNetwork(Building);
+	}
+
+	if (IsValid(CoreToDestroy))
+	{
+		// If the core is destroyed, destroy the whole network after iteration is complete.
+		DestoryNetwork(CoreToDestroy);
 	}
 }
 

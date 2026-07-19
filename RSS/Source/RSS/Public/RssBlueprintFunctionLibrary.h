@@ -19,6 +19,9 @@ class RSS_API URssBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintPure, Category = "RSS BPL|Color")
+	static void HexToLinearColor(const FString& InString, FLinearColor& OutConvertedColor, bool& OutIsValid);
+
 	UFUNCTION(BlueprintCallable, Category = "RSS BPL")
 	static void ValidateCustomData(AActor* Building);
 
@@ -57,4 +60,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "RSS BPL")
 	static FVector2D GetScreenSize(ESignSize SignSize);
+
+	static bool IsSignDataSafe(const FRssSignData& SignData);
 };

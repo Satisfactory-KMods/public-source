@@ -7,8 +7,7 @@
 AKDFChatCommand::AKDFChatCommand()
 {
 	CommandName = TEXT("kdf");
-	Usage =
-		NSLOCTEXT("KDataForge", "KDFCommandUsage", "/kdf <reload|report|editor|debug on|off> — KDataForge data editor");
+	Usage = NSLOCTEXT("KDataForge", "KDFCommandUsage", "/kdf <report|editor|debug on|off> — KDataForge data editor");
 	MinNumberOfArguments = 1;
 	bOnlyUsableByPlayer = false;
 }
@@ -24,20 +23,6 @@ EExecutionStatus AKDFChatCommand::ExecuteCommand_Implementation(UCommandSender* 
 	}
 
 	const FString& SubCommand = Arguments[0];
-	if (SubCommand.Equals(TEXT("reload"), ESearchCase::IgnoreCase))
-	{
-		if (!HasAuthority())
-		{
-			Sender->SendChatMessage(TEXT("Reload is only available on the server/host"), FLinearColor::Red);
-			return EExecutionStatus::INSUFFICIENT_PERMISSIONS;
-		}
-		const int32 AppliedDocuments = Subsystem->Reload(true);
-		Sender->SendChatMessage(
-			FString::Printf(TEXT("KDataForge live reload done — %d document(s) applied. New content types "
-								 "(items/recipes/schematics) need a session restart."),
-							AppliedDocuments));
-		return EExecutionStatus::COMPLETED;
-	}
 	if (SubCommand.Equals(TEXT("editor"), ESearchCase::IgnoreCase))
 	{
 		// Host-local UI: the editor module resolves the local player controller itself.

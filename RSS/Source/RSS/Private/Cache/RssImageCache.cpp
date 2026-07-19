@@ -14,12 +14,15 @@
 #include "Misc/SecureHash.h"
 #include "Serialization/BufferArchive.h"
 #include "Serialization/MemoryReader.h"
+#include "Widget/RssDownloadImage.h"
 
 DEFINE_LOG_CATEGORY(RSSImageCacheLog);
 
 TMap<TWeakObjectPtr<UWorld>, URssImageCacheManager*> URssImageCacheManager::Instances;
 
-URssImageCacheManager::URssImageCacheManager() {}
+URssImageCacheManager::URssImageCacheManager()
+{
+}
 
 URssImageCacheManager* URssImageCacheManager::Get(UObject* WorldContextObject)
 {
@@ -109,7 +112,7 @@ void URssImageCacheManager::Initialize(const FRssImageCacheConfig& Config)
 
 	bIsInitialized = true;
 	UE_LOG(RSSImageCacheLog, Log, TEXT("Image cache initialized. Disk cache entries: %d, Disk usage: %lld bytes"),
-		   DiskCacheIndex.Num(), CurrentDiskUsage);
+	       DiskCacheIndex.Num(), CurrentDiskUsage);
 }
 
 void URssImageCacheManager::Shutdown()
@@ -159,7 +162,7 @@ void URssImageCacheManager::Shutdown()
 
 bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 {
-	if (Url.IsEmpty())
+	if (Url.IsEmpty() || !URssDownloadImage::IsSafeRemoteImageUrl(Url))
 	{
 		return false;
 	}
@@ -177,14 +180,14 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 				// Notify immediately
 				TWeakObjectPtr<URssImageCacheManager> WeakThis(this);
 				AsyncTask(ENamedThreads::GameThread,
-						  [WeakThis, Url, Texture = Entry->Texture]()
-						  {
-							  if (!WeakThis.IsValid())
-							  {
-								  return;
-							  }
-							  WeakThis->OnImageLoaded.Broadcast(Url, Texture);
-						  });
+				          [WeakThis, Url, Texture = Entry->Texture]()
+				          {
+					          if (!WeakThis.IsValid())
+					          {
+						          return;
+					          }
+					          WeakThis->OnImageLoaded.Broadcast(Url, Texture);
+				          });
 				return true;
 			}
 		}
@@ -208,40 +211,54 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 	}
 	if (bHasDiskEntry)
 	{
-		// Load async from disk
+		// Load async from disk without extending this UObject's lifetime across world teardown.
+		TWeakObjectPtr<URssImageCacheManager> WeakThis(this);
 		AsyncTask(
 			ENamedThreads::AnyBackgroundThreadNormalTask,
-			[this, Url, bPersistent]()
+			[WeakThis, Url, bPersistent]()
 			{
+				if (!WeakThis.IsValid())
+				{
+					return;
+				}
+
 				TArray<uint8> RawData;
-				if (LoadFromDiskCache(Url, RawData))
+				if (WeakThis->LoadFromDiskCache(Url, RawData) &&
+					RawData.Num() <= URssDownloadImage::MaxCompressedImageBytes)
 				{
 					// Decode image on background thread
 					IImageWrapperModule& ImageWrapperModule =
 						FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
 
-					TSharedPtr<IImageWrapper> ImageWrappers[3] = {
-						ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG),
-						ImageWrapperModule.CreateImageWrapper(EImageFormat::JPEG),
-						ImageWrapperModule.CreateImageWrapper(EImageFormat::BMP),
-					};
+					const EImageFormat ImageFormat =
+						ImageWrapperModule.DetectImageFormat(RawData.GetData(), RawData.Num());
+					TSharedPtr<IImageWrapper> ImageWrappers[1];
+					if (ImageFormat != EImageFormat::Invalid)
+					{
+						ImageWrappers[0] = ImageWrapperModule.CreateImageWrapper(ImageFormat);
+					}
 
 					for (auto& ImageWrapper : ImageWrappers)
 					{
 						if (ImageWrapper.IsValid() && ImageWrapper->SetCompressed(RawData.GetData(), RawData.Num()))
 						{
+							const int32 Width = ImageWrapper->GetWidth();
+							const int32 Height = ImageWrapper->GetHeight();
+							int64 RawBytes = 0;
+							if (!URssDownloadImage::ValidateImageDimensions(
+								RawData.Num(), Width, Height, RawBytes))
+							{
+								continue;
+							}
+
 							TArray64<uint8> DecompressedData;
 							if (ImageWrapper->GetRaw(ERGBFormat::BGRA, 8, DecompressedData))
 							{
-								int32 Width = ImageWrapper->GetWidth();
-								int32 Height = ImageWrapper->GetHeight();
-
 								// Create texture on game thread
-								TWeakObjectPtr<URssImageCacheManager> WeakThis(this);
 								AsyncTask(
 									ENamedThreads::GameThread,
-									[WeakThis, Url, Width, Height, DecompressedData = MoveTemp(DecompressedData),
-									 bPersistent]() mutable
+									[WeakThis, Url, Width, Height, RawBytes,
+										DecompressedData = MoveTemp(DecompressedData), bPersistent]() mutable
 									{
 										if (!WeakThis.IsValid())
 										{
@@ -262,7 +279,7 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 													new TArray64<uint8>(MoveTemp(DecompressedData));
 												ENQUEUE_RENDER_COMMAND(FWriteRawDataToTexture)(
 													[TextureResource, RawDataCopy, Width,
-													 Height](FRHICommandListImmediate& RHICmdList)
+														Height](FRHICommandListImmediate& RHICmdList)
 													{
 														FRHITexture* TextureRHI = TextureResource->GetTexture2DRHI();
 														if (TextureRHI)
@@ -270,16 +287,16 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 															uint32 DestStride = 0;
 															uint8* DestData = reinterpret_cast<uint8*>(
 																RHILockTexture2D(TextureRHI, 0, RLM_WriteOnly,
-																				 DestStride, false, false));
+																	DestStride, false, false));
 
 															for (int32 y = 0; y < Height; y++)
 															{
 																uint8* DestPtr =
 																	&DestData[(static_cast<int64>(Height) - 1 - y) *
-																			  DestStride];
+																		DestStride];
 																const FColor* SrcPtr =
 																	&((FColor*)(RawDataCopy->GetData()))
-																		[(static_cast<int64>(Height) - 1 - y) * Width];
+																	[(static_cast<int64>(Height) - 1 - y) * Width];
 																for (int32 x = 0; x < Width; x++)
 																{
 																	*DestPtr++ = SrcPtr->B;
@@ -296,8 +313,7 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 													});
 											}
 
-											int64 SizeInBytes = (int64)Width * Height * 4;
-											WeakThis->AddToMemoryCache(Url, Texture, SizeInBytes, bPersistent);
+											WeakThis->AddToMemoryCache(Url, Texture, RawBytes, bPersistent);
 											WeakThis->OnImageLoaded.Broadcast(Url, Texture);
 										}
 										else
@@ -311,38 +327,36 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 					}
 
 					// Failed to decode
-					TWeakObjectPtr<URssImageCacheManager> WeakThis(this);
 					AsyncTask(ENamedThreads::GameThread,
-							  [WeakThis, Url]()
-							  {
-								  if (!WeakThis.IsValid())
-								  {
-									  return;
-								  }
-								  WeakThis->OnImageFailed.Broadcast(Url);
-							  });
+					          [WeakThis, Url]()
+					          {
+						          if (!WeakThis.IsValid())
+						          {
+							          return;
+						          }
+						          WeakThis->OnImageFailed.Broadcast(Url);
+					          });
 				}
 				else
 				{
 					// Disk load failed, try download
-					TWeakObjectPtr<URssImageCacheManager> WeakThis(this);
 					AsyncTask(ENamedThreads::GameThread,
-							  [WeakThis, Url, bPersistent]()
-							  {
-								  if (!WeakThis.IsValid())
-								  {
-									  return;
-								  }
+					          [WeakThis, Url, bPersistent]()
+					          {
+						          if (!WeakThis.IsValid())
+						          {
+							          return;
+						          }
 
-								  // Remove from disk index since it's invalid
-								  {
-									  FScopeLock Lock(&WeakThis->DiskLock);
-									  WeakThis->DiskCacheIndex.Remove(Url);
-								  }
+						          // Remove from disk index since it's invalid
+						          {
+							          FScopeLock Lock(&WeakThis->DiskLock);
+							          WeakThis->DiskCacheIndex.Remove(Url);
+						          }
 
-								  // Start download
-								  WeakThis->StartDownload(Url, bPersistent);
-							  });
+						          // Start download
+						          WeakThis->StartDownload(Url, bPersistent);
+					          });
 				}
 			});
 		return true;
@@ -354,6 +368,12 @@ bool URssImageCacheManager::RequestImage(const FString& Url, bool bPersistent)
 
 bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 {
+	if (!URssDownloadImage::IsSafeRemoteImageUrl(Url))
+	{
+		OnImageFailed.Broadcast(Url);
+		return false;
+	}
+
 	{
 		FScopeLock Lock(&DownloadLock);
 		if (PendingDownloads.Contains(Url))
@@ -381,29 +401,42 @@ bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 				WeakThis->PendingDownloads.Remove(Url);
 			}
 
-			if (bSucceeded && Response.IsValid() && Response->GetContentLength() > 0)
+			if (bSucceeded && Response.IsValid() && EHttpResponseCodes::IsOk(Response->GetResponseCode()) &&
+				URssDownloadImage::IsSafeRemoteImageUrl(Response->GetURL()))
 			{
 				TArray<uint8> RawData = Response->GetContent();
+				if (RawData.IsEmpty() || RawData.Num() > URssDownloadImage::MaxCompressedImageBytes)
+				{
+					WeakThis->OnImageFailed.Broadcast(Url);
+					return;
+				}
 
 				IImageWrapperModule& ImageWrapperModule =
 					FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
 
-				TSharedPtr<IImageWrapper> ImageWrappers[3] = {
-					ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG),
-					ImageWrapperModule.CreateImageWrapper(EImageFormat::JPEG),
-					ImageWrapperModule.CreateImageWrapper(EImageFormat::BMP),
-				};
+				const EImageFormat ImageFormat =
+					ImageWrapperModule.DetectImageFormat(RawData.GetData(), RawData.Num());
+				TSharedPtr<IImageWrapper> ImageWrappers[1];
+				if (ImageFormat != EImageFormat::Invalid)
+				{
+					ImageWrappers[0] = ImageWrapperModule.CreateImageWrapper(ImageFormat);
+				}
 
 				for (auto& ImageWrapper : ImageWrappers)
 				{
 					if (ImageWrapper.IsValid() && ImageWrapper->SetCompressed(RawData.GetData(), RawData.Num()))
 					{
+						const int32 Width = ImageWrapper->GetWidth();
+						const int32 Height = ImageWrapper->GetHeight();
+						int64 RawBytes = 0;
+						if (!URssDownloadImage::ValidateImageDimensions(RawData.Num(), Width, Height, RawBytes))
+						{
+							continue;
+						}
+
 						TArray64<uint8> DecompressedData;
 						if (ImageWrapper->GetRaw(ERGBFormat::BGRA, 8, DecompressedData))
 						{
-							int32 Width = ImageWrapper->GetWidth();
-							int32 Height = ImageWrapper->GetHeight();
-
 							UTexture2DDynamic* Texture = UTexture2DDynamic::Create(Width, Height);
 							if (Texture)
 							{
@@ -417,7 +450,7 @@ bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 									TArray64<uint8>* RawDataCopy = new TArray64<uint8>(MoveTemp(DecompressedData));
 									ENQUEUE_RENDER_COMMAND(FWriteRawDataToTexture)(
 										[TextureResource, RawDataCopy, Width,
-										 Height](FRHICommandListImmediate& RHICmdList)
+											Height](FRHICommandListImmediate& RHICmdList)
 										{
 											FRHITexture* TextureRHI = TextureResource->GetTexture2DRHI();
 											if (TextureRHI)
@@ -432,7 +465,7 @@ bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 														&DestData[(static_cast<int64>(Height) - 1 - y) * DestStride];
 													const FColor* SrcPtr =
 														&((FColor*)(RawDataCopy->GetData()))
-															[(static_cast<int64>(Height) - 1 - y) * Width];
+														[(static_cast<int64>(Height) - 1 - y) * Width];
 													for (int32 x = 0; x < Width; x++)
 													{
 														*DestPtr++ = SrcPtr->B;
@@ -449,8 +482,7 @@ bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 										});
 								}
 
-								int64 SizeInBytes = (int64)Width * Height * 4;
-								WeakThis->AddToMemoryCache(Url, Texture, SizeInBytes, bPersistent);
+								WeakThis->AddToMemoryCache(Url, Texture, RawBytes, bPersistent);
 
 								// Save to disk cache
 								if (bPersistent && WeakThis->CacheConfig.bEnableDiskCache)
@@ -469,8 +501,17 @@ bool URssImageCacheManager::StartDownload(const FString& Url, bool bPersistent)
 			WeakThis->OnImageFailed.Broadcast(Url);
 		});
 
-	HttpRequest->ProcessRequest();
-	return true;
+	if (HttpRequest->ProcessRequest())
+	{
+		return true;
+	}
+
+	{
+		FScopeLock Lock(&DownloadLock);
+		PendingDownloads.Remove(Url);
+	}
+	OnImageFailed.Broadcast(Url);
+	return false;
 }
 
 bool URssImageCacheManager::GetCachedImage(const FString& Url, UTexture2DDynamic*& OutTexture)
@@ -615,7 +656,7 @@ int64 URssImageCacheManager::GetCurrentDiskUsage() const
 }
 
 void URssImageCacheManager::GetCacheStats(int32& OutMemoryCachedCount, int32& OutDiskCachedCount,
-										  int32& OutPendingDownloads) const
+                                          int32& OutPendingDownloads) const
 {
 	{
 		FScopeLock Lock(&CacheLock);
@@ -757,7 +798,11 @@ void URssImageCacheManager::CheckMemoryPressure()
 void URssImageCacheManager::EvictLRUEntries(int64 TargetSize)
 {
 	FScopeLock Lock(&CacheLock);
+	EvictLRUEntriesLocked(TargetSize);
+}
 
+void URssImageCacheManager::EvictLRUEntriesLocked(int64 TargetSize)
+{
 	// Collect entries sorted by last access time (oldest first)
 	TArray<TPair<FString, FDateTime>> SortedEntries;
 	for (auto& Pair : MemoryCache)
@@ -791,14 +836,14 @@ void URssImageCacheManager::EvictLRUEntries(int64 TargetSize)
 }
 
 void URssImageCacheManager::AddToMemoryCache(const FString& Url, UTexture2DDynamic* Texture, int64 SizeInBytes,
-											 bool bPersistent)
+                                             bool bPersistent)
 {
 	FScopeLock Lock(&CacheLock);
 
 	// Check if we need to make room
 	if (CurrentMemoryUsage + SizeInBytes > CacheConfig.MaxMemoryCacheSize)
 	{
-		EvictLRUEntries(CacheConfig.MaxMemoryCacheSize - SizeInBytes);
+		EvictLRUEntriesLocked(FMath::Max<int64>(0, CacheConfig.MaxMemoryCacheSize - SizeInBytes));
 	}
 
 	FRssImageCacheEntry Entry;
@@ -815,5 +860,5 @@ void URssImageCacheManager::AddToMemoryCache(const FString& Url, UTexture2DDynam
 	CurrentMemoryUsage += SizeInBytes;
 
 	UE_LOG(RSSImageCacheLog, Verbose, TEXT("Added to memory cache: %s (Size: %lld, Total: %lld)"), *Url, SizeInBytes,
-		   CurrentMemoryUsage);
+	       CurrentMemoryUsage);
 }

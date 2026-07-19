@@ -92,7 +92,7 @@ bool UKDFDataAssetHandler::ApplyDocument(const FKDFNode& Document, FKDFApplyCont
 
 		if (const FKDFNode* Properties = Entry.Find(TEXT("properties")))
 		{
-			FKDFPatchUtil::ApplyOpsToObject(Asset, *Properties, false, Context);
+			FKDFPatchUtil::ApplyOpsToObject(Asset, *Properties, Context);
 		}
 		Subsystem->MarkDataAssetsChanged();
 	}

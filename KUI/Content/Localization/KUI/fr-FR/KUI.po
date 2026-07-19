@@ -75,8 +75,9 @@ msgctxt "KUI_GeneralWords,Workbench"
 msgid "Craft Bench"
 msgstr "Table de Fabrication"
 
-msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
-msgstr "Du metal broyé qui peut être miné dans différente clusters de minerais. Peut être utilisé dans la fabrication de lingots et de métaux liquides. \\r\\n\\r\\n Il a aussi la capacité d'être nettoyer dans les machines pour en extraire plus."
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Du metal broyé qui peut être miné dans différente clusters de minerais. Peut être utilisé dans la fabrication de lingots et de métaux liquides. \r\n\r\n Il a aussi la capacité d'être nettoyer dans les machines pour en extraire plus."
 
 msgctxt "KUI_GeneralWords,CycleTime"
 msgid "Cycle Time"
@@ -90,8 +91,9 @@ msgctxt "KUI_GeneralWords,Delete"
 msgid "Delete"
 msgstr "Supprimer"
 
-msgid "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
-msgstr "Êtes-vous sur de vouloir ouvrir ce site? Votre navigateur va s’exécuter et ouvrir ce site!\\r\\n\\r\\n{url}"
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "Êtes-vous sur de vouloir ouvrir ce site? Votre navigateur va s’exécuter et ouvrir ce site!\r\n\r\n{url}"
 
 msgctxt "KUI_GeneralWords,Edit"
 msgid "Edit"
@@ -113,16 +115,29 @@ msgctxt "KUI_GeneralWords,State_Error"
 msgid "Error"
 msgstr "Erreur"
 
-msgid "FUNCTION:\\r\\n{Function}"
-msgstr "FONCTION:\\r\\n{Function}"
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "FONCTION:\r\n{Function}"
 
 msgctxt "KUI_ItemFormat,Liquid"
 msgid "Fluid"
 msgstr "Fluide"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Gaz"
+
 msgctxt "KUI_ItemFormat,Gas"
 msgid "Gas"
 msgstr "Gaz"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "Chaleur"
+
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "Chaleur"
 
 msgctxt "KUI_ItemFormat,Heat"
 msgid "Heat"
@@ -132,6 +147,10 @@ msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
 msgid "INSERT FUEL"
 msgstr "INSÉRER DU CARBURANT"
 
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "Inactif "
+
 msgctxt "KUI_GeneralWords,State_Idle"
 msgid "Idle"
 msgstr "Inactif "
@@ -139,6 +158,14 @@ msgstr "Inactif "
 msgctxt "KUI_GeneralWords,Image"
 msgid "Image"
 msgstr "Image"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "Invalide"
+
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "Invalide"
 
 msgctxt "KUI_GeneralWords,Time_Invalid"
 msgid "Invalid"
@@ -203,6 +230,10 @@ msgstr "Aucun fluide"
 msgctxt "KUI_GeneralWords,NoInv"
 msgid "No Inventory set"
 msgstr "Aucun inventaire fait"
+
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "Pas de puissance"
 
 msgctxt "KUI_GeneralWords,State_NoPower"
 msgid "No Power"
@@ -316,6 +347,10 @@ msgctxt "KUI_GeneralWords,SlotNotUsed"
 msgid "Slot not in use"
 msgstr "Cet espace n'est pas utilisé"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "Solide"
+
 msgctxt "KUI_ItemFormat,Solid"
 msgid "Solid"
 msgstr "Solide"
@@ -410,7 +445,7 @@ msgstr "De {From} à {To} °C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "De {From} à {To}%%"
+msgstr "De {From} à {To}%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -418,7 +453,7 @@ msgstr "{Time} Sec"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %%"
+msgstr "{Value} %"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"

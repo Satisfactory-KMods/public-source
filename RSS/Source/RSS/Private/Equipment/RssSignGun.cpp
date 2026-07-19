@@ -678,7 +678,7 @@ bool ARssSignGun::AreSignDataCompatible(const FRssSignData& A, const FRssSignDat
 		return false;
 	}
 
-	if (A.mSignTypeSize == ESignSize::RSS_InValid || A.mSignType == ESignType::RSS_InValid)
+	if (B.mSignTypeSize == ESignSize::RSS_InValid || B.mSignType == ESignType::RSS_InValid)
 	{
 		return false;
 	}

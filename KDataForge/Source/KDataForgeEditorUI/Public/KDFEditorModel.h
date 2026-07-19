@@ -169,14 +169,6 @@ public:
 	/** References tab: recipes using/producing the selected class + schematics unlocking those recipes. */
 	FString GetSelectedReferencesText() const;
 
-	/**
-	 * Re-scans DataForge YAML from disk and re-applies live-safe stages (same as chat's `/kdf
-	 * reload`) — CDOChanges/GameTags/Localization/RuntimePatches only; new item/recipe/schematic
-	 * classes still need a session restart to register. Returns the applied document count and
-	 * fills OutReportText with the same summary `/kdf report` prints (packs, ops, warnings, errors).
-	 */
-	int32 ReloadFromDisk(FString& OutReportText);
-
 	// --- Creation ---
 	const TArray<TSharedPtr<FString>>& GetCreatableKinds() const { return mCreatableKinds; }
 
