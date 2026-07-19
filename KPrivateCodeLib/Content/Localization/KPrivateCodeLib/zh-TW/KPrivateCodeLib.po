@@ -11,7 +11,8 @@ msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
 msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 msgstr "<LightGrey12Reg>感谢您使用 </><Orange12Reg>KMods</>"
 
-msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock_108.Text"
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
 msgstr "<LightGrey12Reg>我们希望您能够决定是否以及 </><Orange12Reg>您想看到哪些广告！</>rn<LightGrey12Reg>您可以在任何时候在 </><Orange12Reg>KPrivateLib 模组配置中更改此设置。</>rnrn<Orange12Reg>此弹窗只会出现一次</>"
 
 msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"

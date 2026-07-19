@@ -15,6 +15,18 @@
 
 #include "RSSImageSubsystem.generated.h"
 
+UENUM(BlueprintType)
+enum class ERssImageRequestState : uint8
+{
+	Queued,
+	Loading,
+	Succeeded,
+	Failed
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnRssImageRequestStateChanged, const FString&, Url,
+	ERssImageRequestState, State);
+
 USTRUCT(BlueprintType)
 struct FInitRequests
 {
@@ -95,6 +107,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "RSS Subsystems")
 	void GetCacheStatistics(int32& MemoryCached, int32& DiskCached, int64& MemoryUsage, int64& DiskUsage) const;
+
+	UPROPERTY(BlueprintAssignable, Category = "RSS Subsystems")
+	FOnRssImageRequestStateChanged OnImageRequestStateChanged;
 
 	UPROPERTY(BlueprintReadWrite, Category = "RSS Subsystems")
 	TMap<FString, FRssCustomSignUrlData> mStoredImages;

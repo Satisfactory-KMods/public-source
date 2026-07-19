@@ -11,8 +11,9 @@ msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
 msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 msgstr "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 
-msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
-msgstr "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock_108.Text"
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
 
 msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
 msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"
@@ -185,6 +186,10 @@ msgstr "Use Wire Switch System"
 msgctxt "ST_KPrivateCodeLib,BPW_KPCL_CustomiserSaveIcon.BPW_KPCL_CustomiserSaveIcon_C.PaletteCategory"
 msgid "User Created"
 msgstr "User Created"
+
+msgctxt "KPrivateCodeLib,ConstructDisqualifier_VerticalPipeConnection"
+msgid "Valve can only be placed on horizontal pipe connections."
+msgstr "Valve can only be placed on horizontal pipe connections."
 
 msgctxt "ST_KPrivateCodeLib,Wiget_KeyBind.K2Node_Select_0.EnumEntryFriendlyNames[0]"
 msgid "Visible"

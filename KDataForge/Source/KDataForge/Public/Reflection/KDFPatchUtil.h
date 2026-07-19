@@ -9,20 +9,15 @@ struct FKDFNode;
 
 /**
  * Shared application of a `properties:` op sequence to one object — vanilla snapshots before first
- * writes, op records into the patch record, optional live-reload instance propagation, and
- * data-asset change tracking (consumer rescan notification). Used by the cdo handler, all content
+ * writes, op records into the patch record, and data-asset change tracking (consumer rescan
+ * notification). Used by the cdo handler, all content
  * creation handlers, and the actor patch subsystem.
  */
 class KDATAFORGE_API FKDFPatchUtil
 {
 public:
-	/**
-	 * @param bPropagate  During live reload, push changed CDO values to instances that still hold
-	 *                    the old CDO value (never overwrites user-customized instances).
-	 * @return true when at least one op applied.
-	 */
-	static bool ApplyOpsToObject(UObject* Target, const FKDFNode& PropertiesNode, bool bPropagate,
-								 FKDFApplyContext& Context);
+	/** Applies the property operations to Target. Returns true when at least one op applied. */
+	static bool ApplyOpsToObject(UObject* Target, const FKDFNode& PropertiesNode, FKDFApplyContext& Context);
 
 	/** True when debug op logging is on for this context (document/pack `debug:` or KDF.Debug/-KDFDebug). */
 	static bool IsDebugEnabled(bool bContextDebug);

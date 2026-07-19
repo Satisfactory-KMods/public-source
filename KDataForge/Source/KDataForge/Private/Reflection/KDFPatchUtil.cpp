@@ -122,8 +122,7 @@ TArray<FString> FKDFPatchUtil::CollectTargetPaths(const FKDFNode& Patch)
 	return TargetPaths;
 }
 
-bool FKDFPatchUtil::ApplyOpsToObject(UObject* Target, const FKDFNode& PropertiesNode, bool bPropagate,
-									 FKDFApplyContext& Context)
+bool FKDFPatchUtil::ApplyOpsToObject(UObject* Target, const FKDFNode& PropertiesNode, FKDFApplyContext& Context)
 {
 	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
 	if (Subsystem == nullptr || !IsValid(Target) || !PropertiesNode.IsSequence())
@@ -160,10 +159,6 @@ bool FKDFPatchUtil::ApplyOpsToObject(UObject* Target, const FKDFNode& Properties
 		{
 			PreValue = FKDFValueCodec::ExportText(PreResolved.mProperty, PreResolved.mValuePtr);
 			VanillaCache.RecordSnapshot(Target, Path.ToString(), PreValue);
-			if (Context.bLiveReloadSafeStage)
-			{
-				Subsystem->GetLiveReloadCache().RecordSnapshot(Target, Path.ToString(), PreValue);
-			}
 		}
 
 		if (Context.bDryRun)
@@ -197,35 +192,6 @@ bool FKDFPatchUtil::ApplyOpsToObject(UObject* Target, const FKDFNode& Properties
 			OpRecord.mPropertyPath = Path.ToString();
 			OpRecord.mOp = Op;
 			OpRecord.mValueText = PostValue;
-		}
-
-		// Live reload: push the change to instances that still hold the old CDO value.
-		if (Context.bLiveReload && bPropagate && bPreResolved && Target->HasAnyFlags(RF_ClassDefaultObject))
-		{
-			TArray<UObject*> Instances;
-			GetObjectsOfClass(Target->GetClass(), Instances, true,
-							  RF_ClassDefaultObject | RF_ArchetypeObject | RF_BeginDestroyed);
-			int32 PropagatedCount = 0;
-			for (UObject* Instance : Instances)
-			{
-				FKDFResolvedProperty InstanceResolved;
-				if (!FKDFPropertyResolver::Resolve(Instance, Path, InstanceResolved, Error))
-				{
-					continue;
-				}
-				const FString InstanceValue =
-					FKDFValueCodec::ExportText(InstanceResolved.mProperty, InstanceResolved.mValuePtr);
-				if (InstanceValue == PreValue &&
-					FKDFValueCodec::ImportText(PostValue, InstanceResolved.mProperty, InstanceResolved.mValuePtr))
-				{
-					++PropagatedCount;
-				}
-			}
-			if (PropagatedCount > 0)
-			{
-				Context.AddInfo(FString::Printf(TEXT("Propagated %s to %d unmodified instance(s) of %s"),
-												*Path.ToString(), PropagatedCount, *Target->GetClass()->GetName()));
-			}
 		}
 	}
 

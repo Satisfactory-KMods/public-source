@@ -209,6 +209,7 @@ protected:
 	static FString GenerateUrlHash(const FString& Url);
 	void CheckMemoryPressure();
 	void EvictLRUEntries(int64 TargetSize);
+	void EvictLRUEntriesLocked(int64 TargetSize);
 	bool StartDownload(const FString& Url, bool bPersistent);
 	void AddToMemoryCache(const FString& Url, UTexture2DDynamic* Texture, int64 SizeInBytes, bool bPersistent);
 
@@ -216,6 +217,7 @@ private:
 	UPROPERTY()
 	FRssImageCacheConfig CacheConfig;
 
+	UPROPERTY(Transient)
 	TMap<FString, FRssImageCacheEntry> MemoryCache;
 	mutable FCriticalSection CacheLock;
 

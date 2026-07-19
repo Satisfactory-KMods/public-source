@@ -7,20 +7,55 @@
 #include "HttpModule.h"
 #include "IImageWrapper.h"
 #include "IImageWrapperModule.h"
+#include "IPAddress.h"
+#include "Interfaces/IPv4/IPv4Address.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Modules/ModuleManager.h"
+#include "SocketSubsystem.h"
 #include "Subsystem/RSSImageSubsystem.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(RSSImageDownloaderLog, Log, All)
 
 DEFINE_LOG_CATEGORY(RSSImageDownloaderLog)
 
+namespace
+{
+	bool IsPublicAddress(const FString& AddressString)
+	{
+		FString Address = AddressString.ToLower();
+		Address.RemoveFromStart(TEXT("["));
+		Address.RemoveFromEnd(TEXT("]"));
+
+		FIPv4Address IPv4;
+		if (FIPv4Address::Parse(Address, IPv4))
+		{
+			return IPv4.A != 0 && IPv4.A != 10 && IPv4.A != 127 &&
+				!(IPv4.A == 100 && IPv4.B >= 64 && IPv4.B <= 127) &&
+				!(IPv4.A == 169 && IPv4.B == 254) &&
+				!(IPv4.A == 172 && IPv4.B >= 16 && IPv4.B <= 31) &&
+				!(IPv4.A == 192 && IPv4.B == 168) && IPv4.A < 224;
+		}
+
+		if (Address.StartsWith(TEXT("::ffff:")))
+		{
+			return IsPublicAddress(Address.RightChop(7));
+		}
+
+		return Address != TEXT("::") && Address != TEXT("::1") &&
+			!Address.StartsWith(TEXT("fc")) && !Address.StartsWith(TEXT("fd")) &&
+			!Address.StartsWith(TEXT("fe8")) && !Address.StartsWith(TEXT("fe9")) &&
+			!Address.StartsWith(TEXT("fea")) && !Address.StartsWith(TEXT("feb")) &&
+			!Address.StartsWith(TEXT("ff"));
+	}
+}
+
 //----------------------------------------------------------------------//
 // URssDownloadImage
 //----------------------------------------------------------------------//
 
 
-URssDownloadImage::URssDownloadImage(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+URssDownloadImage::URssDownloadImage(const FObjectInitializer& ObjectInitializer) :
+	Super(ObjectInitializer)
 {
 	if (HasAnyFlags(RF_ClassDefaultObject) == false)
 	{
@@ -29,7 +64,7 @@ URssDownloadImage::URssDownloadImage(const FObjectInitializer& ObjectInitializer
 }
 
 URssDownloadImage* URssDownloadImage::DownloadImage(UObject* WorldContextObject, FString URL, bool bUseCache,
-													bool bPersistToCache)
+                                                    bool bPersistToCache)
 {
 	URssDownloadImage* DownloadTask = NewObject<URssDownloadImage>();
 	DownloadTask->bUseCache = bUseCache;
@@ -57,7 +92,7 @@ URssDownloadImage* URssDownloadImage::DownloadImageNoCache(FString URL)
 }
 
 void URssDownloadImage::WriteTexture_RenderThread(FTexture2DDynamicResource* TextureResource, TArray64<uint8>* RawData,
-												  bool bUseSRGB)
+                                                  bool bUseSRGB)
 {
 #if !UE_SERVER
 	check(IsInRenderingThread());
@@ -98,6 +133,13 @@ void URssDownloadImage::WriteTexture_RenderThread(FTexture2DDynamicResource* Tex
 void URssDownloadImage::Start(FString URL)
 {
 #if !UE_SERVER
+	if (!IsSafeRemoteImageUrl(URL))
+	{
+		OnFail.Broadcast(nullptr);
+		Cleanup();
+		return;
+	}
+
 	// Create the Http request and add to pending request list
 	TSharedRef<IHttpRequest, ESPMode::ThreadSafe> HttpRequest = FHttpModule::Get().CreateRequest();
 
@@ -106,8 +148,8 @@ void URssDownloadImage::Start(FString URL)
 	HttpRequest->SetVerb(TEXT("GET"));
 	HttpRequest->ProcessRequest();
 #else
-	// On the server we don't execute fail or success we just don't fire the request.
-	RemoveFromRoot();
+	OnFail.Broadcast(nullptr);
+	Cleanup();
 #endif
 }
 
@@ -117,27 +159,44 @@ void URssDownloadImage::HandleImageRequest(FHttpRequestPtr HttpRequest, FHttpRes
 
 	RemoveFromRoot();
 
-	if (bSucceeded && HttpResponse.IsValid() && HttpResponse->GetContentLength() > 0)
+	if (bSucceeded && HttpResponse.IsValid() && EHttpResponseCodes::IsOk(HttpResponse->GetResponseCode()) &&
+		IsSafeRemoteImageUrl(HttpResponse->GetURL()))
 	{
 		IImageWrapperModule& ImageWrapperModule =
 			FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
-		TSharedPtr<IImageWrapper> ImageWrappers[3] = {
-			ImageWrapperModule.CreateImageWrapper(EImageFormat::PNG),
-			ImageWrapperModule.CreateImageWrapper(EImageFormat::JPEG),
-			ImageWrapperModule.CreateImageWrapper(EImageFormat::BMP),
-		};
+		const TArray<uint8>& CompressedData = HttpResponse->GetContent();
+		if (CompressedData.IsEmpty() || CompressedData.Num() > MaxCompressedImageBytes)
+		{
+			OnFail.Broadcast(nullptr);
+			return;
+		}
+		const EImageFormat ImageFormat =
+			ImageWrapperModule.DetectImageFormat(CompressedData.GetData(), CompressedData.Num());
+		TSharedPtr<IImageWrapper> ImageWrappers[1];
+		if (ImageFormat != EImageFormat::Invalid)
+		{
+			ImageWrappers[0] = ImageWrapperModule.CreateImageWrapper(ImageFormat);
+		}
 
 		for (auto ImageWrapper : ImageWrappers)
 		{
 			if (ImageWrapper.IsValid() &&
-				ImageWrapper->SetCompressed(HttpResponse->GetContent().GetData(), HttpResponse->GetContentLength()))
+				ImageWrapper->SetCompressed(CompressedData.GetData(), CompressedData.Num()))
 			{
+				const int32 SourceWidth = ImageWrapper->GetWidth();
+				const int32 SourceHeight = ImageWrapper->GetHeight();
+				int64 RawBytes = 0;
+				if (!ValidateImageDimensions(CompressedData.Num(), SourceWidth, SourceHeight, RawBytes))
+				{
+					continue;
+				}
+
 				TArray64<uint8>* RawData = new TArray64<uint8>();
 				constexpr ERGBFormat InFormat = ERGBFormat::BGRA;
 				if (ImageWrapper->GetRaw(InFormat, 8, *RawData))
 				{
-					int32 Width = bHalfImageSize ? ImageWrapper->GetWidth() / 2 : ImageWrapper->GetWidth();
-					int32 Height = bHalfImageSize ? ImageWrapper->GetHeight() / 2 : ImageWrapper->GetHeight();
+					int32 Width = bHalfImageSize ? SourceWidth / 2 : SourceWidth;
+					int32 Height = bHalfImageSize ? SourceHeight / 2 : SourceHeight;
 
 					if (UTexture2DDynamic* Texture = UTexture2DDynamic::Create(Width, Height))
 					{
@@ -145,11 +204,13 @@ void URssDownloadImage::HandleImageRequest(FHttpRequestPtr HttpRequest, FHttpRes
 						Texture->UpdateResource();
 
 						if (FTexture2DDynamicResource* TextureResource =
-								static_cast<FTexture2DDynamicResource*>(Texture->GetResource()))
+							static_cast<FTexture2DDynamicResource*>(Texture->GetResource()))
 						{
 							ENQUEUE_RENDER_COMMAND(FWriteRawDataToTexture)(
 								[TextureResource, RawData](FRHICommandListImmediate& RHICmdList)
-								{ WriteTexture_RenderThread(TextureResource, RawData); });
+								{
+									WriteTexture_RenderThread(TextureResource, RawData);
+								});
 						}
 						else
 						{
@@ -175,6 +236,13 @@ void URssDownloadImage::HandleImageRequest(FHttpRequestPtr HttpRequest, FHttpRes
 void URssDownloadImage::StartWithCache(FString URL, UObject* WorldContextObject)
 {
 #if !UE_SERVER
+	if (!IsSafeRemoteImageUrl(URL))
+	{
+		OnFail.Broadcast(nullptr);
+		Cleanup();
+		return;
+	}
+
 	CurrentUrl = URL;
 
 	// Try to get from cache first
@@ -188,10 +256,6 @@ void URssDownloadImage::StartWithCache(FString URL, UObject* WorldContextObject)
 			UE_LOG(RSSImageDownloaderLog, Verbose, TEXT("Image found in memory cache: %s"), *URL);
 			CacheManager->AddReference(URL);
 
-			if (Subsystem)
-			{
-				Subsystem->OnDownloadSuccess(CachedTexture);
-			}
 			OnSuccess.Broadcast(CachedTexture);
 			Cleanup();
 			return;
@@ -210,8 +274,67 @@ void URssDownloadImage::StartWithCache(FString URL, UObject* WorldContextObject)
 	// Fallback to direct download
 	Start(URL);
 #else
-	RemoveFromRoot();
+	OnFail.Broadcast(nullptr);
+	Cleanup();
 #endif
+}
+
+bool URssDownloadImage::IsSafeRemoteImageUrl(const FString& Url)
+{
+	if (Url.Len() > 2048 || Url.Contains(TEXT("@")))
+	{
+		return false;
+	}
+
+	FURL ParsedUrl(nullptr, *Url, TRAVEL_Absolute);
+	const FString Host = ParsedUrl.Host.ToLower();
+	if (!ParsedUrl.Valid || (ParsedUrl.Protocol != TEXT("http") && ParsedUrl.Protocol != TEXT("https")) ||
+		Host.IsEmpty() || Host == TEXT("localhost") || Host.EndsWith(TEXT(".localhost")) ||
+		Host.EndsWith(TEXT(".local")) || Host.EndsWith(TEXT(".internal")))
+	{
+		return false;
+	}
+
+	ISocketSubsystem* SocketSubsystem = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM);
+	if (!SocketSubsystem)
+	{
+		return false;
+	}
+
+	const FAddressInfoResult AddressInfo = SocketSubsystem->GetAddressInfo(
+		*Host, nullptr, EAddressInfoFlags::Default, NAME_None);
+	if (AddressInfo.ReturnCode != SE_NO_ERROR || AddressInfo.Results.IsEmpty())
+	{
+		return false;
+	}
+
+	for (const FAddressInfoResultData& Result : AddressInfo.Results)
+	{
+		if (!IsPublicAddress(Result.Address->ToString(false)))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool URssDownloadImage::ValidateImageDimensions(int64 CompressedBytes, int32 Width, int32 Height, int64& OutRawBytes)
+{
+	OutRawBytes = 0;
+	if (CompressedBytes <= 0 || CompressedBytes > MaxCompressedImageBytes || Width <= 0 || Height <= 0 ||
+		Width > MaxImageDimension || Height > MaxImageDimension || Width > MAX_int64 / Height)
+	{
+		return false;
+	}
+
+	const int64 Pixels = static_cast<int64>(Width) * Height;
+	if (Pixels > MaxImagePixels || Pixels > MAX_int64 / 4)
+	{
+		return false;
+	}
+
+	OutRawBytes = Pixels * 4;
+	return true;
 }
 
 void URssDownloadImage::OnCacheImageLoaded(const FString& Url, UTexture2DDynamic* Texture)

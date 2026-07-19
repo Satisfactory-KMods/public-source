@@ -2,6 +2,7 @@
 
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Dom/JsonObject.h"
+#include "Engine/BlueprintGeneratedClass.h"
 #include "HAL/FileManager.h"
 #include "KDFLogging.h"
 #include "Misc/FileHelper.h"
@@ -77,6 +78,67 @@ FString FKDFDynamicContentRegistry::MakeAssetPackageName(const FString& PackRef)
 	return FString::Printf(TEXT("/KDataForge/GenAssets/%s"), *SanitizeToken(PackRef));
 }
 
+UClass* FKDFDynamicContentRegistry::GenerateRuntimeClass(const FString& PackageName, const FString& ClassName,
+	UClass* ParentClass, FString& OutError)
+{
+	if (!IsValid(ParentClass))
+	{
+		OutError = TEXT("Invalid parent class");
+		return nullptr;
+	}
+
+	if (Cast<UBlueprintGeneratedClass>(ParentClass) == nullptr)
+	{
+		UClass* Generated = FClassGenerator::GenerateSimpleClass(*PackageName, *ClassName, ParentClass);
+		if (Generated == nullptr)
+		{
+			OutError = FString::Printf(TEXT("Class generation failed for '%s'"), *ClassName);
+		}
+		else
+		{
+			OutError.Reset();
+		}
+		return Generated;
+	}
+
+	UPackage* Package = CreatePackage(*PackageName);
+	if (Package == nullptr)
+	{
+		OutError = FString::Printf(TEXT("Could not create class package '%s'"), *PackageName);
+		return nullptr;
+	}
+	Package->SetPackageFlags(PKG_RuntimeGenerated | PKG_ContainsScript);
+
+	// SML FClassGenerator always constructs a plain UClass. That is invalid for a Blueprint parent:
+	// its inherited AddReferencedObjectsInUbergraphFrame callback casts the object's class metadata
+	// to UBlueprintGeneratedClass. Construct matching metadata exactly as FKismetCompilerContext does,
+	// then link an empty child class whose functions/properties/SCS remain inherited from the parent.
+	UClass* Generated = NewObject<UClass>(Package, ParentClass->GetClass(), FName(*ClassName),
+		RF_Public | RF_Standalone | RF_Transient);
+	if (Generated == nullptr)
+	{
+		OutError = FString::Printf(TEXT("Blueprint class generation failed for '%s'"), *ClassName);
+		return nullptr;
+	}
+	Generated->AddToRoot();
+
+	Generated->SetSuperStruct(ParentClass);
+	Generated->ClassWithin =
+		ParentClass->ClassWithin != nullptr ? ToRawPtr(ParentClass->ClassWithin) : UObject::StaticClass();
+	Generated->ClassConfigName = ParentClass->ClassConfigName;
+	Generated->ClassFlags |= (ParentClass->ClassFlags & CLASS_ScriptInherit) |
+		CLASS_CompiledFromBlueprint | CLASS_Constructed;
+	Generated->Bind();
+	Generated->StaticLink(true);
+	Generated->AssembleReferenceTokenStream(true);
+	Generated->SetUpRuntimeReplicationData();
+	Generated->GetDefaultObject();
+	CastChecked<UBlueprintGeneratedClass>(Generated)->UpdateCustomPropertyListForPostConstruction();
+
+	OutError.Reset();
+	return Generated;
+}
+
 UClass* FKDFDynamicContentRegistry::GetOrCreateClass(const FString& PackRef, const FString& Id, UClass* ParentClass,
 													 FString& OutError)
 {
@@ -102,12 +164,11 @@ UClass* FKDFDynamicContentRegistry::GetOrCreateClass(const FString& PackRef, con
 		return *Existing;
 	}
 
-	// FClassGenerator must only ever be called once per (package, name) — the map above is that gate.
-	UClass* NewClass =
-		FClassGenerator::GenerateSimpleClass(*MakeClassPackageName(PackRef), *MakeClassName(PackRef, Id), ParentClass);
+	// Runtime class generation must only happen once per (package, name) — the map above is that gate.
+	UClass* NewClass = GenerateRuntimeClass(
+		MakeClassPackageName(PackRef), MakeClassName(PackRef, Id), ParentClass, OutError);
 	if (NewClass == nullptr)
 	{
-		OutError = FString::Printf(TEXT("Class generation failed for '%s'"), *Id);
 		return nullptr;
 	}
 	mClassesByKey.Add(Key, NewClass);
@@ -265,6 +326,7 @@ int32 FKDFDynamicContentRegistry::ReconstructTombstones(TArray<FString>& OutTomb
 		{
 			mTombstoneKeys.Add(Key);
 			OutTombstoneKeys.Add(Key);
+
 			++TombstoneCount;
 			UE_LOG(LogKDataForge, Warning,
 				   TEXT("Tombstone class recreated for '%s:%s' — its YAML definition disappeared. Saves keep "

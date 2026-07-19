@@ -5,8 +5,7 @@
 
 /**
  * First-write snapshot of original ("vanilla") property values, keyed by object and property path.
- * One mechanism powers three features: revert (live reload/rollback), the diff viewer, and the
- * safe instance-propagation heuristic (only touch instances whose value still equals the old CDO value).
+ * Snapshots power the editor's diff viewer and undo/export workflows.
  * Values are stored in the codec's canonical text form.
  */
 class KDATAFORGE_API FKDFVanillaCache

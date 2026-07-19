@@ -54,11 +54,11 @@ namespace
 	{
 		static const ryml::Callbacks Callbacks = []
 		{
-			ryml::Callbacks Value;
-			Value.set_error_basic(&RymlErrorBasic);
-			Value.set_error_parse(&RymlErrorParse);
-			Value.set_error_visit(&RymlErrorVisit);
-			return Value;
+			ryml::Callbacks ConfiguredCallbacks;
+			ConfiguredCallbacks.set_error_basic(&RymlErrorBasic);
+			ConfiguredCallbacks.set_error_parse(&RymlErrorParse);
+			ConfiguredCallbacks.set_error_visit(&RymlErrorVisit);
+			return ConfiguredCallbacks;
 		}();
 		return Callbacks;
 	}
@@ -117,7 +117,8 @@ namespace
 		SetSourceLine(Result.Get(), Node, Parser);
 		return Result;
 	}
-	// Number/bool lookalikes are not quoted here; FKDFNode::bQuoted, set by the value codec for string properties, controls that distinction.
+	// Number/bool lookalikes are not quoted here; FKDFNode::bQuoted, set by the value codec for string properties,
+	// controls that distinction.
 	bool ScalarNeedsQuotes(const FString& Value)
 	{
 		if (Value.IsEmpty())
@@ -143,6 +144,8 @@ namespace
 		return Value.StartsWith(TEXT("- ")) || Value.StartsWith(TEXT("? "));
 	}
 
+	FString EscapeDoubleQuoted(const FString& Value);
+
 	FString EmitScalar(const FKDFNode& Node)
 	{
 		if (Node.IsNull())
@@ -153,12 +156,7 @@ namespace
 		{
 			return Node.Scalar;
 		}
-		FString Escaped = Node.Scalar;
-		Escaped.ReplaceInline(TEXT("\\"), TEXT("\\\\"));
-		Escaped.ReplaceInline(TEXT("\""), TEXT("\\\""));
-		Escaped.ReplaceInline(TEXT("\n"), TEXT("\\n"));
-		Escaped.ReplaceInline(TEXT("\t"), TEXT("\\t"));
-		return FString::Printf(TEXT("\"%s\""), *Escaped);
+		return FString::Printf(TEXT("\"%s\""), *EscapeDoubleQuoted(Node.Scalar));
 	}
 
 	FString EscapeDoubleQuoted(const FString& Value)

@@ -2,7 +2,6 @@
 
 #include "KDFLogging.h"
 #include "Module/GameInstanceModuleManager.h"
-#include "Net/KDFNetHandler.h"
 #include "Net/KDFRemoteCallObject.h"
 #include "Subsystems/KDFSubsystem.h"
 
@@ -34,9 +33,6 @@ void UKDFGameInstanceModule::DispatchLifecycleEvent(ELifecyclePhase Phase)
 
 	switch (Phase)
 	{
-	case ELifecyclePhase::CONSTRUCTION:
-		FKDFNetHandler::Register(); // MP patchset checksum handshake (idempotent per engine run)
-		break;
 	case ELifecyclePhase::INITIALIZATION:
 		Subsystem->RunInitialLoad();
 		break;

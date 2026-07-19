@@ -62,6 +62,9 @@ struct KDATAFORGE_API FKDFDocument
 	FString mPackRef;
 	int32 mPackPriority = 100;
 
+	/** Topologically sorted pack position; preserves dependencies before dependants within every stage. */
+	int32 mPackOrder = INDEX_NONE;
+
 	/** Root type detected from the document's `type:` key (or `name.<type>.yml` filename convention). */
 	FName mRootType;
 
@@ -120,8 +123,6 @@ struct KDATAFORGE_API FKDFLazyClassWatch
 	/** Ops to (re-)apply to a newly loaded matching class's CDO. */
 	TSharedPtr<FKDFNode> mPropertiesNode;
 
-	bool bPropagate = true;
-
 	/** Empty: plain `applyToSubclasses` watch. Non-empty: the CDO must carry every tag (`matchTag`). */
 	TArray<FGameplayTag> mMatchTags;
 
@@ -129,4 +130,7 @@ struct KDATAFORGE_API FKDFLazyClassWatch
 	FString mSourceFile;
 	FString mPackRef;
 	bool bDebug = false;
+
+	/** Classes already handled by this watch, including matches from the initial apply pass. */
+	TSet<TWeakObjectPtr<UClass>> mAppliedClasses;
 };

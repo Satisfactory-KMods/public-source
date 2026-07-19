@@ -27,5 +27,4 @@ public:
 
 	virtual bool ValidateDocument(const FKDFNode& Document, FKDFValidationContext& Context) override;
 	virtual bool ApplyDocument(const FKDFNode& Document, FKDFApplyContext& Context) override;
-	virtual bool RevertDocument(const FKDFPatchRecord& Record, FKDFApplyContext& Context) override;
 };

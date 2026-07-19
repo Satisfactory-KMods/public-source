@@ -120,6 +120,7 @@ public:
 	bool mRenderWasRequested = false;
 	bool mInit = false;
 	bool mSomeWasRendered = false;
+	bool bHasAnimatedEffect = false;
 
 	/** Cached result of DoesImplementInterface(URssSignInterface) for the current owner. Set once in
 	 * InitComponentData. */

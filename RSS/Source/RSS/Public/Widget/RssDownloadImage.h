@@ -67,6 +67,13 @@ class RSS_API URssDownloadImage : public UBlueprintAsyncActionBase
 	void Start(FString URL);
 	void StartWithCache(FString URL, UObject* WorldContextObject);
 
+	static bool IsSafeRemoteImageUrl(const FString& Url);
+	static bool ValidateImageDimensions(int64 CompressedBytes, int32 Width, int32 Height, int64& OutRawBytes);
+
+	static constexpr int64 MaxCompressedImageBytes = 16 * 1024 * 1024;
+	static constexpr int32 MaxImageDimension = 8192;
+	static constexpr int64 MaxImagePixels = 32 * 1024 * 1024;
+
 protected:
 	void Cleanup();
 

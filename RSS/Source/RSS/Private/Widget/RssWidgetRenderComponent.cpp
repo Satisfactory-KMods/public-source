@@ -35,6 +35,10 @@ void URssWidgetRenderComponent::BeginPlay()
 
 void URssWidgetRenderComponent::RequestRedraw()
 {
+	if (GetOwner() && bOwnerImplementsInterface)
+	{
+		bHasAnimatedEffect = HasEffect(IRssSignInterface::Execute_GetSignData(GetOwner()));
+	}
 	mRenderWasRequested = true;
 	mSomeWasRendered = true; // Force visibility check to pass
 }
@@ -53,6 +57,11 @@ void URssWidgetRenderComponent::SetDrawSize(FVector2D NewSize)
 }
 void URssWidgetRenderComponent::PoolTick(float DeltaTime)
 {
+	if (mInit && !bHasAnimatedEffect && !mRenderWasRequested)
+	{
+		return;
+	}
+
 	// Check if the owner is still significant - if not, we shouldn't render
 	// But always allow explicitly requested redraws
 	if (GetOwner() && !mRenderWasRequested)
@@ -179,6 +188,7 @@ void URssWidgetRenderComponent::ResetForPooling()
 	mInit = false;
 	mRenderWasRequested = false;
 	mSomeWasRendered = false;
+	bHasAnimatedEffect = false;
 	mFramesSinceLastRender = 0;
 	mRenderAccumulator = 0.0f;
 	bOwnerImplementsInterface = false;
@@ -274,9 +284,10 @@ void URssWidgetRenderComponent::InitComponentData()
 		return;
 	}
 
+	const FRssSignData SignData = IRssSignInterface::Execute_GetSignData(GetOwner());
+	bHasAnimatedEffect = HasEffect(SignData);
 	if (mUseDrawSizeFromInterface)
 	{
-		FRssSignData SignData = IRssSignInterface::Execute_GetSignData(GetOwner());
 		FVector2D NewSize = URssBlueprintFunctionLibrary::GetScreenSize(SignData.mSignTypeSize);
 		if (NewSize.X > 0 && NewSize.Y > 0)
 		{

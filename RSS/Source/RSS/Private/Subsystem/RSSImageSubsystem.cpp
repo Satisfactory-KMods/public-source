@@ -88,19 +88,16 @@ void ARSSImageSubsystem::Tick(float DeltaSeconds)
 		{
 			bSaveDataDirty = false;
 			mSaveDirtyAccumulator = 0.f;
-			// Generate the serialized string on game thread (reads mStoredImages safely),
-			// then kick the blocking disk write to a background thread.
+			// Serialize on the game thread, then write the latest catalog snapshot asynchronously.
+			// Empty catalogs must still be written or deleted images return after restart.
 			GenerateInformation();
-			if (mInformation.mInformations.Num() > 0)
+			FString SerializedData = CustomInformationToString(this, mInformation);
+			FString FilePath = GetFilePath();
+			if (!SerializedData.IsEmpty())
 			{
-				FString SerializedData = CustomInformationToString(this, mInformation);
-				FString FilePath = GetFilePath();
-				if (!SerializedData.IsEmpty())
-				{
-					AsyncTask(ENamedThreads::AnyBackgroundThreadNormalTask,
-							  [SerializedData = MoveTemp(SerializedData), FilePath = MoveTemp(FilePath)]()
-							  { FFileHelper::SaveStringToFile(SerializedData, *FilePath); });
-				}
+				AsyncTask(ENamedThreads::AnyBackgroundThreadNormalTask,
+						  [SerializedData = MoveTemp(SerializedData), FilePath = MoveTemp(FilePath)]()
+						  { FFileHelper::SaveStringToFile(SerializedData, *FilePath); });
 			}
 		}
 	}
@@ -131,11 +128,13 @@ void ARSSImageSubsystem::Tick(float DeltaSeconds)
 					}
 
 					mRuntimeRequests.RemoveAt(0);
+					OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Succeeded);
 					SendRequestBack(Request, UrlData.mTexture);
 					return;
 				}
 
 				bRequestIsRunning = true;
+				OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Loading);
 				mDownloadTask = NewObject<URssDownloadImage>();
 
 				mDownloadTask->Subsystem = this;
@@ -152,6 +151,7 @@ void ARSSImageSubsystem::Tick(float DeltaSeconds)
 		}
 
 		mRuntimeRequests.RemoveAt(0);
+		OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Failed);
 		SendRequestBack(Request);
 		return;
 	}
@@ -211,6 +211,7 @@ void ARSSImageSubsystem::OnDownloadFailed(UTexture2DDynamic* Texture)
 		{
 			FRssSignRequestData Request = mRuntimeRequests[0];
 			mRuntimeRequests.RemoveAt(0);
+			OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Failed);
 			SendRequestBack(Request);
 		}
 	}
@@ -253,43 +254,39 @@ void ARSSImageSubsystem::OnDownloadSuccess(UTexture2DDynamic* Texture)
 		}
 	}
 
-	if (bInitDone)
+	if (bRequestIsRunning && Texture)
 	{
-		if (bRequestIsRunning && Texture)
-		{
-			if (mRuntimeRequests.IsValidIndex(0))
-			{
-				FRssSignRequestData Request = mRuntimeRequests[0];
-
-				FRssCustomSignUrlData UrlData = GetDataFromUrl(Request.mRequestUrl);
-				UrlData.mUrl = Request.mRequestUrl;
-
-				if (Request.mBuildable)
-				{
-					FRssSignData SignData = IRssSignInterface::Execute_GetSignData(Request.mBuildable);
-					UrlData.mAllowedInSigns.AddUnique(SignData.mSignTypeSize);
-
-					mStoredImages.Add(Request.mRequestUrl, UrlData);
-					bSaveDataDirty = true;
-					mSaveDirtyAccumulator = 0.f;
-				}
-				/*
-				else
-				{
-					Texture->ReleaseResource();
-				}
-				*/
-
-				mRuntimeRequests.RemoveAt(0);
-				SendRequestBack(Request, Texture);
-			}
-		}
-		else if (bRequestIsRunning && mRuntimeRequests.IsValidIndex(0))
+		if (mRuntimeRequests.IsValidIndex(0))
 		{
 			FRssSignRequestData Request = mRuntimeRequests[0];
+
+			FRssCustomSignUrlData UrlData = GetDataFromUrl(Request.mRequestUrl);
+			UrlData.mUrl = Request.mRequestUrl;
+
+			if (Request.mBuildable)
+			{
+				FRssSignData SignData = IRssSignInterface::Execute_GetSignData(Request.mBuildable);
+				UrlData.mAllowedInSigns.AddUnique(SignData.mSignTypeSize);
+			}
+
+			// Image-selector requests are UI-only and may not have a sign actor. They still
+			// need to enter the catalog; otherwise the success callback fires but the selector
+			// cannot find the newly downloaded image through GetDataFromSignSize().
+			mStoredImages.Add(Request.mRequestUrl, UrlData);
+			bSaveDataDirty = true;
+			mSaveDirtyAccumulator = 0.f;
+
 			mRuntimeRequests.RemoveAt(0);
-			SendRequestBack(Request);
+			OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Succeeded);
+			SendRequestBack(Request, Texture);
 		}
+	}
+	else if (bRequestIsRunning && mRuntimeRequests.IsValidIndex(0))
+	{
+		FRssSignRequestData Request = mRuntimeRequests[0];
+		mRuntimeRequests.RemoveAt(0);
+		OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Failed);
+		SendRequestBack(Request);
 	}
 
 	if (mDownloadTask)
@@ -320,17 +317,7 @@ void ARSSImageSubsystem::SendRequestBack(FRssSignRequestData& Request, UTexture*
 
 bool ARSSImageSubsystem::IsUrlValid(FString Url)
 {
-	if (Url.Contains("http://") || Url.Contains("https://"))
-	{
-		if (Url.Contains(".jpeg") || Url.Contains(".jpg") || Url.Contains(".png"))
-		{
-			if (UKismetSystemLibrary::CanLaunchURL(Url))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
+	return URssDownloadImage::IsSafeRemoteImageUrl(Url);
 }
 
 void ARSSImageSubsystem::GenerateInformation()
@@ -416,16 +403,8 @@ bool ARSSImageSubsystem::SaveCustomDataToFile()
 {
 	const FString FilePath = GetFilePath();
 	GenerateInformation();
-	if (mInformation.mInformations.Num() > 0)
-	{
-		FString Data = CustomInformationToString(this, mInformation);
-
-		if (Data != "")
-		{
-			return FFileHelper::SaveStringToFile(Data, *FilePath);
-		}
-	}
-	return false;
+	FString Data = CustomInformationToString(this, mInformation);
+	return !Data.IsEmpty() && FFileHelper::SaveStringToFile(Data, *FilePath);
 }
 
 bool ARSSImageSubsystem::CheckString(FString String, TArray<FString> ExtraNameChecks)
@@ -482,9 +461,11 @@ void ARSSImageSubsystem::onRequestImages_Implementation(FRssSignRequestData Requ
 	if (IsUrlValid(Request.mRequestUrl))
 	{
 		mRuntimeRequests.Add(Request);
+		OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Queued);
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("onRequestImages_Implementation FAILED send back"));
+	OnImageRequestStateChanged.Broadcast(Request.mRequestUrl, ERssImageRequestState::Failed);
 	SendRequestBack(Request);
 }
 
@@ -531,9 +512,16 @@ TArray<FRssCustomSignUrlData> ARSSImageSubsystem::GetDataFromSignSize(ESignSize 
 	TArray<FRssCustomSignUrlData> ReData;
 	for (const auto& Pair : mStoredImages)
 	{
-		if (Pair.Value.mAllowedInSigns.Contains(Size))
+		// UI-only imports have no sign actor from which to infer a size. Treat an empty
+		// allow-list as available for every size; normal sign requests still record their
+		// concrete size in mAllowedInSigns.
+		if (Pair.Value.mAllowedInSigns.IsEmpty() || Pair.Value.mAllowedInSigns.Contains(Size))
 		{
-			ReData.Add(Pair.Value);
+			FRssCustomSignUrlData UrlData = GetDataFromUrl(Pair.Key);
+			if (UrlData.mTexture)
+			{
+				ReData.Add(MoveTemp(UrlData));
+			}
 		}
 	}
 	return ReData;

@@ -5,6 +5,36 @@
 #include "Descriptors/KAPIModularAttachmentDescriptor.h"
 #include "Net/UnrealNetwork.h"
 
+namespace
+{
+	int32 FindClosestAttachmentPointIndex(const TArray<FAttachmentPointData>& AttachmentPoints,
+										  const FTransform& TestLocation, float MaxDistance)
+	{
+		if (MaxDistance < 0.0f)
+		{
+			return INDEX_NONE;
+		}
+
+		int32 ClosestIndex = INDEX_NONE;
+		float ClosestDistanceSquared = FMath::Square(MaxDistance);
+		for (int32 Index = 0; Index < AttachmentPoints.Num(); ++Index)
+		{
+			const float DistanceSquared =
+				FVector::DistSquared(AttachmentPoints[Index].mLocations.GetLocation(), TestLocation.GetLocation());
+			if (DistanceSquared > ClosestDistanceSquared ||
+				(ClosestIndex != INDEX_NONE && DistanceSquared == ClosestDistanceSquared))
+			{
+				continue;
+			}
+
+			ClosestIndex = Index;
+			ClosestDistanceSquared = DistanceSquared;
+		}
+
+		return ClosestIndex;
+	}
+} // namespace
+
 bool FAttachmentPointData::operator==(const AFGBuildable* other) const { return other == mSnappedActors; }
 
 // Start FAttachmentData
@@ -20,24 +50,14 @@ AFGBuildable* FAttachmentData::GetActorFromIndex(int Index) const
 AFGBuildable* FAttachmentData::GetActorFromLocation(FTransform TestLocation, FTransform& OutLocation,
 													float MaxDistance) const
 {
-	AFGBuildable* ClosedActor = nullptr;
 	OutLocation.SetLocation(FVector(0));
-	float LastHit = MaxDistance;
-	if (mAttachmentPointDatas.Num() > 0)
+	const int32 ClosestIndex = FindClosestAttachmentPointIndex(mAttachmentPointDatas, TestLocation, MaxDistance);
+	if (ClosestIndex != INDEX_NONE)
 	{
-		for (int i = 0; i < mAttachmentPointDatas.Num(); ++i)
-		{
-			float Distance =
-				FVector::Distance(mAttachmentPointDatas[i].mLocations.GetLocation(), TestLocation.GetLocation());
-			if (Distance < LastHit)
-			{
-				OutLocation = mAttachmentPointDatas[i].mLocations;
-				LastHit = Distance;
-				ClosedActor = mAttachmentPointDatas[i].mSnappedActors;
-			}
-		}
+		OutLocation = mAttachmentPointDatas[ClosestIndex].mLocations;
+		return mAttachmentPointDatas[ClosestIndex].mSnappedActors;
 	}
-	return ClosedActor;
+	return nullptr;
 }
 
 bool FAttachmentData::HasInRange(FTransform TestLocation, float MaxDistance) const
@@ -59,10 +79,12 @@ bool FAttachmentData::HasInRange(FTransform TestLocation, float MaxDistance) con
 
 bool FAttachmentData::IsLocationFree(FTransform TestLocation, FTransform& OutLocation, float MaxDistance) const
 {
-	if (HasInRange(TestLocation, MaxDistance))
+	const int32 ClosestIndex = FindClosestAttachmentPointIndex(mAttachmentPointDatas, TestLocation, MaxDistance);
+	if (ClosestIndex != INDEX_NONE)
 	{
-		const bool DontAttached = GetActorFromLocation(TestLocation, OutLocation, MaxDistance) == nullptr;
-		return DontAttached && FVector::Distance(OutLocation.GetLocation(), FVector(0)) > 200.f &&
+		const FAttachmentPointData& ClosestPoint = mAttachmentPointDatas[ClosestIndex];
+		OutLocation = ClosestPoint.mLocations;
+		return !ClosestPoint.IsAttached() && FVector::Distance(OutLocation.GetLocation(), FVector(0)) > 200.f &&
 			OutLocation.GetLocation().Z > -20000000;
 	}
 	return false;
@@ -81,18 +103,11 @@ int32 FAttachmentData::AddActorToData(AFGBuildable* Actor, FTransform Location, 
 {
 	if (ensure(Actor))
 	{
-		for (int i = 0; i < mAttachmentPointDatas.Num(); ++i)
+		const int32 ClosestIndex = FindClosestAttachmentPointIndex(mAttachmentPointDatas, Location, Distance);
+		if (ClosestIndex != INDEX_NONE && !mAttachmentPointDatas[ClosestIndex].IsAttached())
 		{
-			if (mAttachmentPointDatas[i].IsAttached())
-			{
-				continue;
-			}
-
-			if (FVector::Dist(mAttachmentPointDatas[i].mLocations.GetLocation(), Location.GetLocation()) < Distance)
-			{
-				mAttachmentPointDatas[i].mSnappedActors = Actor;
-				return i;
-			}
+			mAttachmentPointDatas[ClosestIndex].mSnappedActors = Actor;
+			return ClosestIndex;
 		}
 	}
 	return INDEX_NONE;
@@ -208,10 +223,10 @@ bool UKPCLModularBuildingHandler::AddNewActorToAttachment(AFGBuildable* Actor,
 		return false;
 	}
 
-	FTransform Dummy;
-	if (mAttachmentDatas[AttachmentIndex].IsLocationFree(Location, Dummy, Distance))
+	FTransform ClosestLocation;
+	if (mAttachmentDatas[AttachmentIndex].IsLocationFree(Location, ClosestLocation, Distance))
 	{
-		int32 ModularIndex = mAttachmentDatas[AttachmentIndex].AddActorToData(Actor, Location, Distance);
+		int32 ModularIndex = mAttachmentDatas[AttachmentIndex].AddActorToData(Actor, ClosestLocation, Distance);
 		if (ModularIndex != INDEX_NONE)
 		{
 			IKPCLModularBuildingInterface::Execute_SetMasterBuilding(Actor, Cast<AFGBuildable>(GetOwner()));

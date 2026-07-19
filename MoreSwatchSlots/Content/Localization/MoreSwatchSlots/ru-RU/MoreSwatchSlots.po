@@ -4,8 +4,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals = 3; plural = (n %% 10 === 1 && n %% 100 !== 11 ? 0 : n %% 10 >= 2 && n %% 10 <= 4 && (n %% 100 < 10 || n %% 100 >= 20) ? 1 : 2)\n"
+"Plural-Forms: nplurals = 3; plural = (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)\n"
 "X-Generator: Tolgee\n"
+
+msgctxt "ST_MoreSwatchSlots,ResourceSink_MSS_SwatchSlots.ResourceSink_MSS_SwatchSlots_C.mDescription"
+msgid "Add more swatch slots to the customizer"
+msgstr "Добавить в редактор больше слотов для образцов"
 
 msgctxt "ST_MoreSwatchSlots,ResourceSink_MSS_SwatchSlots.ResourceSink_MSS_SwatchSlots_C.mDisplayName"
 msgid "More Swatch Slots"
@@ -14,3 +18,164 @@ msgstr "Больше слотов для образцов"
 msgctxt "ST_MoreSwatchSlots,SC_RSS_SwatchSlots.SC_RSS_SwatchSlots_C.mDisplayName"
 msgid "Swatch"
 msgstr "Образец ткани"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_20.Recipe_SwatchSlot_Slot_20_C.mDisplayName"
+msgid "Swatch 20"
+msgstr "Образец 20"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_20.SwatchDesc_SwatchSlot_20_C.mDisplayName"
+msgid "Swatch 20"
+msgstr "Образец 20"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_21.Recipe_SwatchSlot_Slot_21_C.mDisplayName"
+msgid "Swatch 21"
+msgstr "Образец 21"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_21.SwatchDesc_SwatchSlot_21_C.mDisplayName"
+msgid "Swatch 21"
+msgstr "Образец 21"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_22.Recipe_SwatchSlot_Slot_22_C.mDisplayName"
+msgid "Swatch 22"
+msgstr "Образец 22"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_22.SwatchDesc_SwatchSlot_22_C.mDisplayName"
+msgid "Swatch 22"
+msgstr "Образец 22"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_23.Recipe_SwatchSlot_Slot_23_C.mDisplayName"
+msgid "Swatch 23"
+msgstr "Образец 23"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_23.SwatchDesc_SwatchSlot_23_C.mDisplayName"
+msgid "Swatch 23"
+msgstr "Образец 23"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_24.Recipe_SwatchSlot_Slot_24_C.mDisplayName"
+msgid "Swatch 24"
+msgstr "Образец 24"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_24.SwatchDesc_SwatchSlot_24_C.mDisplayName"
+msgid "Swatch 24"
+msgstr "Образец 24"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_25.Recipe_SwatchSlot_Slot_25_C.mDisplayName"
+msgid "Swatch 25"
+msgstr "Образец 25"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_25.SwatchDesc_SwatchSlot_25_C.mDisplayName"
+msgid "Swatch 25"
+msgstr "Образец 25"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_26.Recipe_SwatchSlot_Slot_26_C.mDisplayName"
+msgid "Swatch 26"
+msgstr "Образец 26"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_26.SwatchDesc_SwatchSlot_26_C.mDisplayName"
+msgid "Swatch 26"
+msgstr "Образец 26"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_27.Recipe_SwatchSlot_Slot_27_C.mDisplayName"
+msgid "Swatch 27"
+msgstr "Образец 27"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_27.SwatchDesc_SwatchSlot_27_C.mDisplayName"
+msgid "Swatch 27"
+msgstr "Образец 27"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_28.Recipe_SwatchSlot_Slot_28_C.mDisplayName"
+msgid "Swatch 28"
+msgstr "Образец 28"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_28.SwatchDesc_SwatchSlot_28_C.mDisplayName"
+msgid "Swatch 28"
+msgstr "Образец 28"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_29.Recipe_SwatchSlot_Slot_29_C.mDisplayName"
+msgid "Swatch 29"
+msgstr "Образец 29"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_29.SwatchDesc_SwatchSlot_29_C.mDisplayName"
+msgid "Swatch 29"
+msgstr "Образец 29"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_30.Recipe_SwatchSlot_Slot_30_C.mDisplayName"
+msgid "Swatch 30"
+msgstr "Образец 30"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_30.SwatchDesc_SwatchSlot_30_C.mDisplayName"
+msgid "Swatch 30"
+msgstr "Образец 30"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_31.Recipe_SwatchSlot_Slot_31_C.mDisplayName"
+msgid "Swatch 31"
+msgstr "Образец 31"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_31.SwatchDesc_SwatchSlot_31_C.mDisplayName"
+msgid "Swatch 31"
+msgstr "Образец 31"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_32.Recipe_SwatchSlot_Slot_32_C.mDisplayName"
+msgid "Swatch 32"
+msgstr "Образец 32"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_32.SwatchDesc_SwatchSlot_32_C.mDisplayName"
+msgid "Swatch 32"
+msgstr "Образец 32"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_33.Recipe_SwatchSlot_Slot_33_C.mDisplayName"
+msgid "Swatch 33"
+msgstr "Образец 33"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_33.SwatchDesc_SwatchSlot_33_C.mDisplayName"
+msgid "Swatch 33"
+msgstr "Образец 33"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_34.Recipe_SwatchSlot_Slot_34_C.mDisplayName"
+msgid "Swatch 34"
+msgstr "Образец 34"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_34.SwatchDesc_SwatchSlot_34_C.mDisplayName"
+msgid "Swatch 34"
+msgstr "Образец 34"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_35.Recipe_SwatchSlot_Slot_35_C.mDisplayName"
+msgid "Swatch 35"
+msgstr "Образец 35"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_35.SwatchDesc_SwatchSlot_35_C.mDisplayName"
+msgid "Swatch 35"
+msgstr "Образец 35"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_36.Recipe_SwatchSlot_Slot_36_C.mDisplayName"
+msgid "Swatch 36"
+msgstr "Образец 36"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_36.SwatchDesc_SwatchSlot_36_C.mDisplayName"
+msgid "Swatch 36"
+msgstr "Образец 36"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_37.Recipe_SwatchSlot_Slot_37_C.mDisplayName"
+msgid "Swatch 37"
+msgstr "Образец 37"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_37.SwatchDesc_SwatchSlot_37_C.mDisplayName"
+msgid "Swatch 37"
+msgstr "Образец 37"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_38.Recipe_SwatchSlot_Slot_38_C.mDisplayName"
+msgid "Swatch 38"
+msgstr "Образец 38"
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_38.SwatchDesc_SwatchSlot_38_C.mDisplayName"
+msgid "Swatch 38"
+msgstr "Образец 38"
+
+msgctxt "ST_MoreSwatchSlots,Recipe_SwatchSlot_Slot_39.Recipe_SwatchSlot_Slot_39_C.mDisplayName"
+msgid "Swatch 39"
+msgstr "Образец 39"
+
+
+msgctxt "ST_MoreSwatchSlots,SwatchDesc_SwatchSlot_39.SwatchDesc_SwatchSlot_39_C.mDisplayName"
+msgid "Swatch 39"
+msgstr "Образец 39"

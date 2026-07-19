@@ -157,17 +157,11 @@ struct KDATAFORGEAPI_API FKDFValidationContext : FKDFContextBase
 {
 };
 
-/** Context for IKDFDataEditorHandler::ApplyDocument / RevertDocument. */
+/** Context for IKDFDataEditorHandler::ApplyDocument. */
 struct KDATAFORGEAPI_API FKDFApplyContext : FKDFContextBase
 {
 	/** When true, resolve and validate everything but do not write any property. */
 	bool bDryRun = false;
-
-	/** True when applying during a live session reload (registry-frozen stages must refuse). */
-	bool bLiveReload = false;
-
-	/** True for stages whose writes are reverted and reapplied by a live reload. */
-	bool bLiveReloadSafeStage = false;
 
 	/** Record of what this document changed; the framework stores it for revert/report. */
 	FKDFPatchRecord* mPatchRecord = nullptr;

@@ -38,7 +38,7 @@ TArray<UKAPIAirCollectorData*> UKAPIDataAssetSubsystem::AirCollector_GetAll() co
 bool UKAPIDataAssetSubsystem::ApplyManufacturerAssign(AFGBuildableManufacturer* Manufacturer,
 													  TSubclassOf<class UFGRecipe> recipe)
 {
-	for (UKAPIManufacturerModifications* Modification : mManufacturerModifications)
+	for (UKAPIManufacturerModifications* Modification : mOrderedManufacturerModifications)
 	{
 		if (Modification->bAllowMoreInputSlots && Modification->ApplyInventoryChanges(Manufacturer, recipe))
 		{
@@ -51,7 +51,7 @@ bool UKAPIDataAssetSubsystem::ApplyManufacturerAssign(AFGBuildableManufacturer* 
 void UKAPIDataAssetSubsystem::ApplyManufacturerModifications(AFGBuildableManufacturer* Manufacturer,
 															 TSubclassOf<class UFGRecipe> recipe)
 {
-	for (UKAPIManufacturerModifications* Modification : mManufacturerModifications)
+	for (UKAPIManufacturerModifications* Modification : mOrderedManufacturerModifications)
 	{
 		if (Modification->ApplyInventoryChanges(Manufacturer, recipe))
 		{
@@ -91,9 +91,11 @@ void UKAPIDataAssetSubsystem::EmptyAssets()
 	mAllowedScannableResources.Empty();
 	mAllowedResourceExtractors.Empty();
 	mTooltipWidgetsDataAssets.Empty();
+	mOrderedTooltipWidgetsDataAssets.Empty();
 	mAirCollectorDataAssets.Empty();
 	mSlugDatas.Empty();
 	mManufacturerModifications.Empty();
+	mOrderedManufacturerModifications.Empty();
 }
 
 UKAPIDataAssetSubsystem* UKAPIDataAssetSubsystem::Get(UObject* Context)
@@ -120,7 +122,7 @@ UKAPIDataAssetSubsystem* UKAPIDataAssetSubsystem::Get(UObject* Context)
 
 TArray<UKAPTooltipWidgetInjector*> UKAPIDataAssetSubsystem::GetAllTooltipWidgetInjectors()
 {
-	return mTooltipWidgetsDataAssets.Array();
+	return mOrderedTooltipWidgetsDataAssets;
 }
 
 UKAPIDataAssetSubsystem* UKAPIDataAssetSubsystem::GetChecked(UObject* Context)
@@ -132,7 +134,7 @@ UKAPIDataAssetSubsystem* UKAPIDataAssetSubsystem::GetChecked(UObject* Context)
 
 UKAPIManufacturerModifications* UKAPIDataAssetSubsystem::GetModification(AFGBuildableManufacturer* Manufacturer)
 {
-	for (UKAPIManufacturerModifications* Modification : mManufacturerModifications)
+	for (UKAPIManufacturerModifications* Modification : mOrderedManufacturerModifications)
 	{
 		if (Modification->MatchManufacturer(Manufacturer))
 		{
@@ -213,7 +215,7 @@ UKAPIDataAssetSubsystem::K2_FindAllDataAssetsOfClass(TSubclassOf<UKAPIDataAssetB
 		}
 	}
 
-	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B) { return A.mPriority > B.mPriority; });
+	rawObjects.Sort(FSortiableAsset::SortByPriorityAndPath);
 
 	for (FSortiableAsset Str : rawObjects)
 	{
@@ -249,9 +251,13 @@ bool UKAPIDataAssetSubsystem::Miner_GetForKey(TSubclassOf<UFGResourceDescriptor>
 
 void UKAPIDataAssetSubsystem::ScanForAirCollectorDataAssets()
 {
-	TSet<UKAPIAirCollectorData*> Objects;
+	TArray<UKAPIAirCollectorData*> Objects;
 	FindAllDataAssetsOfClass(Objects);
-	mAirCollectorDataAssets = Objects.Array();
+	mAirCollectorDataAssets.Empty();
+	for (UKAPIAirCollectorData* Object : Objects)
+	{
+		mAirCollectorDataAssets.Add(Object);
+	}
 }
 
 void UKAPIDataAssetSubsystem::ScanForAllowList()
@@ -299,8 +305,9 @@ void UKAPIDataAssetSubsystem::ScanForAllowList()
 
 void UKAPIDataAssetSubsystem::ScanForCleanerAssets()
 {
-	TSet<UKAPICleanerItemDescription*> Objects;
+	TArray<UKAPICleanerItemDescription*> Objects;
 	FindAllDataAssetsOfClass(Objects);
+	mCleanerItemMapping.Empty();
 
 	for (UKAPICleanerItemDescription* Object : Objects)
 	{
@@ -311,19 +318,34 @@ void UKAPIDataAssetSubsystem::ScanForCleanerAssets()
 					  GetNameSafe(Object));
 			continue;
 		}
+		if (mCleanerItemMapping.Contains(Object->mInFluid.ItemClass))
+		{
+			UE_LOGFMT(LogKApi, Warning, "ScanForCleanerAssets: Ignoring lower-ranked duplicate {Asset} for {ItemClass}",
+					  Object->GetPathName(), Object->mInFluid.ItemClass->GetPathName());
+			continue;
+		}
 		mCleanerItemMapping.Add(Object->mInFluid.ItemClass, Object);
 	}
 }
 
 void UKAPIDataAssetSubsystem::ScanForManufacturerModifications()
 {
-	FindAllDataAssetsOfClass(mManufacturerModifications);
+	TArray<UKAPIManufacturerModifications*> Objects;
+	FindAllDataAssetsOfClass(Objects);
+	mManufacturerModifications.Empty();
+	mOrderedManufacturerModifications.Empty();
+	for (UKAPIManufacturerModifications* Object : Objects)
+	{
+		mManufacturerModifications.Add(Object);
+		mOrderedManufacturerModifications.Add(Object);
+	}
 }
 
 void UKAPIDataAssetSubsystem::ScanForMinerAssets()
 {
-	TSet<UKAPIModularMinerDescription*> Objects;
+	TArray<UKAPIModularMinerDescription*> Objects;
 	FindAllDataAssetsOfClass(Objects);
+	mMinerMapping.Empty();
 
 	for (UKAPIModularMinerDescription* Object : Objects)
 	{
@@ -331,6 +353,13 @@ void UKAPIDataAssetSubsystem::ScanForMinerAssets()
 		{
 			UE_LOGFMT(LogKApi, Warning, "ScanForMinerAssets: Skipping miner asset with invalid mResourceClass {Field}",
 					  GetNameSafe(Object));
+			continue;
+		}
+		if (mMinerMapping.Contains(Object->mResourceClass))
+		{
+			UE_LOGFMT(LogKApi, Warning,
+					  "ScanForMinerAssets: Ignoring lower-ranked duplicate {Asset} for {ResourceClass}",
+					  Object->GetPathName(), Object->mResourceClass->GetPathName());
 			continue;
 		}
 		mMinerMapping.Add(Object->mResourceClass, Object);
@@ -341,12 +370,19 @@ void UKAPIDataAssetSubsystem::ScanForMinerAssets()
 
 void UKAPIDataAssetSubsystem::ScanForSlugs()
 {
-	TSet<UKAPISugHatchingData*> Objects;
+	TArray<UKAPISugHatchingData*> Objects;
 	FindAllDataAssetsOfClass(Objects);
+	mSlugDatas.Empty();
 	for (UKAPISugHatchingData* Object : Objects)
 	{
-		mSlugDatas.Add(Object->mSlug, Object);
-		mSlugDatas.Add(Object->mEgg, Object);
+		if (!mSlugDatas.Contains(Object->mSlug))
+		{
+			mSlugDatas.Add(Object->mSlug, Object);
+		}
+		if (!mSlugDatas.Contains(Object->mEgg))
+		{
+			mSlugDatas.Add(Object->mEgg, Object);
+		}
 	}
 }
 
@@ -357,8 +393,10 @@ void UKAPIDataAssetSubsystem::ScanForWidgetInjector()
 		return;
 	}
 
-	TSet<UKAPTooltipWidgetInjector*> Objects;
+	TArray<UKAPTooltipWidgetInjector*> Objects;
 	FindAllDataAssetsOfClass(Objects);
+	mTooltipWidgetsDataAssets.Empty();
+	mOrderedTooltipWidgetsDataAssets.Empty();
 
 	for (UKAPTooltipWidgetInjector* Object : Objects)
 	{
@@ -370,6 +408,7 @@ void UKAPIDataAssetSubsystem::ScanForWidgetInjector()
 			continue;
 		}
 		mTooltipWidgetsDataAssets.Add(Object);
+		mOrderedTooltipWidgetsDataAssets.Add(Object);
 	}
 }
 

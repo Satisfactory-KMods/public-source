@@ -51,7 +51,8 @@ public:
 
 	/**
 	 * Find all data assets of a specific class
-	 * @param OutDataAssets - Set of data assets
+	 * @param OutDataAssets - Collection of data assets
+	 *
 	 * @return true if found any data assets
 	 */
 	template <class T>
@@ -59,6 +60,9 @@ public:
 
 	template <class T>
 	bool FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutDataAssets);
+
+	template <class T>
+	bool FindAllDataAssetsOfClass(TArray<T*>& OutDataAssets);
 
 	/**
 	 * Find all data assets of a specific class
@@ -122,6 +126,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
 	TSet<TObjectPtr<UKAPTooltipWidgetInjector>> mTooltipWidgetsDataAssets;
 
+	UPROPERTY(Transient)
+	TArray<TObjectPtr<UKAPTooltipWidgetInjector>> mOrderedTooltipWidgetsDataAssets;
+
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
 	TMap<TSubclassOf<UFGItemDescriptor>, TObjectPtr<UKAPICleanerItemDescription>> mCleanerItemMapping;
 
@@ -142,6 +149,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "KAPI|DataAsset")
 	TSet<TObjectPtr<UKAPIManufacturerModifications>> mManufacturerModifications;
+
+	UPROPERTY(Transient)
+	TArray<TObjectPtr<UKAPIManufacturerModifications>> mOrderedManufacturerModifications;
 };
 
 struct FSortiableAsset
@@ -150,11 +160,24 @@ struct FSortiableAsset
 	{
 		this->mPriority = Object->mPriority;
 		this->mObject = Object;
+		this->mObjectPath = Object->GetPathName();
 	}
 
 	int32 mPriority = 0;
 
 	UKAPIDataAssetBase* mObject = nullptr;
+
+	FString mObjectPath;
+
+	static bool SortByPriorityAndPath(const FSortiableAsset& A, const FSortiableAsset& B)
+	{
+		if (A.mPriority != B.mPriority)
+		{
+			return A.mPriority > B.mPriority;
+		}
+
+		return A.mObjectPath.Compare(B.mObjectPath, ESearchCase::CaseSensitive) < 0;
+	}
 };
 
 template <class T>
@@ -171,6 +194,19 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<TObjectPtr<T>>& OutD
 
 template <class T>
 bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
+{
+	OutDataAssets.Empty();
+	TArray<T*> OrderedDataAssets;
+	const bool bResult = FindAllDataAssetsOfClass(OrderedDataAssets);
+	for (T* Item : OrderedDataAssets)
+	{
+		OutDataAssets.Add(Item);
+	}
+	return bResult;
+}
+
+template <class T>
+bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TArray<T*>& OutDataAssets)
 {
 	OutDataAssets.Empty();
 
@@ -209,13 +245,13 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClass(TSet<T*>& OutDataAssets)
 		}
 	}
 
-	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B) { return A.mPriority > B.mPriority; });
+	rawObjects.Sort(FSortiableAsset::SortByPriorityAndPath);
 
 	for (FSortiableAsset Str : rawObjects)
 	{
 		if (T* CastedAsset = Cast<T>(Str.mObject))
 		{
-			OutDataAssets.Add(Cast<T>(CastedAsset));
+			OutDataAssets.Add(CastedAsset);
 		}
 	}
 
@@ -265,7 +301,7 @@ bool UKAPIDataAssetSubsystem::FindAllDataAssetsOfClassUnfiltered(TArray<T*>& Out
 		}
 	}
 
-	rawObjects.Sort([&](const FSortiableAsset& A, const FSortiableAsset& B) { return A.mPriority > B.mPriority; });
+	rawObjects.Sort(FSortiableAsset::SortByPriorityAndPath);
 
 	for (FSortiableAsset Str : rawObjects)
 	{

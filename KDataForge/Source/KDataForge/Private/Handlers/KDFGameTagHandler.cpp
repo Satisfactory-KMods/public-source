@@ -141,26 +141,3 @@ bool UKDFGameTagHandler::ApplyDocument(const FKDFNode& Document, FKDFApplyContex
 	UE_LOG(LogKDataForge, Log, TEXT("Registered %d gameplay tag(s) from %s"), RegisteredCount, *Context.mSourceFile);
 	return RegisteredCount > 0;
 }
-
-bool UKDFGameTagHandler::RevertDocument(const FKDFPatchRecord& Record, FKDFApplyContext& Context)
-{
-	UGameplayTagsSettings* TagSettings = GetMutableDefault<UGameplayTagsSettings>();
-	int32 RemovedCount = 0;
-	for (const FKDFOpRecord& Op : Record.mOps)
-	{
-		if (Op.mTargetObjectPath != TEXT("/Script/GameplayTags.GameplayTagsSettings") ||
-			Op.mPropertyPath != TEXT("GameplayTagList"))
-		{
-			continue;
-		}
-		RemovedCount += TagSettings->GameplayTagList.RemoveAll(
-			[&Op](const FGameplayTagTableRow& Row) { return Row.Tag == FName(*Op.mValueText); });
-	}
-	if (RemovedCount > 0)
-	{
-		UGameplayTagsManager::Get().DestroyGameplayTagTree();
-		UGameplayTagsManager::Get().ConstructGameplayTagTree();
-		Context.mAppliedOpCount += RemovedCount;
-	}
-	return RemovedCount > 0;
-}

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "KDFHandlerBase.h"
 
 #include "KDFCdoHandler.generated.h"
@@ -22,9 +21,6 @@
  * Extras:
  *  - `applyToSpawnedActors: true` (actor classes) registers a runtime actor patch — the ops are
  *    re-applied to every actor instance of the class when it spawns.
- *  - `propagateToInstances: true` (default) pushes changed CDO values to live instances during live
- *    reload, but only where the instance still holds the old CDO value (never overwrites user edits).
- *
  * See Docs/2.yaml-schema.md for the full grammar.
  */
 UCLASS()
@@ -43,11 +39,11 @@ private:
 	bool ApplyPatchEntry(const FKDFNode& Patch, FKDFApplyContext& Context);
 
 	/**
-	 * @param PropertiesNode / bPropagate  Forwarded only to register a lazy class watch (see
+	 * @param PropertiesNode  Forwarded only to register a lazy class watch (see
 	 *        FKDFLazyClassWatch) for `applyToSubclasses` / `matchTag` scopes — subclasses that load
 	 *        later in the session (common for Blueprint-authored items/buildings/recipes) still get
 	 *        these ops applied to their CDO, the same way the initially-loaded ones did.
 	 */
 	void GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Context, TArray<UObject*>& OutTargets,
-					   TArray<UClass*>& OutTargetClasses, const TSharedPtr<FKDFNode>& PropertiesNode, bool bPropagate);
+					   TArray<UClass*>& OutTargetClasses, const TSharedPtr<FKDFNode>& PropertiesNode);
 };

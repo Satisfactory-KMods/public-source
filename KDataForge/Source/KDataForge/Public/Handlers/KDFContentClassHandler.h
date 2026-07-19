@@ -23,7 +23,7 @@
  *    mSchematicDependencies — the same instanced-object-array shape as `unlocks:`/mUnlocks, gating
  *    the schematic's purchase/visibility on other schematics, items, research, etc. (see
  *    ApplyInstancedObjects).
- *  - research: `nodes:` creates instanced UFGResearchTreeNode subobjects appended to mNodes,
+ *  - research: `addNodes:` creates instanced UFGResearchTreeNode subobjects appended to mNodes,
  *    placing a schematic into the tree's visual graph (see ApplyNodes).
  *
  * Concrete subclasses only configure the entries key, default parent, stage, and registration kind.
@@ -51,9 +51,23 @@ protected:
 	bool ApplyInstancedObjects(UObject* TargetCDO, const FKDFNode& EntriesNode, const TCHAR* ArrayField,
 							   const TCHAR* NotFoundMessage, FKDFApplyContext& Context);
 
+	/** Adds one recipe/schematic unlock from a scalar class-reference list (including vanilla/mod classes). */
+	bool ApplyClassListShortcutUnlock(UObject* TargetCDO, const FKDFNode& EntriesNode, const TCHAR* UnlockClassPath,
+									  const TCHAR* ValueField, const TCHAR* RequiredBaseClassPath,
+									  const TCHAR* ShortcutName, FKDFApplyContext& Context);
+
+	/** Adds one inventory/hand-equipment slot unlock from a positive integer shortcut. */
+	bool ApplyCountShortcutUnlock(UObject* TargetCDO, const FKDFNode& CountNode, const TCHAR* UnlockClassPath,
+								  const TCHAR* ValueField, const TCHAR* ShortcutName, FKDFApplyContext& Context);
+
+	/** Adds one scanner unlock from a list of `{ resource:, nodeType: }` entries. */
+	bool ApplyScannableResourcesShortcutUnlock(UObject* TargetCDO, const FKDFNode& EntriesNode,
+											   FKDFApplyContext& Context);
+
 	/**
-	 * `nodes:` on a research entry — each node instances a UFGResearchTreeNode subclass (default the
-	 * base game's `BPD_ResearchTreeNode`) and appends it to the tree's `mNodes` array, the same
+	 * `addNodes:` on a research entry (`nodes:` remains a legacy alias) — each node instances a
+	 * UFGResearchTreeNode subclass (default: base game's `BPD_ResearchTreeNode`) and appends it to the
+	 * tree's `mNodes` array, the same
 	 * instanced-object-array shape as ApplyUnlocks/mUnlocks.
 	 *
 	 * `BPD_ResearchTreeNode` carries its data as a Blueprint variable, `mNodeDataStruct`, whose
@@ -68,20 +82,26 @@ protected:
 	 *   - `Parents` / `NodesToUnhide` / `UnhiddenBy` (array of {X,Y} struct) — written from
 	 *     `parents:` / `nodesToUnhide:` / `unhiddenBy:`; each entry is either a literal `{X,Y}` or a
 	 *     `{schematic:}` reference resolved against every other node's own `coordinate:` in the same
-	 *     `nodes:` list (order independent — every node's coordinate is recorded before any
+	 *     `addNodes:` list (order independent — every node's coordinate is recorded before any
 	 *     parent/road resolves).
 	 *   - `ChildrenAndRoads` (`TMap<{X,Y}, {Points: array of {X,Y}}>`) — the visual road from this
 	 *     node to a child. `bAutoPath` (the research entry's `autoPath:`) picks how it's filled:
-	 *     `true` inverts every node's resolved `Parents` into its parent's `ChildrenAndRoads` with a
-	 *     straight two-point connector (this repo's own default — no equivalent utility exists in
+	 *     `true` inverts every node's resolved `Parents` into its parent's `ChildrenAndRoads` using
+	 *     orthogonal one-tile steps, excluding the parent and including the child (this repo's own
+	 *     default — no equivalent utility exists in
 	 *     KBFL/KPrivateCodeLib to call into); `false` (default) takes it verbatim from each node's
 	 *     `childrenAndRoads:` (single map or a sequence of them).
+	 * `unhiddenBy:` also appends this node to every referenced target's `NodesToUnhide`, preserving
+	 * explicit entries, because game UI reads both inverse fields for hover highlighting.
 	 * A field that isn't found under its expected name (e.g. a `class:`-overridden custom node type
 	 * with a differently-shaped data struct) logs a warning and is skipped rather than failing the
 	 * whole document — diagnostics here are never fatal, same as everywhere else in KDataForge.
 	 * Anything else the node class exposes is still reachable through its own `properties:`.
 	 */
 	bool ApplyNodes(UObject* TreeCDO, const FKDFNode& NodesNode, bool bAutoPath, FKDFApplyContext& Context);
+
+	/** Removes nodes selected by schematic class and cleans every surviving graph reference to them. */
+	bool RemoveNodesBySchematic(UObject* TreeCDO, const FKDFNode& EntriesNode, FKDFApplyContext& Context);
 
 	/** Plural document key holding the entry sequence ("items", "recipes", …). */
 	FString mEntriesKey;
@@ -99,7 +119,7 @@ protected:
 	/** schematic: enables the `dependencies:` block (mSchematicDependencies — see ApplyInstancedObjects). */
 	bool bSupportsDependencies = false;
 
-	/** research: enables the `nodes:` block (see ApplyNodes). */
+	/** research: enables `addNodes:`/legacy `nodes:` and `removeNodes:` (see ApplyNodes). */
 	bool bSupportsNodes = false;
 
 	/** Generic `class` documents pick their registration per entry (`registerAs: recipe|schematic|research`). */

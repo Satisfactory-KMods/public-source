@@ -14,8 +14,12 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_AlternateRecipe, "KMods.AlternateRecipe
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_PlannerExclude, "KMods.PlannerExclude",
 							   "Excludes an item, building or recipe from the wiki production planner.");
 
-UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_PlannerExcludeOverclocking, "KMods.PlannerExcludeOverclocking",
-							   "Excludes a recipe from overclocking in the production planner; its clock remains capped at 100%.");
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(
+	TAG_KMods_PlannerExcludeOverclocking, "KMods.PlannerExcludeOverclocking",
+	"Excludes a recipe from overclocking in the production planner; its clock remains capped at 100%.");
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_PlannerResource, "KMods.PlannerResource",
+							   "Marks an item as a raw input in the production planner, treated like a raw resource.");
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_MinerModuleCrusher, "KMods.MinerModule.Crusher",
 							   "Marks a Modular Miner extraction recipe as using the Crusher module.");

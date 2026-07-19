@@ -11,8 +11,9 @@ msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock.Text"
 msgid "<LightGrey12Reg>Thanks for using </><Orange12Reg>KMods</>"
 msgstr "<LightGrey12Reg>Merci d'avoir utilisé</><Orange12Reg>KMods </>"
 
-msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\\r\\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\\r\\n\\r\\n<Orange12Reg>This popup will only appear once</>"
-msgstr "<LightGrey12Reg>Nous voulons que vous, avez le choix de choisir quand vous voulez and </><Orange12Reg>quel publicité vous voulez voir! </> \\r\\n<LightGrey12Reg>Vous pouvez changer ceci à n'importe quel moment dans </><Orange12Reg>la Configuration du Mod KPrivateLib. </> \\r\\n\\r\\n<Orange12Reg>Ce message n'apparaîtra qu'une seule fois </>"
+msgctxt "ST_KPrivateCodeLib,Widget_SettingPopup.RichTextBlock_108.Text"
+msgid "<LightGrey12Reg>we want you to be able to decide whether and </><Orange12Reg>which advertising you want to see!</>\r\n<LightGrey12Reg>You can change this at any time in the </><Orange12Reg>KPrivateLib Mod Configs.</>\r\n\r\n<Orange12Reg>This popup will only appear once</>"
+msgstr "<LightGrey12Reg>Nous voulons que vous, avez le choix de choisir quand vous voulez and </><Orange12Reg>quel publicité vous voulez voir! </> \r\n<LightGrey12Reg>Vous pouvez changer ceci à n'importe quel moment dans </><Orange12Reg>la Configuration du Mod KPrivateLib. </> \r\n\r\n<Orange12Reg>Ce message n'apparaîtra qu'une seule fois </>"
 
 msgctxt "ST_KPrivateCodeLib,Disqualifier_ToMuchModules.Disqualifier_ToMuchModules_C.mDisqfualifyingText"
 msgid "Cannot Snap this module to the building. (To much, Invalid or no Place)"

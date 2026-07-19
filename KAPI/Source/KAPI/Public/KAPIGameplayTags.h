@@ -42,6 +42,9 @@ KAPI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_KMods_PlannerExclude);
 /** Recipe is excluded from overclocking in the production planner; its clock remains capped at 100%. */
 KAPI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_KMods_PlannerExcludeOverclocking);
 
+/** Marks an item as a raw input in the production planner (treated like a raw resource, not craftable). */
+KAPI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_KMods_PlannerResource);
+
 /** Marks a Modular Miner extraction recipe as using the Crusher module. */
 KAPI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(TAG_KMods_MinerModuleCrusher);
 

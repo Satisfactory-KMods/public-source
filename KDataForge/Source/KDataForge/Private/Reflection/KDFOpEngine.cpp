@@ -169,7 +169,8 @@ namespace
 		{
 			double MinValue = 0.0;
 			double MaxValue = 0.0;
-			if (!TryReadNumericNode(Args.mMin, MinValue, OutError) || !TryReadNumericNode(Args.mMax, MaxValue, OutError))
+			if (!TryReadNumericNode(Args.mMin, MinValue, OutError) ||
+				!TryReadNumericNode(Args.mMax, MaxValue, OutError))
 			{
 				return false;
 			}
@@ -220,7 +221,12 @@ namespace
 		}
 		if (Numeric->IsFloatingPoint())
 		{
-			if (!Numeric->CanHoldValue(Result))
+			// CanHoldValue(double) rejects values that lose precision when stored as float. That is
+			// correct for a lossless conversion but wrong for reflected float properties: 1.6 is a
+			// valid float value even though it is not represented exactly. Non-finite values were
+			// rejected above; float properties only need an actual range check here.
+			if (Numeric->IsA<FFloatProperty>() &&
+				FMath::Abs(Result) > static_cast<double>(TNumericLimits<float>::Max()))
 			{
 				OutError = FString::Printf(TEXT("Numeric result is out of range for %s"), *Numeric->GetCPPType());
 				return false;

@@ -75,8 +75,9 @@ msgctxt "KUI_GeneralWords,Workbench"
 msgid "Craft Bench"
 msgstr "制作台"
 
-msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\\r\\n\\r\\nIt can also be cleaned with machines to extract more metal from them."
-msgstr "可从各种矿石簇中开采的碎金属。用于制造金属锭或液态金属。\\r\\n\\r\\n也可以用机器清洗以提取更多金属。"
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "可从各种矿石簇中开采的碎金属。用于制造金属锭或液态金属。\r\n\r\n也可以用机器清洗以提取更多金属。"
 
 msgctxt "KUI_GeneralWords,CycleTime"
 msgid "Cycle Time"
@@ -90,8 +91,9 @@ msgctxt "KUI_GeneralWords,Delete"
 msgid "Delete"
 msgstr "删除"
 
-msgid "Do you really want to open this website? Your browser will open and open the website!\\r\\n\\r\\n{url}"
-msgstr "您确定要打开此网站吗？您的浏览器将打开并访问该网站！\\r\\n\\r\\n{url}"
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "您确定要打开此网站吗？您的浏览器将打开并访问该网站！\r\n\r\n{url}"
 
 msgctxt "KUI_GeneralWords,Edit"
 msgid "Edit"
@@ -113,16 +115,29 @@ msgctxt "KUI_GeneralWords,State_Error"
 msgid "Error"
 msgstr "错误"
 
-msgid "FUNCTION:\\r\\n{Function}"
-msgstr "功能：\\r\\n{Function}"
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "功能：\r\n{Function}"
 
 msgctxt "KUI_ItemFormat,Liquid"
 msgid "Fluid"
 msgstr "流体"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "气体"
+
 msgctxt "KUI_ItemFormat,Gas"
 msgid "Gas"
 msgstr "气体"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "热量"
+
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "热量"
 
 msgctxt "KUI_ItemFormat,Heat"
 msgid "Heat"
@@ -132,6 +147,10 @@ msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
 msgid "INSERT FUEL"
 msgstr "输入燃料"
 
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "闲置"
+
 msgctxt "KUI_GeneralWords,State_Idle"
 msgid "Idle"
 msgstr "闲置"
@@ -139,6 +158,14 @@ msgstr "闲置"
 msgctxt "KUI_GeneralWords,Image"
 msgid "Image"
 msgstr "图片"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "无效"
+
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "无效"
 
 msgctxt "KUI_GeneralWords,Time_Invalid"
 msgid "Invalid"
@@ -203,6 +230,10 @@ msgstr "缺少流体！"
 msgctxt "KUI_GeneralWords,NoInv"
 msgid "No Inventory set"
 msgstr "未设置库存"
+
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "缺少电力"
 
 msgctxt "KUI_GeneralWords,State_NoPower"
 msgid "No Power"
@@ -316,6 +347,10 @@ msgctxt "KUI_GeneralWords,SlotNotUsed"
 msgid "Slot not in use"
 msgstr "槽位未使用"
 
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "固体"
+
 msgctxt "KUI_ItemFormat,Solid"
 msgid "Solid"
 msgstr "固体"
@@ -410,7 +445,7 @@ msgstr "{From} 到 {To}°C"
 
 msgctxt "KUI_GeneralWords,ToPercent"
 msgid "{From}% to {To}%"
-msgstr "{From}%% 到 {To}%%"
+msgstr "{From}% 到 {To}%"
 
 msgctxt "KUI_GeneralWords,TimeInSec"
 msgid "{Time} Sec"
@@ -418,7 +453,7 @@ msgstr "{Time} 秒"
 
 msgctxt "KUI_GeneralWords,Percent"
 msgid "{Value} %"
-msgstr "{Value} %%"
+msgstr "{Value} %"
 
 msgctxt "KUI_GeneralWords,PerMin"
 msgid "{Value} / Min"

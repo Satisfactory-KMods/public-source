@@ -619,9 +619,8 @@ void AKPCLNetworkConnectionBuilding::SetFilterItem(TSubclassOf<UFGItemDescriptor
 			AKPCLNetworkCore* Core = GetFaxitCore();
 			if (IsValid(Core))
 			{
-				Core->TryToStoreItemAmount(Stack.Item.GetItemClass(), Stack.NumItems);
+				Core->TryToStoreItem(Inventory, Stack.Item.GetItemClass(), Stack.NumItems, INV_SLOT);
 			}
-			Inventory->RemoveFromIndex(INV_SLOT, Stack.NumItems);
 		}
 	}
 

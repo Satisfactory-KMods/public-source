@@ -99,10 +99,6 @@ msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
 msgid "SourceString"
 msgstr "SourceString"
 
-msgctxt "KBFLCustomizer,SwatchNameFormat"
-msgid "Swatch {0}"
-msgstr "Swatch {0}"
-
 msgctxt "ST_KBFL,KBFL_MainWindow.KBFL_MainWindow_C.PaletteCategory"
 msgid "User Created"
 msgstr "User Created"

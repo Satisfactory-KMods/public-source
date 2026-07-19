@@ -120,8 +120,7 @@ bool UKDFCdoHandler::ValidateDocument(const FKDFNode& Document, FKDFValidationCo
 }
 
 void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Context, TArray<UObject*>& OutTargets,
-								   TArray<UClass*>& OutTargetClasses, const TSharedPtr<FKDFNode>& PropertiesNode,
-								   bool bPropagate)
+								   TArray<UClass*>& OutTargetClasses, const TSharedPtr<FKDFNode>& PropertiesNode)
 {
 	OutTargetClasses.Reset();
 	UKDFSubsystem* Subsystem = UKDFSubsystem::Get(Context.mGameInstance);
@@ -145,23 +144,25 @@ void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Cont
 			OutTargets.Add(Subsystem->GetAndRetainCDO(TargetClass));
 			if (Patch.GetBool(TEXT("applyToSubclasses"), false))
 			{
+				FKDFLazyClassWatch Watch;
+				Watch.mBaseClass = TargetClass;
+				Watch.mPropertiesNode = PropertiesNode;
+				Watch.mSourceFile = Context.mSourceFile;
+				Watch.mPackRef = Context.mPackRef;
+				Watch.bDebug = Context.bDebug;
+				Watch.mAppliedClasses.Add(TargetClass);
+
 				TArray<UClass*> DerivedClasses;
 				GetDerivedClasses(TargetClass, DerivedClasses, true);
 				for (UClass* Derived : DerivedClasses)
 				{
 					OutTargets.Add(Subsystem->GetAndRetainCDO(Derived));
+					Watch.mAppliedClasses.Add(Derived);
 				}
 
 				// GetDerivedClasses only sees subclasses already loaded into memory — Blueprint-authored
 				// items/buildings/recipes are frequently not loaded until the game references them. Watch
 				// for the rest to load later in the session (KBFL parity, see FKDFLazyClassWatch).
-				FKDFLazyClassWatch Watch;
-				Watch.mBaseClass = TargetClass;
-				Watch.mPropertiesNode = PropertiesNode;
-				Watch.bPropagate = bPropagate;
-				Watch.mSourceFile = Context.mSourceFile;
-				Watch.mPackRef = Context.mPackRef;
-				Watch.bDebug = Context.bDebug;
 				Subsystem->RegisterLazyClassWatch(Watch);
 			}
 		}
@@ -182,7 +183,6 @@ void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Cont
 			FKDFLazyClassWatch Watch;
 			Watch.mExactTargetPath = TargetPath;
 			Watch.mPropertiesNode = PropertiesNode;
-			Watch.bPropagate = bPropagate;
 			Watch.mSourceFile = Context.mSourceFile;
 			Watch.mPackRef = Context.mPackRef;
 			Watch.bDebug = Context.bDebug;
@@ -242,6 +242,14 @@ void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Cont
 		}
 		const FString TagPropertyName = Patch.GetString(TEXT("tagProperty"), FString());
 		const int32 TargetCountBefore = OutTargets.Num();
+		FKDFLazyClassWatch Watch;
+		Watch.mBaseClass = ScopeClass;
+		Watch.mPropertiesNode = PropertiesNode;
+		Watch.mMatchTags = MatchTags;
+		Watch.mTagPropertyName = TagPropertyName;
+		Watch.mSourceFile = Context.mSourceFile;
+		Watch.mPackRef = Context.mPackRef;
+		Watch.bDebug = Context.bDebug;
 
 		// Scope CDOs: the class itself plus all derived classes.
 		TArray<UClass*> ScopeClasses = {ScopeClass};
@@ -253,6 +261,7 @@ void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Cont
 			{
 				Subsystem->RetainObject(CandidateCDO);
 				OutTargets.Add(CandidateCDO);
+				Watch.mAppliedClasses.Add(Candidate);
 			}
 		}
 
@@ -282,15 +291,6 @@ void UKDFCdoHandler::GatherTargets(const FKDFNode& Patch, FKDFApplyContext& Cont
 		// Same rationale as applyToSubclasses above: GetDerivedClasses only sees classes already
 		// loaded, so a matching Blueprint subclass that loads later in the session would otherwise
 		// never get these ops.
-		FKDFLazyClassWatch Watch;
-		Watch.mBaseClass = ScopeClass;
-		Watch.mPropertiesNode = PropertiesNode;
-		Watch.bPropagate = bPropagate;
-		Watch.mMatchTags = MatchTags;
-		Watch.mTagPropertyName = TagPropertyName;
-		Watch.mSourceFile = Context.mSourceFile;
-		Watch.mPackRef = Context.mPackRef;
-		Watch.bDebug = Context.bDebug;
 		Subsystem->RegisterLazyClassWatch(Watch);
 	}
 }
@@ -372,11 +372,9 @@ bool UKDFCdoHandler::ApplyPatchEntry(const FKDFNode& Patch, FKDFApplyContext& Co
 		return false;
 	}
 
-	const bool bPropagate = Patch.GetBool(TEXT("propagateToInstances"), true);
-
 	TArray<UObject*> Targets;
 	TArray<UClass*> TargetClasses;
-	GatherTargets(Patch, Context, Targets, TargetClasses, PropertiesNode, bPropagate);
+	GatherTargets(Patch, Context, Targets, TargetClasses, PropertiesNode);
 	if (Targets.IsEmpty())
 	{
 		return false;
@@ -385,7 +383,7 @@ bool UKDFCdoHandler::ApplyPatchEntry(const FKDFNode& Patch, FKDFApplyContext& Co
 	bool bAppliedAny = false;
 	for (UObject* Target : Targets)
 	{
-		bAppliedAny |= FKDFPatchUtil::ApplyOpsToObject(Target, *PropertiesNode, bPropagate, Context);
+		bAppliedAny |= FKDFPatchUtil::ApplyOpsToObject(Target, *PropertiesNode, Context);
 	}
 
 	// Runtime actor patch: re-apply these ops to every spawning instance of each resolved class

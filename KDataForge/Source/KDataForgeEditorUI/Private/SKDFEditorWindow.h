@@ -68,7 +68,6 @@ private:
 	FReply OnRedo();
 	FReply OnExport(bool bDiffOnly);
 	FReply OnCreate();
-	FReply OnReload();
 	FReply OnClose();
 	void SetStatus(const FString& Message, bool bError);
 	void RefreshAll();
@@ -89,7 +88,7 @@ private:
 	/** Expands/collapses the entire property tree (Expand All / Collapse All header buttons). */
 	void SetAllExpansion(bool bExpand);
 
-	/** Modal popup showing a load/reload report (used by OnReload). */
+	/** Modal popup showing an operation report. */
 	void ShowResultDialog(const FString& Title, const FString& ReportText, bool bHasErrors);
 
 	TWeakObjectPtr<UKDFEditorModel> mModel;

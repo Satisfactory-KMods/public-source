@@ -79,14 +79,6 @@ bool UKDFSinkPointsHandler::ValidateDocument(const FKDFNode& Document, FKDFValid
 
 bool UKDFSinkPointsHandler::ApplyDocument(const FKDFNode& Document, FKDFApplyContext& Context)
 {
-	// The sink subsystem reads its point tables before the content registry freezes at world begin play —
-	// a table queued mid-session would never be picked up.
-	if (Context.bLiveReload)
-	{
-		Context.AddWarning(TEXT("sink point tables cannot be re-registered during a live session — restart required"));
-		return false;
-	}
-
 	TArray<FKDFSinkPointsEntry> Entries;
 	CollectSinkEntries(Document, Entries, Context);
 	if (Entries.IsEmpty())

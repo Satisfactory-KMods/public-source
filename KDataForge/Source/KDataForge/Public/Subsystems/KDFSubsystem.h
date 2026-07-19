@@ -1,8 +1,11 @@
 #pragma once
 
+#include "Containers/Ticker.h"
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "UObject/UObjectArray.h"
+
+#include <atomic>
 
 #include "Content/KDFDynamicContent.h"
 #include "KDFDataEditorHandler.h"
@@ -83,15 +86,6 @@ public:
 	/** Full scan + parse + apply. Called once from the INITIALIZATION lifecycle phase. */
 	void RunInitialLoad();
 
-	/**
-	 * Re-scans the DataForge directories, reverts previously applied patches, and re-applies.
-	 * @param bLiveReload  True when a world session is running — only live-safe stages
-	 *                     (GameTags, Localization, CDOChanges, RuntimePatches) are applied and
-	 *                     changed CDO values propagate to unmodified live instances.
-	 * @return Number of applied documents.
-	 */
-	int32 Reload(bool bLiveReload);
-
 	/** Human-readable load report (packs, documents, ops, diagnostics). */
 	UFUNCTION(BlueprintCallable, Category = "KDataForge")
 	FString BuildReportString() const;
@@ -99,7 +93,6 @@ public:
 	const TArray<FKDFDiagnostic>& GetDiagnostics() const { return mDiagnostics; }
 
 	FKDFVanillaCache& GetVanillaCache() { return mVanillaCache; }
-	FKDFVanillaCache& GetLiveReloadCache() { return mLiveReloadCache; }
 
 	const TArray<FKDFPatchRecord>& GetPatchRecords() const { return mPatchRecords; }
 
@@ -188,14 +181,17 @@ public:
 
 private:
 	void ScanAndParse();
-	void ApplyStages(bool bLiveReload);
-	void RevertAppliedPatches();
-	void RevertLiveReloadPatches();
-	void RevertHandlerSideEffects(bool bLiveSafeOnly);
+	void ApplyStages();
 	void SortStageDocuments(TArray<int32>& DocumentIndices) const;
 
+	/** Enqueues a newly allocated class for a post-load-safe lazy-watch pass. Game-thread only. */
+	void QueueLazyClassForProcessing(UClass* NewClass);
+
+	/** Core ticker callback: waits for class/CDO loading to finish before applying queued watches. */
+	bool ProcessPendingLazyClasses(float DeltaTime);
+
 	/** Game-thread only: matches NewClass against mLazyClassWatches and applies any that match. */
-	void ApplyLazyWatchesToClass(UClass* NewClass);
+	void ApplyLazyWatchesToClass(UClass* NewClass, UObject* CDO);
 
 	/** Handler objects retained against GC; each implements IKDFDataEditorHandler. */
 	UPROPERTY()
@@ -225,12 +221,14 @@ private:
 	TArray<FKDFActorPatch> mActorPatches;
 	TArray<FKDFLazyClassWatch> mLazyClassWatches;
 
-	/** Classes already given a lazy-watch pass — once per class, never once per instance (dedupes
-	 *  against duplicate/async NotifyUObjectCreated firings; matters for additive ops). */
-	TSet<TWeakObjectPtr<UClass>> mLazyPatchedClasses;
+	/** Classes observed by FUObjectArray but not yet safe to inspect or patch. Game-thread only. */
+	TSet<TWeakObjectPtr<UClass>> mPendingLazyClasses;
+	FTSTicker::FDelegateHandle mLazyClassTickerHandle;
+
+	/** NotifyUObjectCreated can run off-thread; never read mLazyClassWatches there. */
+	std::atomic<bool> bHasLazyClassWatches{false};
+
 	FKDFVanillaCache mVanillaCache;
-	/** State immediately before live-safe stages first touched each property. */
-	FKDFVanillaCache mLiveReloadCache;
 	FKDFDynamicContentRegistry mDynamicContent;
 	TSet<FString> mRedirectedPacks;
 	FKDFOnToggleEditor mOnToggleEditorRequested;

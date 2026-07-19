@@ -9,9 +9,8 @@
 /**
  * Handler for `type: sinkpoints` documents — registers AWESOME Sink point values for item descriptors.
  *
- * Builds a transient UDataTable of FResourceSinkPointsData rows and queues it on UKDFSubsystem, which
- * registers it per world before the content registry freezes. Because of that freeze the handler refuses
- * live reloads — sink tables cannot be re-registered during a live session.
+ * Builds a transient UDataTable of FResourceSinkPointsData rows and queues it on UKDFSubsystem,
+ * which registers it per world before the content registry freezes.
  *
  * See Docs/2.yaml-schema.md for the grammar.
  */

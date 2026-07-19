@@ -73,10 +73,10 @@ Full grammar, examples for every document type, and task-oriented tutorials live
 - Register new gameplay tags at runtime from YAML; add/remove/clear tags on any tag container property
 - `applyToSpawnedActors: true` re-applies your values to every actor instance the moment it spawns — even values that saves or archetypes would normally override
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Content Packs &amp; Live Reload</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Content Packs &amp; Session Loading</strong></td></tr></table>
 
 - Group files into packs with a `pack.yml` manifest (name, version, priority, dependencies) — deterministic load order across packs and files
-- `/kdf reload` in chat re-reads your YAML and applies CDO/tag changes without restarting
+- DataForge YAML is loaded once during session initialization; restart the session after changing files
 - `/kdf report` prints a full load report with warnings and errors
 - Broken files never block loading — you get warnings instead
 
@@ -84,19 +84,19 @@ Full grammar, examples for every document type, and task-oriented tutorials live
 
 - **Create** real PrimaryDataAsset instances from YAML — e.g. new KAPI cleaner items or RefinedR&D boiler/heater/turbine data assets
 - **Edit** any mod's existing data assets with plain `cdo` documents (single asset, all assets of a class, or by gameplay tag)
-- **Auto-rescan**: KAPI and RefinedR&D (RefinedPower / FicsitFarming) are notified after every load and reload, so your data assets are picked up without a restart — and without KDataForge requiring those mods
+- **Create or edit curves** with `type: curve` — `UCurveFloat` and `UCurveVector`, including interpolation, tangents, defaults, and extrapolation
+- **Auto-rescan**: KAPI and RefinedR&D (RefinedPower / FicsitFarming) are notified after the initial load, without KDataForge requiring those mods
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Chat &amp; Console Commands</strong></td></tr></table>
 
-| Command | Where | Effect |
-|---|---|---|
-| `/kdf report` | chat | Prints the load report: packs, applied documents, ops, warnings, errors |
-| `/kdf reload` | chat (host) | Reverts + re-applies live-safe stages (tags, data assets, localization, CDO changes) without restarting |
-| `/kdf editor` | chat (host) | Toggles the in-game editor — browse content, edit properties live, undo/redo, and export changes to YAML |
-| `/kdf debug on\|off` | chat | Flips global debug logging (same switch as `KDF.Debug`); bare `/kdf debug` toggles the current state |
-| `KDF.Editor` | console | Same as `/kdf editor` |
-| `KDF.Debug 1` | console (or `-KDFDebug`) | Global debug logging — one `[KDF DEBUG]` line per applied op, including editor edits |
-| `KDF.ApplyToAssets [PathFilter]` | console (**UE editor builds only**) | Applies loaded YAML directly onto editor assets and marks packages dirty |
+| Command                          | Where                               | Effect                                                                                                   |
+| -------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `/kdf report`                    | chat                                | Prints the load report: packs, applied documents, ops, warnings, errors                                  |
+| `/kdf editor`                    | chat (host)                         | Toggles the in-game editor — browse content, edit properties live, undo/redo, and export changes to YAML |
+| `/kdf debug on\|off`             | chat                                | Flips global debug logging (same switch as `KDF.Debug`); bare `/kdf debug` toggles the current state     |
+| `KDF.Editor`                     | console                             | Same as `/kdf editor`                                                                                    |
+| `KDF.Debug 1`                    | console (or `-KDFDebug`)            | Global debug logging — one `[KDF DEBUG]` line per applied op, including editor edits                     |
+| `KDF.ApplyToAssets [PathFilter]` | console (**UE editor builds only**) | Applies loaded YAML directly onto editor assets and marks packages dirty                                 |
 
 {{GALLERY}}
 
@@ -106,8 +106,7 @@ Full grammar, examples for every document type, and task-oriented tutorials live
 
 - Reflection-based property engine — supports every reflectable UObject property type, including Blueprint structs and PrimaryDataAssets
 - Fixed stage pipeline (tags → assets → localization → CDO changes → content → validation)
-- Vanilla value snapshots power revert, live reload, and safe instance propagation
-- Multiplayer-safe: on join, the server compares patchset checksums — clients with different packs are rejected with a clear message listing both sides' packs, so mismatched sessions can never silently desync
+- Vanilla value snapshots power editor diffs, undo support, and changes-only export
 - Extensible C++/Blueprint handler API for other mods (`IKDFDataEditorHandler`)
 - Dedicated server compatible
 
@@ -115,10 +114,9 @@ Full grammar, examples for every document type, and task-oriented tutorials live
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Requirements</strong></td></tr></table>
 
-| Dependency | Link |
-|---|---|
-| SML | [ficsit.app](https://ficsit.app/mod/SML) |
-| KAPI | [ficsit.app](https://ficsit.app/mod/KAPI) |
+| Dependency | Link                                     |
+| ---------- | ---------------------------------------- |
+| SML        | [ficsit.app](https://ficsit.app/mod/SML) |
 
 ---
 

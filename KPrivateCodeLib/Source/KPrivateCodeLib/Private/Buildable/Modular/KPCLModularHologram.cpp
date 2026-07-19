@@ -162,7 +162,7 @@ void AKPCLModularHologram::ConfigureComponents(AFGBuildable* inBuildable) const
 		IKPCLModularBuildingInterface::Execute_RemoveAttachedActor(mModuleMasterHit, mUpgradedActorRef);
 	}
 	IKPCLModularBuildingInterface::Execute_AttachedActor(mModuleMasterHit, inBuildable, mAttachmentDescriptor,
-														 mSnapLocation, mSnapDistance);
+														 inBuildable->GetActorTransform(), mSnapDistance);
 }
 
 void AKPCLModularHologram::CheckValidPlacement()
