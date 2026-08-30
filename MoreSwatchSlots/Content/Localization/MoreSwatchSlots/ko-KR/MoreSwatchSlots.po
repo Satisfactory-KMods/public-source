@@ -1,0 +1,16 @@
+msgid ""
+msgstr ""
+"Language: ko-KR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 1; plural = 0\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_MoreSwatchSlots,ResourceSink_MSS_SwatchSlots.ResourceSink_MSS_SwatchSlots_C.mDisplayName"
+msgid "More Swatch Slots"
+msgstr "더 많은 견본 슬롯"
+
+msgctxt "ST_MoreSwatchSlots,SC_RSS_SwatchSlots.SC_RSS_SwatchSlots_C.mDisplayName"
+msgid "Swatch"
+msgstr "견본"

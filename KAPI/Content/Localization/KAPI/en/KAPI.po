@@ -1,0 +1,35 @@
+﻿# KAPI English translation.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: KAPI\n"
+"POT-Creation-Date: 2026-07-24 14:11\n"
+"PO-Revision-Date: 2026-07-24 14:11\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Key:	Attachment_MM_FluidModule.Attachment_MM_FluidModule_C.mName
+#. SourceLocation:	/KAPI/ST_KAPI.ST_KAPI
+#: /KAPI/ST_KAPI.ST_KAPI
+msgctxt "ST_KAPI,Attachment_MM_FluidModule.Attachment_MM_FluidModule_C.mName"
+msgid "Unnamed Attachment Descriptor"
+msgstr "Unnamed Attachment Descriptor"
+
+#. Key:	WP_Crusher.WP_Crusher_C.mName
+#. SourceLocation:	/KAPI/ST_KAPI.ST_KAPI
+#: /KAPI/ST_KAPI.ST_KAPI
+msgctxt "ST_KAPI,WP_Crusher.WP_Crusher_C.mName"
+msgid "Unnamed Waste Descriptor"
+msgstr "Unnamed Waste Descriptor"
+
+#. Key:	Key
+#. SourceLocation:	Mods/GameFeatures/KAPI/Source/KAPI/Public/KAPIModule.h(70)
+#: Mods/GameFeatures/KAPI/Source/KAPI/Public/KAPIModule.h(70)
+msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
+msgid "SourceString"
+msgstr "SourceString"
+

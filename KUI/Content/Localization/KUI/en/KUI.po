@@ -1,0 +1,820 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.mPercentText.HintText"
+msgid "%"
+msgstr "%"
+
+msgctxt "KUI_GeneralWords,/min"
+msgid "/ min"
+msgstr "/ min"
+
+msgctxt ",802757EF4B9434F957B784B10348C053"
+msgid "15 per min"
+msgstr "15 per min"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.Node_Format_Text.Format"
+msgid "<White10Reg>Produced in: </><Orange10SemiB>{WHERE}</>"
+msgstr "<White10Reg>Produced in: </><Orange10SemiB>{WHERE}</>"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[6].PropertyTooltip"
+msgid "Abstract instances configuration data for the buildable"
+msgstr "Abstract instances configuration data for the buildable"
+
+msgctxt "KUI_GeneralWords,Accept"
+msgid "Accept"
+msgstr "Accept"
+
+msgctxt "KUI_GeneralWords,Add"
+msgid "Add"
+msgstr "Add"
+
+msgctxt "KUI_GeneralWords,Added"
+msgid "Added!"
+msgstr "Added!"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[20].PropertyTooltip"
+msgid "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
+msgstr "Allow each actor to run at a different time speed. The DeltaTime for a frame is multiplied by the global TimeDilation (in WorldSettings) and this CustomTimeDilation for this actor's tick."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[10].PropertyTooltip"
+msgid "Allows us to only see this Actor in the Editor, and not in the actual game.\n@see SetActorHiddenInGame()"
+msgstr "Allows us to only see this Actor in the Editor, and not in the actual game.\\\\\\\\n@see SetActorHiddenInGame()"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[9].PropertyTooltip"
+msgid "Always relevant for network (overrides bOnlyRelevantToOwner)."
+msgstr "Always relevant for network (overrides bOnlyRelevantToOwner)."
+
+msgctxt "KUI_GeneralWords,Amount"
+msgid "Amount"
+msgstr "Amount"
+
+msgctxt "KUI_GeneralWords,Time_Any"
+msgid "Any Time"
+msgstr "Any Time"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[33].PropertyTooltip"
+msgid "Array of tags that can be used for grouping and categorizing."
+msgstr "Array of tags that can be used for grouping and categorizing."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[11].PropertyTooltip"
+msgid "Background appearance"
+msgstr "Background appearance"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[12].PropertyTooltip"
+msgid "Background appearance when hovered"
+msgstr "Background appearance when hovered"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[13].PropertyTooltip"
+msgid "Background appearance when pressed"
+msgstr "Background appearance when pressed"
+
+msgctxt ",BD191F2E47CC45897F6FA6961BCB244F"
+msgid "Biomass"
+msgstr "Biomass"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[21].PropertyTooltip"
+msgid "BorderBackgroundColor refers to the actual color and opacity of the supplied border image on toggle buttons"
+msgstr "BorderBackgroundColor refers to the actual color and opacity of the supplied border image on toggle buttons"
+
+msgctxt "KUI_GeneralWords,BuildGun"
+msgid "Build Gun"
+msgstr "Build Gun"
+
+msgctxt "KUI_GeneralWords,Building"
+msgid "Building"
+msgstr "Building"
+
+msgctxt "KUI_GeneralWords,Found_Danger"
+msgid "Can be found in Dangerous Areas."
+msgstr "Can be found in Dangerous Areas."
+
+msgctxt "KUI_GeneralWords,Found_Everywhere"
+msgid "Can be found in every biome."
+msgstr "Can be found in every biome."
+
+msgctxt "KUI_GeneralWords,Cancle"
+msgid "Cancle"
+msgstr "Cancle"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[8].PropertyTooltip"
+msgid "CheckBox appearance when CheckBox is undetermined and hovered"
+msgstr "CheckBox appearance when CheckBox is undetermined and hovered"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[9].PropertyTooltip"
+msgid "CheckBox appearance when CheckBox is undetermined and pressed"
+msgstr "CheckBox appearance when CheckBox is undetermined and pressed"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[5].PropertyTooltip"
+msgid "CheckBox appearance when checked and hovered"
+msgstr "CheckBox appearance when checked and hovered"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[6].PropertyTooltip"
+msgid "CheckBox appearance when checked and pressed"
+msgstr "CheckBox appearance when checked and pressed"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[4].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is checked"
+msgstr "CheckBox appearance when the CheckBox is checked"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[1].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is unchecked (normal)"
+msgstr "CheckBox appearance when the CheckBox is unchecked (normal)"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[2].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is unchecked and hovered"
+msgstr "CheckBox appearance when the CheckBox is unchecked and hovered"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[7].PropertyTooltip"
+msgid "CheckBox appearance when the CheckBox is undetermined"
+msgstr "CheckBox appearance when the CheckBox is undetermined"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[7].PropertyTooltip"
+msgid "Clearance data of this buildable"
+msgstr "Clearance data of this buildable"
+
+msgctxt "ST_KUI,MovieSceneColorTrack_0.DisplayName"
+msgid "Color and Opacity"
+msgstr "Color and Opacity"
+
+msgctxt "KUI_GeneralWords,Rare_Common"
+msgid "Common"
+msgstr "Common"
+
+msgctxt "KUI_GeneralWords,Consumed"
+msgid "Consumed"
+msgstr "Consumed"
+
+msgctxt "KUI_GeneralWords,ConsumedIn"
+msgid "Consumed In"
+msgstr "Consumed In"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[22].PropertyTooltip"
+msgid "Controls how to handle spawning this actor in a situation where it's colliding with something else. \"Default\" means AlwaysSpawn here."
+msgstr "Controls how to handle spawning this actor in a situation where it's colliding with something else. Default means AlwaysSpawn here."
+
+msgctxt "KUI_GeneralWords,Copy"
+msgid "Copy"
+msgstr "Copy"
+
+msgctxt "KUI_GeneralWords,Workbench"
+msgid "Craft Bench"
+msgstr "Craft Bench"
+
+msgctxt "KUI_GeneralWords,CrushedOres"
+msgid "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+msgstr "Crushed metal that can be mined from various ore clusters. Used to create ingots or liquid metals.\r\n\r\nIt can also be cleaned with machines to extract more metal from them."
+
+msgctxt "KUI_GeneralWords,CycleTime"
+msgid "Cycle Time"
+msgstr "Cycle Time"
+
+msgctxt "KUI_GeneralWords,Time_Day"
+msgid "Day"
+msgstr "Day"
+
+msgctxt "ST_KUI,BFL_Widget.K2Node_FunctionEntry_0.MetaData.Category"
+msgid "Default"
+msgstr "Default"
+
+msgctxt "KUI_GeneralWords,Delete"
+msgid "Delete"
+msgstr "Delete"
+
+msgctxt "KUI_GeneralWords,PP_OpenUrl_T"
+msgid "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+msgstr "Do you really want to open this website? Your browser will open and open the website!\r\n\r\n{url}"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[21].PropertyTooltip"
+msgid "Dormancy setting for actor to take itself off of the replication list without being destroyed on clients."
+msgstr "Dormancy setting for actor to take itself off of the replication list without being destroyed on clients."
+
+msgctxt "KUI_GeneralWords,Edit"
+msgid "Edit"
+msgstr "Edit"
+
+msgctxt "KUI_GeneralWords,Effect"
+msgid "Effect"
+msgstr "Effect"
+
+msgctxt "KUI_GeneralWords,DefaultSearchText"
+msgid "Enter text here..."
+msgstr "Enter text here..."
+
+msgctxt "KUI_GeneralWords,Workshop"
+msgid "Equipment Workshop"
+msgstr "Equipment Workshop"
+
+msgctxt "KUI_GeneralWords,State_Error"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "ST_KUI,KUI_Plug.Node_Format_Text.Format"
+msgid "FUNCTION:\r\n{Function}"
+msgstr "FUNCTION:\r\n{Function}"
+
+msgctxt "KUI_ItemFormat,Liquid"
+msgid "Fluid"
+msgstr "Fluid"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[17].PropertyTooltip"
+msgid "Foreground Color when checked"
+msgstr "Foreground Color when checked"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[18].PropertyTooltip"
+msgid "Foreground Color when checked and pressed"
+msgstr "Foreground Color when checked and pressed"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[15].PropertyTooltip"
+msgid "Foreground Color when hovered"
+msgstr "Foreground Color when hovered"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[16].PropertyTooltip"
+msgid "Foreground Color when pressed"
+msgstr "Foreground Color when pressed"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[20].PropertyTooltip"
+msgid "Foreground Color when the check state is indeterminate"
+msgstr "Foreground Color when the check state is indeterminate"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "Gas"
+msgstr "Gas"
+
+msgctxt "KUI_ItemFormat,Gas"
+msgid "Gas"
+msgstr "Gas"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.NewVariables[0].Category"
+msgid "HeaderButton"
+msgstr "HeaderButton"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "Heat"
+msgstr "Heat"
+
+msgctxt "KUI_GeneralWords,Heat"
+msgid "Heat"
+msgstr "Heat"
+
+msgctxt "KUI_ItemFormat,Heat"
+msgid "Heat"
+msgstr "Heat"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[19].PropertyTooltip"
+msgid "How long this Actor lives before dying, 0=forever. Note this is the INITIAL value and should not be modified once play has begun."
+msgstr "How long this Actor lives before dying, 0=forever. Note this is the INITIAL value and should not be modified once play has begun."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[24].PropertyTooltip"
+msgid "How often (per second) this actor will be considered for replication, used to determine NetUpdateTime"
+msgstr "How often (per second) this actor will be considered for replication, used to determine NetUpdateTime"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[0].PropertyTooltip"
+msgid "How to draw the image"
+msgstr "How to draw the image"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[6].PropertyTooltip"
+msgid "How to draw the outline.  Currently only used for RoundedBox type brushes."
+msgstr "How to draw the outline.  Currently only used for RoundedBox type brushes."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[2].PropertyTooltip"
+msgid "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\n          comes from a hardware device such as a web camera."
+msgstr "How to mirror the image in Image mode.  This is normally only used for dynamic image brushes where the source texture\\\\\\\\n          comes from a hardware device such as a web camera."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[1].PropertyTooltip"
+msgid "How to tile the image in Image mode"
+msgstr "How to tile the image in Image mode"
+
+msgctxt "ST_KUI,KUI_ProductionInfoWidget.KUI_ProductionInfoWidget_C.mFuelText"
+msgid "INSERT FUEL"
+msgstr "INSERT FUEL"
+
+msgctxt "KUI_GeneralWords,Idle"
+msgid "Idle"
+msgstr "Idle"
+
+msgctxt "KUI_GeneralWords,State_Idle"
+msgid "Idle"
+msgstr "Idle"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[11].PropertyTooltip"
+msgid "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
+msgstr "If actor has valid Owner, call Owner's IsNetRelevantFor and GetNetPriority"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[12].PropertyTooltip"
+msgid "If true then destroy self when \"finished\", meaning all relevant components report that they are done and no timelines or timers are in flight."
+msgstr "If true then destroy self when finished, meaning all relevant components report that they are done and no timelines or timers are in flight."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[8].PropertyTooltip"
+msgid "If true, this actor is only relevant to its owner. If this flag is changed during play, all non-owner channels would need to be explicitly closed."
+msgstr "If true, this actor is only relevant to its owner. If this flag is changed during play, all non-owner channels would need to be explicitly closed."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[14].PropertyTooltip"
+msgid "If true, this actor should search for an owned camera component to view through when used as a view target."
+msgstr "If true, this actor should search for an owned camera component to view through when used as a view target."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[15].PropertyTooltip"
+msgid "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\n@see UpdateOverlapsMethodDuringLevelStreaming"
+msgstr "If true, this actor will generate overlap Begin/End events when spawned as part of level streaming, which includes initial level load.\\\\\\\\nYou might enable this is in the case where a streaming level loads around an actor and you want Begin/End overlap events to trigger.\\\\\\\\n@see UpdateOverlapsMethodDuringLevelStreaming"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[17].PropertyTooltip"
+msgid "If true, this actor will replicate to remote machines\n@see SetReplicates()"
+msgstr "If true, this actor will replicate to remote machines\\\\\\\\n@see SetReplicates()"
+
+msgctxt "KUI_GeneralWords,Image"
+msgid "Image"
+msgstr "Image"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.Sprite.SpriteInfo.DisplayName"
+msgid "Info"
+msgstr "Info"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[0]"
+msgid "Invalid"
+msgstr "Invalid"
+
+msgctxt "KUI_GeneralWords,Invalid"
+msgid "Invalid"
+msgstr "Invalid"
+
+msgctxt "KUI_GeneralWords,Time_Invalid"
+msgid "Invalid"
+msgstr "Invalid"
+
+msgctxt "KUI_GeneralWords,InvFormat"
+msgid "Invalid Information"
+msgstr "Invalid Information"
+
+msgctxt "KUI_GeneralWords,Item"
+msgid "Item"
+msgstr "Item"
+
+msgctxt "KUI_GeneralWords,ItemName"
+msgid "Item Name"
+msgstr "Item Name"
+
+msgctxt "KUI_GeneralWords,Layout"
+msgid "Layout"
+msgstr "Layout"
+
+msgctxt "KUI_GeneralWords,RSS_LayOutLoaded"
+msgid "Layout loaded"
+msgstr "Layout loaded"
+
+msgctxt "KUI_GeneralWords,LessDetails"
+msgid "Less Details"
+msgstr "Less Details"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[2]"
+msgid "Liquid"
+msgstr "Liquid"
+
+msgctxt "KUI_GeneralWords,LivePreview"
+msgid "Live Preview"
+msgstr "Live Preview"
+
+msgctxt "KUI_GeneralWords,Loading"
+msgid "Loading..."
+msgstr "Loading..."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[28].PropertyTooltip"
+msgid "Local space pivot offset for the actor, only used in the editor"
+msgstr "Local space pivot offset for the actor, only used in the editor"
+
+msgctxt "KUI_GeneralWords,State_MissingModule"
+msgid "Missing Module"
+msgstr "Missing Module"
+
+msgctxt "KUI_GeneralWords,MoreDetails"
+msgid "More Details"
+msgstr "More Details"
+
+msgctxt "KUI_GeneralWords,NO"
+msgid "NO"
+msgstr "NO"
+
+msgctxt "KUI_GeneralWords,Time_Night"
+msgid "Night"
+msgstr "Night"
+
+msgctxt "KUI_GeneralWords,No"
+msgid "No"
+msgstr "No"
+
+msgctxt "KUI_GeneralWords,Warning_NoFluid"
+msgid "No Fluid!"
+msgstr "No Fluid!"
+
+msgctxt "KUI_GeneralWords,NoInv"
+msgid "No Inventory set"
+msgstr "No Inventory set"
+
+msgctxt "KUI_GeneralWords,NoPower"
+msgid "No Power"
+msgstr "No Power"
+
+msgctxt "KUI_GeneralWords,State_NoPower"
+msgid "No Power"
+msgstr "No Power"
+
+msgctxt "KUI_GeneralWords,Warning_NoPower"
+msgid "No Power!"
+msgstr "No Power!"
+
+msgctxt "KUI_GeneralWords,NoCon"
+msgid "No connection"
+msgstr "No connection"
+
+msgctxt "KUI_GeneralWords,Rate_60"
+msgid "Normal extraction rate is: 60/min"
+msgstr "Normal extraction rate is: 60/min"
+
+msgctxt "KUI_GeneralWords,Rate_60m³"
+msgid "Normal extraction rate is: 60m³/min"
+msgstr "Normal extraction rate is: 60m³/min"
+
+msgctxt "KUI_GeneralWords,PP_OpenUrl_D"
+msgid "Open Url"
+msgstr "Open Url"
+
+msgctxt "KUI_GeneralWords,State_Overclocked"
+msgid "Overclocked"
+msgstr "Overclocked"
+
+msgctxt "ST_KUI,KUI_MainWindow.Node_Add.NewItem_Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Overclocking"
+msgstr "Overclocking"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[10].PropertyTooltip"
+msgid "Padding"
+msgstr "Padding"
+
+msgctxt "KUI_GeneralWords,Part"
+msgid "Parts"
+msgstr "Parts"
+
+msgctxt "KUI_GeneralWords,Paste"
+msgid "Paste"
+msgstr "Paste"
+
+msgctxt "KUI_GeneralWords,Paused"
+msgid "Paused"
+msgstr "Paused"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[27].PropertyTooltip"
+msgid "Pawn responsible for damage and other gameplay events caused by this actor."
+msgstr "Pawn responsible for damage and other gameplay events caused by this actor."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[26].PropertyTooltip"
+msgid "Priority for this actor when checking for replication in a low bandwidth or saturated situation, higher priority means it is more likely to replicate"
+msgstr "Priority for this actor when checking for replication in a low bandwidth or saturated situation, higher priority means it is more likely to replicate"
+
+msgctxt "KUI_GeneralWords,State_Produce"
+msgid "Produce"
+msgstr "Produce"
+
+msgctxt "KUI_GeneralWords,Produced"
+msgid "Produced"
+msgstr "Produced"
+
+msgctxt "KUI_GeneralWords,ProducedIn"
+msgid "Produced In"
+msgstr "Produced In"
+
+msgctxt "ST_KUI,KUI_MainWindow.KUI_MainWindow_C.Tabs[0].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Production"
+msgstr "Production"
+
+msgctxt "KUI_GeneralWords,Rare_Rare"
+msgid "Rare"
+msgstr "Rare"
+
+msgctxt "KUI_GeneralWords,RecipeFormat"
+msgid "Recipe: {Name}"
+msgstr "Recipe: {Name}"
+
+msgctxt "KUI_GeneralWords,Refresh"
+msgid "Refresh"
+msgstr "Refresh"
+
+msgctxt "KUI_GeneralWords,RelevantItems"
+msgid "Relevant Items:"
+msgstr "Relevant Items:"
+
+msgctxt "KUI_GeneralWords,Remove"
+msgid "Remove"
+msgstr "Remove"
+
+msgctxt "ST_KUI,MovieSceneFloatTrack_0.DisplayName"
+msgid "Render Opacity"
+msgstr "Render Opacity"
+
+msgctxt "KUI_GeneralWords,Reset"
+msgid "Reset"
+msgstr "Reset"
+
+msgctxt "KUI_GeneralWords,RSS_DefaultTextElementText"
+msgid "Rss Sign Text"
+msgstr "Rss Sign Text"
+
+msgctxt "KUI_GeneralWords,Running"
+msgid "Running"
+msgstr "Running"
+
+msgctxt "KUI_GeneralWords,Save"
+msgid "Save"
+msgstr "Save"
+
+msgctxt "KUI_GeneralWords,SaveAndExit"
+msgid "Save & Exit"
+msgstr "Save & Exit"
+
+msgctxt "KUI_GeneralWords,SaveAsPreset"
+msgid "Save as preset"
+msgstr "Save as preset"
+
+msgctxt "KUI_GeneralWords,Saved"
+msgid "Saved"
+msgstr "Saved"
+
+msgctxt "KUI_GeneralWords,Select"
+msgid "Select"
+msgstr "Select"
+
+msgctxt "KUI_GeneralWords,SelectItem"
+msgid "Select Item"
+msgstr "Select Item"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[3].PropertyTooltip"
+msgid "Size of the resource in Slate Units"
+msgstr "Size of the resource in Slate Units"
+
+msgctxt "KUI_GeneralWords,SlotNotUsed"
+msgid "Slot not in use"
+msgstr "Slot not in use"
+
+msgctxt "ST_KUI,BPL_LocHelper.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Solid"
+msgstr "Solid"
+
+msgctxt "KUI_ItemFormat,Solid"
+msgid "Solid"
+msgstr "Solid"
+
+msgctxt "LOCTEXT_CPP_STRING_TABLE,Key"
+msgid "SourceString"
+msgstr "SourceString"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[23].PropertyTooltip"
+msgid "Square of the max distance from the client's viewpoint that this actor is relevant and will be replicated."
+msgstr "Square of the max distance from the client's viewpoint that this actor is relevant and will be replicated."
+
+msgctxt "KUI_GeneralWords,Stable"
+msgid "Stable"
+msgstr "Stable"
+
+msgctxt "KUI_GeneralWords,Stack"
+msgid "Stack"
+msgstr "Stack"
+
+msgctxt "KUI_GeneralWords,State_Standby"
+msgid "Standby"
+msgstr "Standby"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_1"
+msgid "Target consumption rate:"
+msgstr "Target consumption rate:"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_0"
+msgid "Target production rate:"
+msgstr "Target production rate:"
+
+msgctxt "KUI_GeneralWords,Template"
+msgid "Template"
+msgstr "Template"
+
+msgctxt "KUI_GeneralWords,Text"
+msgid "Text"
+msgstr "Text"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[31].PropertyTooltip"
+msgid "The GUID for this actor's content bundle."
+msgstr "The GUID for this actor's content bundle."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[29].PropertyTooltip"
+msgid "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+msgstr "The GUID for this actor; this guid will be the same for actors from instanced streaming levels.\\\\\\\\n@see         ActorInstanceGuid, FActorInstanceGuidMapper\\\\\\\\n@note        Don't use VisibleAnywhere here to avoid getting the CPF_Edit flag and get this property reset when resetting to defaults.\\\\\\\\n                     See FActorDetails::AddActorCategory and EditorUtilities::CopySingleProperty for details."
+
+msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[1].PropertyTooltip"
+msgid "The amount of this item."
+msgstr "The amount of this item."
+
+msgctxt "ST_KUI,KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[0].PropertyTooltip"
+msgid "The current specified color; only meaningful when ColorToUse == UseColor_Specified."
+msgstr "The current specified color; only meaningful when ColorToUse == UseColor_Specified."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[1].PropertyTooltip"
+msgid "The human readable description of this object."
+msgstr "The human readable description of this object."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[0].PropertyTooltip"
+msgid "The human readable display name of this object."
+msgstr "The human readable display name of this object."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[7].PropertyTooltip"
+msgid "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\nthe AtlasedTextureInterface."
+msgstr "The image to render for this brush, can be a UTexture or UMaterialInterface or an object implementing\\\\\\\\nthe AtlasedTextureInterface."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[30].PropertyTooltip"
+msgid "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\n@see         ActorGuid\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+msgstr "The instance GUID for this actor; this guid will be unique for actors from instanced streaming levels.\\\\\\\\n@see         ActorGuid\\\\\\\\n@note        This is not guaranteed to be valid during PostLoad in all situations, but safe to access from RegisterAllComponents."
+
+msgctxt "ST_KUI,BPW_KUI_ItemCostSlotWidget_2.K2Node_BreakStruct_0.ShowPinForProperties[0].PropertyTooltip"
+msgid "The item."
+msgstr "The item."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[4].PropertyTooltip"
+msgid "The margin to use in Box and Border modes"
+msgstr "The margin to use in Box and Border modes"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[14].PropertyTooltip"
+msgid "The normal unchecked foreground color"
+msgstr "The normal unchecked foreground color"
+
+msgctxt "ST_KUI,KUI_GlowingButton.K2Node_MakeStruct_2.ShowPinForProperties[1].PropertyTooltip"
+msgid "The rule for which color to pick."
+msgstr "The rule for which color to pick."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[32].PropertyTooltip"
+msgid "The scale to apply to any billboard components in editor builds (happens in any WITH_EDITOR build, including non-cooked games)."
+msgstr "The scale to apply to any billboard components in editor builds (happens in any WITH_EDITOR build, including non-cooked games)."
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[22].PropertyTooltip"
+msgid "The sound the check box should play when checked"
+msgstr "The sound the check box should play when checked"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[24].PropertyTooltip"
+msgid "The sound the check box should play when initially hovered over"
+msgstr "The sound the check box should play when initially hovered over"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[23].PropertyTooltip"
+msgid "The sound the check box should play when unchecked"
+msgstr "The sound the check box should play when unchecked"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_0.ShowPinForProperties[0].PropertyTooltip"
+msgid "The visual type of the checkbox"
+msgstr "The visual type of the checkbox"
+
+msgctxt "ST_KUI,KUI_FlipButton.K2Node_SetFieldsInStruct_3.ShowPinForProperties[5].PropertyTooltip"
+msgid "Tinting applied to the image."
+msgstr "Tinting applied to the image."
+
+msgctxt "KUI_GeneralWords,Type"
+msgid "Type"
+msgstr "Type"
+
+msgctxt "KUI_GeneralWords,Unknown"
+msgid "Unknown"
+msgstr "Unknown"
+
+msgctxt "KUI_GeneralWords,UnStable"
+msgid "Unstable"
+msgstr "Unstable"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[25].PropertyTooltip"
+msgid "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
+msgstr "Used to determine what rate to throttle down to when replicated properties are changing infrequently"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[4].PropertyTooltip"
+msgid "Used to sync and start build effect on buildings when created, but not after creation.\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+msgstr "Used to sync and start build effect on buildings when created, but not after creation.\\\\\\\\nThis is sett to null in default. If it's non null, we expect the build effects need to play."
+
+msgctxt "ST_KUI,BPW_KUI_ItemDisplay.BPW_KUI_ItemDisplay_C.PaletteCategory"
+msgid "User Created"
+msgstr "User Created"
+
+msgctxt "KUI_GeneralWords,Rare_VeryCommon"
+msgid "Very Common"
+msgstr "Very Common"
+
+msgctxt "KUI_GeneralWords,Rare_VeryRare"
+msgid "Very Rare"
+msgstr "Very Rare"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[18].PropertyTooltip"
+msgid "When true the replication system will only replicate the registered subobjects and the replicated actor components list\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+msgstr "When true the replication system will only replicate the registered subobjects and the replicated actor components list\\\\\\\\nWhen false the replication system will instead call the virtual ReplicateSubobjects() function where the subobjects and actor components need to be manually replicated."
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[13].PropertyTooltip"
+msgid "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\n@see https://www.unrealengine.com/blog/damage-in-ue4\n@see TakeDamage(), ReceiveDamage()"
+msgstr "Whether this actor can take damage. Must be true for damage events (e.g. ReceiveDamage()) to be called.\\\\\\\\n@see https://www.unrealengine.com/blog/damage-in-ue4\\\\\\\\n@see TakeDamage(), ReceiveDamage()"
+
+msgctxt "ST_KUI,Subsystem_WidgetModifier.K2Node_GetClassDefaults_1.ShowPinForProperties[16].PropertyTooltip"
+msgid "Whether this actor should be considered or not during HLOD generation."
+msgstr "Whether this actor should be considered or not during HLOD generation."
+
+msgctxt "KUI_GeneralWords,NotInit"
+msgid "Widget not Init!"
+msgstr "Widget not Init!"
+
+msgctxt "KUI_GeneralWords,YES"
+msgid "YES"
+msgstr "YES"
+
+msgctxt "KUI_GeneralWords,Yes"
+msgid "Yes"
+msgstr "Yes"
+
+msgctxt "KUI_GeneralWords,Deleted"
+msgid "deleted"
+msgstr "deleted"
+
+msgctxt "KUI_GeneralWords,loaded"
+msgid "loaded"
+msgstr "loaded"
+
+msgctxt "KUI_GeneralWords,m³"
+msgid "m³"
+msgstr "m³"
+
+msgctxt "KUI_GeneralWords,m3/min"
+msgid "m³ / min"
+msgstr "m³ / min"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI_Production.Node_Select.Option_0"
+msgid "m³ per minute"
+msgstr "m³ per minute"
+
+msgctxt "KUI_GeneralWords,no"
+msgid "no"
+msgstr "no"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Select.Option_1_01"
+msgid "part per minute"
+msgstr "part per minute"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI_Production.Node_Select.Option_1"
+msgid "parts per minute"
+msgstr "parts per minute"
+
+msgctxt "KUI_GeneralWords,PartPMin"
+msgid "per minute"
+msgstr "per minute"
+
+msgctxt "KUI_GeneralWords,yes"
+msgid "yes"
+msgstr "yes"
+
+msgctxt "KUI_GeneralWords,FromTo"
+msgid "{From} to {To}"
+msgstr "{From} to {To}"
+
+msgctxt "KUI_GeneralWords,FromToCelc"
+msgid "{From} to {To}°C"
+msgstr "{From} to {To}°C"
+
+msgctxt "KUI_GeneralWords,ToPercent"
+msgid "{From}% to {To}%"
+msgstr "{From}% to {To}%"
+
+msgctxt "KUI_GeneralWords,TimeInSec"
+msgid "{Time} Sec"
+msgstr "{Time} Sec"
+
+msgctxt "KUI_GeneralWords,Percent"
+msgid "{Value} %"
+msgstr "{Value} %"
+
+msgctxt "KUI_GeneralWords,PerMin"
+msgid "{Value} / Min"
+msgstr "{Value} / Min"
+
+msgctxt "KUI_GeneralWords,MW"
+msgid "{Value} MW"
+msgstr "{Value} MW"
+
+msgctxt "KUI_GeneralWords,Format_m³"
+msgid "{Value} m³"
+msgstr "{Value} m³"
+
+msgctxt "KUI_GeneralWords,m3PerMin"
+msgid "{Value} m³ / Min"
+msgstr "{Value} m³ / Min"
+
+msgctxt "KUI_GeneralWords,Celcius"
+msgid "{Value} °C"
+msgstr "{Value} °C"
+
+msgctxt "KUI_GeneralWords,CountMulti"
+msgid "{count}x"
+msgstr "{count}x"
+
+msgctxt "ST_KUI,KUI_CustomOverclockingUI.Node_Format_Text.Format"
+msgid "{value}%"
+msgstr "{value}%"

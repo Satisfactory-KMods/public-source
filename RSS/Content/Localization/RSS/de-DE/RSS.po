@@ -1,0 +1,12 @@
+msgid ""
+msgstr ""
+"Language: de-DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_RSS,Build_RSS_1x1_Ceiling_C.mDisplayName"
+msgid "Ceiling Sign 1x1"
+msgstr "Decken Schild 1x1"
