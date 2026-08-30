@@ -1,0 +1,16 @@
+msgid ""
+msgstr ""
+"Language: de-DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 2; plural = (n !== 1)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt ",B0F3123246619679F2E11CAFE4E95EB6"
+msgid "100"
+msgstr "100"
+
+msgctxt "ST_KBFL,Widget_CheatBuilding.KBFL_MainWindow.Tabs[1].Text_5_FD671CE446AF05CA543E228C049AB0F9"
+msgid "Fluids"
+msgstr "Flüssigkeiten"

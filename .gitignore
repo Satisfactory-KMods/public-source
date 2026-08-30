@@ -1,0 +1,66 @@
+Binaries/
+Build/
+Intermediate/
+Saved/
+.vs/
+*.pdb
+*.dll
+*.exe
+*.env
+ConfigCleanerTest.ts
+node_modules/
+dist/
+.env
+exports/
+
+# KMod_Devs directory - development files that shouldn't be committed
+KMod_Devs/
+
+# Unreal Engine build artifacts
+Binaries/
+Build/
+Intermediate/
+Saved/
+DerivedDataCache/
+.vs/
+
+
+# Visual Studio files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.opensdf
+*.opendb
+*.sdf
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+*.pdb
+
+# Large binary files
+*.pak
+*.upk
+*.dll
+*.exe
+*.so
+*.dylib
+*.lib
+*.a
+
+# # Wwise plugin binaries (large library files)
+# Plugins/Wwise/ThirdParty/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea

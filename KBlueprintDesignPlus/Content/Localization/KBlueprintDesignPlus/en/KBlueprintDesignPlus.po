@@ -1,0 +1,81 @@
+﻿# KBlueprintDesignPlus English translation.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: KBlueprintDesignPlus\n"
+"POT-Creation-Date: 2026-07-24 14:12\n"
+"PO-Revision-Date: 2026-07-24 14:12\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-SourceKey: msgstr\n"
+
+#. Key:	FD13BF1C4850AD679B96B08FC00E0A79
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk2.Default__BP_BlueprintDesignerMk2_C.mDescription
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk2.Default__BP_BlueprintDesignerMk2_C.mDescription
+msgid ",FD13BF1C4850AD679B96B08FC00E0A79"
+msgstr "The Blueprint Designer is used to create custom factory designs and save them as Blueprints.\r\nBlueprints can be accessed from the Build Menu - Blueprint tab.\r\n\r\nNote that buildings can only be placed within the Blueprint Designer if they are fully within the boundry frame.\r\n\r\nDesigner Dimensions: 48m x 48m x 48m"
+
+#. Key:	4D2708704A24ECBD4B6CBEA87704C98D
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk2.Default__BP_BlueprintDesignerMk2_C.mDisplayName
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk2.Default__BP_BlueprintDesignerMk2_C.mDisplayName
+msgid ",4D2708704A24ECBD4B6CBEA87704C98D"
+msgstr "Blueprint Designer Mk.2"
+
+#. Key:	CEC036DC4ABEE2924E51B180501B88DB
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk3.Default__BP_BlueprintDesignerMk3_C.mDescription
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk3.Default__BP_BlueprintDesignerMk3_C.mDescription
+msgid ",CEC036DC4ABEE2924E51B180501B88DB"
+msgstr "The Blueprint Designer is used to create custom factory designs and save them as Blueprints.\r\nBlueprints can be accessed from the Build Menu - Blueprint tab.\r\n\r\nNote that buildings can only be placed within the Blueprint Designer if they are fully within the boundry frame.\r\n\r\nDesigner Dimensions: 64m x 64m x 64m"
+
+#. Key:	5C69E3E1408A29A5B451169BF28EE653
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk3.Default__BP_BlueprintDesignerMk3_C.mDisplayName
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk3.Default__BP_BlueprintDesignerMk3_C.mDisplayName
+msgid ",5C69E3E1408A29A5B451169BF28EE653"
+msgstr "Blueprint Designer Mk.3"
+
+#. Key:	1BD7757F435365CA0BFF2A939010C4DE
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk4.Default__BP_BlueprintDesignerMk4_C.mDescription
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk4.Default__BP_BlueprintDesignerMk4_C.mDescription
+msgid ",1BD7757F435365CA0BFF2A939010C4DE"
+msgstr "The Blueprint Designer is used to create custom factory designs and save them as Blueprints.\r\nBlueprints can be accessed from the Build Menu - Blueprint tab.\r\n\r\nNote that buildings can only be placed within the Blueprint Designer if they are fully within the boundry frame.\r\n\r\nDesigner Dimensions: 80m x 80m x 64m"
+
+#. Key:	80155B194A373781B5B9F89B102C5FEC
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk4.Default__BP_BlueprintDesignerMk4_C.mDisplayName
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk4.Default__BP_BlueprintDesignerMk4_C.mDisplayName
+msgid ",80155B194A373781B5B9F89B102C5FEC"
+msgstr "Blueprint Designer Mk.4.1"
+
+#. Key:	999D8670495607A168754D9704361064
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk5.Default__BP_BlueprintDesignerMk5_C.mDescription
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk5.Default__BP_BlueprintDesignerMk5_C.mDescription
+msgid ",999D8670495607A168754D9704361064"
+msgstr "The Blueprint Designer is used to create custom factory designs and save them as Blueprints.\r\nBlueprints can be accessed from the Build Menu - Blueprint tab.\r\n\r\nNote that buildings can only be placed within the Blueprint Designer if they are fully within the boundry frame.\r\n\r\nDesigner Dimensions: 96m x 96m x 48m"
+
+#. Key:	74A01CC9416648B6EEA85DBCE197E455
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk5.Default__BP_BlueprintDesignerMk5_C.mDisplayName
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk5.Default__BP_BlueprintDesignerMk5_C.mDisplayName
+msgid ",74A01CC9416648B6EEA85DBCE197E455"
+msgstr "Blueprint Designer Mk.4.2"
+
+#. Key:	CBB60A35404D9E23CE8AC9B530CA33CE
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk6.Default__BP_BlueprintDesignerMk6_C.mDescription
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk6.Default__BP_BlueprintDesignerMk6_C.mDescription
+msgid ",CBB60A35404D9E23CE8AC9B530CA33CE"
+msgstr "!!! PLEASE ONLY USE IF YOU RLY NEED TO !!!\r\n!!! USE ON OWN REISK !!!\r\n!!! DO NOT REPORT ANY ISSUES WITH THIS DESIGNER !!!!\r\n\r\nThe Blueprint Designer is used to create custom factory designs and save them as Blueprints.\r\nBlueprints can be accessed from the Build Menu - Blueprint tab.\r\n\r\nNote that buildings can only be placed within the Blueprint Designer if they are fully within the boundry frame.\r\n\r\nDesigner Dimensions: 176m x 176m x 96m"
+
+#. Key:	43D4E2D242E2CD607C1E1ABA9CD2C35D
+#. SourceLocation:	/KBlueprintDesignPlus/BP_BlueprintDesignerMk6.Default__BP_BlueprintDesignerMk6_C.mDisplayName
+#: /KBlueprintDesignPlus/BP_BlueprintDesignerMk6.Default__BP_BlueprintDesignerMk6_C.mDisplayName
+msgid ",43D4E2D242E2CD607C1E1ABA9CD2C35D"
+msgstr "Blueprint Designer Mk.5"
+
+#. Key:	0364F38D4E71A6A4D49BD784FD3098CD
+#. SourceLocation:	/KBlueprintDesignPlus/Schematic_6.Default__Schematic_6_C.mDisplayName
+#: /KBlueprintDesignPlus/Schematic_6.Default__Schematic_6_C.mDisplayName
+msgid ",0364F38D4E71A6A4D49BD784FD3098CD"
+msgstr "More FICSIT Blueprints"
+

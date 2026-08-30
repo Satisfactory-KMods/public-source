@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Language: ru-RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals = 3; plural = (n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2)\n"
+"X-Generator: Tolgee\n"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "05x05"
+msgstr "05х05"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[0].mTemplateData.mTemplateName"
+msgid "1 Textline Chavron"
+msgstr "1 Текстовая строка Chavron"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[15]"
+msgid "16x8"
+msgstr "16х8"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[2]"
+msgid "1x1"
+msgstr "1х1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[3]"
+msgid "1x2"
+msgstr "1х2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[4]"
+msgid "1x7"
+msgstr "1х7"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[1].mTemplateData.mTemplateName"
+msgid "2 Textline Chavron"
+msgstr "2 Текстовая строка Chavron"
+
+msgctxt "ST_RSS,BP_Subsystem_AddonHandler_C.mLayouts_Value[0].Map_48_F343857D489A1BB2D20590BC06C89A53[2].mTemplateData.mTemplateName"
+msgid "2 Textline Main Sub Chavron"
+msgstr "Главная текстовая строка Sub Chavron"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[16]"
+msgid "25x2"
+msgstr "25х2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[5]"
+msgid "2x05"
+msgstr "2х05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[6]"
+msgid "2x1"
+msgstr "2х1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[7]"
+msgid "2x2"
+msgstr "2х2"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[8]"
+msgid "2x3"
+msgstr "2х3"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[9]"
+msgid "3x05"
+msgstr "3х05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[10]"
+msgid "3x1"
+msgstr "3х1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[11]"
+msgid "4x05"
+msgstr "4х05"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[12]"
+msgid "4x1"
+msgstr "4х1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[13]"
+msgid "7x1"
+msgstr "7х1"
+
+msgctxt "ST_RSS,Widget_Rss2.K2Node_Select_0.EnumEntryFriendlyNames[14]"
+msgid "8x4"
+msgstr "8х4"
+
+msgctxt "RSS_Table,SignPole"
+msgid "A Simple Pole to attach RSS Signs on it."
+msgstr "Простая опора для крепления RSS-знаков"
+
+msgctxt "ST_RSS,BP_Subsystem_RssAddon_C.mFonts[3].mDesc_83_244F2C9D41F6B45DB17379864CBF35CF"
+msgid "A compact font"
+msgstr "Компактный шрифт"
+
+msgctxt "RSS_Table,Vehicel"
+msgid "A vehicle with mounted RSS signs!\r\n\r\nNeed Sign Gun for interaction and change the sign!"
+msgstr "Транспортное средство с установленными на нем знаками RSS!\r\n\\r\\п Для взаимодействия нужен сигнальный пистолет и смените знак!"
+
+msgctxt "ST_RSS,TextBlock_71.Text"
+msgid "Add Element"
+msgstr "Добавить элемент"
+
+msgctxt "ST_RSS,TextBlock.Text"
+msgid "Alpha Value (Opacity)"
+msgstr "Альфа-значение (Непрозрачность)"
+
+msgctxt "ST_RSS,Dummy_C.mDisplayName"
+msgid "And more..."
+msgstr "И многое другое..."
+
+msgctxt ",793BA8504F522C39DFCCCDAB963618D5"
+msgid "Background"
+msgstr "Фон"
+
+msgctxt "ST_RSS,BP_WC_SignWidget_Text.K2Node_Select_0.EnumEntryFriendlyNames[1]"
+msgid "Background"
+msgstr "Фон"
+
+msgctxt "ST_RSS,Sink_RSS_Bill_C.mDisplayName"
+msgid "Billboard Set"
+msgstr "Набор рекламных щитов"

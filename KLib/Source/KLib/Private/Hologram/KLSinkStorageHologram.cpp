@@ -1,0 +1,101 @@
+﻿
+
+#include "Hologram/KLSinkStorageHologram.h"
+
+#include "Buildable/Storage/KLSinkStorage.h"
+#include "Buildables/FGBuildableStorage.h"
+
+void AKLSinkStorageHologram::GetSupportedBuildModes_Implementation(
+	TArray<TSubclassOf<UFGBuildGunModeDescriptor>>& out_buildmodes) const
+{
+	Super::GetSupportedBuildModes_Implementation(out_buildmodes);
+	if (mUpgradeBuildMode)
+	{
+		out_buildmodes.AddUnique(mUpgradeBuildMode);
+	}
+}
+
+void AKLSinkStorageHologram::OnBuildModeChanged(TSubclassOf<UFGHologramBuildModeDescriptor> buildMode)
+{
+	Super::OnBuildModeChanged(buildMode);
+
+	if (!IsCurrentBuildMode(mUpgradeBuildMode))
+	{
+		mUpgradeActor = nullptr;
+	}
+}
+
+AActor* AKLSinkStorageHologram::GetUpgradedActor() const { return mUpgradeActor; }
+
+bool AKLSinkStorageHologram::TryUpgrade(const FHitResult& hitResult)
+{
+	if (!IsCurrentBuildMode(mUpgradeBuildMode))
+	{
+		mUpgradeActor = nullptr;
+		return Super::TryUpgrade(hitResult);
+	}
+
+	if (hitResult.GetActor() != mUpgradeActor)
+	{
+		mUpgradeActor = nullptr;
+	}
+
+	if (AFGBuildableStorage* AsStorage = Cast<AFGBuildableStorage>(hitResult.GetActor()))
+	{
+		AFGBuildableStorage* Default = GetDefaultBuildable<AFGBuildableStorage>();
+
+		if (AsStorage->GetClass() != mBuildClass && Default->mInventorySizeX == AsStorage->mInventorySizeX &&
+			Default->mInventorySizeY == AsStorage->mInventorySizeY)
+		{
+			mUpgradeActor = hitResult.GetActor();
+			SetActorLocationAndRotation(hitResult.GetActor()->GetActorLocation(),
+										hitResult.GetActor()->GetActorRotation());
+			return mUpgradeActor != nullptr;
+		}
+	}
+	return Super::TryUpgrade(hitResult);
+}
+
+void AKLSinkStorageHologram::ConfigureActor(AFGBuildable* inBuildable) const
+{
+	Super::ConfigureActor(inBuildable);
+
+	if (GetUpgradedActor() && HasAuthority())
+	{
+		AFGBuildableStorage* AsStorage = Cast<AFGBuildableStorage>(GetUpgradedActor());
+		AFGBuildableStorage* NewAsStorage = Cast<AFGBuildableStorage>(inBuildable);
+
+		if (IsValid(AsStorage) && IsValid(NewAsStorage))
+		{
+			if (UFGInventoryComponent* SourceInventory = AsStorage->GetStorageInventory())
+			{
+				if (UFGInventoryComponent* TargetInventory = NewAsStorage->GetStorageInventory())
+				{
+
+					const AFGBuildableStorage* TargetDefault = GetDefaultBuildable<AFGBuildableStorage>();
+					const int32 TargetSize =
+						IsValid(TargetDefault) ? TargetDefault->mInventorySizeX * TargetDefault->mInventorySizeY : 0;
+
+					if (TargetSize > 0 && TargetInventory->GetSizeLinear() != TargetSize)
+					{
+						TargetInventory->Resize(TargetSize);
+					}
+
+					TargetInventory->Empty();
+
+					const int32 CopyCount = FMath::Min(SourceInventory->GetSizeLinear(), TargetSize);
+					for (int32 SlotIndex = 0; SlotIndex < CopyCount; ++SlotIndex)
+					{
+						FInventoryStack Stack;
+						if (SourceInventory->GetStackFromIndex(SlotIndex, Stack) && Stack.HasItems())
+						{
+							TargetInventory->AddStackToIndex(SlotIndex, Stack, false);
+						}
+					}
+
+					SourceInventory->Empty();
+				}
+			}
+		}
+	}
+}
