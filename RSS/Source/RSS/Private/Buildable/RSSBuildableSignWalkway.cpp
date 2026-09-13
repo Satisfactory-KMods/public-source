@@ -1,4 +1,6 @@
-﻿#include "Buildable/RSSBuildableSignWalkway.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Buildable/RSSBuildableSignWalkway.h"
 #include "Buildable/RSSSignRCO.h"
 #include "Cache/RssImageCache.h"
 #include "Net/UnrealNetwork.h"

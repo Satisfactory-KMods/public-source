@@ -1,4 +1,6 @@
-﻿#include "DataAssets/KAPTooltipWidgetInjector.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "DataAssets/KAPTooltipWidgetInjector.h"
 
 #include "Components/HorizontalBoxSlot.h"
 #include "Components/VerticalBoxSlot.h"

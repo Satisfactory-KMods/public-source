@@ -1,0 +1,5 @@
+BasedOnStyle: InheritParentConfig
+# UHT requires each .generated.h to be the final include.
+SortIncludes: Never
+# Keep localization macro source strings visible to UE's source gatherer.
+BreakStringLiterals: false

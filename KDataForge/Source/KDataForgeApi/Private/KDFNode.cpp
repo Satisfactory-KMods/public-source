@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "KDFNode.h"
 
 const FKDFNode* FKDFNode::Find(const FString& Key) const

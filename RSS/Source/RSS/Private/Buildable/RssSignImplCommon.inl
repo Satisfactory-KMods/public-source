@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "TimerManager.h"
 
 RSS_SIGN_IMPL_CLASS::RSS_SIGN_IMPL_CLASS()

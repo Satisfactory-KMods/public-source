@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Buildable/KPCLProducerBase.h"
 
 #include "AbstractInstanceManager.h"

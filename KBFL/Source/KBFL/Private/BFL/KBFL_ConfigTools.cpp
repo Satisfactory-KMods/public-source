@@ -1,4 +1,6 @@
-﻿#include "BFL/KBFL_ConfigTools.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "BFL/KBFL_ConfigTools.h"
 
 #include "Configuration/Properties/ConfigPropertyClass.h"
 

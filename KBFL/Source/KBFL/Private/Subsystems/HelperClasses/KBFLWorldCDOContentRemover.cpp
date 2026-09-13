@@ -1,4 +1,6 @@
-﻿#include "Subsystems/HelperClasses/KBFLWorldCDOContentRemover.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Subsystems/HelperClasses/KBFLWorldCDOContentRemover.h"
 
 #include "FGCustomizationRecipe.h"
 #include "Kismet/GameplayStatics.h"

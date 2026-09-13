@@ -1,4 +1,6 @@
-﻿
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+
 
 #include "Subsystems/HelperClasses/KBFLCDOCallRequirement.h"
 #include "Engine/World.h"

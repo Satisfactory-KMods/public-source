@@ -1,4 +1,6 @@
-﻿#include "Buildable/KlBuildableCleaner.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Buildable/KlBuildableCleaner.h"
 
 #include <Net/UnrealNetwork.h>
 

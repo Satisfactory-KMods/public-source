@@ -1,4 +1,6 @@
-﻿#include "Components/KLCustomIndicator.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Components/KLCustomIndicator.h"
 
 #include "FGBuildableSubsystem.h"
 #include "FGColorInterface.h"

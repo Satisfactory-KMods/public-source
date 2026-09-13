@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Subsystems/KBFLAssetDataSubsystem.h"
 
 #include "Engine/AssetManager.h"

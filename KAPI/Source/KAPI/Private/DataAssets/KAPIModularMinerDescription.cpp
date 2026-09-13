@@ -1,4 +1,6 @@
-﻿#include "DataAssets/KAPIModularMinerDescription.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "DataAssets/KAPIModularMinerDescription.h"
 
 FKAPIModuleItems UKAPIModularMinerDescription::GetItemsForModule(TSubclassOf<UKAPIWasteProducerType> Module) const
 {

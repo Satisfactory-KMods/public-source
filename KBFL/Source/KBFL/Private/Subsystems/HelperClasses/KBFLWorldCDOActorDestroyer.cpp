@@ -1,4 +1,6 @@
-﻿#include "Subsystems/HelperClasses/KBFLWorldCDOActorDestroyer.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Subsystems/HelperClasses/KBFLWorldCDOActorDestroyer.h"
 
 #include "Engine/World.h"
 #include "FGDismantleInterface.h"

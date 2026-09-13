@@ -1,0 +1,888 @@
+﻿# SBS English translation.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SBS\n"
+"POT-Creation-Date: 2026-09-13 12:54\n"
+"PO-Revision-Date: 2026-09-13 12:54\n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Key:	7A9773D94FD6F43972DCB8B1501535D8
+#. SourceLocation:	/SBS/Subsystem/BP_SBSKeybindHandler.Default__BP_SBSKeybindHandler_C.mTab.Text_5_FD671CE446AF05CA543E228C049AB0F9
+#: /SBS/Subsystem/BP_SBSKeybindHandler.Default__BP_SBSKeybindHandler_C.mTab.Text_5_FD671CE446AF05CA543E228C049AB0F9
+msgctxt ",7A9773D94FD6F43972DCB8B1501535D8"
+msgid "SBS"
+msgstr "SBS"
+
+#. Key:	40D22BA04DED7C686A910BB64C539EDE
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+msgctxt ",40D22BA04DED7C686A910BB64C539EDE"
+msgid "Vanilla"
+msgstr "Vanilla"
+
+#. Key:	5F43DD9D4E8FBC773DFEB6807E5B99D4
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+msgctxt ",5F43DD9D4E8FBC773DFEB6807E5B99D4"
+msgid "Modded + Vanilla"
+msgstr "Modded + Vanilla"
+
+#. Key:	95D1CE0A490D323425AE5FB6450E69A1
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:ExecuteUbergraph_Widget_SBS_BP_Brower [Script Bytecode]
+msgctxt ",95D1CE0A490D323425AE5FB6450E69A1"
+msgid "Api call failed!"
+msgstr "Api call failed!"
+
+#. Key:	58DFB66D48E50F6A7E5992B903175F44
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mModdedFilter.mText
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mModdedFilter.mText
+msgctxt ",58DFB66D48E50F6A7E5992B903175F44"
+msgid "Modded + Vanilla"
+msgstr "Modded + Vanilla"
+
+#. Key:	C78D06F4493A9842D80B36870090D9D9
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mNextPage.mText
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mNextPage.mText
+msgctxt ",C78D06F4493A9842D80B36870090D9D9"
+msgid "Next"
+msgstr "Next"
+
+#. Key:	5D09685D43656DB3626D62B5FAD0D3EA
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mPrevPage.mText
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.mPrevPage.mText
+msgctxt ",5D09685D43656DB3626D62B5FAD0D3EA"
+msgid "Back"
+msgstr "Back"
+
+#. Key:	FA16E92C4F504498FF82FDB77D0B3669
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.Widget_StandardButton_1.mText
+#: /SBS/Widget/BP/Widget_SBS_BP_Brower.Widget_SBS_BP_Brower_C:WidgetTree.Widget_StandardButton_1.mText
+msgctxt ",FA16E92C4F504498FF82FDB77D0B3669"
+msgid "Search"
+msgstr "Search"
+
+#. Key:	09209B6A43D441AB6A42C199AE15A76B
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:ExecuteUbergraph_Widget_SBS_BP_Element [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:ExecuteUbergraph_Widget_SBS_BP_Element [Script Bytecode]
+msgctxt ",09209B6A43D441AB6A42C199AE15A76B"
+msgid "Blueprint is now in download queue"
+msgstr "Blueprint is now in download queue"
+
+#. Key:	7F9C3C1A4239C4B9A29415A08CD1735F
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:ExecuteUbergraph_Widget_SBS_BP_Element [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:ExecuteUbergraph_Widget_SBS_BP_Element [Script Bytecode]
+msgctxt ",7F9C3C1A4239C4B9A29415A08CD1735F"
+msgid "Blueprint is already in download queue"
+msgstr "Blueprint is already in download queue"
+
+#. Key:	AE252618490189DD26831F83758F07EB
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:WidgetTree.mtxt.Text
+#: /SBS/Widget/BP/Widget_SBS_BP_Element.Widget_SBS_BP_Element_C:WidgetTree.mtxt.Text
+msgctxt ",AE252618490189DD26831F83758F07EB"
+msgid "asdasd asd asd asdas dasdasd "
+msgstr "asdasd asd asd asdas dasdasd "
+
+#. Key:	88EE35F84F946604A97DFCB3C603DEBF
+#. SourceLocation:	/SBS/Widget/BP/Widget_SBS_BPDetails.Widget_SBS_BPDetails_C:ExecuteUbergraph_Widget_SBS_BPDetails [Script Bytecode]
+#: /SBS/Widget/BP/Widget_SBS_BPDetails.Widget_SBS_BPDetails_C:ExecuteUbergraph_Widget_SBS_BPDetails [Script Bytecode]
+msgctxt ",88EE35F84F946604A97DFCB3C603DEBF"
+msgid "Owner: {owner}\r\nFilename: {file}\r\nDesigner size: {size}\r\nDownload count: {download}\r\nRating: {rate} / 5 ({votes} votes)\r\n\r\nMods: {mods}\r\n\r\nCreated: {c}\r\nUpdated: {u}\r\n\r\nMissing Mods: {missing}"
+msgstr "Owner: {owner}\r\nFilename: {file}\r\nDesigner size: {size}\r\nDownload count: {download}\r\nRating: {rate} / 5 ({votes} votes)\r\n\r\nMods: {mods}\r\n\r\nCreated: {c}\r\nUpdated: {u}\r\n\r\nMissing Mods: {missing}"
+
+#. Key:	4225D4E949D0D63318760EA2DEDA8145
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+msgctxt ",4225D4E949D0D63318760EA2DEDA8145"
+msgid "Modded + Vanilla"
+msgstr "Modded + Vanilla"
+
+#. Key:	58E82A25420393EB2A0663B56ABED56D
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+msgctxt ",58E82A25420393EB2A0663B56ABED56D"
+msgid "Vanilla"
+msgstr "Vanilla"
+
+#. Key:	D43F339547C3502365C72884A2A5CBB9
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:ExecuteUbergraph_Widget_SBS_BPP_Brower [Script Bytecode]
+msgctxt ",D43F339547C3502365C72884A2A5CBB9"
+msgid "Api call failed!"
+msgstr "Api call failed!"
+
+#. Key:	B0064830405F1909DF2067A38E63C917
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mModdedFilter.mText
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mModdedFilter.mText
+msgctxt ",B0064830405F1909DF2067A38E63C917"
+msgid "Modded + Vanilla"
+msgstr "Modded + Vanilla"
+
+#. Key:	CA738B1548D9DC13289FC899E537A8BE
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mNextPage.mText
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mNextPage.mText
+msgctxt ",CA738B1548D9DC13289FC899E537A8BE"
+msgid "Next"
+msgstr "Next"
+
+#. Key:	06888FEA42EDE11EE44F64A8AA12AD65
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mPrevPage.mText
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.mPrevPage.mText
+msgctxt ",06888FEA42EDE11EE44F64A8AA12AD65"
+msgid "Back"
+msgstr "Back"
+
+#. Key:	45230DE046B3CFD22B38D8B9C616F315
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.Widget_StandardButton_1.mText
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Brower.Widget_SBS_BPP_Brower_C:WidgetTree.Widget_StandardButton_1.mText
+msgctxt ",45230DE046B3CFD22B38D8B9C616F315"
+msgid "Search"
+msgstr "Search"
+
+#. Key:	3BFE65A64C94B1E1F1ACFC9526F447EE
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:ExecuteUbergraph_Widget_SBS_BPP_Element [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:ExecuteUbergraph_Widget_SBS_BPP_Element [Script Bytecode]
+msgctxt ",3BFE65A64C94B1E1F1ACFC9526F447EE"
+msgid "Blueprint is now in download queue"
+msgstr "Blueprint is now in download queue"
+
+#. Key:	EE3441CB4FA92253214AE98185C9563C
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:ExecuteUbergraph_Widget_SBS_BPP_Element [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:ExecuteUbergraph_Widget_SBS_BPP_Element [Script Bytecode]
+msgctxt ",EE3441CB4FA92253214AE98185C9563C"
+msgid "Blueprint is already in download queue"
+msgstr "Blueprint is already in download queue"
+
+#. Key:	1C81D67245254A4429C06A89C2A27202
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:WidgetTree.mtxt.Text
+#: /SBS/Widget/BPP/Widget_SBS_BPP_Element.Widget_SBS_BPP_Element_C:WidgetTree.mtxt.Text
+msgctxt ",1C81D67245254A4429C06A89C2A27202"
+msgid "asdasd asd asd asdas dasdasd "
+msgstr "asdasd asd asd asdas dasdasd "
+
+#. Key:	73B7DDB146C8A762B48652AC2F141C3B
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPPDetails.Widget_SBS_BPPDetails_C:ExecuteUbergraph_Widget_SBS_BPPDetails [Script Bytecode]
+#: /SBS/Widget/BPP/Widget_SBS_BPPDetails.Widget_SBS_BPPDetails_C:ExecuteUbergraph_Widget_SBS_BPPDetails [Script Bytecode]
+msgctxt ",73B7DDB146C8A762B48652AC2F141C3B"
+msgid "Owner: {owner}\r\nTotal Blueprints: {BPcount}\r\nRating: {rate} / 5 ({votes} votes)\r\n\r\nMods: {mods}\r\n\r\nCreated: {c}\r\nUpdated: {u}\r\n\r\nMissing Mods: {missing}"
+msgstr "Owner: {owner}\r\nTotal Blueprints: {BPcount}\r\nRating: {rate} / 5 ({votes} votes)\r\n\r\nMods: {mods}\r\n\r\nCreated: {c}\r\nUpdated: {u}\r\n\r\nMissing Mods: {missing}"
+
+#. Key:	E4E9D2B94DA6070DF2118389885EB572
+#. SourceLocation:	/SBS/Widget/BPP/Widget_SBS_BPPDetails.Widget_SBS_BPPDetails_C:WidgetTree.TextBlock_1.Text
+#: /SBS/Widget/BPP/Widget_SBS_BPPDetails.Widget_SBS_BPPDetails_C:WidgetTree.TextBlock_1.Text
+msgctxt ",E4E9D2B94DA6070DF2118389885EB572"
+msgid "Info"
+msgstr "Info"
+
+#. Key:	17F04EC3421A96FB83430DBA86EDF8D9
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",17F04EC3421A96FB83430DBA86EDF8D9"
+msgid "Install / Update"
+msgstr "Install / Update"
+
+#. Key:	49B04A954AE600BDDFD8D183F2119C26
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",49B04A954AE600BDDFD8D183F2119C26"
+msgid "Blueprint is now in download queue"
+msgstr "Blueprint is now in download queue"
+
+#. Key:	4D8F0C1A422D0DD5E04F04917D44393B
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",4D8F0C1A422D0DD5E04F04917D44393B"
+msgid "<LightGrey10Reg>{txt}</>"
+msgstr "<LightGrey10Reg>{txt}</>"
+
+#. Key:	65F6386147A84F94091188B3F190301D
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",65F6386147A84F94091188B3F190301D"
+msgid "Download in progress"
+msgstr "Download in progress"
+
+#. Key:	7E7F798A40BA2BA5C3CFAEA18FE8716A
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",7E7F798A40BA2BA5C3CFAEA18FE8716A"
+msgid "In Queue"
+msgstr "In Queue"
+
+#. Key:	D0EED81F444CE26C47CDA4AA3A13DD4F
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:ExecuteUbergraph_Widget_SBS_Blueprint [Script Bytecode]
+msgctxt ",D0EED81F444CE26C47CDA4AA3A13DD4F"
+msgid "Blueprint is already in download queue"
+msgstr "Blueprint is already in download queue"
+
+#. Key:	D0000A3D48D4550CFCFA7AAFC3FAF153
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:setupTextContainer [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:setupTextContainer [Script Bytecode]
+msgctxt ",D0000A3D48D4550CFCFA7AAFC3FAF153"
+msgid "Vanilla"
+msgstr "Vanilla"
+
+#. Key:	DC6C674F43E59C3D38B3DEA4C4BD9685
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:setupTextContainer [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:setupTextContainer [Script Bytecode]
+msgctxt ",DC6C674F43E59C3D38B3DEA4C4BD9685"
+msgid "Modded"
+msgstr "Modded"
+
+#. Key:	7A91B62D454545B7C030CBB0DF8F0532
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.mOpenSBS.mButtonText
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.mOpenSBS.mButtonText
+msgctxt ",7A91B62D454545B7C030CBB0DF8F0532"
+msgid "Details"
+msgstr "Details"
+
+#. Key:	6D5689BC478B8ECB48058598CAD56ABD
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.RichTextBlock_81.Text
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.RichTextBlock_81.Text
+msgctxt ",6D5689BC478B8ECB48058598CAD56ABD"
+msgid "<LightGrey10Reg>Missing Mods:</>"
+msgstr "<LightGrey10Reg>Missing Mods:</>"
+
+#. Key:	96A8BC4F46AE2860C575E89E2C0C92E7
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.TextBlock.Text
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.TextBlock.Text
+msgctxt ",96A8BC4F46AE2860C575E89E2C0C92E7"
+msgid "Creator:"
+msgstr "Creator:"
+
+#. Key:	E690C78046EB934FD7B211801E8F6C43
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.TextBlock_38.Text
+#: /SBS/Widget/Widget_SBS_Blueprint.Widget_SBS_Blueprint_C:WidgetTree.TextBlock_38.Text
+msgctxt ",E690C78046EB934FD7B211801E8F6C43"
+msgid "123123123123"
+msgstr "123123123123"
+
+#. Key:	2F76D6484F14872D5DD6C68D834BDB1F
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+msgctxt ",2F76D6484F14872D5DD6C68D834BDB1F"
+msgid "Download sucessfully: {name}"
+msgstr "Download sucessfully: {name}"
+
+#. Key:	7D3B3ED04DBF6B8A815C8895041B049D
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+msgctxt ",7D3B3ED04DBF6B8A815C8895041B049D"
+msgid "Api call failed!"
+msgstr "Api call failed!"
+
+#. Key:	F18564AA402479671301279795CC332E
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:ExecuteUbergraph_Widget_SBS_Main [Script Bytecode]
+msgctxt ",F18564AA402479671301279795CC332E"
+msgid "Download failed: {name}"
+msgstr "Download failed: {name}"
+
+#. Key:	63BC2A044092E60452F9A1B9488391B0
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.addbp.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.addbp.mText
+msgctxt ",63BC2A044092E60452F9A1B9488391B0"
+msgid "Upload Blueprint"
+msgstr "Upload Blueprint"
+
+#. Key:	DCB5DA8C449AE27D1A46CD82E6826EE1
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.addbppack.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.addbppack.mText
+msgctxt ",DCB5DA8C449AE27D1A46CD82E6826EE1"
+msgid "Create Pack"
+msgstr "Create Pack"
+
+#. Key:	9BAA3B2744009AF47B29089F1F2CE56E
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.mNotifyText_1.Text
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.mNotifyText_1.Text
+msgctxt ",9BAA3B2744009AF47B29089F1F2CE56E"
+msgid "Load from API...."
+msgstr "Load from API...."
+
+#. Key:	2448432C422FE3F2EC04FFAC7A20C8A4
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.patscim.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.patscim.mText
+msgctxt ",2448432C422FE3F2EC04FFAC7A20C8A4"
+msgid "Support KMods"
+msgstr "Support KMods"
+
+#. Key:	23537BDD44D6A1892A198A8A707F920F
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.patscim_1.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.patscim_1.mText
+msgctxt ",23537BDD44D6A1892A198A8A707F920F"
+msgid "Support SCIM"
+msgstr "Support SCIM"
+
+#. Key:	D23A91DA4758D6E8BB22EF8FE72F7B27
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.Widget_SBS_MenuButton.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.Widget_SBS_MenuButton.mText
+msgctxt ",D23A91DA4758D6E8BB22EF8FE72F7B27"
+msgid "Blueprints"
+msgstr "Blueprints"
+
+#. Key:	8066AFB3410C83B0309F918F5ABF7048
+#. SourceLocation:	/SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.Widget_SBS_MenuButton_1.mText
+#: /SBS/Widget/Widget_SBS_Main.Widget_SBS_Main_C:WidgetTree.Widget_SBS_MenuButton_1.mText
+msgctxt ",8066AFB3410C83B0309F918F5ABF7048"
+msgid "Blueprint Packs"
+msgstr "Blueprint Packs"
+
+#. Key:	TextBlockDefaultValue
+#. SourceLocation:	/SBS/Widget/Widget_SBS_MenuButton.Widget_SBS_MenuButton_C:WidgetTree.mCategoryName.Text
+#: /SBS/Widget/Widget_SBS_MenuButton.Widget_SBS_MenuButton_C:WidgetTree.mCategoryName.Text
+msgctxt "UMG,TextBlockDefaultValue"
+msgid "Text Block"
+msgstr "Text Block"
+
+#. Key:	DownloadId.ClipboardUnavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/BlueprintFunctionLib/SBSApiFunctionLibrary.cpp(51)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/BlueprintFunctionLib/SBSApiFunctionLibrary.cpp(51)
+msgctxt "SBS,DownloadId.ClipboardUnavailable"
+msgid "The clipboard is unavailable here."
+msgstr "The clipboard is unavailable here."
+
+#. Key:	DownloadId.Copied
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/BlueprintFunctionLib/SBSApiFunctionLibrary.cpp(55)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/BlueprintFunctionLib/SBSApiFunctionLibrary.cpp(55)
+msgctxt "SBS,DownloadId.Copied"
+msgid "Download ID copied."
+msgstr "Download ID copied."
+
+#. Key:	DownloadId.Invalid
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(13)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(13)
+msgctxt "SBS,DownloadId.Invalid"
+msgid "Enter a valid blueprint or pack ID."
+msgstr "Enter a valid blueprint or pack ID."
+
+#. Key:	DownloadId.Resolved
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(176)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(176)
+msgctxt "SBS,DownloadId.Resolved"
+msgid "Download ID found."
+msgstr "Download ID found."
+
+#. Key:	DownloadId.Network
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(186)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(186)
+msgctxt "SBS,DownloadId.Network"
+msgid "Could not contact SBS. Try again."
+msgstr "Could not contact SBS. Try again."
+
+#. Key:	DownloadId.Login
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(194)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(194)
+msgctxt "SBS,DownloadId.Login"
+msgid "Your SBS login was rejected. Sign in again."
+msgstr "Your SBS login was rejected. Sign in again."
+
+#. Key:	DownloadId.Forbidden
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(198)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(198)
+msgctxt "SBS,DownloadId.Forbidden"
+msgid "This account cannot download this content."
+msgstr "This account cannot download this content."
+
+#. Key:	DownloadId.NotFound
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(203)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(203)
+msgctxt "SBS,DownloadId.NotFound"
+msgid "No public blueprint or pack is available for this ID."
+msgstr "No public blueprint or pack is available for this ID."
+
+#. Key:	DownloadId.Ambiguous
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(208)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(208)
+msgctxt "SBS,DownloadId.Ambiguous"
+msgid "This ID matches a blueprint and a pack. Copy its full download ID."
+msgstr "This ID matches a blueprint and a pack. Copy its full download ID."
+
+#. Key:	DownloadId.InvalidContent
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(214)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(214)
+msgctxt "SBS,DownloadId.InvalidContent"
+msgid "This blueprint or pack cannot be downloaded. Its files may be missing or incompatible."
+msgstr "This blueprint or pack cannot be downloaded. Its files may be missing or incompatible."
+
+#. Key:	DownloadId.RateLimited
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(220)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(220)
+msgctxt "SBS,DownloadId.RateLimited"
+msgid "Too many SBS requests. Wait before trying again."
+msgstr "Too many SBS requests. Wait before trying again."
+
+#. Key:	DownloadId.Failed
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(225)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Download/SBSDownloadIdProtocol.cpp(225)
+msgctxt "SBS,DownloadId.Failed"
+msgid "SBS could not resolve this download ID. Try again later."
+msgstr "SBS could not resolve this download ID. Try again later."
+
+#. Key:	Sharing.CredentialSaved
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(111)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(111)
+msgctxt "SBS,Sharing.CredentialSaved"
+msgid "SBS login saved on this computer."
+msgstr "SBS login saved on this computer."
+
+#. Key:	Sharing.CredentialDeleted
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(127)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(127)
+msgctxt "SBS,Sharing.CredentialDeleted"
+msgid "Saved SBS login removed."
+msgstr "Saved SBS login removed."
+
+#. Key:	Sharing.CredentialStoreError
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(34)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(34)
+msgctxt "SBS,Sharing.CredentialStoreError"
+msgid "Windows could not access the saved SBS login."
+msgstr "Windows could not access the saved SBS login."
+
+#. Key:	Sharing.NoSavedLogin
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(57)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(57)
+msgctxt "SBS,Sharing.NoSavedLogin"
+msgid "No SBS login is saved."
+msgstr "No SBS login is saved."
+
+#. Key:	Sharing.CredentialLoaded
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(76)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(76)
+msgctxt "SBS,Sharing.CredentialLoaded"
+msgid "Saved SBS login loaded."
+msgstr "Saved SBS login loaded."
+
+#. Key:	Sharing.StorageUnsupported
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(83)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(83)
+msgctxt "SBS,Sharing.StorageUnsupported"
+msgid "Secure login storage is unavailable on this platform."
+msgstr "Secure login storage is unavailable on this platform."
+
+#. Key:	Sharing.InvalidKey
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(93)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSCredentialStore.cpp(93)
+msgctxt "SBS,Sharing.InvalidKey"
+msgid "Enter an SBS user key created on K-Mods.com."
+msgstr "Enter an SBS user key created on K-Mods.com."
+
+#. Key:	Sharing.Valid
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(103)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(103)
+msgctxt "SBS,Sharing.Valid"
+msgid "Upload metadata is valid."
+msgstr "Upload metadata is valid."
+
+#. Key:	Sharing.InvalidFilename2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(116)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(116)
+msgctxt "SBS,Sharing.InvalidFilename2"
+msgid "Select a blueprint from the current session."
+msgstr "Select a blueprint from the current session."
+
+#. Key:	Sharing.InvalidLocalFiles
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(141)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(141)
+msgctxt "SBS,Sharing.InvalidLocalFiles"
+msgid "Both local blueprint files must exist and fit the 64 MiB / 1 MiB upload limits. Save the blueprint before uploading."
+msgstr "Both local blueprint files must exist and fit the 64 MiB / 1 MiB upload limits. Save the blueprint before uploading."
+
+#. Key:	Sharing.FilesReady
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(146)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(146)
+msgctxt "SBS,Sharing.FilesReady"
+msgid "Local blueprint files are ready."
+msgstr "Local blueprint files are ready."
+
+#. Key:	Sharing.InvalidPayload
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(164)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(164)
+msgctxt "SBS,Sharing.InvalidPayload"
+msgid "Blueprint upload data is invalid or too large."
+msgstr "Blueprint upload data is invalid or too large."
+
+#. Key:	Sharing.InvalidPayload2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(184)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(184)
+msgctxt "SBS,Sharing.InvalidPayload2"
+msgid "Could not encode this upload. Try again."
+msgstr "Could not encode this upload. Try again."
+
+#. Key:	Sharing.PayloadReady
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(224)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(224)
+msgctxt "SBS,Sharing.PayloadReady"
+msgid "Blueprint upload is ready."
+msgstr "Blueprint upload is ready."
+
+#. Key:	Sharing.PublicationNotConfirmed
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(58)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(58)
+msgctxt "SBS,Sharing.PublicationNotConfirmed"
+msgid "Choose public publication before uploading."
+msgstr "Choose public publication before uploading."
+
+#. Key:	Sharing.InvalidFilename
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(65)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(65)
+msgctxt "SBS,Sharing.InvalidFilename"
+msgid "Select a local blueprint name without a file extension."
+msgstr "Select a local blueprint name without a file extension."
+
+#. Key:	Sharing.InvalidMetadata3
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(72)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(72)
+msgctxt "SBS,Sharing.InvalidMetadata3"
+msgid "Use a name of 1-120 characters, a description up to 10000 characters and at most 32 tags."
+msgstr "Use a name of 1-120 characters, a description up to 10000 characters and at most 32 tags."
+
+#. Key:	Sharing.InvalidMetadata
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(81)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(81)
+msgctxt "SBS,Sharing.InvalidMetadata"
+msgid "The public name cannot contain control characters."
+msgstr "The public name cannot contain control characters."
+
+#. Key:	Sharing.InvalidMetadata2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(89)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(89)
+msgctxt "SBS,Sharing.InvalidMetadata2"
+msgid "The description contains unsupported control characters."
+msgstr "The description contains unsupported control characters."
+
+#. Key:	Sharing.InvalidTags
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(99)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Sharing/SBSSharingProtocol.cpp(99)
+msgctxt "SBS,Sharing.InvalidTags"
+msgid "Choose distinct valid SBS tag IDs."
+msgstr "Choose distinct valid SBS tag IDs."
+
+#. Key:	Api.UnsupportedRequest
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(179)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(179)
+msgctxt "SBS,Api.UnsupportedRequest"
+msgid "This SBS request is not supported."
+msgstr "This SBS request is not supported."
+
+#. Key:	Api.InvalidRating
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(191)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(191)
+msgctxt "SBS,Api.InvalidRating"
+msgid "A valid blueprint, rating from 1 to 5 and SBS login are required."
+msgstr "A valid blueprint, rating from 1 to 5 and SBS login are required."
+
+#. Key:	Api.QueueUnavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(207)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(207)
+msgctxt "SBS,Api.QueueUnavailable"
+msgid "SBS request queue is unavailable or full."
+msgstr "SBS request queue is unavailable or full."
+
+#. Key:	Api.RequestFailed
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(366)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(366)
+msgctxt "SBS,Api.RequestFailed"
+msgid "SBS request failed (HTTP {Status} or invalid response)."
+msgstr "SBS request failed (HTTP {Status} or invalid response)."
+
+#. Key:	Api.NetworkError
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(369)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(369)
+msgctxt "SBS,Api.NetworkError"
+msgid "Could not reach SBS."
+msgstr "Could not reach SBS."
+
+#. Key:	Api.AccountChanged
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(452)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystem.cpp(452)
+msgctxt "SBS,Api.AccountChanged"
+msgid "SBS request cancelled because account or API configuration changed."
+msgstr "SBS request cancelled because account or API configuration changed."
+
+#. Key:	DownloadId.InvalidResponse
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(107)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(107)
+msgctxt "SBS,DownloadId.InvalidResponse"
+msgid "SBS returned invalid or incomplete download information."
+msgstr "SBS returned invalid or incomplete download information."
+
+#. Key:	DownloadId.Unavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(19)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(19)
+msgctxt "SBS,DownloadId.Unavailable"
+msgid "SBS is not ready to resolve download IDs."
+msgstr "SBS is not ready to resolve download IDs."
+
+#. Key:	DownloadId.Busy
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(25)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(25)
+msgctxt "SBS,DownloadId.Busy"
+msgid "Another download ID is being resolved. Wait or cancel it first."
+msgstr "Another download ID is being resolved. Wait or cancel it first."
+
+#. Key:	DownloadId.Cancelled
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(57)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(57)
+msgctxt "SBS,DownloadId.Cancelled"
+msgid "Download ID lookup cancelled."
+msgstr "Download ID lookup cancelled."
+
+#. Key:	DownloadId.ContextChanged
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(75)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(75)
+msgctxt "SBS,DownloadId.ContextChanged"
+msgid "The game session or SBS service changed. Enter the download ID again."
+msgstr "The game session or SBS service changed. Enter the download ID again."
+
+#. Key:	DownloadId.ResponseTooLarge
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(82)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSApiSubsystemDownloadId.cpp(82)
+msgctxt "SBS,DownloadId.ResponseTooLarge"
+msgid "SBS returned too much data for this download ID."
+msgstr "SBS returned too much data for this download ID."
+
+#. Key:	DownloadId.DownloadUnavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(192)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(192)
+msgctxt "SBS,DownloadId.DownloadUnavailable"
+msgid "Blueprint downloads are not ready in this game session."
+msgstr "Blueprint downloads are not ready in this game session."
+
+#. Key:	DownloadId.HostRequired
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(199)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(199)
+msgctxt "SBS,DownloadId.HostRequired"
+msgid "The host must start this blueprint download."
+msgstr "The host must start this blueprint download."
+
+#. Key:	DownloadId.NotResolved
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(208)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(208)
+msgctxt "SBS,DownloadId.NotResolved"
+msgid "Resolve a valid download ID first."
+msgstr "Resolve a valid download ID first."
+
+#. Key:	DownloadId.AlreadyQueued
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(214)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(214)
+msgctxt "SBS,DownloadId.AlreadyQueued"
+msgid "This blueprint or part of this pack is already downloading."
+msgstr "This blueprint or part of this pack is already downloading."
+
+#. Key:	DownloadId.Queued
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(220)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(220)
+msgctxt "SBS,DownloadId.Queued"
+msgid "Download added to the queue."
+msgstr "Download added to the queue."
+
+#. Key:	DownloadId.QueueRejected
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(223)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSDownloadSubsystem.cpp(223)
+msgctxt "SBS,DownloadId.QueueRejected"
+msgid "Could not queue this download. The queue may be full or its files invalid."
+msgstr "Could not queue this download. The queue may be full or its files invalid."
+
+#. Key:	Sharing.Unavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(161)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(161)
+msgctxt "SBS,Sharing.Unavailable"
+msgid "Website login is unavailable in this context."
+msgstr "Website login is unavailable in this context."
+
+#. Key:	Sharing.BrowserOpened
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(167)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(167)
+msgctxt "SBS,Sharing.BrowserOpened"
+msgid "Sign in on K-Mods.com, create an SBS key, then paste it here."
+msgstr "Sign in on K-Mods.com, create an SBS key, then paste it here."
+
+#. Key:	Sharing.BrowserError
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(172)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(172)
+msgctxt "SBS,Sharing.BrowserError"
+msgid "Could not open the browser. Open the login URL manually."
+msgstr "Could not open the browser. Open the login URL manually."
+
+#. Key:	Sharing.StorageUnavailable
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(190)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(190)
+msgctxt "SBS,Sharing.StorageUnavailable"
+msgid "Saved login is unavailable in this context."
+msgstr "Saved login is unavailable in this context."
+
+#. Key:	Sharing.InvalidLogin
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(218)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(218)
+msgctxt "SBS,Sharing.InvalidLogin"
+msgid "Use an SBS user key on the production API. Test mode accepts only its dummy key."
+msgstr "Use an SBS user key on the production API. Test mode accepts only its dummy key."
+
+#. Key:	Sharing.SigningIn
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(246)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(246)
+msgctxt "SBS,Sharing.SigningIn"
+msgid "Checking SBS login."
+msgstr "Checking SBS login."
+
+#. Key:	Sharing.SignedIn
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(270)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(270)
+msgctxt "SBS,Sharing.SignedIn"
+msgid "Signed in to K-Mods.com."
+msgstr "Signed in to K-Mods.com."
+
+#. Key:	Sharing.StorageUnavailable2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(281)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(281)
+msgctxt "SBS,Sharing.StorageUnavailable2"
+msgid "Secure login storage is unavailable."
+msgstr "Secure login storage is unavailable."
+
+#. Key:	Sharing.SignedInNotSaved
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(287)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(287)
+msgctxt "SBS,Sharing.SignedInNotSaved"
+msgid "Signed in for this session. Windows could not save the login."
+msgstr "Signed in for this session. Windows could not save the login."
+
+#. Key:	Sharing.SignedOut
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(338)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(338)
+msgctxt "SBS,Sharing.SignedOut"
+msgid "Signed out. Revoke the key on K-Mods.com if it should stop working on other devices."
+msgstr "Signed out. Revoke the key on K-Mods.com if it should stop working on other devices."
+
+#. Key:	Sharing.NetworkError
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(34)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(34)
+msgctxt "SBS,Sharing.NetworkError"
+msgid "Could not reach SBS. An upload may already have been published; retry with the same request ID and unchanged data."
+msgstr "Could not reach SBS. An upload may already have been published; retry with the same request ID and unchanged data."
+
+#. Key:	Sharing.EnvironmentChanged
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(365)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(365)
+msgctxt "SBS,Sharing.EnvironmentChanged"
+msgid "API settings changed. Sign in again before publishing."
+msgstr "API settings changed. Sign in again before publishing."
+
+#. Key:	Sharing.NoSession
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(414)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(414)
+msgctxt "SBS,Sharing.NoSession"
+msgid "Load a save and save a blueprint on this computer first."
+msgstr "Load a save and save a blueprint on this computer first."
+
+#. Key:	Sharing.Unauthorized
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(43)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(43)
+msgctxt "SBS,Sharing.Unauthorized"
+msgid "This SBS login has expired or was revoked. Create a new key on K-Mods.com."
+msgstr "This SBS login has expired or was revoked. Create a new key on K-Mods.com."
+
+#. Key:	Sharing.LocalBlueprintsReady
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(435)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(435)
+msgctxt "SBS,Sharing.LocalBlueprintsReady"
+msgid "Local blueprint list loaded."
+msgstr "Local blueprint list loaded."
+
+#. Key:	Sharing.Busy
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(452)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(452)
+msgctxt "SBS,Sharing.Busy"
+msgid "Wait for the current SBS operation to finish."
+msgstr "Wait for the current SBS operation to finish."
+
+#. Key:	Sharing.LoginRequired
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(458)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(458)
+msgctxt "SBS,Sharing.LoginRequired"
+msgid "Sign in to K-Mods.com before uploading."
+msgstr "Sign in to K-Mods.com before uploading."
+
+#. Key:	Sharing.Forbidden2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(464)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(464)
+msgctxt "SBS,Sharing.Forbidden2"
+msgid "This SBS key does not have permission to publish."
+msgstr "This SBS key does not have permission to publish."
+
+#. Key:	Sharing.NoSession2
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(470)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(470)
+msgctxt "SBS,Sharing.NoSession2"
+msgid "Load a save and select a blueprint available on this computer."
+msgstr "Load a save and select a blueprint available on this computer."
+
+#. Key:	Sharing.Forbidden
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(50)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(50)
+msgctxt "SBS,Sharing.Forbidden"
+msgid "This account or key cannot publish blueprints."
+msgstr "This account or key cannot publish blueprints."
+
+#. Key:	Sharing.SessionChanged
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(516)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(516)
+msgctxt "SBS,Sharing.SessionChanged"
+msgid "The save or API changed while preparing the upload."
+msgstr "The save or API changed while preparing the upload."
+
+#. Key:	Sharing.RequestConflict
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(55)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(55)
+msgctxt "SBS,Sharing.RequestConflict"
+msgid "This request ID belongs to different upload data, or is still processing. Keep the original data when retrying."
+msgstr "This request ID belongs to different upload data, or is still processing. Keep the original data when retrying."
+
+#. Key:	Sharing.Published
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(581)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(581)
+msgctxt "SBS,Sharing.Published"
+msgid "Blueprint published on K-Mods.com."
+msgstr "Blueprint published on K-Mods.com."
+
+#. Key:	Sharing.Cancelled
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(626)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(626)
+msgctxt "SBS,Sharing.Cancelled"
+msgid "Upload cancelled locally. Publication may already have completed; keep the request ID to check or retry safely."
+msgstr "Upload cancelled locally. Publication may already have completed; keep the request ID to check or retry safely."
+
+#. Key:	Sharing.PayloadTooLarge
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(63)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(63)
+msgctxt "SBS,Sharing.PayloadTooLarge"
+msgid "The blueprint files exceed the service upload limits."
+msgstr "The blueprint files exceed the service upload limits."
+
+#. Key:	Sharing.InvalidUpload
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(71)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(71)
+msgctxt "SBS,Sharing.InvalidUpload"
+msgid "SBS rejected the blueprint files, metadata or tags."
+msgstr "SBS rejected the blueprint files, metadata or tags."
+
+#. Key:	Sharing.RateLimited
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(77)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(77)
+msgctxt "SBS,Sharing.RateLimited"
+msgid "Too many SBS requests. Wait before trying again."
+msgstr "Too many SBS requests. Wait before trying again."
+
+#. Key:	Sharing.InvalidResponse
+#. SourceLocation:	Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(84)
+#: Mods/GameFeatures/SBS/Source/SBS/Private/Subsystem/SBSSharingSubsystem.cpp(84)
+msgctxt "SBS,Sharing.InvalidResponse"
+msgid "SBS returned an unexpected response. For uploads, keep the request ID before retrying."
+msgstr "SBS returned an unexpected response. For uploads, keep the request ID before retrying."

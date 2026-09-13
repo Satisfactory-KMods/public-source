@@ -1,4 +1,6 @@
-﻿
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+
 
 #include "Subsystems/HelperClasses/KBFLCDOOverwriteBase.h"
 #include "Logging/StructuredLog.h"

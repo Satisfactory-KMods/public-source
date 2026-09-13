@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Cache/RssImageCache.h"
 #include "Async/Async.h"
 #include "Compression/CompressedBuffer.h"

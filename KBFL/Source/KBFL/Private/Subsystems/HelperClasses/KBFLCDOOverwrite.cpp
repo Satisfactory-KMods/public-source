@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Subsystems/HelperClasses/KBFLCDOOverwrite.h"
 #include "Logging/StructuredLog.h"
 #include "Misc/DataValidation.h"
