@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #ifndef _RYML_SINGLE_HEADER_AMALGAMATED_HPP_
 #define _RYML_SINGLE_HEADER_AMALGAMATED_HPP_
 

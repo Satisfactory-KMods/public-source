@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "KAPIGameplayTags.h"
 
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(TAG_KMods_ExcludeFromNodeRandomization, "KMods.ExcludeFromNodeRandomization",

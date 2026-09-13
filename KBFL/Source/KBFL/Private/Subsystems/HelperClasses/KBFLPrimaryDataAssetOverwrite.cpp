@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Subsystems/HelperClasses/KBFLPrimaryDataAssetOverwrite.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Engine/AssetManager.h"

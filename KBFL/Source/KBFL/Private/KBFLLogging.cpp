@@ -1,4 +1,6 @@
-﻿#include "KBFLLogging.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "KBFLLogging.h"
 
 DEFINE_LOG_CATEGORY(KBFLMenuModuleLog);
 DEFINE_LOG_CATEGORY(KBFLGameInstanceModuleLog);

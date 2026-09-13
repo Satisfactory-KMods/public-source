@@ -1,1 +1,3 @@
-﻿#include "Structures/KPCLInventoryStructure.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Structures/KPCLInventoryStructure.h"

@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "DataAssets/KAPIAirCollectorData.h"
 
 #include "FGDestructibleActor.h"

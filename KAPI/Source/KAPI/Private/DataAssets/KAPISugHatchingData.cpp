@@ -1,4 +1,6 @@
-﻿#include "DataAssets/KAPISugHatchingData.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "DataAssets/KAPISugHatchingData.h"
 #include "Kismet/KismetMathLibrary.h"
 
 bool FKAPISlugIncubation::Roll(float ChanceOverwrite) const

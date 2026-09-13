@@ -1,4 +1,6 @@
-﻿#include "Components/KPCLBetterIndicator.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Components/KPCLBetterIndicator.h"
 
 UKPCLBetterIndicator::UKPCLBetterIndicator() { mCustomExtraData = {3.0f, .0f, 0.473958f, 0.026989f}; }
 

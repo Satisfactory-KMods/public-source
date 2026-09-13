@@ -1,4 +1,6 @@
-﻿#include "Subsystems/KBFLWorldCDOSubsystem.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "Subsystems/KBFLWorldCDOSubsystem.h"
 
 #include "Engine/World.h"
 #include "KBFLLogging.h"

@@ -1,0 +1,270 @@
+{
+  "repository": "https://github.com/Satisfactory-KMods/SBS",
+  "commit": "a5da1641aeec7917e07a98f8e2374af962380a7c",
+  "assets": [
+    "Content/BP_SBSGameInstanceModule.uasset",
+    "Content/BP_SBSMenuWorldModule.uasset",
+    "Content/BP_SBSWorldModule.uasset",
+    "Content/SBS_ModConfig.uasset",
+    "Content/Subsystem/BP_SBSDownloadSubsystem.uasset",
+    "Content/Subsystem/BP_SBSKeybindHandler.uasset",
+    "Content/Widget/BP/Widget_SBS_BPDetails.uasset",
+    "Content/Widget/BP/Widget_SBS_BP_Brower.uasset",
+    "Content/Widget/BP/Widget_SBS_BP_Element.uasset",
+    "Content/Widget/BPP/Widget_SBS_BPPDetails.uasset",
+    "Content/Widget/BPP/Widget_SBS_BPP_Brower.uasset",
+    "Content/Widget/BPP/Widget_SBS_BPP_Element.uasset",
+    "Content/Widget/TX/ICON_Blueprint.uasset",
+    "Content/Widget/TX/MM_UI_BlueprintIcon.uasset",
+    "Content/Widget/TX/MM_UI_BlueprintIcon_Inst.uasset",
+    "Content/Widget/TX/TXUI_Check.uasset",
+    "Content/Widget/TX/TXUI_Download.uasset",
+    "Content/Widget/TX/TXUI_Globus.uasset",
+    "Content/Widget/TX/TXUI_Link.uasset",
+    "Content/Widget/TX/TXUI_Patreon.uasset",
+    "Content/Widget/TX/TXUI_Star.uasset",
+    "Content/Widget/TX/TXUI_Times.uasset",
+    "Content/Widget/TX/boxes-solid.uasset",
+    "Content/Widget/Util/Widget_SBS_Text.uasset",
+    "Content/Widget/Widget_SBS_Blueprint.uasset",
+    "Content/Widget/Widget_SBS_Button.uasset",
+    "Content/Widget/Widget_SBS_Main.uasset",
+    "Content/Widget/Widget_SBS_MenuButton.uasset"
+  ],
+  "headers": {
+    "Source/SBS/Public/BlueprintFunctionLib/SBSApiFunctionLibrary.h": {
+      "types": {
+        "USBSApiFunctionLibrary": {
+          "declaration": "UCLASS()classSBS_APIUSBSApiFunctionLibrary:publicUBlueprintFunctionLibrary{",
+          "members": {
+            "IsBlueprintInstalled": "UFUNCTION(BlueprintPure,meta=(WorldContext=\"WorldContext\"),Category=\"KMods|Subsystem|SBS\",DisplayName=\"GetSBSDownloadSubsystem\")staticboolIsBlueprintInstalled(UObject*WorldContext,FStringBlueprint)"
+          }
+        }
+      },
+      "delegates": {}
+    },
+    "Source/SBS/Public/Logging.h": {
+      "types": {},
+      "delegates": {}
+    },
+    "Source/SBS/Public/Replication/SBSDefaultRCO.h": {
+      "types": {
+        "USBSDefaultRCO": {
+          "declaration": "UCLASS()classSBS_APIUSBSDefaultRCO:publicUFGRemoteCallObject{",
+          "members": {}
+        }
+      },
+      "delegates": {}
+    },
+    "Source/SBS/Public/SBSModule.h": {
+      "types": {},
+      "delegates": {}
+    },
+    "Source/SBS/Public/Structures/ApiJsonStruct.h": {
+      "types": {
+        "FApiJsonStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFApiJsonStruct{",
+          "members": {}
+        },
+        "FBlueprintJsonTagStructure": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFBlueprintJsonTagStructure:publicFApiJsonStruct{",
+          "members": {
+            "ID": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringID",
+            "DisplayName": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringDisplayName"
+          }
+        },
+        "FBlueprintJsonColorStructure": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFBlueprintJsonColorStructure:publicFApiJsonStruct{",
+          "members": {
+            "IconID": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32IconID",
+            "Color": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FLinearColorColor"
+          }
+        },
+        "FBlueprintJsonStructure": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFBlueprintJsonStructure:publicFApiJsonStruct{",
+          "members": {
+            "ID": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringID",
+            "Mods": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FString>Mods",
+            "Tags": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FBlueprintJsonTagStructure>Tags",
+            "Owner": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringOwner",
+            "DesignerSize": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringDesignerSize",
+            "Name": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringName",
+            "CreatedAt": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringCreatedAt",
+            "UpdatedAt": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringUpdatedAt",
+            "Downloads": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32Downloads",
+            "TotalRating": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32TotalRating",
+            "TotalRatingCount": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32TotalRatingCount",
+            "Images": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FString>Images",
+            "OriginalName": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringOriginalName",
+            "SCIM": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringSCIM",
+            "IconData": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FBlueprintJsonColorStructureIconData"
+          }
+        },
+        "FBlueprintInPackJsonStructure": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFBlueprintInPackJsonStructure:publicFApiJsonStruct{",
+          "members": {
+            "ID": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringID",
+            "Name": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringName",
+            "OriginalName": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringOriginalName",
+            "IconData": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FBlueprintJsonColorStructureIconData"
+          }
+        },
+        "FBlueprintPackJsonStructure": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFBlueprintPackJsonStructure:publicFApiJsonStruct{",
+          "members": {
+            "ID": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringID",
+            "Mods": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FString>Mods",
+            "Tags": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FBlueprintJsonTagStructure>Tags",
+            "Owner": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringOwner",
+            "Name": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringName",
+            "CreatedAt": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringCreatedAt",
+            "UpdatedAt": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringUpdatedAt",
+            "TotalRating": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32TotalRating",
+            "TotalRatingCount": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")int32TotalRatingCount",
+            "Blueprints": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FBlueprintInPackJsonStructure>Blueprints",
+            "ImageUrl": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FStringImageUrl",
+            "FirstIconData": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")FBlueprintJsonColorStructureFirstIconData"
+          }
+        }
+      },
+      "delegates": {}
+    },
+    "Source/SBS/Public/Structures/ApiPostStruct.h": {
+      "types": {
+        "FApiPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFApiPostStruct{",
+          "members": {}
+        },
+        "FDynamicApiPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFDynamicApiPostStruct:publicFApiPostStruct{",
+          "members": {
+            "NotifyText": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")FTextNotifyText",
+            "Indetifier": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")FStringIndetifier",
+            "FailedText": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")FStringFailedText"
+          }
+        },
+        "FAuthCheckPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFAuthCheckPostStruct:publicFDynamicApiPostStruct{",
+          "members": {}
+        },
+        "FFilterPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFFilterPostStruct:publicFApiPostStruct{",
+          "members": {
+            "Limit": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")int32Limit",
+            "Skip": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")int32Skip",
+            "SortByKey": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")FStringSortByKey",
+            "SortByUp": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")boolSortByUp",
+            "Name": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")FStringName",
+            "Tags": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")TArray<FString>Tags",
+            "Mods": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")TArray<FString>Mods",
+            "OnlyVanilla": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"FilterPostStruct\")boolOnlyVanilla"
+          }
+        },
+        "FPackFilterPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFPackFilterPostStruct:publicFFilterPostStruct{",
+          "members": {}
+        },
+        "FRatingPostStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFRatingPostStruct:publicFDynamicApiPostStruct{",
+          "members": {
+            "BlueprintID": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"RatingPostStruct\")FStringBlueprintID",
+            "Rating": "UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=\"RatingPostStruct\")int32Rating"
+          }
+        },
+        "FDownloadSbpStruct": {
+          "declaration": "USTRUCT()structSBS_APIFDownloadSbpStruct:publicFApiPostStruct{",
+          "members": {}
+        },
+        "FDownloadSbpcfgStruct": {
+          "declaration": "USTRUCT()structSBS_APIFDownloadSbpcfgStruct:publicFDownloadSbpStruct{",
+          "members": {}
+        },
+        "FSBSUserData": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFSBSUserData:publicFDynamicApiPostStruct{",
+          "members": {
+            "ID": "UPROPERTY(BlueprintReadOnly)FStringID",
+            "Username": "UPROPERTY(BlueprintReadOnly)FStringUsername",
+            "Role": "UPROPERTY(BlueprintReadOnly)int32Role"
+          }
+        },
+        "FGetTagsStruct": {
+          "declaration": "USTRUCT(BlueprintType)structSBS_APIFGetTagsStruct:publicFDynamicApiPostStruct{",
+          "members": {}
+        }
+      },
+      "delegates": {}
+    },
+    "Source/SBS/Public/Structures/ApiStatics.h": {
+      "types": {
+        "FSBSStatics": {
+          "declaration": "USTRUCT()structSBS_APIFSBSStatics{",
+          "members": {}
+        }
+      },
+      "delegates": {}
+    },
+    "Source/SBS/Public/Subsystem/SBSApiSubsystem.h": {
+      "types": {
+        "USBSApiSubsystem": {
+          "declaration": "UCLASS()classSBS_APIUSBSApiSubsystem:publicUGameInstanceSubsystem{",
+          "members": {
+            "QueryApi": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")voidQueryApi(FFilterPostStructPost)",
+            "QueryPackApi": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")voidQueryPackApi(FPackFilterPostStructPost)",
+            "QueryApiDynamic": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")voidQueryApiDynamic(FDynamicApiPostStructPost)",
+            "QueryRating": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")voidQueryRating(FRatingPostStructPost)",
+            "IsQuery": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolIsQuery()const",
+            "IsPackQuery": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolIsPackQuery()const",
+            "IsBpQuery": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolIsBpQuery()const",
+            "IsAuthQuery": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolIsAuthQuery()const",
+            "QueryForAuth": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")voidQueryForAuth()",
+            "GetBlueprints": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")TArray<FBlueprintJsonStructure>GetBlueprints()const",
+            "GetBlueprintPacks": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")TArray<FBlueprintPackJsonStructure>GetBlueprintPacks()const",
+            "GetTotalBlueprints": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")int32GetTotalBlueprints()const",
+            "GetTotalBlueprintPacks": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")int32GetTotalBlueprintPacks()const",
+            "GetUserData": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")FSBSUserDataGetUserData()const",
+            "IsLoggedIn": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolIsLoggedIn()const",
+            "GetIsInQuery": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")boolGetIsInQuery()const",
+            "GetTags": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")TArray<FBlueprintJsonTagStructure>GetTags()const",
+            "mOnQueryDone": "UPROPERTY(BlueprintAssignable)FOnBlueprintQueryDonemOnQueryDone",
+            "mOnPackQueryDone": "UPROPERTY(BlueprintAssignable)FOnBlueprintPackQueryDonemOnPackQueryDone",
+            "mOnDynamicQueryDone": "UPROPERTY(BlueprintAssignable)FOnDynamicQueryDonemOnDynamicQueryDone",
+            "mOnAuthUpdated": "UPROPERTY(BlueprintAssignable)FOnAuthUpdatedmOnAuthUpdated",
+            "mTags": "UPROPERTY(BlueprintReadOnly,Category=\"BlueprintJsonStructure\")TArray<FBlueprintJsonTagStructure>mTags",
+            "OnAccountKeyChanged": "UFUNCTION()voidOnAccountKeyChanged()"
+          }
+        }
+      },
+      "delegates": {
+        "FOnBlueprintQueryDone": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnBlueprintQueryDone,constTArray<FBlueprintJsonStructure>&,Blueprints,int32,Max,bool,Success)",
+        "FOnBlueprintPackQueryDone": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnBlueprintPackQueryDone,constTArray<FBlueprintPackJsonStructure>&,BlueprintPacks,int32,Max,bool,Success)",
+        "FOnDynamicQueryDone": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDynamicQueryDone,FDynamicApiPostStruct,PostResult,bool,Success)",
+        "FOnAuthUpdated": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAuthUpdated,FSBSUserData,UserData,bool,Success)"
+      }
+    },
+    "Source/SBS/Public/Subsystem/SBSDownloadSubsystem.h": {
+      "types": {
+        "ASBSDownloadSubsystem": {
+          "declaration": "UCLASS()classSBS_APIASBSDownloadSubsystem:publicAKPCLModSubsystem{",
+          "members": {
+            "Get": "UFUNCTION(BlueprintPure,meta=(WorldContext=\"WorldContext\"),Category=\"KMods|Subsystem|SBS\",DisplayName=\"GetSBSDownloadSubsystem\")staticASBSDownloadSubsystem*Get(UObject*WorldContext)",
+            "DownloadBlueprint": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")boolDownloadBlueprint(FBlueprintJsonStructureBlueprint)",
+            "DownloadBlueprintPack": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")boolDownloadBlueprintPack(FBlueprintPackJsonStructureBlueprintPack)",
+            "GetDownloadStateForBlueprint": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")int32GetDownloadStateForBlueprint(FBlueprintJsonStructureBlueprint)",
+            "GetDownloadStateForBlueprintPack": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")boolGetDownloadStateForBlueprintPack(FBlueprintPackJsonStructureBlueprintPack)",
+            "GetCurrentBlueprintPath": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")FStringGetCurrentBlueprintPath()",
+            "IsBlueprintInstalled": "UFUNCTION(BlueprintCallable,Category=\"KMods|Json\")boolIsBlueprintInstalled(FBlueprintJsonStructureBlueprint)",
+            "OnBlueprintCreated": "UFUNCTION(BlueprintNativeEvent,Category=\"KMods|Json\")boolOnBlueprintCreated(UFGBlueprintDescriptor*BlueprintDescriptor,FBlueprintJsonStructureBlueprint)",
+            "SBS_GetLocalPlayer": "UFUNCTION(BlueprintPure,Category=\"KMods|Json\")staticUFGLocalPlayer*SBS_GetLocalPlayer(UObject*WorldContext)",
+            "mSaveSessionName": "UPROPERTY(BlueprintReadOnly)FStringmSaveSessionName",
+            "mFOnDownloadComplete": "UPROPERTY(BlueprintAssignable)FOnDownloadCompletemFOnDownloadComplete",
+            "mOnDownloadProgress": "UPROPERTY(BlueprintAssignable)FOnDownloadProgressmOnDownloadProgress"
+          }
+        }
+      },
+      "delegates": {
+        "FOnDownloadComplete": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDownloadComplete,FBlueprintJsonStructure,Blueprint,bool,Success)",
+        "FOnDownloadProgress": "DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnDownloadProgress,FBlueprintJsonStructure,Blueprint,float,Progress,FString,FileName)"
+      }
+    }
+  }
+}

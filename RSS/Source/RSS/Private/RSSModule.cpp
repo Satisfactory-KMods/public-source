@@ -1,4 +1,6 @@
-﻿#include "RSSModule.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "RSSModule.h"
 
 #include "Buildable/RSSBuildableSign.h"
 #include "Buildable/RSSSignRCO.h"

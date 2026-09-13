@@ -1,4 +1,6 @@
-﻿#include "RSS_Math.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "RSS_Math.h"
 
 #include "Kismet/KismetMathLibrary.h"
 

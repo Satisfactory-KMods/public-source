@@ -1,4 +1,6 @@
-﻿#include "RssBlueprintFunctionLibrary.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "RssBlueprintFunctionLibrary.h"
 
 #include "Algo/AllOf.h"
 #include "Buildables/FGBuildable.h"

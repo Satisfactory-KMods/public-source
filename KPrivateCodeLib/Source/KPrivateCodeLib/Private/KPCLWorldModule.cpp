@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "KPCLWorldModule.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(KBFLWorldModuleV2Log, Log, All);

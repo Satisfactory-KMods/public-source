@@ -1,4 +1,6 @@
-﻿#include "BFL/KBFL_Util.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "BFL/KBFL_Util.h"
 
 #include "BFL/KBFL_Player.h"
 #include "Buildables/FGBuildableResourceExtractorBase.h"

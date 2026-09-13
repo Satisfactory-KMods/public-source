@@ -1,4 +1,6 @@
-﻿#include "BFL/KBFL_Player.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "BFL/KBFL_Player.h"
 
 #include "FGLocalPlayer.h"
 #include "FGPlayerController.h"

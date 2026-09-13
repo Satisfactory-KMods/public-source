@@ -1,3 +1,5 @@
+// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
 #include "Reflection/KDFVanillaCache.h"
 
 void FKDFVanillaCache::RecordSnapshot(const UObject* Object, const FString& PropertyPath, const FString& ExportedValue)

@@ -1,4 +1,6 @@
-﻿#include "DataAssets/KAPIManufacturerModifications.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "DataAssets/KAPIManufacturerModifications.h"
 
 #include "Buildables/FGBuildableManufacturer.h"
 #include "FGPipeConnectionComponent.h"

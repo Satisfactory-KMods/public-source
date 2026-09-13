@@ -1,4 +1,6 @@
-﻿#include "DataAssets/KAPICleanerItemDescription.h"
+﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
+
+#include "DataAssets/KAPICleanerItemDescription.h"
 
 #include "Resources/FGNoneDescriptor.h"
 
