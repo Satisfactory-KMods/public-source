@@ -37,6 +37,6 @@
 		}
 	],
 	"AcceptsAnyRemoteVersion": false,
-	"GameVersion": ">=491125",
+	"GameVersion": ">=513885",
 	"GameFeatures": true
 }

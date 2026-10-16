@@ -2,6 +2,8 @@
 
 #include "KBFLModule.h"
 
+bool GIsSFPPrepared = false;
+
 #if !WITH_EDITOR
 #include "Engine/NetDriver.h"
 #include "Patching/NativeHookManager.h"
@@ -17,9 +19,55 @@
 #include "ToolMenus.h"
 #endif
 
+#if !WITH_EDITOR
+#include "AssetRegistry/AssetData.h"
+#include "AssetRegistry/IAssetRegistry.h"
+#include "Interfaces/IPluginManager.h"
+#include "KBFLLogging.h"
+#include "ModLoading/ModLoadingLibrary.h"
+
+namespace
+{
+	FDelegateHandle ModCompatibilityMountedHandle;
+
+	bool IsSFPAssetLoaded(const TCHAR* ModReference)
+	{
+
+		const TSharedPtr<IPlugin> Plugin = IPluginManager::Get().FindPlugin(ModReference);
+		return Plugin.IsValid() && Plugin->IsEnabled() && UModLoadingLibrary::IsPluginAMod(*Plugin);
+	}
+
+	bool IsSFPContentDescriptorPresent()
+	{
+		const FTopLevelAssetPath DescriptorClassPath(TEXT("/Script/SatisfactoryPlus"), TEXT("SFPContentDescriptor"));
+		TArray<FAssetData> Descriptors;
+		IAssetRegistry::GetChecked().GetAssetsByClass(DescriptorClassPath, Descriptors, true);
+		return !Descriptors.IsEmpty();
+	}
+
+	void PrepareSFP()
+	{
+        GIsSFPPrepared = IsSFPContentDescriptorPresent();
+        if (!IsSFPAssetLoaded(TEXT("SatisfactoryPlus")))
+        {
+            return;
+        }
+
+        if (!GIsSFPPrepared)
+        {
+            UE_LOG(LogKBFLModule, Fatal, TEXT("Could not loaded SFPContentDescriptor"));
+        }
+	}
+}
+#endif
+
 void FKBFLModule::StartupModule()
 {
 #if !WITH_EDITOR
+
+	ModCompatibilityMountedHandle =
+		IPluginManager::Get().OnNewPluginMounted().AddLambda([](IPlugin&) { PrepareSFP(); });
+	PrepareSFP();
 
 	SUBSCRIBE_METHOD(UFGReplicationGraph::RegisterCustomClassRepPolicy,
 					 [](auto& scope, TSoftClassPtr<AActor> InActor, EClassRepPolicy InRepPolicy)
@@ -54,6 +102,11 @@ void FKBFLModule::StartupModule()
 
 void FKBFLModule::ShutdownModule()
 {
+#if !WITH_EDITOR
+	IPluginManager::Get().OnNewPluginMounted().Remove(ModCompatibilityMountedHandle);
+	ModCompatibilityMountedHandle.Reset();
+#endif
+
 #if WITH_EDITOR
 	if (UObjectInitialized())
 	{

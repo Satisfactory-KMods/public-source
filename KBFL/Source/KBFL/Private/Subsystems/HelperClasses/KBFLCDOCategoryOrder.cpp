@@ -1,6 +1,5 @@
 ﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
 
-
 #include "Subsystems/HelperClasses/KBFLCDOCategoryOrder.h"
 
 #include "FGBuildSubCategory.h"

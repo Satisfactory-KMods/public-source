@@ -1,7 +1,5 @@
 ﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
 
-
-
 #include "Hologram/KBFLUtilHologram.h"
 
 #include "BFL/KBFL_Player.h"

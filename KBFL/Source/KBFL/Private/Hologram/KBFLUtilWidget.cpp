@@ -1,7 +1,5 @@
 ﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
 
-
-
 #include "Hologram/KBFLUtilWidget.h"
 #include "Subsystems/KBFLLocationSubsystem.h"
 

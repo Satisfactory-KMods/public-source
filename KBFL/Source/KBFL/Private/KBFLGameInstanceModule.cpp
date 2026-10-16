@@ -1,7 +1,5 @@
 ﻿// Copyright Kyri123 / KMods 2026. All Rights Reserved.
 
-
-
 #include "KBFLGameInstanceModule.h"
 
 #include "KBFLLogging.h"

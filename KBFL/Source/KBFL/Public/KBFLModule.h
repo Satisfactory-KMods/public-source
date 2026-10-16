@@ -41,6 +41,8 @@
 			return BaseString;                                                                                         \
 		}())
 
+extern KBFL_API bool GIsSFPPrepared;
+
 class FKBFLModule : public FDefaultGameModuleImpl
 {
 public:
