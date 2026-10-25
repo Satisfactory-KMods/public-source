@@ -42,19 +42,19 @@
 
 ---
 
-KAPI is the shared data-driven API library that powers all KMods: it exposes extensible data assets so any mod can register configuration for KMods machines without touching C++ code.
+KAPI is a shared dependency for KMods. Players do not need to configure it; Satisfactory Mod Manager installs it with mods that require it. Mod authors can use its data assets to configure KMods machines without changing C++ code.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">What Is KAPI?</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">What KAPI does</strong></td></tr></table>
 
-KAPI provides a central `UKAPIDataAssetSubsystem` (a `GameInstanceSubsystem`) that scans the Unreal Engine Asset Registry at startup, discovers every registered data asset, resolves priorities, and makes the results available to all other KMods. All configuration for miners, cleaners, air collectors, slug breeders, manufacturer tweaks, and UI injectors lives in data assets: not hard-coded values.
+KAPI provides a central `UKAPIDataAssetSubsystem` (a `GameInstanceSubsystem`). At startup it scans the Unreal Engine Asset Registry, discovers registered data assets, resolves priorities, and shares the results with other KMods. Data assets hold configuration for miners, cleaners, air collectors, slug breeders, manufacturer changes, delivery tasks, FaxIT capacity rules, and UI injectors.
 
-Third-party mods can extend KMods behavior simply by creating their own data assets that inherit from `UKAPIDataAssetBase`, without requiring any source-code changes.
+Third-party mods can extend KMods behavior by creating data assets derived from `UKAPIDataAssetBase`. This does not require changes to KMods source code.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Data Asset Base: `UKAPIDataAssetBase`</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Data asset base: `UKAPIDataAssetBase`</strong></td></tr></table>
 
 Every KAPI config asset inherits from this base class, which provides:
 
@@ -65,14 +65,17 @@ Every KAPI config asset inherits from this base class, which provides:
 | `mIcon` | `UTexture2D` | Icon used in UI |
 | `mIsDisabled` | `bool` | Disable this asset at runtime (e.g. to suppress another mod's content) |
 | `mPriority` | `int` | Sort order: higher values win when multiple assets compete |
+| `mTags` | `FGameplayTagContainer` | Tags used for filtering, feature flags, and integration rules |
 
 Override `IsEnabled_Internal` for custom enable/disable logic beyond the simple flag.
+
+KAPI also exposes Blueprint helpers for reading and changing gameplay-tag containers. They work with KAPI data assets, item descriptors, recipes, schematics, research trees, classes, and objects that implement Unreal's gameplay-tag interface.
 
 ---
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Modular Miner: `UKAPIModularMinerDescription`</strong></td></tr></table>
 
-Data asset that fully describes how a resource node is mined by the KMods Modular Miner system.
+This data asset describes how the KMods Modular Miner handles a resource node.
 
 - Maps each **waste producer module type** (`UKAPIWasteProducerType`) to its own production item and trash item via `FKAPIModuleItems`
 - Specifies which **attachment modules** (`UKAPIModularAttachmentDescriptor`) are required or forbidden
@@ -105,7 +108,7 @@ Configures one collection recipe for the KMods Air Collector, which harvests ite
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Slug Hatching: `UKAPISugHatchingData`</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Slug hatching: `UKAPISugHatchingData`</strong></td></tr></table>
 
 Full breeding and incubation profile for one slug type in the KLib slug system.
 
@@ -117,9 +120,9 @@ Full breeding and incubation profile for one slug type in the KLib slug system.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Manufacturer Modifications: `UKAPIManufacturerModifications`</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Manufacturer modifications: `UKAPIManufacturerModifications`</strong></td></tr></table>
 
-Patches an existing vanilla or modded manufacturer's inventory slots at runtime: no Blueprint subclassing required.
+This asset changes inventory slots on an existing vanilla or modded manufacturer at runtime. It does not require a Blueprint subclass.
 
 - Targets any `AFGBuildableManufacturer` class (optionally including subclasses via `bApplyOnSubclasses`)
 - Per-slot icon overrides for solid and fluid inputs/outputs (`mFluidSlotIcons`, `mSolidSlotIcons`)
@@ -128,7 +131,7 @@ Patches an existing vanilla or modded manufacturer's inventory slots at runtime:
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Extractor Allow List: `UKAPIExtractorAllowList`</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Extractor allow list: `UKAPIExtractorAllowList`</strong></td></tr></table>
 
 Fine-grained whitelist/blacklist control over which resource extractors are allowed on which resource nodes.
 
@@ -137,13 +140,30 @@ Fine-grained whitelist/blacklist control over which resource extractors are allo
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Tooltip Widget Injector: `UKAPTooltipWidgetInjector`</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Tooltip widget injector: `UKAPTooltipWidgetInjector`</strong></td></tr></table>
 
 Injects a custom UMG widget into item tooltips for a filtered set of item descriptors.
 
 - `mWidgetClass`: the widget to inject
 - `mClassFilter`: set of item descriptor classes that trigger the injection
 - `mInjectAtIndex`: insertion position within the tooltip panel (`-1` appends at the end)
+
+---
+
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Delivery tasks: `UKAPIDeliveryTask`</strong></td></tr></table>
+
+Defines nodes for the KMods delivery tree. A task can use fixed costs and rewards or generate repeatable requests from an item pool.
+
+- Tree coordinates and parent-direction flags control placement and prerequisites
+- One-time tasks can grant items, schematics, unlock objects, ADA messages, and completion toasts
+- Endless tasks support item pools, mandatory entries, task-count requirements, amount steps, reward tiers, and scaling curves
+- Availability dependencies can gate tasks with the same dependency system used by Satisfactory schematics
+
+---
+
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">FaxIT byte usage: `UKAPIFaxitByteUsageDefinition`</strong></td></tr></table>
+
+Defines one tagged FaxIT capacity category. Each unit can consume bytes, add power demand, change a displayed value, apply per-drive limits, and set reclaim priority when capacity must be reduced.
 
 ---
 

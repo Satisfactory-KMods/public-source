@@ -42,11 +42,11 @@
 
 ---
 
-KBFL (KMods Blueprint Function Library) is the shared foundation library used by all KMods, providing asset scanning, CDO overwriting, custom swatch replication, resource node spawning, and a suite of Blueprint-exposed utilities that any other mod can build on.
+KBFL (KMods Blueprint Function Library) is a shared dependency for KMods. Players do not need to configure it; Satisfactory Mod Manager installs it with mods that require it. For mod authors, KBFL provides asset scanning, CDO overwrites, replicated custom swatches, resource node spawning, and Blueprint utilities.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Asset Data Subsystem</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Asset data subsystem</strong></td></tr></table>
 
 `UKBFLAssetDataSubsystem` (GameInstanceSubsystem) scans the full asset registry at startup and categorises every discovered class into fast, queryable sets, partitioned per mod.
 
@@ -56,9 +56,9 @@ KBFL (KMods Blueprint Function Library) is the shared foundation library used by
 - Per-mod data buckets via `GetModRelatedData`: lets a mod introspect its own registered content at runtime
 - Template helpers `FindAllDataAssetsOfClass` / `FindFirstDataAssetsOfClass` for `UPrimaryDataAsset` lookups without touching the registry directly
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">CDO Overwrite System</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">CDO overwrite system</strong></td></tr></table>
 
-A data-asset-driven pipeline that lets mods modify Class Default Objects without touching a single line of C++ or Blueprint logic in the target mod.
+This data-asset pipeline lets mods change Class Default Objects without modifying C++ or Blueprint logic in the target mod.
 
 - **`UKBFLCDOOverwrite`**: point at any target class; configure property values in the editor; KBFL applies the diff at the right lifecycle phase
 - Supports all property kinds: arrays, sets, maps, integers, floats, booleans, strings, texts, names, objects, classes, structs, enums
@@ -67,9 +67,9 @@ A data-asset-driven pipeline that lets mods modify Class Default Objects without
 - **`UKBFLWorldCDOSubsystem`** handles world-phase CDO overwrites (applied after save load, before BeginPlay) with optional per-tick updates
 - **`UKBFLCDOItemStackSize`**: data asset for batch-resizing item stack sizes; maps `EStackSize` to a list of item descriptor classes
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Swatch &amp; Customizer System</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Swatch and Customizer system</strong></td></tr></table>
 
-Stable, save-safe custom paint swatch registration with full multiplayer replication.
+Custom paint swatches keep their assignments in saves and replicate in multiplayer.
 
 - **`AKBFLSwatchReplicationSubsystem`**: server-authoritative swatch ID assignment; persists assignments across save/load via `IFGSaveInterface`; replicates the full color-slot table to every client via `OnRep_ColorSlots`
 - Collision-free ID allocation: existing in-world swatches keep their IDs; new swatches fill gaps automatically
@@ -77,7 +77,7 @@ Stable, save-safe custom paint swatch registration with full multiplayer replica
 - **`UKBFLCustomizationProvider`** data asset: declarative registration of swatches, swatch groups, and material descriptor overrides without any Blueprint logic
 - **`UKBFLColorRCO`**: RCO for client-side swatch name edits forwarded reliably to server
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Resource Node Spawning</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Resource node spawning</strong></td></tr></table>
 
 Data-asset-driven actor spawning tied to the world lifecycle, used to add or replace resource nodes and resource wells without modifying the level.
 
@@ -91,7 +91,7 @@ Data-asset-driven actor spawning tied to the world lifecycle, used to add or rep
 | `UKBFLSubLevelSpawning` | Sub-level streaming helper for large-scale node layouts |
 | `UKBFLSpawnRequirement` | Pluggable requirement object: override `IsRequirementMet` in Blueprint to gate spawning on any condition |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Blueprint Function Libraries</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Blueprint function libraries</strong></td></tr></table>
 
 A set of `UBlueprintFunctionLibrary` classes exposing commonly needed operations to both C++ and Blueprint authors.
 
@@ -104,20 +104,20 @@ A set of `UBlueprintFunctionLibrary` classes exposing commonly needed operations
 | `UKBFL_ConfigTools` | Type-safe get/set for Bool, Float, Int, String, Text, Name, Class from any `UModConfiguration` |
 | `UKBFLCppInventoryHelper` | `CanStoreItem`, `StoreItemStack`, `AddStacksInInventory`, `PullBelt`, `PullPipe`, `PushPipe`: inventory I/O helpers used inside `Factory_Tick` |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Lifecycle Module Base Classes</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Lifecycle module base classes</strong></td></tr></table>
 
-`UKBFLGameInstanceModule` and `UKBFLWorldModule` extend SML's module system with structured construction / init / post-init lifecycle events, CDO registration hooks, and optional asset-registry auto-scan.
+`UKBFLGameInstanceModule` and `UKBFLWorldModule` extend SML's module system with structured construction / init / post-init lifecycle events and editor scan helpers.
 
 - Expose `ConstructionPhase`, `InitPhase`, `PostInitPhase` as BlueprintNativeEvents: no C++ required for most mods
-- Optional `mUseAssetRegistry` flag triggers automatic scanning and CDO/schematic/recipe/research-tree registration
+- Editor-callable scan helpers populate mod configurations, session settings, Remote Call Objects, schematics, research trees, and chat commands from the owning plugin
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Utility Buildables &amp; Holograms</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Utility buildables and holograms</strong></td></tr></table>
 
-- **`AKBFLUtilItemCreaterBuildable`**: cheat/debug buildable that generates arbitrary items on belts and pipes; fully replicated via `UKBFLDefaultRCO`
+- **`AKBFLUtilItemCreaterBuildable`**: cheat/debug buildable that generates arbitrary items on belts and pipes and replicates through `UKBFLDefaultRCO`
 - **`AKBFLUtilHologram`**: placement hologram with free transform (offset, rotation, scale) driven by `AKBFLLocationSubsystem`; shows a live widget overlay during placement
-- **`AKBFLLocationSubsystem`**: saves and restores actor transforms to a file for iterative level design
+- **`AKBFLLocationSubsystem`**: records placed transforms per actor class and writes them to text files for iterative level design; it also remembers the most recent hologram offset, rotation, and scale during the current session
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">C++ Data Structures</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">C++ data structures</strong></td></tr></table>
 
 - **`FSortedActorDistanceArray<T>`**: template proximity container; `Sort()` orders actors by distance to a reference actor, `PopClosestValid()` pops the nearest one; used for efficient proximity-based loading
 - **`UKBFLCppInventoryHelper`**: all-static belt/pipe pull/push helpers that work directly with `UFGInventoryComponent` and connection components

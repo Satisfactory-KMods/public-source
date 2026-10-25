@@ -42,13 +42,13 @@
 
 ---
 
-**KLib** is the core gameplay mod of the KMods suite: it adds a collection of advanced production buildings powered by the data-driven [KAPI](https://ficsit.app/mod/KAPI) framework, all with full multiplayer support, overclocking, and Factory Clipboard integration.
+KLib supplies gameplay machines and systems used by KMods. Its buildings use the data-driven [KAPI](https://ficsit.app/mod/KAPI) framework and support multiplayer, overclocking, and Factory Clipboard copy and paste.
 
 ---
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Modular Miner</strong></td></tr></table>
 
-A fully customizable resource extractor built around a snap-on module system. Place the main miner on any resource node, then attach modules to shape its output.
+Place the Modular Miner on a resource node, then attach modules to change its output.
 
 - **Dual belt outputs** plus a pipe connection for fluid nodes
 - **Swappable modules**: Drill, Fluid, Power Shard, and Waste Producer attachments
@@ -59,11 +59,11 @@ A fully customizable resource extractor built around a snap-on module system. Pl
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Slug Breeding &amp; Incubation</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Slug breeding and incubation</strong></td></tr></table>
 
 A two-stage creature farming system for producing Power Slugs and their variants.
 
-### Slug Breeder
+### Slug breeder
 Place two groups of parent slugs, keep them fed, and dial in the right temperature and humidity. When conditions are met the breeder produces eggs.
 
 - Two parent slots (up to 5 slugs each) + one food slot
@@ -72,7 +72,7 @@ Place two groups of parent slugs, keep them fed, and dial in the right temperatu
 - Overclocking speeds up the breeding cycle
 - Settings are copy/paste-able via the Factory Clipboard
 
-### Slug Incubator
+### Slug incubator
 Hatch eggs by supplying the right fluid and environmental conditions.
 
 - One egg input + fluid input, multiple slug outputs
@@ -81,7 +81,7 @@ Hatch eggs by supplying the right fluid and environmental conditions.
   | Module | Effect |
   |--------|--------|
   | Temperature | Raises or lowers incubation temperature |
-  | Humidity | Controls ambient humidity (0–1) |
+  | Humidity | Controls ambient humidity (0 to 1) |
   | Tank | Increases fluid buffer capacity |
   | Incubator | Active temperature regulation |
   | Time | Restricts hatching to day-only or night-only cycles |
@@ -95,9 +95,8 @@ Hatch eggs by supplying the right fluid and environmental conditions.
 
 Extract atmospheric gases and particles without needing a resource node.
 
-- Production scales with **altitude**: the higher you build, the more you get (4 000 – 45 000 UU range)
-- **Clustering bonus**: collectors within 2 500 UU of each other boost each other's output
-- **Proximity debuff**: other nearby buildings reduce output; the fewer structures in range, the higher the yield
+- Production scales with **altitude**: the higher you build, the more you get (4,000 to 45,000 UU range)
+- **Collector spacing**: every other Air Collector within 2,500 UU reduces output, so spreading them out increases yield
 - Output type is determined by KAPI scan data assets
 - Gas output via pipe connection
 - Build-mode sphere visualisation shows the cluster range before you place
@@ -108,15 +107,15 @@ Extract atmospheric gases and particles without needing a resource node.
 
 A configurable item-washing station that processes items through fluids, driven by KAPI recipe data assets.
 
-- Three connections: fluid in (pipe), item in (belt), fluid out (pipe)
+- Four connections: fluid in/out through pipes and item in/out through belts
 - Recipe auto-detected from the input item, or selected manually
 - Up to 10 parallel bypass processing slots
-- Recipes unlock progressively through M.A.M. research
+- Only recipes registered as unlocked by the KLib unlock subsystem can be selected
 - Overclocking reduces processing time
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Sink Storage</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Sink storage</strong></td></tr></table>
 
 Power-consuming storage buildings integrated with the AWESOME Sink subsystem.
 
@@ -127,9 +126,9 @@ Power-consuming storage buildings integrated with the AWESOME Sink subsystem.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Toxic Resource Node</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Toxic resource node</strong></td></tr></table>
 
-Hazardous resource deposits that spawn ambient gas pillars and clouds. Cannot be mined by standard extractors, and requires specialist equipment.
+These hazardous deposits spawn gas pillars and clouds. Standard extractors cannot mine them; they require specialist equipment.
 
 ---
 

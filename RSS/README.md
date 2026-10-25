@@ -40,13 +40,13 @@
 
 ---
 
-Want to label your factory sections, mark pipelines, or put up a proper welcome sign? RSS adds a fully featured sign system to Satisfactory: build signs anywhere, design them however you like, and keep them in sync across your whole factory.
+RSS adds editable signs for factory labels, pipeline markers, billboards, and other displays. Place a sign, build its design in layers, and reuse that design elsewhere in your factory.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Lots of Signs to Place</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Available signs</strong></td></tr></table>
 
-RSS adds a large variety of sign types that attach to almost any surface in the game. All signs are unlocked through the **Awesome Shop**.
+RSS signs attach to most surfaces in the game. Unlock them through the AWESOME Shop.
 
 | Type | Where it goes |
 |---|---|
@@ -59,13 +59,13 @@ RSS adds a large variety of sign types that attach to almost any surface in the 
 | Foundation signs | Large format signs for factory sections |
 | Vanilla sign upgrade | All base-game signs now use the RSS editor |
 
-17 standard canvas sizes are available, from tiny `0.5×0.5` labels up to massive `25×2` billboards, plus a fully custom size option.
+Choose from 17 standard canvas sizes, from `0.5×0.5` labels to `25×2` billboards, or set a custom size.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Powerful In-Game Editor</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">In-game editor</strong></td></tr></table>
 
-Every sign has an in-game editor where you can stack as many layers as you want. Each layer is a **text block**, an **image**, or an **animation effect**: mix and match freely.
+Every sign has an in-game editor with up to 128 layers. A layer can contain text, an image, or an animation effect.
 
 - **Text layers**: choose font, size, colour, alignment, bold, uppercase, letter spacing, and more
 - **Image layers**: use any in-game asset or paste a URL to load an image from the internet directly onto the sign; adjust size, tint, opacity, rotation, and z-order
@@ -75,25 +75,25 @@ Every sign has an in-game editor where you can stack as many layers as you want.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Load Images from the Internet</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Images from the internet</strong></td></tr></table>
 
-Paste any public image URL into an image layer and RSS will download it and display it on your sign automatically: no mods, no files, no restarts needed. Downloaded images are cached so they load instantly the next time you use the same URL.
+Paste a public image URL into an image layer. RSS downloads the image, displays it on the sign, and caches it for later use. The URL does not need an image-file extension; RSS detects raster formats supported by the running Unreal Engine build from the downloaded content. You do not need to add local files or restart the game.
 
 ---
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Templates</strong></td></tr></table>
 
-Spent time on a great sign design? Save it as a template and reuse it on any compatible sign in any session.
+Save a sign design as a template to reuse it on compatible signs in any session.
 
 - Templates show only options that fit the current sign type and size: no mismatches
-- Templates are saved as plain text files, so you can back them up or share them with friends by copy-pasting a single string
-- All players in a multiplayer session share the same template library automatically
+- Each client keeps its own template library as JSON in `RssTemplateData.txt`; the first migration or overwrite keeps the original file as `.bak`
+- Template data can be exported to a string and imported again for backups or sharing
 
 ---
 
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Sign Gun</strong></td></tr></table>
 
-The Sign Gun is a handheld tool that lets you copy a sign's full design and paste it onto other signs without opening each one individually: great for labelling long stretches of belts or pipes.
+The Sign Gun copies a sign's complete design and pastes it onto other signs without opening each editor. This is useful when labelling long stretches of belts or pipes.
 
 | Control | What it does |
 |---|---|

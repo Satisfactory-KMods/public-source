@@ -42,24 +42,24 @@
 
 ---
 
-**More Swatch Slots** gives you 51 extra color slots in the Customizer so you can paint your factory exactly the way you want it: no more juggling a handful of colors across hundreds of buildings.
+More Swatch Slots adds 51 extra color slots to the Customizer, bringing the available range up to swatch 70.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">🎨 Massively Expand Your Color Palette</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Extra color slots</strong></td></tr></table>
 
-The base game gives you a limited set of color slots in the Customizer. That sounds like a lot, until you start building a sprawling factory with color-coded pipes, belts, floors, and walls. This mod adds **51 more slots** on top, taking your Customizer all the way up to swatch 70.
+The extra slots can hold colors and finishes for pipes, belts, floors, walls, and other factory parts. Together with the base-game slots, they extend the Customizer through swatch 70.
 
-- **51 extra color slots** sitting right inside the Customizer, ready to use
-- Set any color and finish you like on each new slot, the same way you do with the originals
-- **Repaint whole sections instantly**: change one slot and every building wearing that color updates automatically
-- **Your colors live in your save file**, not the mod itself, so even if you uninstall the mod later, the painted colors on your buildings stay exactly as you left them
+- The **51 extra color slots** appear in the Customizer.
+- Each new slot supports colors and finishes in the same way as the original slots.
+- Changing a slot updates every building that uses it.
+- Colors are stored in the save file. If you uninstall the mod, painted buildings keep their assigned colors.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">🛒 One Simple Unlock</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Unlock</strong></td></tr></table>
 
-You don't need to climb a research tree or hunt down special resources. Spend a single AWESOME Coupon in the AWESOME Shop and all 51 extra slots are yours for the rest of your playthrough.
+Unlock all 51 extra slots in the AWESOME Shop for one AWESOME Coupon. No research tree or special resource is required.
 
 | How to unlock | What it costs |
 |---------------|---------------|

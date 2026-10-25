@@ -42,13 +42,13 @@
 
 ---
 
-Ever tried cramming a whole production floor into a blueprint and just... couldn't? Same. That's the whole reason **Blueprint Designer Plus** exists. It gives you three much bigger Blueprint Designers, so entire factory sections fit in one blueprint instead of getting chopped up into a dozen tiny ones.
+Blueprint Designer Plus adds three oversized Blueprint Designers for factory sections that do not fit inside the base-game designers.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Three New Designer Sizes</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Designer sizes</strong></td></tr></table>
 
-Stock Blueprint Designer? A cozy little 32 m × 32 m × 32 m box. Great for a handful of machines, a bit tight for anything bigger. This mod throws three roomier options into the mix, and you get all of them in one go:
+The mod adds these three larger options:
 
 | Designer | Build Area (W × D × H) |
 |----------|------------------------|
@@ -56,27 +56,19 @@ Stock Blueprint Designer? A cozy little 32 m × 32 m × 32 m box. Great for a ha
 | Blueprint Designer Mk.4.2 | 96 m × 96 m × 48 m |
 | Blueprint Designer Mk.5 | 176 m × 176 m × 96 m |
 
-Hit Tier 9 in your HUB and unlock the Milestone, and boom, all three designers unlock together.
+---
+
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Using the designers</strong></td></tr></table>
+
+Place a designer, build inside its glowing frame, and save the result as you would with the vanilla designer. Saved blueprints appear under the Blueprint tab in the Build Menu.
+
+- To edit a blueprint, use the same designer size or a larger one. This size restriction does not apply when placing the blueprint in the world.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Works Just Like Vanilla Blueprints</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Mk.5 performance</strong></td></tr></table>
 
-Don't worry, there's no learning curve. Plop one of these designers down anywhere in your factory, walk inside, and lay out your machines within the glowing frame, same as you'd do with the vanilla one. Hit save, and the blueprint lands in your Build Menu under the Blueprint tab, ready to drop wherever you feel like building next.
-
-A few things you'll want to know:
-
-- **Your blueprints live in your save file, not the mod.** Once you've made one, you can place it in any world, even one that doesn't have this mod installed.
-- **Share away.** Friends on your server can place blueprints you built with these bigger designers even if they never installed the mod themselves.
-- **Editing has a size floor.** Made a blueprint inside a Mk.4.1? You can only reopen and tweak it inside a Mk.4.1 or something bigger. Placing it out in the world, though, has no such limit.
-
----
-
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">A Note on the Mk.5</strong></td></tr></table>
-
-Let's talk about the Mk.5 for a second. It's massive, almost 176 m per side, built for players who genuinely need that much room. Heads up, though: cram enough into one blueprint at that scale and you start bumping into Satisfactory's own limits. Load it up with tons of pipes or belts and you might hit noticeable lag, or even the occasional crash, when saving or placing it.
-
-That one's on the game, not on us. There's only so much you can squeeze into a blueprint before the engine starts to sweat. So save the Mk.5 for when nothing smaller cuts it, and always save your game before placing a big print.
+The Mk.5 provides a 176 m × 176 m × 96 m build area. Its in-game description marks it as use at your own risk and asks players not to report issues caused by this designer. Save before using it, and choose a smaller designer when it fits.
 
 {{GALLERY}}
 

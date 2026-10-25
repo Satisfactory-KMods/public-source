@@ -42,13 +42,13 @@
 
 ---
 
-KPrivateCodeLib is the shared C++ foundation that powers every KMods building: base classes, the FaxIT item network, modular assembly, fluid valve, subsystems, and replication utilities, all bundled in one dependency mod.
+KPrivateCodeLib is a shared dependency for KMods. Players do not need to configure it; Satisfactory Mod Manager installs it with mods that require it. It contains the base classes and systems used by KMods buildings, including modular assembly, the FaxIT item network, fluid valves, subsystems, and replication utilities.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Base Buildable Classes</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Base buildable classes</strong></td></tr></table>
 
-All KMods machines derive from one of three abstract base classes, each of which extends the corresponding Satisfactory factory type and adds a consistent set of shared features.
+KMods machines can derive from three abstract base classes. Each extends the corresponding Satisfactory factory type and adds the same shared production features.
 
 | Class | Extends | Use case |
 |---|---|---|
@@ -69,13 +69,13 @@ All KMods machines derive from one of three abstract base classes, each of which
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Modular Building System</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Modular building system</strong></td></tr></table>
 
 KPrivateCodeLib provides a full snap-point module system so buildings can accept physically-attached upgrade modules.
 
 - **`AKPCLModularBuildingBase`**: producer variant; extends `AKPCLProducerBase` and `IKPCLModularBuildingInterface`.
 - **`AKPCLModularExtractorBase`**: extractor variant; extends `AKPCLExtractorBase` and `IKPCLModularBuildingInterface`.
-- **`UKPCLModularBuildingHandler`**: manages up to 10 attachment-type slots, each with an array of world-space snap transforms. Tracks which modules are snapped at which positions; fully saved and replicated.
+- **`UKPCLModularBuildingHandler`**: manages up to 10 attachment-type slots, each with an array of world-space snap transforms. It tracks the module at each position and saves and replicates that state.
 - **`UKPCLModularBuildingHandlerStacker`**: stacking-variant handler for vertically stacked modules.
 - **`KPCLModularSnapPoint`**: component that marks valid snap locations on a module.
 - **`KPCLModularHologram`**: placement hologram that previews snap-point alignment before the module is built.
@@ -89,7 +89,7 @@ KPrivateCodeLib provides a full snap-point module system so buildings can accept
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">FaxIT Item Network</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">FaxIT item network</strong></td></tr></table>
 
 FaxIT is a wireless item-transfer network. Buildings connect to a named network core over cable, then upload and download items without physical conveyors.
 
@@ -127,25 +127,33 @@ FaxIT is a wireless item-transfer network. Buildings connect to a named network 
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Pressure Regulator Valve</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Delivery task system</strong></td></tr></table>
+
+`AKPCLDeliveryTaskSubsystem` runs the delivery tree defined by KAPI task assets. It tracks active, queued, completed, and repeatable tasks; stores delivered items and deferred rewards; applies unlocks; and replicates authoritative state to clients.
+
+The UI layer includes the task tree, minimap, queue, node, and preview widgets. Session options can scale delivery costs and selected KMods production speeds without changing the authored task assets.
+
+---
+
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Pressure regulator valve</strong></td></tr></table>
 
 `AKPCLPressureRegulatorValve` is a pressure/fill-controlled bidirectional pipe valve that gates fluid flow without pump behavior.
 
 - Extends `AFGBuildablePipelineAttachment`; reads neighboring pipe `FFluidBox` data through `IFGFluidIntegrantInterface`.
 - Pipe A is the consumer connection; Pipe B is the producer connection.
-- **Hysteresis logic**: two independently configurable limits in `[0.01, 1.25]` — slider order selects mode:
+- **Hysteresis logic**: two independently configurable limits in `[0.01, 1.25]`. Slider order selects the mode:
   - `mOnThreshold` ≥ `mOffThreshold`: monitor Pipe A; open above On pressure, close below Off pressure
   - `mOnThreshold` < `mOffThreshold`: monitor Pipe B; open below On pressure, close above Off pressure
   - Between thresholds → hold current state
 - Pipe fill supports overfill through `140%`; overfill adds up to `10 m` pressure head.
 - Custom flow gate writes `mMaxFlowRate` when open and `0` when closed.
 - Both threshold properties are `SaveGame`, `FGReplicated`, and editable in Blueprint defaults.
-- `mValveOpenAlpha` (0–1) drives mesh animation; `OnValveStateChanged` and `OnUiRequireUpdate` are Blueprint implementable events.
+- `mValveOpenAlpha` (0 to 1) drives mesh animation; `OnValveStateChanged` and `OnUiRequireUpdate` are Blueprint implementable events.
 - RCO methods on `UKPCLDefaultRCO` (`Server_Valve_Set*`) allow client-side UI to change thresholds safely; the setters dispatch internally.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Balance Splitter</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Balance splitter</strong></td></tr></table>
 
 `AKPCLBuildableBalanceSplitter` extends `AFGBuildableConveyorAttachment` with per-output item filtering and rate capping.
 
@@ -155,7 +163,7 @@ FaxIT is a wireless item-transfer network. Buildings connect to a named network 
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Outline System</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Outline system</strong></td></tr></table>
 
 `AKPCLOutlineSubsystem` renders post-process outlines around arbitrary actors using a material parameter collection.
 
@@ -166,18 +174,18 @@ FaxIT is a wireless item-transfer network. Buildings connect to a named network 
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Replication &amp; RCO</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Replication and RCO</strong></td></tr></table>
 
 `UKPCLDefaultRCO` is the central Remote Call Object for all KMods buildings.
 
 - Retrieve with `UKPCLDefaultRCO::Get(WorldContext)` from any `UObject` with a valid world.
 - Covers: fluid flush, swatch mutations, loot chest interaction, item moves between inventories, all FaxIT operations (filter item, speed override, grab/store, rename network), pressure valve threshold changes, and balance splitter rule updates.
-- All `_Validate` stubs return `true` by default; override in subclass for input sanitisation.
+- Validation depends on the RPC. Delivery, FaxIT, valve, outline, and splitter calls check their relevant targets, indexes, finite numbers, ranges, or rule limits; several older utility calls still use permissive validation.
 - Buildings dispatch to the RCO internally in their setters: callers never need to check `HasAuthority()`.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Blueprint Function Library</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Blueprint function library</strong></td></tr></table>
 
 `UKPCLBlueprintFunctionLib` provides utility functions callable from C++ and Blueprint.
 

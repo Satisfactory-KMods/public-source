@@ -1,25 +1,21 @@
-## 📄 License
+# KMods public source
 
-This repository uses **dual licensing**:
+This repository contains source code and assets for KAPI, KBFL, KBlueprintDesignPlus, KDataForge, KLib, KPrivateCodeLib, KUI, MoreSwatchSlots, RSS, and SBS.
 
-### Source Code - MIT License
-- **Applies to**: All C++ source code in `/Source` and other code files
-- **License**: [MIT License](LICENSE)
-- ✅ Free to use, modify, and distribute
-- ✅ Commercial use allowed
-- ✅ Modification allowed
-- ✅ Distribution allowed
+## Licensing
 
-### Assets & Content - Proprietary License
-- **Applies to**: All assets in `/Content` (models, textures, materials, etc.)
-- **License**: [Custom Restrictive License](LICENSE-ASSETS)
-- ❌ No redistribution or publication
-- ❌ No commercial use
-- ⚠️ Personal use only (non-distributed)
-- ✅ May be used with explicit permission and credit
+Code and assets use different licenses. Read both license files before using anything from this repository.
 
-**Mods included**: KAPI, KBFL, KBlueprintDesignPlus, KDataForge, KLib, KPrivateCodeLib, KUI, MoreSwatchSlots, RSS, SBS
+### Source code: MIT License
 
-Please review both license files before using any part of this project.
+The [MIT License](LICENSE) applies to all C++ source code in `/Source` and to other code files. It permits use, modification, redistribution, and commercial use under its terms.
 
-For permission to use assets, please contact me on Discord kyrium or on out Discord-Server https://discord.gg/uVbRQcv9bB
+### Assets and content: proprietary license
+
+The [Custom Restrictive License](LICENSE-ASSETS) applies to assets in `/Content`, including models, textures, and materials.
+
+- Personal, non-distributed use is allowed.
+- Redistribution, publication, and commercial use are not allowed.
+- Use with explicit permission and credit is allowed.
+
+For permission to use assets, contact `kyrium` on Discord or join the [KMods Discord server](https://discord.gg/uVbRQcv9bB).

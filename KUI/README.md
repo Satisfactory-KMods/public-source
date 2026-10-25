@@ -42,13 +42,13 @@
 
 ---
 
-KUI is the shared UI framework and asset library that powers the visual layer of all KMods, providing localization macros, a rich icon/button/background library, 9-slice textures, dynamic materials, bundled fonts, widget element primitives, and reusable UMG window templates.
+KUI is a shared dependency for KMods. Players do not need to configure it; Satisfactory Mod Manager installs it with mods that require it. It provides localization helpers, icons, buttons, backgrounds, 9-slice textures, dynamic materials, fonts, widget elements, and reusable UMG window templates.
 
 ---
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Localization Macros</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Localization macros</strong></td></tr></table>
 
-KUI exposes a lightweight C++ localization API via `KUIModule.h`. All KMods use these macros instead of raw `LOCTEXT`/`NSLOCTEXT` calls so every string automatically participates in the shared string-table pipeline.
+KUI exposes a lightweight C++ localization API via `KUIModule.h`. Mods can use these macros for the shared string-table pipeline or for code-defined localized text.
 
 | Macro | Returns | Description |
 |---|---|---|
@@ -56,6 +56,8 @@ KUI exposes a lightweight C++ localization API via `KUIModule.h`. All KMods use 
 | `FI18N_FORMAT(Key, ...)` | `FString` | Look up + format with positional `FStringFormatArg` arguments |
 | `FI18N_NS(Key, Default)` | `FText` | Inline `NSLOCTEXT`-style text (no string table required) |
 | `FI18N_NS_FORMAT(Key, Default, ...)` | `FString` | Inline text with positional format arguments |
+
+`UKUIBlueprintFunctionLib` also provides case-insensitive item searches for Blueprint UI. Searches can match an item's class name and localized display name, with an optional localized-description check.
 
 String table assets are split by domain for easy translation management:
 
@@ -70,7 +72,7 @@ String table assets are split by domain for easy translation management:
 | `KUI_Formats` | Generic format patterns |
 | `KUI_Popups` | Popup and confirmation text |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Icon Library</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Icon library</strong></td></tr></table>
 
 Over 160 icon textures organized into sub-libraries, ready to reference from any Blueprint or C++ widget:
 
@@ -79,9 +81,9 @@ Over 160 icon textures organized into sub-libraries, ready to reference from any
 - **Map compass icons**: cluster border, directional actors, ping actors, static actors, hub marker, loot crate
 - **Resource category icons**: foundations, logistics, organisation, power, production, transport, walls
 - **Status / indicator icons**: aggro, directional arrows, LED indicators (green/red), standby set, small variant set
-- **White icon variants**: 52 white/outline versions for dark-background contexts
+- **White icon variants**: 100 white/outline assets for dark-background contexts
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Button &amp; Toggle Assets</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Button and toggle assets</strong></td></tr></table>
 
 Pre-built button and toggle textures that cover the standard Satisfactory UI aesthetic:
 
@@ -92,13 +94,13 @@ Pre-built button and toggle textures that cover the standard Satisfactory UI aes
 - Page navigation buttons (`page_back`, `page_next`)
 - Manual icon button, custom header button asset
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">9-Slice Textures</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">9-slice textures</strong></td></tr></table>
 
 Thirteen named 9-slice assets for pixel-perfect scalable borders and panels:
 
 | Asset | Description |
 |---|---|
-| `9S_0000` – `9S_1111` | Full bitmask set (corner flags: top-left, top-right, bottom-right, bottom-left) |
+| `9S_0000`, `9S_0001`, `9S_0010`, `9S_0011`, `9S_0100`, `9S_0101`, `9S_1000` | Seven corner combinations for scalable panels |
 | `25_9S_0000` / `50_9S_0000` / `75_9S_0000` | Opacity variants at 25 %, 50 %, 75 % |
 | `MM_TransperentSlice` | Transparent master material for runtime tinting |
 | `selection_border` | Highlight selection ring |
@@ -116,7 +118,7 @@ A focused set of dynamic UI materials ready for instancing:
 | `MI_TileDiagonalLines` | Standalone diagonal-line tile for general panel fills |
 | `MM_TileImages` | Master material for all tiled image instances |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Bundled Fonts</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Bundled fonts</strong></td></tr></table>
 
 Eight ready-to-use font families shipped with KUI, no extra installation needed:
 
@@ -131,7 +133,7 @@ Eight ready-to-use font families shipped with KUI, no extra installation needed:
 | **CourierPrime** | Monospaced; data readouts |
 | **Allan** | Stylized display |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Widget Element Primitives</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Widget element primitives</strong></td></tr></table>
 
 Reusable texture elements for assembling custom UMG widgets:
 
@@ -140,7 +142,7 @@ Reusable texture elements for assembling custom UMG widgets:
 - **Widget controls**: blank, buff indicator, green/red LED, green switch light, on/off switch, warning badge, text block, dot, scroll grabber, white slider backgrounds
 - **Logos**: KMods, KMods Basic, LIBS, Pneumatic, RSS, SF+, UP
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Reusable UMG Window Templates</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Reusable UMG window templates</strong></td></tr></table>
 
 Pre-built Blueprint Widget classes that other KMods extend:
 
@@ -156,7 +158,7 @@ Pre-built Blueprint Widget classes that other KMods extend:
 | `KUI_Widget_Tooltip` | Styled tooltip container |
 | `BPW_KUI_FuelList` | Fuel-type list popup with entity rows |
 
-<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Sounds &amp; Miscellaneous</strong></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td style="background:#e8a202;padding:6px 14px;border-radius:6px 6px 0 0;border:none"><strong style="color:#1a1a2e;font-size:18px">Sounds and other assets</strong></td></tr></table>
 
 - `Sound_LevelUP`: shared level-up / unlock audio cue
 - `BFL_Widget`: Blueprint Function Library with widget utilities
